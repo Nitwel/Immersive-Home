@@ -1,29 +1,49 @@
-[gd_scene load_steps=4 format=3 uid="uid://18sldbn0hij8"]
+[gd_scene load_steps=6 format=3 uid="uid://eecv28y6jxk4"]
 
-[ext_resource type="PackedScene" uid="uid://b4kad2kuba1yn" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_hand_low.tscn" id="1_66jmx"]
-[ext_resource type="PackedScene" uid="uid://l2n30mpbkdyw" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_hand_low.tscn" id="2_3f5tl"]
-[ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="3_iaq1p"]
+[ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_i4c04"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ir3co"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p6hri"]
+sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
+use_debanding = false
+
+[sub_resource type="Sky" id="Sky_vhymk"]
+sky_material = SubResource("ProceduralSkyMaterial_p6hri")
+
+[sub_resource type="Environment" id="Environment_7ghp0"]
+background_mode = 1
+background_color = Color(1, 1, 1, 0)
+sky = SubResource("Sky_vhymk")
 
 [node name="Main" type="Node3D"]
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6555, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.798091, 0.311748)
 
-[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.341606, 0.506389, 0)
+[node name="XRControllerLeft" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.469893, 0.597213, -0.251112)
 tracker = &"left_hand"
 pose = &"aim"
 
-[node name="LeftHand" parent="XROrigin3D/LeftHand" instance=ExtResource("1_66jmx")]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/XRControllerLeft"]
+mesh = SubResource("BoxMesh_ir3co")
 
-[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.408271, 0.538159, 0)
+[node name="XRControllerRight" type="XRController3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.488349, 0.559219, -0.2988)
 tracker = &"right_hand"
 pose = &"aim"
 
-[node name="RightHand" parent="XROrigin3D/RightHand" instance=ExtResource("2_3f5tl")]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/XRControllerRight"]
+mesh = SubResource("BoxMesh_ir3co")
 
-[node name="StartXR" parent="." instance=ExtResource("3_iaq1p")]
+[node name="StartXR" parent="." instance=ExtResource("1_i4c04")]
 enable_passthrough = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7ghp0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
