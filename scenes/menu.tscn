@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://c3kdssrmv84kv"]
+
+[ext_resource type="Script" path="res://src/menu.gd" id="1_ng4u3"]
+[ext_resource type="Material" uid="uid://bertj8bp8b5l1" path="res://assets/materials/interface.tres" id="2_nsukb"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_6t3dn"]
+material = ExtResource("2_nsukb")
+size = Vector2(0.3, 0.3)
+
+[node name="Menu" type="Node3D"]
+script = ExtResource("1_ng4u3")
+
+[node name="Background" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_6t3dn")
+
+[node name="Devices" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.149223, 0, 0.150667)
