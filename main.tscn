@@ -1,17 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://eecv28y6jxk4"]
+[gd_scene load_steps=10 format=3 uid="uid://eecv28y6jxk4"]
 
-[ext_resource type="Script" path="res://src/devices/light.gd" id="1_5mqma"]
 [ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_i4c04"]
 [ext_resource type="Script" path="res://src/raycast.gd" id="1_tsqxc"]
 [ext_resource type="Script" path="res://src/model.gd" id="2_7f1x4"]
 [ext_resource type="PackedScene" uid="uid://c3kdssrmv84kv" path="res://scenes/menu.tscn" id="3_1tbp3"]
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_2igmd"]
-radius = 0.1
-
-[sub_resource type="SphereMesh" id="SphereMesh_eme7e"]
-radius = 0.1
-height = 0.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58yb"]
 ao_enabled = true
@@ -41,16 +33,6 @@ ambient_light_sky_contribution = 0.72
 
 [node name="Main" type="Node3D"]
 
-[node name="Light" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.45064, 0, 0.20152)
-script = ExtResource("1_5mqma")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Light"]
-shape = SubResource("SphereShape3D_2igmd")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Light"]
-mesh = SubResource("SphereMesh_eme7e")
-
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
@@ -64,9 +46,8 @@ pose = &"aim"
 [node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/XRControllerLeft"]
 mesh = SubResource("BoxMesh_ir3co")
 
-[node name="Model" type="Node3D" parent="XROrigin3D/XRControllerLeft" node_paths=PackedStringArray("light")]
+[node name="Model" type="Node3D" parent="XROrigin3D/XRControllerLeft"]
 script = ExtResource("2_7f1x4")
-light = NodePath("../../../Light")
 
 [node name="Menu" parent="XROrigin3D/XRControllerLeft" instance=ExtResource("3_1tbp3")]
 transform = Transform3D(-4.37114e-08, 0, -1, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -3.09086e-08, 0.194945, 0, -0.0534939)

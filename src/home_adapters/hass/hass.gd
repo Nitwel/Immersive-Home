@@ -21,3 +21,43 @@ func load_devices():
 
 	print(json)
 	return json
+
+func get_state(entity: String):
+	var type = entity.split('.')[0]
+
+	Request.request("%s/api/states/%s" % [url, entity], headers, HTTPClient.METHOD_GET)
+	var response = await Request.request_completed
+
+	var data_string = response[3].get_string_from_utf8().replace("'", "\"")
+	var json = JSON.parse_string(data_string)
+
+	print(json)
+	return json
+
+
+
+func set_state(entity: String, state: String, attributes: Dictionary = {}):
+	var type = entity.split('.')[0]
+	var response
+
+	if type == 'switch':
+		if state == 'on':
+			Request.request("%s/api/services/switch/turn_on" % [url], headers, HTTPClient.METHOD_POST, "{\"entity_id\": \"%s\"}" % [entity])
+			response = await Request.request_completed
+		elif state == 'off':
+			Request.request("%s/api/services/switch/turn_off" % [url], headers, HTTPClient.METHOD_POST, "{\"entity_id\": \"%s\"}" % [entity])
+			response = await Request.request_completed
+	elif type == 'light':
+		if state == 'on':
+			Request.request("%s/api/services/light/turn_on" % [url], headers, HTTPClient.METHOD_POST, "{\"entity_id\": \"%s\"}" % [entity])
+			response = await Request.request_completed
+		elif state == 'off':
+			Request.request("%s/api/services/light/turn_off" % [url], headers, HTTPClient.METHOD_POST, "{\"entity_id\": \"%s\"}" % [entity])
+			response = await Request.request_completed
+	
+	var data_string = response[3].get_string_from_utf8().replace("'", "\"")
+	var json = JSON.parse_string(data_string)
+
+	print(json)
+	return json
+	
