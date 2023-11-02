@@ -19,7 +19,6 @@ func load_devices():
 	var data_string = response[3].get_string_from_utf8().replace("'", "\"")
 	var json = JSON.parse_string(data_string).data
 
-	print(json)
 	return json
 
 func get_state(entity: String):
@@ -31,7 +30,6 @@ func get_state(entity: String):
 	var data_string = response[3].get_string_from_utf8().replace("'", "\"")
 	var json = JSON.parse_string(data_string)
 
-	print(json)
 	return json
 
 
@@ -58,6 +56,5 @@ func set_state(entity: String, state: String, attributes: Dictionary = {}):
 	var data_string = response[3].get_string_from_utf8().replace("'", "\"")
 	var json = JSON.parse_string(data_string)
 
-	print(json)
 	return json
 	

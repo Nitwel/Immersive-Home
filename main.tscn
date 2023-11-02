@@ -28,7 +28,6 @@ ambient_light_sky_contribution = 0.72
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, -0.000296142, 0.000270963, 0.000296143, 1, -4.61078e-06, -0.000270962, 4.67014e-06, 1, 0, 0, 0)
 script = ExtResource("1_uvrd4")
-passthrough = false
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 

@@ -1,0 +1,12 @@
+{% set devices = states | map(attribute='entity_id') | map('device_id') | unique | reject('eq',None) | list %}
+    
+{%- set ns = namespace(devices = []) %}
+{%- for device in devices %}
+  {%- set entities = device_entities(device) | list %}
+  {%- if entities %}
+    {%- set ns.devices = ns.devices +  [ {device: {"name": device_attr(device, "name"), "entities": entities }} ] %}
+  {%- endif %}
+{%- endfor %}
+{
+  "data": {{ ns.devices }}
+}
