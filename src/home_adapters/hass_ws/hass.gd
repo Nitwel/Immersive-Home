@@ -1,18 +1,23 @@
 extends Node
 
-var devices_template = FileAccess.get_file_as_string("res://src/home_adapters/hass/templates/devices.j2")
-var socket = WebSocketPeer.new()
+var devices_template := FileAccess.get_file_as_string("res://src/home_adapters/hass/templates/devices.j2")
+var socket := WebSocketPeer.new()
 # in seconds
-var request_timeout: float = 10
+var request_timeout := 10.0
 
-var url: String = "ws://192.168.33.33:8123/api/websocket"
-var token: String = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzZjQ0ZGM2N2Y3YzY0MDc1OGZlMWI2ZjJlNmIxZjRkNSIsImlhdCI6MTY5ODAxMDcyOCwiZXhwIjoyMDEzMzcwNzI4fQ.K6ydLUC-4Q7BNIRCU1nWlI2s6sg9UCiOu-Lpedw2zJc"
+var url := "ws://192.168.33.33:8123/api/websocket"
+var token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzZjQ0ZGM2N2Y3YzY0MDc1OGZlMWI2ZjJlNmIxZjRkNSIsImlhdCI6MTY5ODAxMDcyOCwiZXhwIjoyMDEzMzcwNzI4fQ.K6ydLUC-4Q7BNIRCU1nWlI2s6sg9UCiOu-Lpedw2zJc"
 
 
-var authenticated: bool = false
-var id = 1
+var authenticated := false
+var id := 1
+var entities: Dictionary = {}
 
-signal packet_received(packet: Dictionary)
+var entitiy_callbacks := CallbackMap.new()
+var packet_callbacks := CallbackMap.new()
+
+signal on_connect()
+signal on_disconnect()
 
 func _init(url := self.url, token := self.token):
 	self.url = url
@@ -27,8 +32,9 @@ func connect_ws():
 
 func _process(delta):
 	socket.poll()
-
+	
 	var state = socket.get_ready_state()
+	print(state, "POLLING")
 	if state == WebSocketPeer.STATE_OPEN:
 		while socket.get_available_packet_count():
 			handle_packet(socket.get_packet())
@@ -38,8 +44,7 @@ func _process(delta):
 		var code = socket.get_close_code()
 		var reason = socket.get_close_reason()
 		print("WS connection closed with code: %s, reason: %s" % [code, reason])
-		authenticated = false
-		set_process(false)
+		handle_disconnect()
 
 func handle_packet(raw_packet: PackedByteArray):
 	var packet = decode_packet(raw_packet)
@@ -54,36 +59,79 @@ func handle_packet(raw_packet: PackedByteArray):
 
 	elif packet.type == "auth_ok":
 		authenticated = true
+		start_subscriptions()
+		
 	elif packet.type == "auth_invalid":
-		authenticated = false
-		print("Authentication failed")
-		set_process(false)
+		handle_disconnect()
 	else:
-		packet_received.emit(packet)
+		packet_callbacks.call_key(packet.id, [packet])
 
-	
+func start_subscriptions():
+	assert(authenticated, "Not authenticated")
+
+	await send_request_packet({
+		"type": "supported_features",
+		"features": {
+			"coalesce_messages": 1
+		}
+	})
+
+	send_subscribe_packet({
+		"type": "subscribe_entities"
+	}, func(packet: Dictionary):
+		if packet.type != "event":
+			return
+
+		if packet.event.has("a"):
+			for entity in packet.event.a.keys():
+				entities[entity] = packet.event.a[entity]
+				entitiy_callbacks.call_key(entity, [entities[entity]])
+			on_connect.emit()
+
+		if packet.event.has("c"):
+			for entity in packet.event.c.keys():
+				if packet.event.c[entity].has("+"):
+					entities[entity].merge(packet.event.c[entity]["+"])
+					entitiy_callbacks.call_key(entity, [entities[entity]])
+	)
+
+func handle_disconnect():
+	authenticated = false
+	set_process(false)
+	on_disconnect.emit()
+
+func send_subscribe_packet(packet: Dictionary, callback: Callable):
+	packet.id = id
+	id += 1
+
+	send_packet(packet)
+	packet_callbacks.add(packet.id, callback)
+
+	return func():
+		packet_callbacks.remove(packet.id, callback)
+		send_packet({
+			id: id,
+			"type": packet.type.replace("subscribe", "unsubscribe"),
+			"subscription": packet.id
+		})
+		id += 1
+
+
 func send_request_packet(packet: Dictionary):
 	packet.id = id
 	id += 1
 
 	send_packet(packet)
 
-	var promise = Promise.new(func(resolve: Callable, reject: Callable):
-		var handle_packet = func(recieved_packet: Dictionary):
-			print("Received packet in handler: %s" % recieved_packet)
-			if packet.id == recieved_packet.id:
-				print("same id")
-				resolve.call(recieved_packet)
-				packet_received.disconnect(handle_packet)
-		
-		packet_received.connect(handle_packet)
+	var promise = Promise.new(func(resolve: Callable, reject: Callable):		
+		packet_callbacks.add_once(packet.id, resolve)
 		
 		var timeout = Timer.new()
 		timeout.set_wait_time(request_timeout)
 		timeout.set_one_shot(true)
 		timeout.timeout.connect(func():
 			reject.call(Promise.Rejection.new("Request timed out"))
-			packet_received.disconnect(handle_packet)
+			packet_callbacks.remove(packet.id, resolve)
 		)
 		add_child(timeout)
 		timeout.start()
@@ -106,22 +154,36 @@ func load_devices():
 	pass
 
 func get_state(entity: String):
-	assert(authenticated, "Not authenticated")
+	if !authenticated:
+		await on_connect
 
-	var result = await send_request_packet({
-		"type": "get_states"
-	})
-
-	if result.status == Promise.Status.RESOLVED:
-		return result.payload
-	return null
+	if entities.has(entity):
+		return entities[entity]
+	else:
+		print(entities, entity)
 
 
 func watch_state(entity: String, callback: Callable):
-	assert(authenticated, "Not authenticated")
+	if !authenticated:
+		await on_connect
+
+	entitiy_callbacks.add(entity, callback)
 
 
 func set_state(entity: String, state: String, attributes: Dictionary = {}):
 	assert(authenticated, "Not authenticated")
+
+	var domain = entity.split(".")[0]
+	var service =  entity.split(".")[1]
+
+	return await send_request_packet({
+		"type": "call_service",
+		"domain": domain,
+		"service": service,
+		"service_data": attributes,
+		"target": {
+			"entity_id": entity
+		}
+	})
 
 	
