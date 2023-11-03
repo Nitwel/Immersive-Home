@@ -4,6 +4,7 @@ const Device = preload("res://scenes/device.tscn")
 const Entity = preload("res://scenes/entity.tscn")
 const Switch = preload("res://scenes/entities/switch.tscn")
 const Light = preload("res://scenes/entities/light.tscn")
+const Sensor = preload("res://scenes/entities/sensor.tscn")
 
 @onready var devices_node = $Devices
 var devices
@@ -93,6 +94,13 @@ func _on_entity_click(entity_name):
 
 		light.set_position(global_position)
 		get_node("/root").add_child(light)
+
+	if type == "sensor":
+		var sensor = Sensor.instantiate()
+		sensor.entity_id = entity_name
+
+		sensor.set_position(global_position)
+		get_node("/root").add_child(sensor)
 	
 func clear_menu():
 	for child in devices_node.get_children():

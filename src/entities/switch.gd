@@ -11,6 +11,13 @@ func _ready():
 	else:
 		sprite.set_frame(1)
 
+	await HomeAdapters.adapter_ws.watch_state(entity_id, func(new_state):
+		if new_state["state"] == "on":
+			sprite.set_frame(0)
+		else:
+			sprite.set_frame(1)
+	)
+
 
 func _on_toggle():
 	HomeAdapters.adapter_ws.set_state(entity_id, "off" if sprite.get_frame() == 0 else "on")
