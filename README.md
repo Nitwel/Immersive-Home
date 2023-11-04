@@ -20,7 +20,7 @@ Immersive Home is project to bring Smart Home and Mixed Reality technologies tog
 **Mixed Reality Headsets**
 - Meta Quest 2 / Pro / 3
 
-# Development
+# 🛠 Development
 
 In order to contribute to this project, you need the following to be setup before you can start working:
 - Godot 4.1.3 installed
