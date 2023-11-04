@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://cw86rc42dv2d8"]
+
+[ext_resource type="Script" path="res://src/entities/light.gd" id="1_ykxy3"]
+[ext_resource type="Texture2D" uid="uid://b72vsbcvqqxg7" path="res://assets/materials/swich_on.png" id="2_6gn2e"]
+[ext_resource type="Texture2D" uid="uid://cvc0o6dsktnvl" path="res://assets/materials/switch_off.png" id="3_qlm62"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
+radius = 0.1
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ldpuo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_6gn2e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_qlm62")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Light" type="StaticBody3D"]
+script = ExtResource("1_ykxy3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_ukj14")
+
+[node name="Icon" type="AnimatedSprite3D" parent="."]
+pixel_size = 0.0005
+billboard = 1
+sprite_frames = SubResource("SpriteFrames_ldpuo")

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://xsiy71rsqulj"]
+
+[ext_resource type="Script" path="res://src/entities/sensor.gd" id="1_57ac8"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_r20gc"]
+radius = 0.1
+
+[node name="Sensor" type="StaticBody3D"]
+script = ExtResource("1_57ac8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_r20gc")
+
+[node name="Label" type="Label3D" parent="."]
+text = "some text"
