@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://xsiy71rsqulj"]
 
-[ext_resource type="Script" path="res://src/entities/sensor.gd" id="1_57ac8"]
+[ext_resource type="Script" path="res://content/entities/sensor/sensor.gd" id="1_57ac8"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_r20gc"]
 radius = 0.1

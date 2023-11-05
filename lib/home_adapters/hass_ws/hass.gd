@@ -1,6 +1,6 @@
 extends Node
 
-var devices_template := FileAccess.get_file_as_string("res://src/home_adapters/hass/templates/devices.j2")
+var devices_template := FileAccess.get_file_as_string("res://lib/home_adapters/hass/templates/devices.j2")
 var socket := WebSocketPeer.new()
 # in seconds
 var request_timeout := 10.0
@@ -10,6 +10,7 @@ var token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzZjQ0ZGM2N2Y3YzY0M
 var LOG_MESSAGES := false
 
 var authenticated := false
+var loading := true
 var id := 1
 var entities: Dictionary = {}
 
@@ -100,6 +101,7 @@ func start_subscriptions():
 					"attributes": packet.event.a[entity]["a"]
 				}
 				entitiy_callbacks.call_key(entity, [entities[entity]])
+			loading = false
 			on_connect.emit()
 
 		if packet.event.has("c"):
@@ -171,13 +173,13 @@ func encode_packet(packet: Dictionary):
 	return JSON.stringify(packet)
 
 func load_devices():
-	if !authenticated:
+	if loading:
 		await on_connect
 
 	return entities
 
 func get_state(entity: String):
-	if !authenticated:
+	if loading:
 		await on_connect
 
 	if entities.has(entity):
@@ -186,14 +188,14 @@ func get_state(entity: String):
 
 
 func watch_state(entity: String, callback: Callable):
-	if !authenticated:
+	if loading:
 		await on_connect
 
 	entitiy_callbacks.add(entity, callback)
 
 
 func set_state(entity: String, state: String, attributes: Dictionary = {}):
-	assert(authenticated, "Not authenticated")
+	assert(!loading, "Still loading")
 
 	var domain = entity.split(".")[0]
 	var service: String

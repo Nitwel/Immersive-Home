@@ -1,12 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://eecv28y6jxk4"]
+[gd_scene load_steps=13 format=3 uid="uid://eecv28y6jxk4"]
 
 [ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_i4c04"]
-[ext_resource type="Script" path="res://src/raycast.gd" id="1_tsqxc"]
-[ext_resource type="Script" path="res://main.gd" id="1_uvrd4"]
-[ext_resource type="Script" path="res://src/model.gd" id="2_7f1x4"]
-[ext_resource type="PackedScene" uid="uid://c3kdssrmv84kv" path="res://scenes/menu.tscn" id="3_1tbp3"]
+[ext_resource type="Script" path="res://content/raycast.gd" id="1_tsqxc"]
+[ext_resource type="Script" path="res://content/main.gd" id="1_uvrd4"]
+[ext_resource type="Script" path="res://content/model.gd" id="2_7f1x4"]
+[ext_resource type="PackedScene" uid="uid://c3kdssrmv84kv" path="res://content/ui/menu/menu.tscn" id="3_1tbp3"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="5_3qc8g"]
 [ext_resource type="Material" uid="uid://bf5ina366dwm6" path="res://assets/materials/sky.material" id="5_wgwf8"]
+[ext_resource type="PackedScene" uid="uid://cscl5k7lhopj5" path="res://content/entities/switch/switch.tscn" id="8_uxmrb"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58yb"]
 ao_enabled = true
@@ -76,3 +77,7 @@ shadow_enabled = true
 
 [node name="XRSimulator" parent="." instance=ExtResource("5_3qc8g")]
 xr_origin = NodePath("../XROrigin3D")
+
+[node name="Switch" parent="." instance=ExtResource("8_uxmrb")]
+transform = Transform3D(0.999999, -1.39635e-11, 0, 9.48031e-12, 1, 0, 0, 0, 1, 0.564168, 0.725642, -1.56163)
+entity_id = "switch.plug_printer_2_fale"
