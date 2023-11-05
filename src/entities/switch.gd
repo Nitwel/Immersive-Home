@@ -6,6 +6,9 @@ extends StaticBody3D
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var stateInfo = await HomeAdapters.adapter_ws.get_state(entity_id)
+	if stateInfo == null:
+		return
+
 	if stateInfo["state"] == "on":
 		sprite.set_frame(0)
 	else:

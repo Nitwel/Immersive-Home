@@ -65,30 +65,29 @@ func watch_state(entity: String, callback: Callable[entity: Entity]) -> Callable
 
 ### Interaction Events
 
-Each time a button is pressed on the primary controller, a raycast is done to be able to interact with devices or the UI.
+Each time a button is pressed on the primary controller, a ray-cast is done to be able to interact with devices or the UI.
 
-**InteractionEvent**
-```js
-{
-	position: Vector3,
-	rotation: Vector3
+```python
+InteractionEvent {
+	"controller": XRController3D, # The controller that triggered the event
+	"ray": RayCast3D, # The ray-cast that triggered the event
 }
 ```
 
 | Function called | Args | Description |
 | -- | -- | -- |
-| `_click` | `[event: InteractionEvent]` | The back trigger button has been pressed and released |
-| `_dbl_click` | `[event: InteractionEvent]` | The back trigger button has been pressed and released twice in a row |
-| `_long_click` | `[event: InteractionEvent]` | The back trigger button has been pressed, then hold still for a short period, then released |
-| `_press_down` | `[event: InteractionEvent]` | The back trigger button has been pressed down |
-| `_press_move` | `[event: InteractionEvent]` | The back trigger button has been moved while pressed down |
-| `_press_up` | `[event: InteractionEvent]` | The back trigger button has been released |
-| `_grab_down` | `[event: InteractionEvent]` | The side grap button been pressed down |
-| `_grab_move` | `[event: InteractionEvent]` | The side grap button been pressed down |
-| `_grab_up` | `[event: InteractionEvent]` | The side grap button been released |
+| `_on_click` | `[event: InteractionEvent]` | The back trigger button has been pressed and released |
+| `_on_press_down` | `[event: InteractionEvent]` | The back trigger button has been pressed down |
+| `_on_press_move` | `[event: InteractionEvent]` | The back trigger button has been moved while pressed down |
+| `_on_press_up` | `[event: InteractionEvent]` | The back trigger button has been released |
+| `_on_grab_down` | `[event: InteractionEvent]` | The side grab button been pressed down |
+| `_on_grab_move` | `[event: InteractionEvent]` | The side grab button been pressed down |
+| `_on_grab_up` | `[event: InteractionEvent]` | The side grab button been released |
+| `_on_ray_enter` | `[event: InteractionEvent]` | The ray-cast enters the the collision body |
+| `_on_ray_leave` | `[event: InteractionEvent]` | The ray-cast leaves the the collision body |
 
 ### Testing without a VR Headset
 
 In order to test without a headset, press the run project (F5) button in Godot and ignore the prompt that OpenXR failed to start.
 To simulate the headset and controller movement, we're using the [XR Input Simulator](https://godotengine.org/asset-library/asset/1775) asset.
-Click at the link to get a list of the supported controlls.
+Click at the link to get a list of the supported controls.
