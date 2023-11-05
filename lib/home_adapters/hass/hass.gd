@@ -13,7 +13,7 @@ func _init(url := self.url, token := self.token):
 	headers = PackedStringArray(["Authorization: Bearer %s" % token, "Content-Type: application/json"])
 	devices_template = devices_template.replace("\n", " ").replace("\t", "").replace("\r", " ").replace("\"", "\\\"")
 
-func load_devices():
+func get_devices():
 	Request.request("%s/api/template" % [url], headers, HTTPClient.METHOD_POST, "{\"template\": \"%s\"}" % [devices_template])
 	var response = await Request.request_completed
 	var data_string = response[3].get_string_from_utf8().replace("'", "\"")

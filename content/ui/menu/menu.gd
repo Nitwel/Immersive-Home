@@ -12,7 +12,7 @@ var devices
 var selected_device = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	devices = await HomeAdapters.adapter.load_devices()
+	devices = await HomeAdapters.adapter.get_devices()
 	render_devices()
 
 func render_devices():

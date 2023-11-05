@@ -1,13 +1,13 @@
 extends Node
 
-var devices_template := FileAccess.get_file_as_string("res://lib/home_adapters/hass/templates/devices.j2")
+var devices_template := FileAccess.get_file_as_string("res://lib/home_adapters/hass_ws/templates/devices.j2")
 var socket := WebSocketPeer.new()
 # in seconds
 var request_timeout := 10.0
 
 var url := "ws://192.168.33.33:8123/api/websocket"
 var token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzZjQ0ZGM2N2Y3YzY0MDc1OGZlMWI2ZjJlNmIxZjRkNSIsImlhdCI6MTY5ODAxMDcyOCwiZXhwIjoyMDEzMzcwNzI4fQ.K6ydLUC-4Q7BNIRCU1nWlI2s6sg9UCiOu-Lpedw2zJc"
-var LOG_MESSAGES := false
+var LOG_MESSAGES := true
 
 var authenticated := false
 var loading := true
@@ -24,7 +24,7 @@ func _init(url := self.url, token := self.token):
 	self.url = url
 	self.token = token
 
-	devices_template = devices_template.replace("\n", " ").replace("\t", "").replace("\r", " ").replace("\"", "\\\"")
+	devices_template = devices_template.replace("\n", " ").replace("\t", "").replace("\r", " ")
 	connect_ws()
 
 func connect_ws():
@@ -56,7 +56,7 @@ func _process(delta):
 		handle_disconnect()
 
 func handle_packet(packet: Dictionary):
-	if LOG_MESSAGES: print("Received packet: %s" % packet)
+	if LOG_MESSAGES: print("Received packet: %s" % str(packet).substr(0, 1000))
 
 	if packet.type == "auth_required":
 		send_packet({
@@ -139,21 +139,34 @@ func send_subscribe_packet(packet: Dictionary, callback: Callable):
 		id += 1
 
 
-func send_request_packet(packet: Dictionary):
+func send_request_packet(packet: Dictionary, ignore_initial := false):
 	packet.id = id
 	id += 1
 
 	send_packet(packet)
 
-	var promise = Promise.new(func(resolve: Callable, reject: Callable):		
-		packet_callbacks.add_once(packet.id, resolve)
+	var promise = Promise.new(func(resolve: Callable, reject: Callable):
+		var fn: Callable
+
+		if ignore_initial:
+			fn = func(packet: Dictionary):
+				if packet.type == "event":
+					resolve.call(packet)
+					packet_callbacks.remove(packet.id, fn)
+
+			packet_callbacks.add(packet.id, fn)
+		else:
+			packet_callbacks.add_once(packet.id, resolve)
 		
 		var timeout = Timer.new()
 		timeout.set_wait_time(request_timeout)
 		timeout.set_one_shot(true)
 		timeout.timeout.connect(func():
 			reject.call(Promise.Rejection.new("Request timed out"))
-			packet_callbacks.remove(packet.id, resolve)
+			if ignore_initial:
+				packet_callbacks.remove(packet.id, fn)
+			else:
+				packet_callbacks.remove(packet.id, resolve)
 		)
 		add_child(timeout)
 		timeout.start()
@@ -163,7 +176,7 @@ func send_request_packet(packet: Dictionary):
 
 
 func send_packet(packet: Dictionary):
-	if LOG_MESSAGES || true: print("Sending packet: %s" % encode_packet(packet))
+	if LOG_MESSAGES: print("Sending packet: %s" % encode_packet(packet))
 	socket.send_text(encode_packet(packet))
 
 func decode_packet(packet: PackedByteArray):
@@ -172,11 +185,21 @@ func decode_packet(packet: PackedByteArray):
 func encode_packet(packet: Dictionary):
 	return JSON.stringify(packet)
 
-func load_devices():
+func get_devices():
 	if loading:
 		await on_connect
 
-	return entities
+	var result = await send_request_packet({
+		"type": "render_template",
+		"template": devices_template,
+		"timeout": 3,
+		"report_errors": true
+	}, true)
+
+	return result.payload.event.result
+
+func get_device(id: String):
+	pass
 
 func get_state(entity: String):
 	if loading:
@@ -192,6 +215,9 @@ func watch_state(entity: String, callback: Callable):
 		await on_connect
 
 	entitiy_callbacks.add(entity, callback)
+
+	return func():
+		entitiy_callbacks.remove(entity, callback)
 
 
 func set_state(entity: String, state: String, attributes: Dictionary = {}):
@@ -210,6 +236,9 @@ func set_state(entity: String, state: String, attributes: Dictionary = {}):
 			service = 'turn_on'
 		elif state == 'off':
 			service = 'turn_off'
+
+	if service == null:
+		return null
 
 	return await send_request_packet({
 		"type": "call_service",

@@ -1,11 +1,11 @@
 extends Node
 
-var Adapter = preload("res://lib/home_adapters/adapter.gd")
+const Adapter = preload("res://lib/home_adapters/adapter.gd")
 
-var adapter = Adapter.new(Adapter.ADAPTER_TYPES.HASS)
-var adapter_ws = Adapter.new(Adapter.ADAPTER_TYPES.HASS_WS)
+var adapter = Adapter.new(Adapter.ADAPTER_TYPES.HASS_WS)
+# var adapter_http = Adapter.new(Adapter.ADAPTER_TYPES.HASS)
 
 func _ready():
 	add_child(adapter)
-	add_child(adapter_ws)
+	# add_child(adapter_http)
 	
