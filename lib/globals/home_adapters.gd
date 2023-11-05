@@ -1,6 +1,6 @@
 extends Node
 
-var Adapter = preload("res://src/home_adapters/adapter.gd")
+var Adapter = preload("res://lib/home_adapters/adapter.gd")
 
 var adapter = Adapter.new(Adapter.ADAPTER_TYPES.HASS)
 var adapter_ws = Adapter.new(Adapter.ADAPTER_TYPES.HASS_WS)

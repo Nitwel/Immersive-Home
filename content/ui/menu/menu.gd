@@ -1,10 +1,10 @@
 extends Node3D
 
-const Device = preload("res://scenes/device.tscn")
-const Entity = preload("res://scenes/entity.tscn")
-const Switch = preload("res://scenes/entities/switch.tscn")
-const Light = preload("res://scenes/entities/light.tscn")
-const Sensor = preload("res://scenes/entities/sensor.tscn")
+const Device = preload("res://content/ui/device/device.tscn")
+const Entity = preload("res://content/ui/entity/entity.tscn")
+const Switch = preload("res://content/entities/switch/switch.tscn")
+const Light = preload("res://content/entities/light/light.tscn")
+const Sensor = preload("res://content/entities/sensor/sensor.tscn")
 
 @onready var devices_node = $Devices
 var devices

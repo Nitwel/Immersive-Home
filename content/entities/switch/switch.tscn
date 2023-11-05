@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cscl5k7lhopj5"]
 
-[ext_resource type="Script" path="res://src/entities/switch.gd" id="1_8ffhi"]
+[ext_resource type="Script" path="res://content/entities/switch/switch.gd" id="1_8ffhi"]
 [ext_resource type="Texture2D" uid="uid://b72vsbcvqqxg7" path="res://assets/materials/swich_on.png" id="1_w68gw"]
 [ext_resource type="Texture2D" uid="uid://cvc0o6dsktnvl" path="res://assets/materials/switch_off.png" id="2_86ba1"]
 

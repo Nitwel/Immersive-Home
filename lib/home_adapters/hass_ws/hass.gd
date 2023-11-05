@@ -1,6 +1,6 @@
 extends Node
 
-var devices_template := FileAccess.get_file_as_string("res://src/home_adapters/hass/templates/devices.j2")
+var devices_template := FileAccess.get_file_as_string("res://lib/home_adapters/hass/templates/devices.j2")
 var socket := WebSocketPeer.new()
 # in seconds
 var request_timeout := 10.0

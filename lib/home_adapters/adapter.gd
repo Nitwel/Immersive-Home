@@ -1,7 +1,7 @@
 extends Node
 
-const hass = preload("res://src/home_adapters/hass/hass.gd")
-const hass_ws = preload("res://src/home_adapters/hass_ws/hass.gd")
+const hass = preload("res://lib/home_adapters/hass/hass.gd")
+const hass_ws = preload("res://lib/home_adapters/hass_ws/hass.gd")
 
 enum ADAPTER_TYPES {
 	HASS,
