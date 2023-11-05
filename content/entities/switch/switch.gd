@@ -5,7 +5,7 @@ extends StaticBody3D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var stateInfo = await HomeAdapters.adapter_ws.get_state(entity_id)
+	var stateInfo = await HomeAdapters.adapter.get_state(entity_id)
 	if stateInfo == null:
 		return
 
@@ -14,7 +14,7 @@ func _ready():
 	else:
 		sprite.set_frame(1)
 
-	await HomeAdapters.adapter_ws.watch_state(entity_id, func(new_state):
+	await HomeAdapters.adapter.watch_state(entity_id, func(new_state):
 		if new_state["state"] == "on":
 			sprite.set_frame(0)
 		else:
@@ -23,7 +23,7 @@ func _ready():
 
 
 func _on_toggle():
-	HomeAdapters.adapter_ws.set_state(entity_id, "off" if sprite.get_frame() == 0 else "on")
+	HomeAdapters.adapter.set_state(entity_id, "off" if sprite.get_frame() == 0 else "on")
 	if sprite.get_frame() == 0:
 		sprite.set_frame(1)
 	else:

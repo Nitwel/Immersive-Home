@@ -7,6 +7,4 @@
     {%- set ns.devices = ns.devices +  [ {device: {"name": device_attr(device, "name"), "entities": entities }} ] %}
   {%- endif %}
 {%- endfor %}
-{
-  "data": {{ ns.devices }}
-}
+{{ ns.devices }}
