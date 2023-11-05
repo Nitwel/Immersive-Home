@@ -26,13 +26,14 @@ func _get_event_data():
 
 func _handle_move():
 	var distance = ray.get_collision_point().distance_to(_click_point)
+	var collider = ray.get_collider()
 
 	if distance > 0.01:
 		if _is_pressed:
-			_call_fn("_on_press_move")
+			_call_fn(collider, "_on_press_move")
 			_moved = true
 		if _is_grabbed:
-			_call_fn("_on_grab_move")
+			_call_fn(collider, "_on_grab_move")
 			_moved = true
 
 func _handle_enter_leave():
@@ -41,11 +42,8 @@ func _handle_enter_leave():
 	if collider == _last_collided:
 		return
 
-	if _last_collided != null && _last_collided.has_method("_on_ray_enter"):
-		_last_collided._on_ray_enter(_get_event_data())
-
-	if collider != null && collider.has_method("_on_ray_leave"):
-		collider._on_ray_leave(_get_event_data())
+	_call_fn(collider, "_on_ray_enter")
+	_call_fn(_last_collided, "_on_ray_leave")
 
 	_last_collided = collider
 
@@ -59,11 +57,11 @@ func _on_button_pressed(button):
 		"trigger_click":
 			_is_pressed = true
 			_click_point = ray.get_collision_point()
-			_call_fn("_on_press_down")
+			_call_fn(collider, "_on_press_down")
 		"grip_click":
 			_is_grabbed = true
 			_click_point = ray.get_collision_point()
-			_call_fn("_on_grab_down")
+			_call_fn(collider, "_on_grab_down")
 
 func _on_button_released(button):
 	var collider = ray.get_collider()
@@ -75,22 +73,16 @@ func _on_button_released(button):
 		"trigger_click":
 			if _is_pressed:
 				if _moved == false:
-					_call_fn("_on_click")
-				_call_fn("_on_press_up")
+					_call_fn(collider, "_on_click")
+				_call_fn(collider, "_on_press_up")
 				_is_pressed = false
 				_moved = false
 		"grip_click":
 			if _is_grabbed:
-				_call_fn("_on_grab_up")
+				_call_fn(collider, "_on_grab_up")
 				_is_grabbed = false
 				_moved = false
 
-func _call_fn(fn_name: String):
-	print("call_fn", fn_name)
-	var collider = ray.get_collider()
-
-	if collider == null:
-		return
-	
-	if collider.has_method(fn_name):
+func _call_fn(collider: Object, fn_name: String):
+	if collider != null && collider.has_method(fn_name):
 		collider.call(fn_name, _get_event_data())
