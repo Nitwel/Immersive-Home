@@ -5,7 +5,7 @@ extends StaticBody3D
 
 signal click(name: String)
 	
-func _on_toggle():
+func _on_click(event):
 	click.emit(text)
 
 func set_entity_name(text):

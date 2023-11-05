@@ -31,6 +31,7 @@ renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality=4
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality.mobile=4
+anti_aliasing/quality/msaa_3d=2
 
 [xr]
 

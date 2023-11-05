@@ -7,7 +7,7 @@ var request_timeout := 10.0
 
 var url := "ws://192.168.33.33:8123/api/websocket"
 var token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzZjQ0ZGM2N2Y3YzY0MDc1OGZlMWI2ZjJlNmIxZjRkNSIsImlhdCI6MTY5ODAxMDcyOCwiZXhwIjoyMDEzMzcwNzI4fQ.K6ydLUC-4Q7BNIRCU1nWlI2s6sg9UCiOu-Lpedw2zJc"
-var LOG_MESSAGES := true
+var LOG_MESSAGES := false
 
 var authenticated := false
 var loading := true
