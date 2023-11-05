@@ -37,10 +37,10 @@ For example, the entity of name `lights.smart_lamp_1` would control the kitchen 
 .
 ├── addons             (All installed Godot Addons are saved here)
 ├── assets             (Files like logos or assets that are shared across scenes)
-├── content            (Main files of the project)/
+├── content/           (Main files of the project)
 │   ├── entities       (Entities that can be placed into the room)
 │   └── ui             (User Interface Scenes and related files)
-└── lib                (Code that is global or shared across scenes)/
+└── lib/               (Code that is global or shared across scenes)
     ├── globals        (Globally running scripts)
     └── home_adapters  (Code allowing control smart home entities)
 ```
