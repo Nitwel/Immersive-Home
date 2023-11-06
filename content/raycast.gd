@@ -31,8 +31,6 @@ func _handle_move():
 	var distance = ray.get_collision_point().distance_to(_click_point)
 	var collider = ray.get_collider()
 
-	print(distance)
-
 	if distance > 0.02:
 		if _is_pressed:
 			_call_fn(collider, "_on_press_move")
@@ -94,7 +92,5 @@ func _call_fn(collider: Object, fn_name: String):
 			collider.call(fn_name, _get_event_data())
 
 		for child in collider.get_children():
-			print("child", child)
 			if child is Function:
-				print("child is function!")
 				_call_fn(child, fn_name)
