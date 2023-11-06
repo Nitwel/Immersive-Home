@@ -5,7 +5,7 @@ extends StaticBody3D
 
 signal click(id: String)
 
-func _on_toggle():
+func _on_click(event):
 	click.emit(id)
 
 func set_device_name(text):

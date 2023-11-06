@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://xsiy71rsqulj"]
+[gd_scene load_steps=4 format=3 uid="uid://xsiy71rsqulj"]
 
 [ext_resource type="Script" path="res://content/entities/sensor/sensor.gd" id="1_57ac8"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="2_fpq5q"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_r20gc"]
 radius = 0.1
@@ -13,3 +14,6 @@ shape = SubResource("SphereShape3D_r20gc")
 
 [node name="Label" type="Label3D" parent="."]
 text = "some text"
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("2_fpq5q")

@@ -22,7 +22,7 @@ func _ready():
 	)
 
 
-func _on_toggle():
+func _on_click(event):
 	HomeAdapters.adapter.set_state(entity_id, "off" if sprite.get_frame() == 0 else "on")
 	if sprite.get_frame() == 0:
 		sprite.set_frame(1)

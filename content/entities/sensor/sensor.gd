@@ -12,5 +12,5 @@ func _ready():
 		label.text = new_state["state"]
 	)
 
-func _on_toggle():
+func _on_click(event):
 	pass

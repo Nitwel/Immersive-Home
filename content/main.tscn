@@ -57,7 +57,7 @@ script = ExtResource("1_tsqxc")
 ray = NodePath("RayCast3D")
 
 [node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/XRControllerRight/Raycast"]
-transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(-2.58078e-11, 4.3714e-08, 1, 1, -4.37117e-08, 9.27469e-12, 4.37112e-08, 1, -4.3714e-08, 0, 0, 0)
 target_position = Vector3(0, -5, 0)
 
 [node name="StartXR" parent="." instance=ExtResource("1_i4c04")]
