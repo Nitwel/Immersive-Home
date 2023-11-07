@@ -42,7 +42,7 @@ pose = &"aim"
 mesh = SubResource("BoxMesh_ir3co")
 
 [node name="Menu" parent="XROrigin3D/XRControllerLeft" instance=ExtResource("3_1tbp3")]
-transform = Transform3D(-4.37114e-08, 0, -1, -0.707107, 0.707107, 3.09086e-08, 0.707107, 0.707107, -3.09086e-08, 0.183517, 0, -0.0534939)
+transform = Transform3D(1, -0.000382732, -0.000120985, 8.65898e-05, 0.5, -0.866025, 0.000391948, 0.866025, 0.5, 0.0669508, 0.0876772, -0.101157)
 
 [node name="XRControllerRight" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.488349, 0.559219, -0.2988)

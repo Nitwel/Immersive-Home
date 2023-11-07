@@ -6,7 +6,7 @@ const Switch = preload("res://content/entities/switch/switch.tscn")
 const Light = preload("res://content/entities/light/light.tscn")
 const Sensor = preload("res://content/entities/sensor/sensor.tscn")
 
-@onready var devices_node = $Devices
+@onready var devices_node: GridContainer3D = $Devices
 var devices
 
 var selected_device = null
@@ -16,30 +16,18 @@ func _ready():
 	render_devices()
 
 func render_devices():
-	var x = 0
-	var y = 0
-	
 	for device in devices:
 		var info = device.values()[0]
 
 		var device_instance = Device.instantiate()
-		device_instance.set_position(Vector3(y * 0.08, 0, -x * 0.08))
 		device_instance.click.connect(_on_device_click)
 		device_instance.id = device.keys()[0]
-
 		devices_node.add_child(device_instance)
-
 		device_instance.set_device_name(info["name"])
-
-		x += 1
-		if x % 5 == 0:
-			x = 0
-			y += 1
+	
+	devices_node._update_container()
 		
 func render_entities():
-	var x = 0
-	var y = 0
-	
 	var info
 
 	for device in devices:
@@ -54,17 +42,11 @@ func render_entities():
 	
 	for entity in entities:
 		var entity_instance = Entity.instantiate()
-		entity_instance.set_position(Vector3(y * 0.08, 0, -x * 0.08))
 		entity_instance.click.connect(_on_entity_click)
-
 		devices_node.add_child(entity_instance)
-		
 		entity_instance.set_entity_name(entity)
-		
-		x += 1
-		if x % 5 == 0:
-			x = 0
-			y += 1
+
+	devices_node._update_container()
 	
 func _on_device_click(device_id):
 	selected_device = device_id
