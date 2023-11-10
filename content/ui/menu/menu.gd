@@ -39,6 +39,11 @@ func render_entities():
 		return
 
 	var entities = info["entities"]
+
+	var back_button = Entity.instantiate()
+	back_button.click.connect(_on_entity_click)
+	devices_node.add_child(back_button)
+	back_button.set_entity_name("#back")
 	
 	for entity in entities:
 		var entity_instance = Entity.instantiate()
@@ -56,9 +61,13 @@ func _on_device_click(device_id):
 
 func _on_entity_click(entity_name):
 	print(entity_name)
+
 	selected_device = null
 	clear_menu()
 	render_devices()
+
+	if entity_name == "#back":
+		return
 
 	var type = entity_name.split(".")[0]
 	print(type)
