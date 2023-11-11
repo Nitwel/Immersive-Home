@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://eecv28y6jxk4"]
+[gd_scene load_steps=12 format=3 uid="uid://eecv28y6jxk4"]
 
 [ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_i4c04"]
 [ext_resource type="Script" path="res://content/raycast.gd" id="1_tsqxc"]
 [ext_resource type="Script" path="res://content/main.gd" id="1_uvrd4"]
 [ext_resource type="PackedScene" uid="uid://c3kdssrmv84kv" path="res://content/ui/menu/menu.tscn" id="3_1tbp3"]
+[ext_resource type="Texture2D" uid="uid://bo55nohs0wsgf" path="res://assets/materials/pointer.png" id="4_wcfej"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="5_3qc8g"]
 [ext_resource type="Material" uid="uid://bf5ina366dwm6" path="res://assets/materials/sky.material" id="5_wgwf8"]
 
@@ -59,6 +60,11 @@ ray = NodePath("RayCast3D")
 [node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/XRControllerRight/Raycast"]
 transform = Transform3D(-2.58078e-11, 4.3714e-08, 1, 1, -4.37117e-08, 9.27469e-12, 4.37112e-08, 1, -4.3714e-08, 0, 0, 0)
 target_position = Vector3(0, -5, 0)
+
+[node name="Decal" type="Decal" parent="XROrigin3D/XRControllerRight/Raycast"]
+transform = Transform3D(0.999999, -0.000567105, -2.5179e-05, -2.51789e-05, 4.39886e-08, -0.999999, 0.000567105, 1, 2.97064e-08, -0.000775784, -1.09076e-05, -2.46767)
+size = Vector3(0.01, 5, 0.01)
+texture_albedo = ExtResource("4_wcfej")
 
 [node name="StartXR" parent="." instance=ExtResource("1_i4c04")]
 enable_passthrough = true

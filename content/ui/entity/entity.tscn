@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://xo0o5nrfjl23"]
+[gd_scene load_steps=5 format=3 uid="uid://xo0o5nrfjl23"]
 
 [ext_resource type="Script" path="res://content/ui/entity/entity.gd" id="1_825oj"]
+[ext_resource type="Script" path="res://content/functions/clickable.gd" id="2_i054q"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_aa3i4"]
 size = Vector3(0.05, 0.01, 0.05)
@@ -21,3 +22,7 @@ shape = SubResource("BoxShape3D_28fjq")
 transform = Transform3D(0.05, 0, 0, 0, -2.18557e-09, 0.05, 0, -0.05, -2.18557e-09, 0, 0.00918245, 0)
 text = "Text"
 autowrap_mode = 3
+width = 200.0
+
+[node name="Clickable" type="Node" parent="."]
+script = ExtResource("2_i054q")

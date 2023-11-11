@@ -1,0 +1,79 @@
+[gd_scene load_steps=9 format=3 uid="uid://bsjqdvkt0u87c"]
+
+[ext_resource type="Script" path="res://content/ui/button/button.gd" id="1_g5u54"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_peqek"]
+albedo_color = Color(0.151534, 0.211909, 0.619523, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jwpm5"]
+material = SubResource("StandardMaterial3D_peqek")
+size = Vector3(0.05, 0.02, 0.05)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_o4j7g"]
+points = PackedVector3Array(-0.025, -0.01, -0.025, -0.025, 0.01, -0.025, 0.025, -0.01, -0.025, -0.025, -0.01, 0.025, -0.025, 0.01, 0.025, 0.025, 0.01, -0.025, 0.025, -0.01, 0.025, 0.025, 0.01, 0.025)
+
+[sub_resource type="Animation" id="Animation_04k6i"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.01, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_iu2ed"]
+resource_name = "down"
+length = 0.4
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0.01, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+
+[sub_resource type="Animation" id="Animation_y7xum"]
+resource_name = "up"
+length = 0.4
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0.01, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sbgno"]
+_data = {
+"RESET": SubResource("Animation_04k6i"),
+"down": SubResource("Animation_iu2ed"),
+"up": SubResource("Animation_y7xum")
+}
+
+[node name="Button" type="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+script = ExtResource("1_g5u54")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_jwpm5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_o4j7g")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_sbgno")
+}
