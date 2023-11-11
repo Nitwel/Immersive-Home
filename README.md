@@ -80,11 +80,14 @@ func watch_state(entity: String, callback: Callable[entity: Entity]) -> Callable
 ### Interaction Events
 
 Each time a button is pressed on the primary controller, a ray-cast is done to be able to interact with devices or the UI.
+Additionally, each event will bubble up until the root node is reached, allowing to handle events on parents.
+In case that an event of a specific node has to be reacted on, use the `Clickable` function node.
 
 ```python
 InteractionEvent {
 	"controller": XRController3D, # The controller that triggered the event
 	"ray": RayCast3D, # The ray-cast that triggered the event
+	"target": Node3D, # The node that was hit by the ray-cast
 }
 ```
 
@@ -99,6 +102,18 @@ InteractionEvent {
 | `_on_grab_up` | `[event: InteractionEvent]` | The side grab button been released |
 | `_on_ray_enter` | `[event: InteractionEvent]` | The ray-cast enters the the collision body |
 | `_on_ray_leave` | `[event: InteractionEvent]` | The ray-cast leaves the the collision body |
+
+### Functions
+
+In order to implement generic features, a set of functions is available to be used in the project.
+
+#### Movable
+
+The `Movable` node allows to move a node around in the room. It uses the grab events in order to transform the parent node.
+
+#### Clickable
+
+The `Clickable` allows to access events of the parent using signals this node emits.
 
 ### Testing without a VR Headset
 
