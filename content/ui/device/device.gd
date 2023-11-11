@@ -1,12 +1,7 @@
-extends StaticBody3D
+extends Node3D
 
-@onready var label: Label3D = $Label
+@onready var label: Label3D = $Button/Label
 @export var id: String = "0"
-
-signal click(id: String)
-
-func _on_click(event):
-	click.emit(id)
 
 func set_device_name(text):
 	assert(label != null, "Device has to be added to the scene tree")

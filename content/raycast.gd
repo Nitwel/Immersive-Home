@@ -18,12 +18,6 @@ func _physics_process(delta):
 	_handle_enter_leave()
 	_handle_move()
 
-func _get_event_data():
-	return {
-		"controller": _controller,
-		"ray": ray,
-	}
-
 func _handle_move():
 	if _is_pressed == false && _is_grabbed == false:
 		return
@@ -86,11 +80,27 @@ func _on_button_released(button):
 				_is_grabbed = false
 				_moved = false
 
-func _call_fn(collider: Object, fn_name: String):
-	if collider != null:
-		if collider.has_method(fn_name):
-			collider.call(fn_name, _get_event_data())
+func _call_fn(collider: Object, fn_name: String, node: Node3D = null):
+	if collider == null:
+		return
 
-		for child in collider.get_children():
-			if child is Function:
-				_call_fn(child, fn_name)
+	if node == null:
+		node = collider
+
+	var event = {
+		"controller": _controller,
+		"ray": ray,
+		"target": collider,
+	}
+		
+	for child in node.get_children():
+		if child is Function && child.has_method(fn_name):
+			child.call(fn_name, event)
+
+	if node.has_method(fn_name):
+		node.call(fn_name, event)
+
+	var parent = node.get_parent()
+
+	if parent != null && parent is Node3D:
+		_call_fn(collider, fn_name, parent)

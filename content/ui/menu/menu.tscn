@@ -1,7 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=8 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="Material" uid="uid://bertj8bp8b5l1" path="res://assets/materials/interface.tres" id="2_nsukb"]
+[ext_resource type="Script" path="res://content/ui/menu/grid.gd" id="3_35a5r"]
+[ext_resource type="Texture2D" uid="uid://tr8yrx470k03" path="res://assets/materials/arrow_right.png" id="4_7frvc"]
+[ext_resource type="Script" path="res://content/functions/clickable.gd" id="4_f385t"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/button/button.tscn" id="5_w4i01"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_6t3dn"]
 material = ExtResource("2_nsukb")
@@ -11,7 +15,38 @@ size = Vector2(0.3, 0.3)
 script = ExtResource("1_ng4u3")
 
 [node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.15)
 mesh = SubResource("PlaneMesh_6t3dn")
 
 [node name="Devices" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.149223, 0, 0.150667)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0.03)
+script = ExtResource("3_35a5r")
+depth_gap = 0.06
+size = Vector3(0.24, 0.1, 0.1)
+
+[node name="NextPageButton" parent="." instance=ExtResource("5_w4i01")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, 0.01, 0.27)
+
+[node name="Decal" type="Decal" parent="NextPageButton"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+size = Vector3(0.04, 0.04, 0.04)
+texture_albedo = ExtResource("4_7frvc")
+
+[node name="Clickable" type="Node" parent="NextPageButton"]
+script = ExtResource("4_f385t")
+
+[node name="PreviousPageButton" parent="." instance=ExtResource("5_w4i01")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.11, 0.01, 0.27)
+
+[node name="Decal" type="Decal" parent="PreviousPageButton"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.02, 0)
+size = Vector3(0.04, 0.04, 0.04)
+texture_albedo = ExtResource("4_7frvc")
+
+[node name="Clickable" type="Node" parent="PreviousPageButton"]
+script = ExtResource("4_f385t")
+
+[node name="PageNumberLabel" type="Label3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, -4.37114e-09, 0.1, 0, -0.1, -4.37114e-09, 0.26, 0.01, 0.27)
+text = "1 / 3"
+font_size = 36
