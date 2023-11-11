@@ -39,6 +39,7 @@ For example, the entity of name `lights.smart_lamp_1` would control the kitchen 
 ├── assets             (Files like logos or assets that are shared across scenes)
 ├── content/           (Main files of the project)
 │   ├── entities       (Entities that can be placed into the room)
+│   ├── functions      (Generic functions that can be used in scenes)
 │   └── ui             (User Interface Scenes and related files)
 └── lib/               (Code that is global or shared across scenes)
     ├── globals        (Globally running scripts)
