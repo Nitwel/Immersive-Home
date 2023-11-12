@@ -121,3 +121,7 @@ The `Clickable` allows to access events of the parent using signals this node em
 In order to test without a headset, press the run project (F5) button in Godot and ignore the prompt that OpenXR failed to start.
 To simulate the headset and controller movement, we're using the [XR Input Simulator](https://godotengine.org/asset-library/asset/1775) asset.
 Click at the link to get a list of the supported controls.
+
+## Building
+
+`<uses-feature android:name="com.oculus.feature.CONTEXTUAL_BOUNDARYLESS_APP" android:required="true" />` can be added to the `AndroidManifest.xml` to disable the boundary system.
