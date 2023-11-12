@@ -1,12 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://cw86rc42dv2d8"]
+[gd_scene load_steps=14 format=3 uid="uid://cw86rc42dv2d8"]
 
 [ext_resource type="Script" path="res://content/entities/light/light.gd" id="1_ykxy3"]
 [ext_resource type="Texture2D" uid="uid://b72vsbcvqqxg7" path="res://assets/materials/swich_on.png" id="2_6gn2e"]
 [ext_resource type="Texture2D" uid="uid://cvc0o6dsktnvl" path="res://assets/materials/switch_off.png" id="3_qlm62"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_4sfxb"]
+[ext_resource type="Material" uid="uid://vce66e7sbc3n" path="res://content/entities/light/light_on.tres" id="5_50gph"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
-radius = 0.1
+radius = 0.06
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ldpuo"]
 animations = [{
@@ -22,6 +23,69 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Animation" id="Animation_7o31s"]
+resource_name = "light"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CSGCombiner3D:material_override:albedo_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 0.85098, 0, 1), Color(0.231373, 0.231373, 0.231373, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_afofi"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CSGCombiner3D:material_override:albedo_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 0.85098, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Knob:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.0492394, -0.0903599)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8a76q"]
+_data = {
+"RESET": SubResource("Animation_afofi"),
+"light": SubResource("Animation_7o31s")
+}
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_j3pn3"]
+top_radius = 0.002
+bottom_radius = 0.002
+height = 0.1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_tysib"]
+height = 0.1
+radius = 0.006
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_s8215"]
+top_radius = 0.004
+bottom_radius = 0.004
+height = 0.002
+
 [node name="Light" type="StaticBody3D"]
 script = ExtResource("1_ykxy3")
 
@@ -29,9 +93,50 @@ script = ExtResource("1_ykxy3")
 shape = SubResource("SphereShape3D_ukj14")
 
 [node name="Icon" type="AnimatedSprite3D" parent="."]
+visible = false
 pixel_size = 0.0005
 billboard = 1
 sprite_frames = SubResource("SpriteFrames_ldpuo")
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("4_4sfxb")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+transform = Transform3D(1, 9.69949e-05, 0.000589194, -9.77749e-05, 0.999999, 0.00135802, -0.000589065, -0.00135808, 0.999999, 0, 0, 0)
+material_override = ExtResource("5_50gph")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="CSGCombiner3D"]
+radius = 0.05
+radial_segments = 36
+rings = 12
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0485739, 0)
+radius = 0.02
+height = 0.03
+sides = 36
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_8a76q")
+}
+
+[node name="Rod" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0903599)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Rod"]
+mesh = SubResource("CylinderMesh_j3pn3")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rod"]
+shape = SubResource("CylinderShape3D_tysib")
+
+[node name="Knob" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0492394, -0.0903599)
+mesh = SubResource("CylinderMesh_s8215")
+
+[node name="RodBottom" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0501399, -0.090675)
+
+[node name="RodTop" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0498752, -0.090942)

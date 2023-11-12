@@ -81,4 +81,4 @@ shadow_enabled = true
 xr_origin = NodePath("../XROrigin3D")
 
 [node name="House" parent="." instance=ExtResource("8_qkrg7")]
-transform = Transform3D(0.999999, -1.39634e-11, 0, 9.48053e-12, 1, 0, 0, 0, 1, -1.83323, 0.000545101, 0.477467)
+transform = Transform3D(0.404247, 0.000180645, 0.914648, 0.00017221, 0.999999, -0.000273614, -0.914648, 0.00026812, 0.404247, -0.343479, 0.000110551, 1.91547)
