@@ -23,20 +23,19 @@ func _handle_move():
 		return
 
 	var distance = ray.get_collision_point().distance_to(_click_point)
-	var collider = ray.get_collider()
 
-	if distance > 0.02:
+	if _moved || distance > 0.02:
 		if _is_pressed:
-			_call_fn(collider, "_on_press_move")
+			_call_fn(_last_collided, "_on_press_move")
 			_moved = true
 		if _is_grabbed:
-			_call_fn(collider, "_on_grab_move")
+			_call_fn(_last_collided, "_on_grab_move")
 			_moved = true
 
 func _handle_enter_leave():
 	var collider = ray.get_collider()
 
-	if collider == _last_collided:
+	if collider == _last_collided || _is_grabbed || _is_pressed:
 		return
 
 	_call_fn(collider, "_on_ray_enter")
