@@ -1,0 +1,287 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://c0pyxkvyd8uca"
+path="res://.godot/imported/scene.gltf-e2c2ad1352f0744906d0c5025ff36336.scn"
+
+[deps]
+
+source_file="res://assets/living_room/scene.gltf"
+dest_files=["res://.godot/imported/scene.gltf-e2c2ad1352f0744906d0c5025ff36336.scn"]
+
+[params]
+
+nodes/root_type="Node3D"
+nodes/root_name="Scene Root"
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+import_script/path=""
+_subresources={
+"materials": {
+"0053_Ivory": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/0053_Ivory.tres"
+},
+"0128_White": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/0128_White.tres"
+},
+"BARRO_CANECA": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/BARRO_CANECA.tres"
+},
+"BRO3": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/BRO3.tres"
+},
+"BRO3_1": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/BRO3_1.tres"
+},
+"CHALEIRA_BASE_PRETA": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/CHALEIRA_BASE_PRETA.tres"
+},
+"CINZENTO_FORNO": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/CINZENTO_FORNO.tres"
+},
+"CROMADO": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/CROMADO.tres"
+},
+"CROMO_TORNEIRA": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/CROMO_TORNEIRA.tres"
+},
+"FRIGORIFICO_CORPO": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/FRIGORIFICO_CORPO.tres"
+},
+"Grass_Light_Green": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/Grass_Light_Green.tres"
+},
+"INTERRUPTOR_VERMELHO_FORNO": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/INTERRUPTOR_VERMELHO_FORNO.tres"
+},
+"LACADO": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/LACADO.tres"
+},
+"LOGO_CANECA": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/LOGO_CANECA.tres"
+},
+"LOGO_CANECA_3": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/LOGO_CANECA_3.tres"
+},
+"MOLDURA": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/MOLDURA.tres"
+},
+"MOLDURA_0": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/MOLDURA_0.tres"
+},
+"MOSTRADOR": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/MOSTRADOR.tres"
+},
+"PARQUET": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/PARQUET.tres"
+},
+"PLASTICO_BOX": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/PLASTICO_BOX.tres"
+},
+"PRATEADO_CROMO_TV": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/PRATEADO_CROMO_TV.tres"
+},
+"PRETO": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/PRETO.tres"
+},
+"PRETO_CADEIRA": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/PRETO_CADEIRA.tres"
+},
+"PRETO_FRIGORIFICO": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/PRETO_FRIGORIFICO.tres"
+},
+"PRETO_PORTAFORNO": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/PRETO_PORTAFORNO.tres"
+},
+"PRETO_TV": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/PRETO_TV.tres"
+},
+"TECIDO_SOFA": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/TECIDO_SOFA.tres"
+},
+"TECIDO_SOFA_4": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/TECIDO_SOFA_4.tres"
+},
+"TIJOLEIRA": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/TIJOLEIRA.tres"
+},
+"VASO1": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VASO1.tres"
+},
+"VASO10": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VASO10.tres"
+},
+"VASO11": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VASO11.tres"
+},
+"VASO12": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VASO12.tres"
+},
+"VASO2": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VASO2.tres"
+},
+"VASO3": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VASO3.tres"
+},
+"VASO4": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VASO4.tres"
+},
+"VASO5": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VASO5.tres"
+},
+"VASO6": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VASO6.tres"
+},
+"VASO7": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VASO7.tres"
+},
+"VASO8": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VASO8.tres"
+},
+"VASO9": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VASO9.tres"
+},
+"VIDRO": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VIDRO.tres"
+},
+"VIDRO_FORNO": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/VIDRO_FORNO.tres"
+},
+"Vegetation_Grass1": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/Vegetation_Grass1.tres"
+},
+"cinzentinho_forno": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/cinzentinho_forno.tres"
+},
+"ecran": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/ecran.tres"
+},
+"edge_color000255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color000255.tres"
+},
+"edge_color147614255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color147614255.tres"
+},
+"edge_color148148148255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color148148148255.tres"
+},
+"edge_color198198198255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color198198198255.tres"
+},
+"edge_color20400255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color20400255.tres"
+},
+"edge_color214214214255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color214214214255.tres"
+},
+"edge_color222209193255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color222209193255.tres"
+},
+"edge_color22610140255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color22610140255.tres"
+},
+"edge_color239239239255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color239239239255.tres"
+},
+"edge_color241242246255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color241242246255.tres"
+},
+"edge_color255255255255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color255255255255.tres"
+},
+"edge_color402720255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color402720255.tres"
+},
+"edge_color7110240255": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/edge_color7110240255.tres"
+},
+"material": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/material.tres"
+},
+"material_1": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/material_1.tres"
+},
+"material_2": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/material_2.tres"
+},
+"material_5": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/living_room/materials/material_5.tres"
+}
+}
+}
+gltf/embedded_image_handling=1

@@ -113,7 +113,7 @@ func start_subscriptions():
 					if packet.event.c[entity]["+"].has("s"):
 						entities[entity]["state"] = packet.event.c[entity]["+"]["s"]
 					if packet.event.c[entity]["+"].has("a"):
-						entities[entity]["attributes"].merge(packet.event.c[entity]["+"]["a"])
+						entities[entity]["attributes"].merge(packet.event.c[entity]["+"]["a"], true)
 					entitiy_callbacks.call_key(entity, [entities[entity]])
 	)
 

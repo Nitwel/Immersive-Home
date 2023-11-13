@@ -132,10 +132,11 @@ Click at the link to get a list of the supported controls.
 5. Make sure to reuse any existing `debug.keystore` when updating an app
 6. Don't forget to set the JAVA_HOME variable and restart Godot to take effect
 7. Install the `Godot XR Android OpenXR Loaders` plugin in Godot
-7. Configure the following in the android build template:
+8. Configure the following in the android build template:
 	- XRMode set to OpenXR
 	- Check `Use Grandle Build`
 	- Check `Godot OpenXR Meta`
 	- In XRFeatures, select at least optional for passthrough
 	- Ckeck Internet under the permissions
 	- Under Resources > Filters to export, add `*.j2`
+9. `<uses-feature android:name="com.oculus.feature.CONTEXTUAL_BOUNDARYLESS_APP" android:required="true" />` can be added to the `AndroidManifest.xml` to disable the boundary system.
