@@ -7,6 +7,10 @@ var request_timeout := 10.0
 
 var url := "ws://192.168.33.33:8123/api/websocket"
 var token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzZjQ0ZGM2N2Y3YzY0MDc1OGZlMWI2ZjJlNmIxZjRkNSIsImlhdCI6MTY5ODAxMDcyOCwiZXhwIjoyMDEzMzcwNzI4fQ.K6ydLUC-4Q7BNIRCU1nWlI2s6sg9UCiOu-Lpedw2zJc"
+
+# var url := "wss://8ybjhqcinfcdyvzu.myfritz.net:8123/api/websocket"
+# var token := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjNjU0ZDE3NDc2ZGM0NzU1OGY5NjIzMmM5ZjdjYzE2YSIsImlhdCI6MTY5OTgyMzcxOCwiZXhwIjoyMDE1MTgzNzE4fQ.XHlfnXUd16HaV9XjYrxzuNg23nFFeoEsIsaMVXwRkd8"
+
 var LOG_MESSAGES := false
 
 var authenticated := false

@@ -1,13 +1,15 @@
 extends StaticBody3D
 
 @export var entity_id = "switch.plug_printer_2"
-@onready var sprite: AnimatedSprite3D = $Icon
-@onready var animation: AnimationPlayer = $AnimationPlayer
+@export var color_off = Color(0.23, 0.23, 0.23)
+@export var color_on = Color(1.0, 0.85, 0.0)
+
 @onready var shape = $CSGCombiner3D
 @onready var rod_top = $RodTop
 @onready var rod_bottom = $RodBottom
 @onready var slider_knob = $Knob
 var state = false
+var brightness = 0 # 0-255
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -20,19 +22,37 @@ func _ready():
 		set_state(new_state["state"] == "on")
 	)
 
-func set_state(state: bool):
+func set_state(state: bool, brightness = null):
+	print("set_state ", state, brightness)
 	self.state = state
+	self.brightness = brightness
+
 	if state:
-		animation.play_backwards("light")
+		if brightness == null:
+			shape.material_override.albedo_color = color_on
+		else:
+			shape.material_override.albedo_color = color_off.lerp(color_on, brightness / 255.0)
 	else:
-		animation.play("light")
+			shape.material_override.albedo_color = color_off
+
+
 
 func _on_click(event):
 	if event.target == self:
-		HomeAdapters.adapter.set_state(entity_id, "on" if !state else "off")
-		set_state(!state)
+		var attributes = {}
+
+		if !state && brightness != null:
+			attributes["brightness"] = int(brightness)
+
+		HomeAdapters.adapter.set_state(entity_id, "on" if !state else "off", attributes)
+		set_state(!state, brightness)
 	else:
 		_on_clickable_on_click(event)
+
+func _on_press_move(event):
+	if event.target != self:
+		_on_clickable_on_click(event)
+		
 
 func _on_request_completed():
 	pass
@@ -51,4 +71,5 @@ func _on_clickable_on_click(event):
 
 	slider_knob.position = new_pos
 
-	HomeAdapters.adapter.set_state(entity_id, "on" if state else "off", {"brightness_pct": int(ratio * 100)})
+	HomeAdapters.adapter.set_state(entity_id, "on" if state else "off", {"brightness": int(ratio * 255)})
+	set_state(state, ratio * 255)

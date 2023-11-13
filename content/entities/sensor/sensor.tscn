@@ -13,7 +13,11 @@ script = ExtResource("1_57ac8")
 shape = SubResource("SphereShape3D_r20gc")
 
 [node name="Label" type="Label3D" parent="."]
-text = "some text"
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+pixel_size = 0.001
+text = "some text
+"
+font_size = 80
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("2_fpq5q")
