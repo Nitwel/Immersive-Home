@@ -60,22 +60,20 @@ func _on_button_pressed(button):
 			_call_fn(collider, "_on_grab_down")
 
 func _on_button_released(button):
-	var collider = ray.get_collider()
-
-	if collider == null:
+	if _last_collided == null:
 		return
 
 	match button:
 		"trigger_click":
 			if _is_pressed:
 				if _moved == false:
-					_call_fn(collider, "_on_click")
-				_call_fn(collider, "_on_press_up")
+					_call_fn(_last_collided, "_on_click")
+				_call_fn(_last_collided, "_on_press_up")
 				_is_pressed = false
 				_moved = false
 		"grip_click":
 			if _is_grabbed:
-				_call_fn(collider, "_on_grab_up")
+				_call_fn(_last_collided, "_on_grab_up")
 				_is_grabbed = false
 				_moved = false
 

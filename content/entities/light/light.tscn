@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cw86rc42dv2d8"]
+[gd_scene load_steps=15 format=3 uid="uid://cw86rc42dv2d8"]
 
 [ext_resource type="Script" path="res://content/entities/light/light.gd" id="1_ykxy3"]
 [ext_resource type="Texture2D" uid="uid://b72vsbcvqqxg7" path="res://assets/materials/swich_on.png" id="2_6gn2e"]
@@ -7,7 +7,7 @@
 [ext_resource type="Material" uid="uid://vce66e7sbc3n" path="res://content/entities/light/light_on.tres" id="5_50gph"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
-radius = 0.06
+radius = 0.05
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ldpuo"]
 animations = [{
@@ -73,18 +73,22 @@ _data = {
 }
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_j3pn3"]
-top_radius = 0.002
-bottom_radius = 0.002
+top_radius = 0.004
+bottom_radius = 0.004
 height = 0.1
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_tysib"]
 height = 0.1
-radius = 0.006
+radius = 0.01
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_13uml"]
+albedo_color = Color(0.231373, 0.239216, 0.231373, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_s8215"]
-top_radius = 0.004
-bottom_radius = 0.004
-height = 0.002
+material = SubResource("StandardMaterial3D_13uml")
+top_radius = 0.006
+bottom_radius = 0.006
+height = 0.004
 
 [node name="Light" type="StaticBody3D"]
 script = ExtResource("1_ykxy3")

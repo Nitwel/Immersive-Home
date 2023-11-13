@@ -6,11 +6,13 @@ var hit_node := Node3D.new()
 
 func _on_grab_down(event):
 	event.controller.add_child(hit_node)
-	hit_node.global_position = get_parent().global_position
+	hit_node.global_transform = get_parent().global_transform
 
 func _on_grab_move(event):
-	get_parent().global_position = hit_node.global_position
-	get_parent().global_rotation = hit_node.global_rotation
+	get_parent().global_transform = hit_node.global_transform
+
+func _on_grab_up(event):
+	event.controller.remove_child(hit_node)
 
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := PackedStringArray()
