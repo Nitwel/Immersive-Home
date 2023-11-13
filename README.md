@@ -121,3 +121,21 @@ The `Clickable` allows to access events of the parent using signals this node em
 In order to test without a headset, press the run project (F5) button in Godot and ignore the prompt that OpenXR failed to start.
 To simulate the headset and controller movement, we're using the [XR Input Simulator](https://godotengine.org/asset-library/asset/1775) asset.
 Click at the link to get a list of the supported controls.
+
+## Building
+
+1. Clone the repo from GitHub
+	- Make sure, Git LFS is installed
+2. Open the project in Godot 4.1.3
+3. Possibly fix importing scenes error
+4. Follow the following guide to setup exporting for android. [link](https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_android.html)
+5. Make sure to reuse any existing `debug.keystore` when updating an app
+6. Don't forget to set the JAVA_HOME variable and restart Godot to take effect
+7. Install the `Godot XR Android OpenXR Loaders` plugin in Godot
+7. Configure the following in the android build template:
+	- XRMode set to OpenXR
+	- Check `Use Grandle Build`
+	- Check `Godot OpenXR Meta`
+	- In XRFeatures, select at least optional for passthrough
+	- Ckeck Internet under the permissions
+	- Under Resources > Filters to export, add `*.j2`
