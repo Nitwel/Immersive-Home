@@ -124,4 +124,19 @@ Click at the link to get a list of the supported controls.
 
 ## Building
 
-`<uses-feature android:name="com.oculus.feature.CONTEXTUAL_BOUNDARYLESS_APP" android:required="true" />` can be added to the `AndroidManifest.xml` to disable the boundary system.
+1. Clone the repo from GitHub
+	- Make sure, Git LFS is installed
+2. Open the project in Godot 4.1.3
+3. Possibly fix importing scenes error
+4. Follow the following guide to setup exporting for android. [link](https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_android.html)
+5. Make sure to reuse any existing `debug.keystore` when updating an app
+6. Don't forget to set the JAVA_HOME variable and restart Godot to take effect
+7. Install the `Godot XR Android OpenXR Loaders` plugin in Godot
+8. Configure the following in the android build template:
+	- XRMode set to OpenXR
+	- Check `Use Grandle Build`
+	- Check `Godot OpenXR Meta`
+	- In XRFeatures, select at least optional for passthrough
+	- Ckeck Internet under the permissions
+	- Under Resources > Filters to export, add `*.j2`
+9. `<uses-feature android:name="com.oculus.feature.CONTEXTUAL_BOUNDARYLESS_APP" android:required="true" />` can be added to the `AndroidManifest.xml` to disable the boundary system.
