@@ -66,6 +66,8 @@ target_position = Vector3(0, -5, 0)
 transform = Transform3D(0.999999, -0.000567105, -2.5179e-05, -2.51789e-05, 4.39886e-08, -0.999999, 0.000567105, 1, 2.97064e-08, -0.000775784, -1.09076e-05, -2.46767)
 size = Vector3(0.02, 5, 0.02)
 texture_albedo = ExtResource("4_wcfej")
+upper_fade = 0.000985425
+lower_fade = 0.000919435
 
 [node name="StartXR" parent="." instance=ExtResource("1_i4c04")]
 enable_passthrough = true

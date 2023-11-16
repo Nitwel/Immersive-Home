@@ -84,6 +84,8 @@ Each time a button is pressed on the primary controller, a ray-cast is done to b
 Additionally, each event will bubble up until the root node is reached, allowing to handle events on parents.
 In case that an event of a specific node has to be reacted on, use the `Clickable` function node.
 
+It is also possible to bubble up information by returning a dictionary from a function like `_on_click`.
+
 ```python
 InteractionEvent {
 	"controller": XRController3D, # The controller that triggered the event

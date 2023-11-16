@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3 uid="uid://crrb0l3ekuotj"]
+
+[ext_resource type="Script" path="res://content/ui/menu/edit/edit_menu.gd" id="1_34cbn"]
+[ext_resource type="Script" path="res://content/ui/menu/grid.gd" id="3_0xvyw"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_tvimg"]
+[ext_resource type="Texture2D" uid="uid://tr8yrx470k03" path="res://assets/materials/arrow_right.png" id="5_0uvv4"]
+[ext_resource type="Script" path="res://content/functions/clickable.gd" id="6_pf8jy"]
+
+[node name="EditMenu" type="Node3D"]
+script = ExtResource("1_34cbn")
+
+[node name="Devices" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0.01, 0.03)
+script = ExtResource("3_0xvyw")
+depth_gap = 0.06
+size = Vector3(0.24, 0.1, 0.1)
+
+[node name="PageNumberLabel" type="Label3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, -4.37114e-09, 0.1, 0, -0.1, -4.37114e-09, 0.26, 0.01, 0.27)
+text = "1 / 3"
+font_size = 36
+
+[node name="Buttons" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, 0.01, 0.27)
+
+[node name="NextPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
+
+[node name="Decal" type="Decal" parent="Buttons/NextPageButton"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+size = Vector3(0.04, 0.04, 0.04)
+texture_albedo = ExtResource("5_0uvv4")
+
+[node name="Clickable" type="Node" parent="Buttons/NextPageButton"]
+script = ExtResource("6_pf8jy")
+
+[node name="PreviousPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0, 0)
+
+[node name="Decal" type="Decal" parent="Buttons/PreviousPageButton"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.02, 0)
+size = Vector3(0.04, 0.04, 0.04)
+texture_albedo = ExtResource("5_0uvv4")
+
+[node name="Clickable" type="Node" parent="Buttons/PreviousPageButton"]
+script = ExtResource("6_pf8jy")

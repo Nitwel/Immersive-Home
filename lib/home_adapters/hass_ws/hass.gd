@@ -34,6 +34,7 @@ func _init(url := self.url, token := self.token):
 func connect_ws():
 	print("Connecting to %s" % self.url)
 	socket.connect_to_url(self.url)
+	set_process(true)
 
 	# https://github.com/godotengine/godot/issues/84423
 	# Otherwise the WebSocketPeer will crash when receiving large packets
@@ -125,6 +126,9 @@ func handle_disconnect():
 	authenticated = false
 	set_process(false)
 	on_disconnect.emit()
+
+	# Reconnect
+	connect_ws()
 
 func send_subscribe_packet(packet: Dictionary, callback: Callable):
 	packet.id = id
