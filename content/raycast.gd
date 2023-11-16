@@ -77,27 +77,34 @@ func _on_button_released(button):
 				_is_grabbed = false
 				_moved = false
 
-func _call_fn(collider: Object, fn_name: String, node: Node3D = null):
+func _call_fn(collider: Object, fn_name: String, node: Node3D = null, event = null):
 	if collider == null:
 		return
 
 	if node == null:
 		node = collider
+		event = {
+			"controller": _controller,
+			"ray": ray,
+			"target": collider,
+		}
 
-	var event = {
-		"controller": _controller,
-		"ray": ray,
-		"target": collider,
-	}
-		
+	if node.has_method(fn_name):
+		var result = node.call(fn_name, event)
+
+		if result != null && result is Dictionary:
+			result.merge(event, true)
+
+		if result != null && result is bool && result == false:
+			# Stop the event from bubbling up
+			return
+
 	for child in node.get_children():
 		if child is Function && child.has_method(fn_name):
 			child.call(fn_name, event)
-
-	if node.has_method(fn_name):
-		node.call(fn_name, event)
+			
 
 	var parent = node.get_parent()
 
 	if parent != null && parent is Node3D:
-		_call_fn(collider, fn_name, parent)
+		_call_fn(collider, fn_name, parent, event)
