@@ -18,7 +18,7 @@ enum Menu {
 var selected_menu := Menu.EDIT
 
 func _ready():
-	select_menu(selected_menu)
+	pass
 
 func _on_click(event):
 	if event.target == nav_view:
@@ -40,6 +40,9 @@ func select_menu(menu: Menu):
 
 	var menu_node = enum_to_menu(menu)
 	var nav_node = enum_to_nav(menu)
+
+	if nav_node != null:
+		nav_node.disabled = true
 
 	if menu_node != null:
 		menu_node.show()

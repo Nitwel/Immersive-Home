@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://c01gkeldvjwtr"]
+
+[ext_resource type="Script" path="res://content/ui/menu/room/room_menu.gd" id="1_ch4jb"]
+[ext_resource type="Script" path="res://content/functions/clickable.gd" id="2_elugy"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_08sv0"]
+
+[node name="RoomMenu" type="Node3D"]
+script = ExtResource("1_ch4jb")
+
+[node name="TeleportRoot" type="Node3D" parent="."]
+
+[node name="Ground" type="StaticBody3D" parent="TeleportRoot"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TeleportRoot/Ground"]
+shape = SubResource("WorldBoundaryShape3D_08sv0")
+
+[node name="Clickable" type="Node" parent="TeleportRoot/Ground"]
+script = ExtResource("2_elugy")
+
+[node name="WallCorners" type="Node3D" parent="TeleportRoot"]
+
+[node name="WallEdges" type="Node3D" parent="TeleportRoot"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=12 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="PackedScene" uid="uid://crrb0l3ekuotj" path="res://content/ui/menu/edit/edit_menu.tscn" id="4_r2raj"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://jodf3dm654j3" path="res://assets/icons/view_in_ar_white_24dp.svg" id="7_wvovx"]
 [ext_resource type="Texture2D" uid="uid://dch6rwihrl3i2" path="res://assets/icons/schema_white_24dp.svg" id="8_3d082"]
 [ext_resource type="Texture2D" uid="uid://dyh0ax51xqp8n" path="res://assets/icons/settings_white_24dp.svg" id="9_mel13"]
+[ext_resource type="PackedScene" uid="uid://c01gkeldvjwtr" path="res://content/ui/menu/room/room_menu.tscn" id="10_u4i1x"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_08du6"]
 size = Vector3(0.3, 0.01, 0.3)
@@ -79,3 +80,5 @@ texture = ExtResource("9_mel13")
 [node name="Content" type="Node3D" parent="."]
 
 [node name="EditMenu" parent="Content" instance=ExtResource("4_r2raj")]
+
+[node name="RoomMenu" parent="Content" instance=ExtResource("10_u4i1x")]
