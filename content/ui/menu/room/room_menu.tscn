@@ -1,9 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://c01gkeldvjwtr"]
+[gd_scene load_steps=8 format=3 uid="uid://c01gkeldvjwtr"]
 
 [ext_resource type="Script" path="res://content/ui/menu/room/room_menu.gd" id="1_ch4jb"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="2_elugy"]
+[ext_resource type="Material" uid="uid://bbx6fv7jq50tr" path="res://content/ui/menu/room/walls.tres" id="3_fke3j"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_whl7a"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_08sv0"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_7dibq"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_e37nn"]
+size = Vector3(0.3, 0.01, 0.3)
 
 [node name="RoomMenu" type="Node3D"]
 script = ExtResource("1_ch4jb")
@@ -21,3 +28,26 @@ script = ExtResource("2_elugy")
 [node name="WallCorners" type="Node3D" parent="TeleportRoot"]
 
 [node name="WallEdges" type="Node3D" parent="TeleportRoot"]
+
+[node name="WallMesh" type="MeshInstance3D" parent="TeleportRoot"]
+material_override = ExtResource("3_fke3j")
+mesh = SubResource("ArrayMesh_7dibq")
+
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.15)
+mesh = SubResource("BoxMesh_e37nn")
+
+[node name="Interface" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+
+[node name="ToggleEdit" parent="Interface" instance=ExtResource("3_whl7a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0, 0.05)
+toggleable = true
+
+[node name="Clickable" type="Node" parent="Interface/ToggleEdit"]
+script = ExtResource("2_elugy")
+
+[node name="Label3D" type="Label3D" parent="Interface"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.17, -1.86265e-09, 0.05)
+pixel_size = 0.001
+text = "Edit Room"

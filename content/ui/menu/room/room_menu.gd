@@ -6,24 +6,72 @@ const wall_edge_scene = preload("res://content/ui/menu/room/wall_edge.tscn")
 @onready var teleport_root = $TeleportRoot
 @onready var wall_corners = $TeleportRoot/WallCorners
 @onready var wall_edges = $TeleportRoot/WallEdges
+@onready var wall_mesh = $TeleportRoot/WallMesh
+@onready var toggle_edit_button = $Interface/ToggleEdit
 
 var moving = null
 var ground_plane = Plane(Vector3.UP, Vector3.ZERO)
+var edit_enabled = false
 
 func _ready():
 	remove_child(teleport_root)
 	get_tree().get_root().get_node("Main").add_child.call_deferred(teleport_root)
 
 	teleport_root.get_node("Ground/Clickable").on_click.connect(func(event):
+		if !edit_enabled:
+			return
+
 		add_corner(event.ray.get_collision_point())
 	)
 
+	toggle_edit_button.get_node("Clickable").on_click.connect(func(event):
+		edit_enabled = event.active
 
+		if edit_enabled == false:
+			wall_corners.visible = false
+			wall_edges.visible = false
+			generate_mesh()
+			wall_mesh.visible = true
+		else:
+			wall_corners.visible = true
+			wall_edges.visible = true
+			wall_mesh.visible = false
+	)
+
+func generate_mesh():
+	var st = SurfaceTool.new()
+	var wall_up = Vector3.UP * 3
+
+	st.begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
+
+	for i in range(wall_corners.get_child_count()):
+		var corner = get_corner(i)
+
+		print(corner.position, " ", corner.position + wall_up)
+
+		st.add_vertex(corner.position)
+		st.add_vertex(corner.position + wall_up)
+
+	var first_corner = get_corner(0)
+
+	st.add_vertex(first_corner.position)
+	st.add_vertex(first_corner.position + wall_up)
+
+	st.index()
+	st.generate_normals()
+	st.generate_tangents()
+	var mesh = st.commit()
+	
+	wall_mesh.mesh = mesh
+		
 func add_corner(position: Vector3):
 	var corner = wall_corner_scene.instantiate()
 	corner.position = position
 	
 	corner.get_node("Clickable").on_grab_down.connect(func(event):
+		if !edit_enabled:
+			return
+
 		moving = event.target
 	)
 
