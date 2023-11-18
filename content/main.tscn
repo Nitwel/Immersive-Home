@@ -33,7 +33,7 @@ script = ExtResource("1_uvrd4")
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.798091, 0.311748)
+transform = Transform3D(1, 2.47971e-10, 3.49246e-10, 9.47986e-12, 1, 2.08834e-08, 0, 4.54747e-13, 1, -7.27596e-12, 0.798091, 0.311748)
 
 [node name="XRControllerLeft" type="XRController3D" parent="XROrigin3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.469893, 0.597213, -0.251112)
@@ -59,12 +59,12 @@ script = ExtResource("1_tsqxc")
 ray = NodePath("RayCast3D")
 
 [node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/XRControllerRight/Raycast"]
-transform = Transform3D(-2.58078e-11, 4.3714e-08, 1, 1, -4.37117e-08, 9.27469e-12, 4.37112e-08, 1, -4.3714e-08, 0, 0, 0)
+transform = Transform3D(-4.62364e-10, 4.3714e-08, 0.999998, 0.999999, -4.37194e-08, 9.2768e-12, 4.37103e-08, 0.999999, -4.3714e-08, -0.000467122, 0.00228411, -0.0016689)
 target_position = Vector3(0, -5, 0)
 
 [node name="Decal" type="Decal" parent="XROrigin3D/XRControllerRight/Raycast"]
 transform = Transform3D(0.999999, -0.000567105, -2.5179e-05, -2.51789e-05, 4.39886e-08, -0.999999, 0.000567105, 1, 2.97064e-08, -0.000775784, -1.09076e-05, -2.46767)
-size = Vector3(0.02, 5, 0.02)
+size = Vector3(0.02, 4.91995, 0.02)
 texture_albedo = ExtResource("4_wcfej")
 upper_fade = 0.000985425
 lower_fade = 0.000919435
@@ -84,3 +84,4 @@ xr_origin = NodePath("../XROrigin3D")
 
 [node name="House" parent="." instance=ExtResource("8_qkrg7")]
 transform = Transform3D(0.404247, 0.000180645, 0.914648, 0.00017221, 0.999999, -0.000273614, -0.914648, 0.00026812, 0.404247, -0.343479, 0.000110551, 1.91547)
+visible = false

@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://cfcabpcbp577o"]
+
+[ext_resource type="Material" uid="uid://j12e5wwthtaa" path="res://content/ui/menu/room/edge.tres" id="1_b21dw"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_a2dct"]
+material = ExtResource("1_b21dw")
+radius = 0.01
+height = 1.0
+
+[node name="MeshInstance3D" type="MeshInstance3D"]
+mesh = SubResource("CapsuleMesh_a2dct")

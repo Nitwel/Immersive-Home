@@ -3,6 +3,7 @@ class_name Button3D
 
 @export var toggleable: bool = false
 @export var disabled: bool = false
+@export var initial_active: bool = false
 var active: bool = false :
 	set(value):
 		print("set active", value)
@@ -16,15 +17,14 @@ var active: bool = false :
 			animation_player.play("down")
 		else:
 			animation_player.play_backwards("down")
-		
-		
-	
 	get:
-		return active
-	
-		
+		return active	
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+
+func _ready():
+	if initial_active:
+		active = true
 
 func _on_click(_event):
 	if disabled:

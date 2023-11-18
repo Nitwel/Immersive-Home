@@ -4,6 +4,7 @@ extends Node3D
 @onready var nav_edit: Button3D = $Navigation/Edit
 @onready var menu_edit: Node3D = $Content/EditMenu
 @onready var nav_room = $Navigation/Room
+@onready var menu_room: Node3D = $Content/RoomMenu
 @onready var nav_automate = $Navigation/Automate
 @onready var nav_settings = $Navigation/Settings
 
@@ -36,13 +37,16 @@ func select_menu(menu: Menu):
 	selected_menu = menu
 	for child in $Content.get_children():
 		if child.is_visible():
-			child.hide()
+			$Content.remove_child(child)
 
 	var menu_node = enum_to_menu(menu)
 	var nav_node = enum_to_nav(menu)
 
+	if nav_node != null:
+		nav_node.disabled = true
+
 	if menu_node != null:
-		menu_node.show()
+		$Content.add_child(menu_node)
 
 	for child in $Navigation.get_children():
 		if child.active && child != nav_node:
@@ -69,7 +73,7 @@ func enum_to_menu(menu: Menu):
 		Menu.EDIT:
 			return menu_edit
 		Menu.ROOM:
-			return null
+			return menu_room
 		Menu.AUTOMATE:
 			return null
 		Menu.SETTINGS:

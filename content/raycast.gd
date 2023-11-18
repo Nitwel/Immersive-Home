@@ -94,6 +94,7 @@ func _call_fn(collider: Object, fn_name: String, node: Node3D = null, event = nu
 
 		if result != null && result is Dictionary:
 			result.merge(event, true)
+			event = result
 
 		if result != null && result is bool && result == false:
 			# Stop the event from bubbling up
