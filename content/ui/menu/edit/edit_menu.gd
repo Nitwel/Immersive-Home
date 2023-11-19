@@ -65,8 +65,13 @@ func render():
 	update_pages()
 	page_number_label.set_text(str(page + 1) + " / " + str(pages))
 
-	previous_page_button.visible = page > 0
-	next_page_button.visible = page < pages - 1
+	var has_prev_page = page > 0
+	var has_next_page = page < pages - 1
+
+	previous_page_button.visible = has_prev_page
+	previous_page_button.disabled = !has_prev_page
+	next_page_button.visible = has_next_page
+	next_page_button.disabled = !has_next_page
 
 	clear_menu()
 	if selected_device == null:

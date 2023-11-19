@@ -6,7 +6,7 @@
 [sub_resource type="SphereShape3D" id="SphereShape3D_r20gc"]
 radius = 0.1
 
-[node name="Sensor" type="StaticBody3D"]
+[node name="Sensor" type="StaticBody3D" groups=["entity"]]
 script = ExtResource("1_57ac8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

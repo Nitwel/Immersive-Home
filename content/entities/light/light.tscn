@@ -90,7 +90,7 @@ top_radius = 0.006
 bottom_radius = 0.006
 height = 0.004
 
-[node name="Light" type="StaticBody3D"]
+[node name="Light" type="StaticBody3D" groups=["entity"]]
 script = ExtResource("1_ykxy3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

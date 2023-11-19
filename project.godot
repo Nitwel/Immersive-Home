@@ -21,6 +21,7 @@ XRToolsUserSettings="*res://addons/godot-xr-tools/user_settings/user_settings.gd
 Request="*res://lib/globals/request.gd"
 HomeAdapters="*res://lib/globals/home_adapters.gd"
 AudioPlayer="*res://lib/globals/audio_player.gd"
+Events="*res://lib/globals/events.gd"
 
 [editor_plugins]
 
