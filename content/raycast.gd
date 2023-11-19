@@ -72,14 +72,16 @@ func _on_button_released(button):
 					_call_fn(_last_collided, "_on_click")
 				_call_fn(_last_collided, "_on_press_up")
 				_is_pressed = false
+				_last_collided = null
 				_moved = false
 		"grip_click":
 			if _is_grabbed:
 				_call_fn(_last_collided, "_on_grab_up")
 				_is_grabbed = false
+				_last_collided = null
 				_moved = false
 
-func _call_fn(collider: Object, fn_name: String, node: Node3D = null, event = null):
+func _call_fn(collider: Variant, fn_name: String, node: Node3D = null, event = null):
 	if collider == null:
 		return
 
@@ -111,3 +113,9 @@ func _call_fn(collider: Object, fn_name: String, node: Node3D = null, event = nu
 
 	if parent != null && parent is Node3D:
 		_call_fn(collider, fn_name, parent, event)
+	else:
+		# in case the top has been reached
+		_call_global_fn(fn_name, event)
+
+func _call_global_fn(fn_name: String, event = null):
+	Events.get(fn_name.substr(1)).emit(event)

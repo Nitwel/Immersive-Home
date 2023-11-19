@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=16 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="PackedScene" uid="uid://crrb0l3ekuotj" path="res://content/ui/menu/edit/edit_menu.tscn" id="4_r2raj"]
@@ -15,76 +15,224 @@
 [sub_resource type="BoxMesh" id="BoxMesh_08du6"]
 size = Vector3(0.3, 0.01, 0.3)
 
+[sub_resource type="Animation" id="Animation_lkh72"]
+resource_name = "hide_menu"
+length = 0.4
+step = 0.01
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationContainer:rotation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationContainer:rotation:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimationContainer:rotation:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.18, -0.0484788, -1.5708, -0.24, 0.0818026, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimationContainer:scale:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.01, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AnimationContainer:scale:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.01, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AnimationContainer:scale:z")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.01, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.4)
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("AnimationContainer:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.39, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_61md4"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationContainer:scale:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationContainer:scale:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimationContainer:scale:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimationContainer:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s30cd"]
+_data = {
+"RESET": SubResource("Animation_61md4"),
+"hide_menu": SubResource("Animation_lkh72")
+}
+
 [node name="Menu" type="Node3D"]
 script = ExtResource("1_ng4u3")
 
-[node name="Background" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.15)
+[node name="AnimationContainer" type="Node3D" parent="."]
+
+[node name="Background" type="MeshInstance3D" parent="AnimationContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, 0, 0.15)
 mesh = SubResource("BoxMesh_08du6")
+skeleton = NodePath("../..")
+
+[node name="Navigation" type="Node3D" parent="AnimationContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
+
+[node name="View" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.03)
+toggleable = true
+
+[node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/View"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
+pixel_size = 0.0002
+axis = 1
+texture = ExtResource("5_8o1rb")
+
+[node name="Edit" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.09)
+toggleable = true
+initial_active = true
+
+[node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/Edit"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
+pixel_size = 0.0002
+axis = 1
+texture = ExtResource("6_344ot")
+
+[node name="Room" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.15)
+toggleable = true
+
+[node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/Room"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
+pixel_size = 0.0002
+axis = 1
+texture = ExtResource("7_wvovx")
+
+[node name="Automate" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.21)
+toggleable = true
+
+[node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/Automate"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
+pixel_size = 0.0002
+axis = 1
+texture = ExtResource("8_3d082")
+
+[node name="Settings" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.27)
+toggleable = true
+
+[node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/Settings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
+pixel_size = 0.0002
+axis = 1
+texture = ExtResource("9_mel13")
+
+[node name="Content" type="Node3D" parent="AnimationContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
+
+[node name="EditMenu" parent="AnimationContainer/Content" instance=ExtResource("4_r2raj")]
+
+[node name="RoomMenu" parent="AnimationContainer/Content" instance=ExtResource("10_u4i1x")]
+visible = false
+
+[node name="SettingsMenu" parent="AnimationContainer/Content" instance=ExtResource("11_7wm6b")]
+visible = false
 
 [node name="ImmersiveHomePanels" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.37114e-10, 0, 0.01, 0, 0.01, 0, -0.01, 0, -4.37114e-10, 0.32, 0, -0.0500001)
 visible = false
 mesh = ExtResource("7_f4u4o")
 
-[node name="Navigation" type="Node3D" parent="."]
-
-[node name="View" parent="Navigation" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.03)
-toggleable = true
-
-[node name="Sprite3D" type="Sprite3D" parent="Navigation/View"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
-pixel_size = 0.0002
-axis = 1
-texture = ExtResource("5_8o1rb")
-
-[node name="Edit" parent="Navigation" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.09)
-toggleable = true
-initial_active = true
-
-[node name="Sprite3D" type="Sprite3D" parent="Navigation/Edit"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
-pixel_size = 0.0002
-axis = 1
-texture = ExtResource("6_344ot")
-
-[node name="Room" parent="Navigation" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.15)
-toggleable = true
-
-[node name="Sprite3D" type="Sprite3D" parent="Navigation/Room"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
-pixel_size = 0.0002
-axis = 1
-texture = ExtResource("7_wvovx")
-
-[node name="Automate" parent="Navigation" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.21)
-toggleable = true
-
-[node name="Sprite3D" type="Sprite3D" parent="Navigation/Automate"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
-pixel_size = 0.0002
-axis = 1
-texture = ExtResource("8_3d082")
-
-[node name="Settings" parent="Navigation" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.27)
-toggleable = true
-
-[node name="Sprite3D" type="Sprite3D" parent="Navigation/Settings"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
-pixel_size = 0.0002
-axis = 1
-texture = ExtResource("9_mel13")
-
-[node name="Content" type="Node3D" parent="."]
-
-[node name="EditMenu" parent="Content" instance=ExtResource("4_r2raj")]
-
-[node name="RoomMenu" parent="Content" instance=ExtResource("10_u4i1x")]
-
-[node name="SettingsMenu" parent="Content" instance=ExtResource("11_7wm6b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_s30cd")
+}

@@ -2,6 +2,8 @@ extends AudioStreamPlayer
 
 var click_sound = preload("res://assets/sound/click.wav")
 var spawn_sound = preload("res://assets/sound/spawn.wav")
+var open_menu = preload("res://assets/sound/open_menu.wav")
+var close_menu = preload("res://assets/sound/close_menu.wav")
 
 func _ready():
 	volume_db = -18
@@ -9,7 +11,15 @@ func _ready():
 func play_effect(sound):
 	if sound == "click":
 		stream = click_sound
+		volume_db = -18
 	elif sound == "spawn":
 		stream = spawn_sound
+		volume_db = -10
+	elif sound == "open_menu":
+		stream = open_menu
+		volume_db = -6
+	elif sound == "close_menu":
+		stream = close_menu
+		volume_db = -6
 	
 	play()

@@ -1,0 +1,121 @@
+[gd_scene load_steps=10 format=3 uid="uid://b30w6tywfj4fp"]
+
+[ext_resource type="Script" path="res://content/controller_left.gd" id="1_2j3qs"]
+[ext_resource type="PackedScene" uid="uid://c3kdssrmv84kv" path="res://content/ui/menu/menu.tscn" id="1_ccbr3"]
+[ext_resource type="PackedScene" uid="uid://cj42our8uhfq6" path="res://assets/models/trash_bin/trash_bin.gltf" id="3_m33ce"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58yb"]
+ao_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_ir3co"]
+material = SubResource("StandardMaterial3D_m58yb")
+size = Vector3(0.01, 0.01, 0.01)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_x2eyr"]
+height = 0.105954
+radius = 0.0447927
+
+[sub_resource type="Animation" id="Animation_7owc4"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("trash_bin:scale:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.03, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("trash_bin:scale:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.03, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("trash_bin:scale:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.03, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_hax52"]
+resource_name = "add_trashbin"
+length = 0.3
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("trash_bin:scale:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0.03, -0.25, 0, 0.25, 0, 0.04, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.3)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("trash_bin:scale:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0.03, -0.25, 0, 0.25, 0, 0.04, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.3)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("trash_bin:scale:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0.03, -0.25, 0, 0.25, 0, 0.04, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.3)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hkli8"]
+_data = {
+"RESET": SubResource("Animation_7owc4"),
+"add_trashbin": SubResource("Animation_hax52")
+}
+
+[node name="XRControllerLeft" type="XRController3D"]
+tracker = &"left_hand"
+pose = &"aim"
+script = ExtResource("1_2j3qs")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_ir3co")
+
+[node name="Menu" parent="." instance=ExtResource("1_ccbr3")]
+transform = Transform3D(1, -0.000382732, -0.000120985, 8.65898e-05, 0.5, -0.866025, 0.000391948, 0.866025, 0.5, 0.0669508, 0.0876772, -0.101157)
+
+[node name="trash_bin" parent="." instance=ExtResource("3_m33ce")]
+transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0.106903, -0.228617, 0.132214)
+
+[node name="Area3D" type="Area3D" parent="trash_bin"]
+transform = Transform3D(25, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="trash_bin/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0542412, 0)
+shape = SubResource("CylinderShape3D_x2eyr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_hkli8")
+}

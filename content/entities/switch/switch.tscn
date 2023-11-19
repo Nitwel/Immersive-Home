@@ -22,7 +22,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Switch" type="StaticBody3D"]
+[node name="Switch" type="StaticBody3D" groups=["entity"]]
 script = ExtResource("1_8ffhi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
