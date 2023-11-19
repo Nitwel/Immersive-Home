@@ -121,11 +121,13 @@ func _on_entity_click(entity_name):
 	if entity_name == "#back":
 		selected_device = null
 		page = last_device_page
+		AudioPlayer.play_effect("click")
 		render()
 		return
 
 	var type = entity_name.split(".")[0]
 	print(type)
+	AudioPlayer.play_effect("spawn")
 
 	if type == "switch":
 		var switch = Switch.instantiate()
