@@ -7,6 +7,7 @@ const wall_edge_scene = preload("res://content/ui/menu/room/wall_edge.tscn")
 @onready var wall_corners = $TeleportRoot/WallCorners
 @onready var wall_edges = $TeleportRoot/WallEdges
 @onready var wall_mesh = $TeleportRoot/WallMesh
+@onready var wall_collisions = $TeleportRoot/WallCollisions
 @onready var toggle_edit_button = $Interface/ToggleEdit
 
 var moving = null
@@ -30,7 +31,17 @@ func _ready():
 		if edit_enabled == false:
 			wall_corners.visible = false
 			wall_edges.visible = false
-			generate_mesh()
+			wall_mesh.mesh = generate_mesh()
+			var collisions = generate_collision(wall_mesh.mesh)
+		
+			for old_coll in wall_collisions.get_children():
+				old_coll.queue_free()
+
+			for collision in collisions:
+				var static_body = StaticBody3D.new()
+				static_body.add_child(collision)
+				wall_collisions.add_child(static_body)
+			
 			wall_mesh.visible = true
 		else:
 			wall_corners.visible = true
@@ -67,7 +78,39 @@ func generate_mesh():
 	st.generate_tangents()
 	var mesh = st.commit()
 	
-	wall_mesh.mesh = mesh
+	return mesh
+
+func generate_collision(mesh: ArrayMesh):
+	var corner_count = wall_corners.get_child_count()
+
+	if corner_count < 3:
+		return
+
+	var collision_shapes: Array[CollisionShape3D] = []
+
+	for i in range(corner_count):
+		var corner = get_corner(i)
+		var next_corner = get_corner(i + 1)
+
+		var shape = BoxShape3D.new()
+		shape.size = Vector3((next_corner.position - corner.position).length(), 3, 0.04)
+
+		var transform = Transform3D()
+		var back_vector = (corner.position - next_corner.position).cross(Vector3.UP).normalized() * shape.size.z / 2
+
+		transform.basis = Basis((next_corner.position - corner.position).normalized(), Vector3.UP,  back_vector.normalized())
+		transform.origin = corner.position + (next_corner.position - corner.position) / 2 + back_vector + Vector3.UP * shape.size.y / 2
+
+		var collision_shape = CollisionShape3D.new()
+
+		collision_shape.shape = shape
+		collision_shape.transform = transform
+
+		collision_shapes.append(collision_shape)
+
+	print(collision_shapes)
+	
+	return collision_shapes
 		
 func add_corner(position: Vector3):
 	var corner = wall_corner_scene.instantiate()
