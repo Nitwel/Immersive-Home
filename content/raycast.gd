@@ -2,6 +2,7 @@ extends Node3D
 
 @onready var _controller := XRHelpers.get_xr_controller(self)
 @export var ray: RayCast3D
+@export var timespan_click = 200.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -11,6 +12,7 @@ func _ready():
 var _last_collided: Object = null
 var _is_pressed := false
 var _is_grabbed := false
+var _time_pressed := 0.0
 var _moved := false
 var _click_point := Vector3.ZERO
 
@@ -19,18 +21,17 @@ func _physics_process(delta):
 	_handle_move()
 
 func _handle_move():
-	if _is_pressed == false && _is_grabbed == false:
+	var time_passed = Time.get_ticks_msec() - _time_pressed
+	if time_passed <= timespan_click || (_is_pressed == false && _is_grabbed == false):
 		return
 
-	var distance = ray.get_collision_point().distance_to(_click_point)
+	_moved = true
 
-	if _moved || distance > 0.02:
-		if _is_pressed:
-			_call_fn(_last_collided, "_on_press_move")
-			_moved = true
-		if _is_grabbed:
-			_call_fn(_last_collided, "_on_grab_move")
-			_moved = true
+	if _is_pressed:
+		_call_fn(_last_collided, "_on_press_move")
+		
+	if _is_grabbed:
+		_call_fn(_last_collided, "_on_grab_move")
 
 func _handle_enter_leave():
 	var collider = ray.get_collider()
@@ -52,6 +53,7 @@ func _on_button_pressed(button):
 	match button:
 		"trigger_click":
 			_is_pressed = true
+			_time_pressed = Time.get_ticks_msec()
 			_click_point = ray.get_collision_point()
 			_call_fn(collider, "_on_press_down")
 		"grip_click":

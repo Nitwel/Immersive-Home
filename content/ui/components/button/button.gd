@@ -21,6 +21,7 @@ var active: bool = false :
 		return active	
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var click_sound: AudioStreamPlayer = $ClickSound
 
 func _ready():
 	if initial_active:
@@ -34,6 +35,7 @@ func _on_click(_event):
 		return
 
 	active = !active
+	AudioPlayer.play_effect("click")
 
 	return {
 		"active": active
@@ -46,6 +48,7 @@ func _on_press_down(_event):
 	if toggleable:
 		return
 	
+	AudioPlayer.play_effect("click")
 	animation_player.play("down")
 
 func _on_press_up(_event):

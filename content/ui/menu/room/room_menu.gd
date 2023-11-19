@@ -39,12 +39,17 @@ func _ready():
 	)
 
 func generate_mesh():
+	var corner_count = wall_corners.get_child_count()
+
+	if corner_count < 3:
+		return
+
 	var st = SurfaceTool.new()
 	var wall_up = Vector3.UP * 3
 
 	st.begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
 
-	for i in range(wall_corners.get_child_count()):
+	for i in range(corner_count):
 		var corner = get_corner(i)
 
 		print(corner.position, " ", corner.position + wall_up)
