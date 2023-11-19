@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://c6r4higceibif"]
+
+[ext_resource type="Script" path="res://content/ui/menu/settings/settings_menu.gd" id="1_0lte6"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_faxng"]
+[ext_resource type="Script" path="res://content/functions/clickable.gd" id="3_qmg6q"]
+
+[node name="SettingsMenu" type="Node3D"]
+script = ExtResource("1_0lte6")
+
+[node name="Button" parent="." instance=ExtResource("1_faxng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0458097, 0, 0.0435752)
+
+[node name="Label3D" type="Label3D" parent="Button"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.138567, 0, 0)
+pixel_size = 0.001
+text = "Spawn Ball"
+
+[node name="Clickable" type="Node" parent="Button"]
+script = ExtResource("3_qmg6q")

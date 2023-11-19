@@ -7,6 +7,7 @@ extends Node3D
 @onready var menu_room: Node3D = $Content/RoomMenu
 @onready var nav_automate = $Navigation/Automate
 @onready var nav_settings = $Navigation/Settings
+@onready var menu_settings: Node3D = $Content/SettingsMenu
 
 enum Menu {
 	VIEW,
@@ -77,4 +78,4 @@ func enum_to_menu(menu: Menu):
 		Menu.AUTOMATE:
 			return null
 		Menu.SETTINGS:
-			return null
+			return menu_settings

@@ -33,6 +33,8 @@ script = ExtResource("2_elugy")
 material_override = ExtResource("3_fke3j")
 mesh = SubResource("ArrayMesh_7dibq")
 
+[node name="WallCollisions" type="Node3D" parent="TeleportRoot"]
+
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.15)
 mesh = SubResource("BoxMesh_e37nn")
