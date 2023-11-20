@@ -61,7 +61,7 @@ jobs:
 
       - name: Test
         run: |
-          cat ./export_presets.cfg | grep keystore/release
+          cat ./export_presets.cfg
 
       - name: export game
         id: export
