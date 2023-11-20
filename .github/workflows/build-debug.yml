@@ -23,9 +23,9 @@ jobs:
       - name: Android Export
         run: |
           mkdir -v -p build/android
-          godot -v --export-debug --headless "Android" /build/android/$EXPORT_NAME-debug.apk
+          godot -v --export-debug --headless "Android" /build/android/immersive-home.apk
       - name: Upload APK
         uses: actions/upload-artifact@v1
         with:
-          name: $EXPORT_NAME-debug
-          path: build/android/$EXPORT_NAME-debug.apk
+          name: immersive-home-debug
+          path: build/android/immersive-home-debug.apk
