@@ -24,6 +24,7 @@ jobs:
         run: |
           mkdir -v -p ~/.local/share/godot/templates
           mv /root/.local/share/godot/templates/4.1.3.stable ~/.local/share/godot/templates/4.1.3.stable
+          ls -l ~/.local/share/godot/templates
       - name: Android Export
         run: |
           mkdir -v -p /build/android
