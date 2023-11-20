@@ -39,7 +39,6 @@ jobs:
       - name: Setup Android Export
         run: |
           keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999 -deststoretype pkcs12
-          ls -l
 
           mkdir -p ~/.config/godot
           cp -v ./editor_settings-4.tres ~/.config/godot/
@@ -53,31 +52,29 @@ jobs:
           unzip -q ./templates/android_source.zip -d ./android/build/
           rm ./templates/android_source.zip
 
-          ls -l ./android/build/
+      - name: Test1
+        run: |
+          cat ~/.config/godot/editor_settings-4.tres
 
-      # - name: Test1
-      #   run: |
-      #     cat ~/.config/godot/editor_settings-4.tres
+      - name: export game
+        id: export
+        # Use latest version (see releases for all versions)
+        uses: firebelley/godot-export@v5.2.1
+        with:
+          # Defining all the required inputs
+          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.1.3/Godot_v4.1.3-stable_linux.x86_64.zip
+          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.1.3/Godot_v4.1.3-stable_export_templates.tpz
+          export_debug: true
+          relative_project_path: ./
+          archive_output: true
+          verbose: true
 
-      # - name: export game
-      #   id: export
-      #   # Use latest version (see releases for all versions)
-      #   uses: firebelley/godot-export@v5.2.1
-      #   with:
-      #     # Defining all the required inputs
-      #     godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.1.3/Godot_v4.1.3-stable_linux.x86_64.zip
-      #     godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.1.3/Godot_v4.1.3-stable_export_templates.tpz
-      #     export_debug: true
-      #     relative_project_path: ./
-      #     archive_output: true
-      #     verbose: true
+      - name: Test2
+        run: |
+          cat ~/.config/godot/editor_settings-4.tres
 
-      # - name: Test2
-      #   run: |
-      #     cat ~/.config/godot/editor_settings-4.tres
-
-      # - name: Upload APK
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: immersive-home-debug
-      #     path: ${{ steps.export.outputs.archive_directory }}
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: immersive-home-debug
+          path: ${{ steps.export.outputs.archive_directory }}
