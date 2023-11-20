@@ -6,14 +6,13 @@ on:
       - main
 
 env:
-  GODOT_VERSION: 4.1.3-stable
   EXPORT_NAME: immersive-home
 
 jobs:
   build:
     runs-on: ubuntu-20.04
     container:
-      image: barichello/godot-ci:${GODOT_VERSION}
+      image: barichello/godot-ci:4.1.3
     steps:
       - name: Checkout
         uses: actions/checkout@v2
