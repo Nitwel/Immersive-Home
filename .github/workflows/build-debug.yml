@@ -24,13 +24,15 @@ jobs:
         run: |
           mkdir -v -p ~/.local/share/godot/export_templates
           mv /root/.local/share/godot/export_templates/4.1.3.stable ~/.local/share/godot/export_templates/4.1.3.stable
-          ls -l ~/.local/share/godot/export_templates
           ls -l ~/.local/share/godot/export_templates/4.1.3.stable
+          mkdir -v -p ~/.android
+          mv /root/debug.keystore ~/.android/debug.keystore
+          ls -l ~/.android
       - name: Android Export
         run: |
           mkdir -v -p /build/android
+          ls -l /root/
           godot -v --export-debug --debug-collisions --headless "Android" /build/android/immersive-home.apk
-          ls -l .
           ls -l /build/android
       - name: Upload APK
         uses: actions/upload-artifact@v2
