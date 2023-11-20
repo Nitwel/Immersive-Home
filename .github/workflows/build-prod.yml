@@ -43,9 +43,9 @@ jobs:
           rm export_presets.cfg
           mv export_presets_prod.cfg export_presets.cfg
 
-          echo keystore/release="/home/runner/work/Immersive-Home/Immersive-Home/release.keystore" > ./export_presets.cfg
-          echo keystore/release_user="${{ secrets.RELEASE_USER }}" > ./export_presets.cfg
-          echo keystore/release_password="${{ secrets.RELEASE_PASSWORD }}" > ./export_presets.cfg
+          echo keystore/release="/home/runner/work/Immersive-Home/Immersive-Home/release.keystore" >> ./export_presets.cfg
+          echo keystore/release_user="${{ secrets.RELEASE_USER }}" >> ./export_presets.cfg
+          echo keystore/release_password="${{ secrets.RELEASE_PASSWORD }}" >> ./export_presets.cfg
 
           mkdir -p ~/.config/godot
           cp -v ./editor_settings-4.tres ~/.config/godot/
@@ -58,10 +58,6 @@ jobs:
           rm ./godot_templates.tpz
           unzip -q ./templates/android_source.zip -d ./android/build/
           rm ./templates/android_source.zip
-
-      - name: Test
-        run: |
-          cat ./export_presets.cfg
 
       - name: export game
         id: export
