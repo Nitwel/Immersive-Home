@@ -1,9 +1,10 @@
 # Build the Android APK on push to the master branch
-name: Build APK
+name: Build Release APK
 on:
   push:
     tags:
-      - "v*-test"
+      - "v*"
+      - "!v*-test"
 
 env:
   GODOT_VERSION: 4.1.3
@@ -37,7 +38,14 @@ jobs:
 
       - name: Setup Android Export
         run: |
-          keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999 -deststoretype pkcs12
+          echo "${{ secrets.KEYSTORE_RELEASE }}" | base64 -di > release.keystore
+
+          rm export_presets.cfg
+          mv export_presets_prod.cfg export_presets.cfg
+
+          echo keystore/release="/home/runner/work/Immersive-Home/Immersive-Home/release.keystore" > ./export_presets.cfg
+          echo keystore/release_user="${{ secrets.RELEASE_USER }}" > ./export_presets.cfg
+          echo keystore/release_password="${{ secrets.RELEASE_PASSWORD }}" > ./export_presets.cfg
 
           mkdir -p ~/.config/godot
           cp -v ./editor_settings-4.tres ~/.config/godot/
@@ -59,7 +67,6 @@ jobs:
           # Defining all the required inputs
           godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.1.3/Godot_v4.1.3-stable_linux.x86_64.zip
           godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.1.3/Godot_v4.1.3-stable_export_templates.tpz
-          export_debug: true
           relative_project_path: ./
           archive_output: true
 
@@ -67,6 +74,5 @@ jobs:
         uses: ncipollo/release-action@v1.11.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          generateReleaseNotes: false
-          prerelease: true
+          generateReleaseNotes: true
           artifacts: ${{ steps.export.outputs.archive_directory }}/* # Added "/*" at the end is glob pattern match for this action
