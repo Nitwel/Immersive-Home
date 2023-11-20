@@ -59,6 +59,7 @@ jobs:
           export_debug: true
           relative_project_path: ./
           archive_output: true
+          verbose: true
 
       - name: Test
         run: |
