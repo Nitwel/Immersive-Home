@@ -10,3 +10,7 @@ end_of_line = crlf
 charset = utf-8
 trim_trailing_whitespace = false
 insert_final_newline = false
+
+[*.yml]
+indent_size = 2
+indent_style = space

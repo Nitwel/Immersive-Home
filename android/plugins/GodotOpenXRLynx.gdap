@@ -1,0 +1,7 @@
+[config]
+
+name="GodotOpenXRLynx"
+binary_type="local"
+binary="godotopenxrlynx/godotopenxrlynx-release.aar"
+
+[dependencies]
