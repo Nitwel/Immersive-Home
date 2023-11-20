@@ -1,0 +1,7 @@
+[config]
+
+name="GodotOpenXRMeta"
+binary_type="local"
+binary="godotopenxrmeta/godotopenxrmeta-debug.aar"
+
+[dependencies]
