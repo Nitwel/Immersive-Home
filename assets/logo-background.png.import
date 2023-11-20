@@ -1,3 +1,34 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8a3dcddb38aad078d2aa060c37fd931c564eff3241e8badadae8737ab647e54b
-size 786
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://bcp24e532oyfy"
+path="res://.godot/imported/logo-background.png-3d5691e6c32be592c284587b43087aae.ctex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://assets/logo-background.png"
+dest_files=["res://.godot/imported/logo-background.png-3d5691e6c32be592c284587b43087aae.ctex"]
+
+[params]
+
+compress/mode=0
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1
