@@ -22,10 +22,10 @@ jobs:
           lfs: true
       - name: Android Export
         run: |
-          mkdir -v -p build/android
-          godot -v --export-debug --headless "Android" /build/android/immersive-home.apk
+          mkdir -v -p ./build/android
+          godot -v --export-debug --headless "Android" ./build/android/immersive-home.apk
       - name: Upload APK
         uses: actions/upload-artifact@v1
         with:
           name: immersive-home-debug
-          path: ./
+          path: ./build
