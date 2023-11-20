@@ -36,15 +36,16 @@ jobs:
 
       - name: Setup Android Export
         run: |
-          mkdir -p ~/.android
           keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999 -deststoretype pkcs12
-          mv -v debug.keystore ~/.android/debug.keystore
+          mv -v debug.keystore /usr/bin/debug.keystore
 
           mkdir -p ~/.config/godot
           cp -v ./android/editor_settings-4.tres ~/.config/godot/
 
           mkdir -p ./android/build
           touch ./android/build/.gdignore
+
+          cat ~/.config/godot/editor_settings-4.tres
 
       - name: export game
         id: export
