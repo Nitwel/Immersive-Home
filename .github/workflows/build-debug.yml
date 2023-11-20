@@ -46,7 +46,9 @@ jobs:
           mkdir -p ./android/build
           touch ./android/build/.gdignore
 
-          cat ~/.config/godot/editor_settings-4.tres | echo
+      - name: Test1
+        run: |
+          cat ~/.config/godot/editor_settings-4.tres
 
       - name: export game
         id: export
@@ -61,9 +63,9 @@ jobs:
           archive_output: true
           verbose: true
 
-      - name: Test
+      - name: Test2
         run: |
-          cat ~/.config/godot/editor_settings-4.tres | echo
+          cat ~/.config/godot/editor_settings-4.tres
 
       - name: Upload APK
         uses: actions/upload-artifact@v2
