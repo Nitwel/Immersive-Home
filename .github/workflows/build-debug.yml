@@ -28,4 +28,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: immersive-home-debug
-          path: build/android/immersive-home-debug.apk
+          path: build/
