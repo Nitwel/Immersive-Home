@@ -59,6 +59,12 @@ jobs:
           unzip -q ./templates/android_source.zip -d ./android/build/
           rm ./templates/android_source.zip
 
+      - name: create test artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: test
+          path: .
+
       - name: export game
         id: export
         # Use latest version (see releases for all versions)
