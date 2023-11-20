@@ -38,10 +38,16 @@ jobs:
         run: |
           mkdir -p ~/.android
           keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999 -deststoretype pkcs12
-          mv debug.keystore ~/.android/debug.keystore
+          mv -v debug.keystore ~/.android/debug.keystore
 
           mkdir -p ~/.config/godot
-          cp ./android/editor_settings-4.tres ~/.config/godot/
+          cp -v ./android/editor_settings-4.tres ~/.config/godot/
+
+          touch ./android/build/.gdignore
+
+      - name: Import Assets
+        run: |
+          godot -v -e --quit --headless
 
       - name: export game
         id: export
