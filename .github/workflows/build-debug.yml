@@ -24,6 +24,9 @@ jobs:
         run: |
           mkdir -v -p build/android
           godot -v --export-debug --headless "Android" /build/android/immersive-home.apk
+      - name: Show File Tree
+        run: |
+          tree -a -L 3
       - name: Upload APK
         uses: actions/upload-artifact@v1
         with:
