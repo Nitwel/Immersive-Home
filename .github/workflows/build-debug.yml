@@ -43,6 +43,7 @@ jobs:
           mkdir -p ~/.config/godot
           cp -v ./android/editor_settings-4.tres ~/.config/godot/
 
+          mkdir -p ./android/build
           touch ./android/build/.gdignore
 
       - name: Import Assets
