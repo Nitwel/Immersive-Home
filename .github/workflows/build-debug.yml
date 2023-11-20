@@ -46,10 +46,6 @@ jobs:
           mkdir -p ./android/build
           touch ./android/build/.gdignore
 
-      - name: Import Assets
-        run: |
-          godot -v -e --quit --headless
-
       - name: export game
         id: export
         # Use latest version (see releases for all versions)
