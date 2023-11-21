@@ -27,7 +27,7 @@ func _init(type: ADAPTER_TYPES):
 
 	var clipboard := DisplayServer.clipboard_get()
 
-	if clipboard != null:
+	if clipboard != null && clipboard.find(" ") != -1:
 		var clip_url = clipboard.split(" ")[0]
 		var clip_token = clipboard.split(" ")[1]
 		adapter = adapters[type].new(clip_url, clip_token)
