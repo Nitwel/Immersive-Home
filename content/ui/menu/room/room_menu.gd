@@ -32,6 +32,10 @@ func _ready():
 			wall_corners.visible = false
 			wall_edges.visible = false
 			wall_mesh.mesh = generate_mesh()
+
+			if wall_mesh.mesh == null:
+				return
+				
 			var collisions = generate_collision(wall_mesh.mesh)
 		
 			for old_coll in wall_collisions.get_children():
