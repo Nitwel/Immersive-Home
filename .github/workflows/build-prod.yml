@@ -62,6 +62,8 @@ jobs:
 
           sed -i 's/singleInstancePerTask/singleTask/g' ./android/build/AndroidManifest.xml
 
+          sed -i 's/BUILD_VERSION/${{ github.ref_name }}/g' ./android/build/AndroidManifest.xml
+
       - name: export game
         id: export
         # Use latest version (see releases for all versions)
