@@ -9,6 +9,9 @@ on:
 env:
   GODOT_VERSION: 4.1.3
   EXPORT_NAME: immersive-home
+  GODOT_ANDROID_KEYSTORE_RELEASE_PATH: /home/runner/work/Immersive-Home/Immersive-Home/release.keystore
+  GODOT_ANDROID_KEYSTORE_RELEASE_USER: ${{ secrets.RELEASE_USER }}
+  GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: ${{ secrets.RELEASE_PASSWORD }}
 
 jobs:
   # job id, can be anything
@@ -38,14 +41,12 @@ jobs:
 
       - name: Setup Android Export
         run: |
+          sdkmanager "build-tools;32.0.0"
+
           echo "${{ secrets.KEYSTORE_RELEASE }}" | base64 -di > release.keystore
 
           rm export_presets.cfg
           mv export_presets_prod.cfg export_presets.cfg
-
-          echo keystore/release="/home/runner/work/Immersive-Home/Immersive-Home/release.keystore" >> ./export_presets.cfg
-          echo keystore/release_user="${{ secrets.RELEASE_USER }}" >> ./export_presets.cfg
-          echo keystore/release_password="${{ secrets.RELEASE_PASSWORD }}" >> ./export_presets.cfg
 
           mkdir -p ~/.config/godot
           cp -v ./editor_settings-4.tres ~/.config/godot/
@@ -58,6 +59,8 @@ jobs:
           rm ./godot_templates.tpz
           unzip -q ./templates/android_source.zip -d ./android/build/
           rm ./templates/android_source.zip
+
+          sed -i 's/singleInstancePerTask/singleTask/g' ./android/build/AndroidManifest.xml
 
       - name: export game
         id: export
