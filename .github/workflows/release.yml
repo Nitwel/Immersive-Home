@@ -1,0 +1,24 @@
+name: Create new Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "New tag name"
+        required: true
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+          fetch-depth: 0
+      - name: Create and push new Tag
+        run: |
+          git config user.name "Nitwel"
+          git config user.email "mail@nitwel.de"
+
+          git tag ${{ github.event.inputs.tag }}
+          git push origin ${{ github.event.inputs.tag }}
