@@ -11,3 +11,5 @@ signal on_grab_move(event: Dictionary)
 signal on_grab_up(event: Dictionary)
 signal on_ray_enter(event: Dictionary)
 signal on_ray_leave(event: Dictionary)
+
+signal typed(key: String)

@@ -24,7 +24,16 @@ const methods = [
 var adapter: Node
 
 func _init(type: ADAPTER_TYPES):
-	adapter = adapters[type].new()
+
+	var clipboard := DisplayServer.clipboard_get()
+
+	if clipboard != null && clipboard.find(" ") != -1:
+		var clip_url = clipboard.split(" ")[0]
+		var clip_token = clipboard.split(" ")[1]
+		adapter = adapters[type].new(clip_url, clip_token)
+	else:
+		adapter = adapters[type].new()
+		
 	add_child(adapter)
 
 	for method in methods:

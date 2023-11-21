@@ -20,6 +20,15 @@ Immersive Home is project to bring Smart Home and Mixed Reality technologies tog
 **Mixed Reality Headsets**
 - Meta Quest 2 / Pro / 3
 
+## Connecting to your Home Assistant Instance
+Right now, as a temporary solution, the app will use whatever is saved into your clipboard to connect to your Home Assistant instance.
+Format: `ws://<ip/url>:<port>/api/websocket <token>`
+Example `ws://192.168.0.31:8123/api/websocket eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzZjQ0ZGM2N2Y3YzY0MDc1OGZlMWI2ZjJlNmIxZjRkNSIsImlhdCI6MTY5ODAxMDcyOCwiZXhwIjoyMDEzMzcwNzI4fQ.K6ydLUC-4Q7BNIRCU1nWlI2s6sg9UCiOu-Lpedw2zJc`
+
+To generate a HASS token, login into your dashboard, click on your name (bottom left), scroll down and create a long-lived access token.
+
+You can check if you are properly connected by opening the settings tab in the app and looking at the bottom right corner.
+
 # 🛠 Development
 
 In order to contribute to this project, you need the following to be setup before you can start working:
@@ -118,6 +127,12 @@ The `Movable` node allows to move a node around in the room. It uses the grab ev
 
 The `Clickable` allows to access events of the parent using signals this node emits.
 
+## Installing Locally
+1. Make sure Git LFS is installed
+2. Run `git clone https://github.com/Nitwel/Immersive-Home.git` in your terminal
+3. Import the created `Immersive-Home` folder in Godot
+4. Open the project in Godot 4.1.3
+
 ### Testing without a VR Headset
 
 In order to test without a headset, press the run project (F5) button in Godot and ignore the prompt that OpenXR failed to start.
@@ -126,19 +141,16 @@ Click at the link to get a list of the supported controls.
 
 ## Building
 
-1. Clone the repo from GitHub
-	- Make sure, Git LFS is installed
-2. Open the project in Godot 4.1.3
-3. Possibly fix importing scenes error
-4. Follow the following guide to setup exporting for android. [link](https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_android.html)
-5. Make sure to reuse any existing `debug.keystore` when updating an app
-6. Don't forget to set the JAVA_HOME variable and restart Godot to take effect
-7. Install the `Godot XR Android OpenXR Loaders` plugin in Godot
-8. Configure the following in the android build template:
+1. Possibly fix importing scenes error
+2. Follow the following guide to setup exporting for android. [link](https://docs.godotengine.org/en/stable/tutorials/export/exporting_for_android.html)
+3. Make sure to reuse any existing `debug.keystore` when updating an app
+4. Don't forget to set the JAVA_HOME variable and restart Godot to take effect
+5. Install the `Godot XR Android OpenXR Loaders` plugin in Godot
+6. Configure the following in the android build template:
 	- XRMode set to OpenXR
 	- Check `Use Grandle Build`
 	- Check `Godot OpenXR Meta`
 	- In XRFeatures, select at least optional for passthrough
 	- Ckeck Internet under the permissions
 	- Under Resources > Filters to export, add `*.j2`
-9. `<uses-feature android:name="com.oculus.feature.CONTEXTUAL_BOUNDARYLESS_APP" android:required="true" />` can be added to the `AndroidManifest.xml` to disable the boundary system.
+7. `<uses-feature android:name="com.oculus.feature.CONTEXTUAL_BOUNDARYLESS_APP" android:required="true" />` can be added to the `AndroidManifest.xml` to disable the boundary system.
