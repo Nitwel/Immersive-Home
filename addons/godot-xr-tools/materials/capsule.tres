@@ -1,7 +1,3 @@
-[gd_resource type="StandardMaterial3D" format=2]
-
-[resource]
-flags_transparent = true
-albedo_color = Color( 0.0337219, 0.241112, 0.863281, 0.497255 )
-roughness = 0.0
-
+version https://git-lfs.github.com/spec/v1
+oid sha256:533666c3af3e9619c085fe46eaa03f771d9734757a1abe305fee518ae5a5041e
+size 167

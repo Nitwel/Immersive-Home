@@ -1,10 +1,3 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=2]
-
-[ext_resource path="res://addons/godot-xr-tools/images/ring.png" type="Texture2D" id=1]
-
-[resource]
-flags_transparent = true
-flags_unshaded = true
-flags_no_depth_test = true
-params_billboard_mode = 1
-albedo_texture = ExtResource( 1 )
+version https://git-lfs.github.com/spec/v1
+oid sha256:5e10ca1942fa2ac7922a10a9124e32d80b1f65a67b6f1fa640dc67bdefc668db
+size 297
