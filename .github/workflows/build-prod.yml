@@ -41,6 +41,8 @@ jobs:
 
       - name: Setup Android Export
         run: |
+          sdkmanager "build-tools;32.0.0"
+
           echo "${{ secrets.KEYSTORE_RELEASE }}" | base64 -di > release.keystore
 
           rm export_presets.cfg
