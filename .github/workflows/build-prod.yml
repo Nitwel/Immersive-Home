@@ -62,7 +62,9 @@ jobs:
 
           sed -i 's/singleInstancePerTask/singleTask/g' ./android/build/AndroidManifest.xml
 
-          sed -i 's/BUILD_VERSION/${{ github.ref_name }}/g' ./android/build/AndroidManifest.xml
+          sed -i 's/BUILD_VERSION/${{ github.ref_name }}/g' export_presets.cfg
+          versioncode=$(eval "git tag | grep -v "test" | wc -l")
+          sed -i "s/BUILD_VERSION_CODE/$versioncode/g" export_presets.cfg
 
       - name: export game
         id: export
