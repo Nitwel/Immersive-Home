@@ -95,35 +95,32 @@ In case that an event of a specific node has to be reacted on, use the `Clickabl
 
 It is also possible to bubble up information by returning a dictionary from a function like `_on_click`.
 
-```python
-InteractionEvent {
-	"controller": XRController3D, # The controller that triggered the event
-	"ray": RayCast3D, # The ray-cast that triggered the event
-	"target": Node3D, # The node that was hit by the ray-cast
-}
-
-KeyEvent {
-	"key": String, # The key that was pressed
-}
-```
-
 | Function called | Args | Description |
 | -- | -- | -- |
-| `_on_click` | `[event: InteractionEvent]` | The back trigger button has been pressed and released |
-| `_on_press_down` | `[event: InteractionEvent]` | The back trigger button has been pressed down |
-| `_on_press_move` | `[event: InteractionEvent]` | The back trigger button has been moved while pressed down |
-| `_on_press_up` | `[event: InteractionEvent]` | The back trigger button has been released |
-| `_on_grab_down` | `[event: InteractionEvent]` | The side grab button been pressed down |
-| `_on_grab_move` | `[event: InteractionEvent]` | The side grab button been pressed down |
-| `_on_grab_up` | `[event: InteractionEvent]` | The side grab button been released |
-| `_on_ray_enter` | `[event: InteractionEvent]` | The ray-cast enters the the collision body |
-| `_on_ray_leave` | `[event: InteractionEvent]` | The ray-cast leaves the the collision body |
-| `_on_key_down` | `[event: KeyEvent]` | The ray-cast leaves the the collision body |
-| `_on_key_up` | `[event: KeyEvent]` | The ray-cast leaves the the collision body |
+| `_on_click` | `[event: EventRay]` | The back trigger button has been pressed and released |
+| `_on_press_down` | `[event: EventRay]` | The back trigger button has been pressed down |
+| `_on_press_move` | `[event: EventRay]` | The back trigger button has been moved while pressed down |
+| `_on_press_up` | `[event: EventRay]` | The back trigger button has been released |
+| `_on_grab_down` | `[event: EventRay]` | The side grab button been pressed down |
+| `_on_grab_move` | `[event: EventRay]` | The side grab button been pressed down |
+| `_on_grab_up` | `[event: EventRay]` | The side grab button been released |
+| `_on_ray_enter` | `[event: EventRay]` | The ray-cast enters the the collision body |
+| `_on_ray_leave` | `[event: EventRay]` | The ray-cast leaves the the collision body |
+| `_on_key_down` | `[event: EventKey]` | The ray-cast leaves the the collision body |
+| `_on_key_up` | `[event: EventKey]` | The ray-cast leaves the the collision body |
+| `_on_focus_in` | `[event: EventFocus]` | The node is got focused |
+| `_on_focus_out` | `[event: EventFocus]` | The node lost focus |
 
 After considering using the build in godot event system, I've decided that it would be better to use a custom event system.
 The reason being that we would have to check each tick if the event matches the desired one which seems very inefficient compared to using signals like the browser does.
 Thus I've decided to use a custom event system that is similar to the one used in the browser.
+
+### UI Groups
+
+| Group | Description |
+| -- | -- |
+| `ui_focus` | The element can be focused |
+
 
 ### Functions
 

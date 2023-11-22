@@ -81,7 +81,7 @@ _data = {
 "down": SubResource("Animation_iu2ed")
 }
 
-[node name="Button" type="StaticBody3D"]
+[node name="Button" type="StaticBody3D" groups=["ui_focus"]]
 script = ExtResource("1_74x7g")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
