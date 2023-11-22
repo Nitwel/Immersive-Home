@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="5_3qc8g"]
 [ext_resource type="Material" uid="uid://bf5ina366dwm6" path="res://assets/materials/sky.material" id="5_wgwf8"]
 [ext_resource type="PackedScene" uid="uid://83lb5p4e0qk0" path="res://content/scenes/house.tscn" id="8_qkrg7"]
-[ext_resource type="PackedScene" uid="uid://lrehk38exd5n" path="res://content/ui/keyboard/keyboard.tscn" id="9_e5n3p"]
+[ext_resource type="PackedScene" uid="uid://lrehk38exd5n" path="res://content/system/keyboard/keyboard.tscn" id="9_e5n3p"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58yb"]
 ao_enabled = true

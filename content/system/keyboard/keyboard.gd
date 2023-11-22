@@ -23,6 +23,10 @@ func _ready():
 		for key in row:
 			var button = create_key(key)
 			keys.add_child(button)
+
+			if Engine.is_editor_hint():
+				continue
+
 			button.on_button_down.connect(func():
 				_emit_event("key_down", key)
 			)
@@ -31,6 +35,9 @@ func _ready():
 			)
 
 	keys.columns = key_list[0].size()
+
+	if Engine.is_editor_hint():
+		return
 
 	backspace_button.on_button_down.connect(func():
 		_emit_event("key_down", KEY_BACKSPACE)

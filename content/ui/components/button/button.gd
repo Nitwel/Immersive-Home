@@ -21,7 +21,6 @@ var active: bool = false :
 			animation_player.play_backwards("down")
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-@onready var click_sound: AudioStreamPlayer = $ClickSound
 
 func _ready():
 	if initial_active:
