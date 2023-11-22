@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://b30w6tywfj4fp"]
+[gd_scene load_steps=11 format=3 uid="uid://b30w6tywfj4fp"]
 
-[ext_resource type="Script" path="res://content/controller_left.gd" id="1_2j3qs"]
+[ext_resource type="Script" path="res://content/system/controller_left/controller_left.gd" id="1_2j3qs"]
 [ext_resource type="PackedScene" uid="uid://c3kdssrmv84kv" path="res://content/ui/menu/menu.tscn" id="1_ccbr3"]
 [ext_resource type="PackedScene" uid="uid://cj42our8uhfq6" path="res://assets/models/trash_bin/trash_bin.gltf" id="3_m33ce"]
+[ext_resource type="PackedScene" uid="uid://d3f8glx1xgm5w" path="res://content/system/raycast/raycast.tscn" id="4_n7lao"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58yb"]
 ao_enabled = true
@@ -119,3 +120,5 @@ shape = SubResource("CylinderShape3D_x2eyr")
 libraries = {
 "": SubResource("AnimationLibrary_hkli8")
 }
+
+[node name="Raycast" parent="." instance=ExtResource("4_n7lao")]

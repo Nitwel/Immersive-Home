@@ -101,6 +101,10 @@ InteractionEvent {
 	"ray": RayCast3D, # The ray-cast that triggered the event
 	"target": Node3D, # The node that was hit by the ray-cast
 }
+
+KeyEvent {
+	"key": String, # The key that was pressed
+}
 ```
 
 | Function called | Args | Description |
@@ -114,6 +118,12 @@ InteractionEvent {
 | `_on_grab_up` | `[event: InteractionEvent]` | The side grab button been released |
 | `_on_ray_enter` | `[event: InteractionEvent]` | The ray-cast enters the the collision body |
 | `_on_ray_leave` | `[event: InteractionEvent]` | The ray-cast leaves the the collision body |
+| `_on_key_down` | `[event: KeyEvent]` | The ray-cast leaves the the collision body |
+| `_on_key_up` | `[event: KeyEvent]` | The ray-cast leaves the the collision body |
+
+After considering using the build in godot event system, I've decided that it would be better to use a custom event system.
+The reason being that we would have to check each tick if the event matches the desired one which seems very inefficient compared to using signals like the browser does.
+Thus I've decided to use a custom event system that is similar to the one used in the browser.
 
 ### Functions
 

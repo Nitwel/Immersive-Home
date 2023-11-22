@@ -34,11 +34,11 @@ var trash_bin_large: bool = false:
 func _ready():
 	trash_bin_visible = false
 
-	Events.on_grab_down.connect(func(event):
+	EventSystem.on_grab_down.connect(func(event: EventRay):
 		trash_bin_visible = event.target.is_in_group("entity")
 	)
 
-	Events.on_grab_move.connect(func(event):
+	EventSystem.on_grab_move.connect(func(event):
 		if !trash_bin_visible:
 			return
 
@@ -53,7 +53,7 @@ func _ready():
 			
 	)
 
-	Events.on_grab_up.connect(func(event):
+	EventSystem.on_grab_up.connect(func(_event: EventRay):
 		if !trash_bin_visible:
 			return
 

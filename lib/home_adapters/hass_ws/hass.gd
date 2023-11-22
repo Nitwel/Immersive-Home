@@ -16,6 +16,7 @@ var authenticated := false
 var loading := true
 var id := 1
 var entities: Dictionary = {}
+var retries := 5
 
 var entitiy_callbacks := CallbackMap.new()
 var packet_callbacks := CallbackMap.new()
@@ -31,6 +32,11 @@ func _init(url := self.url, token := self.token):
 	connect_ws()
 
 func connect_ws():
+	retries -= 1
+	if retries < 0:
+		print("Failed to connect to %s" % self.url)
+		return
+
 	print("Connecting to %s" % self.url)
 	socket.connect_to_url(self.url)
 	set_process(true)

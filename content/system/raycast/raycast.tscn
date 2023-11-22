@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3f8glx1xgm5w"]
+
+[ext_resource type="Texture2D" uid="uid://bo55nohs0wsgf" path="res://assets/materials/pointer.png" id="1_2f2iv"]
+[ext_resource type="Script" path="res://content/system/raycast/raycast.gd" id="1_gp8nv"]
+
+[node name="Raycast" type="RayCast3D"]
+transform = Transform3D(0.999999, -1.39624e-11, 0, 9.48108e-12, 0.999999, 0, 0, 4.54747e-13, 0.999998, -0.000467122, 0.00228411, -0.0016689)
+target_position = Vector3(0, 0, -5)
+script = ExtResource("1_gp8nv")
+
+[node name="Decal" type="Decal" parent="."]
+transform = Transform3D(1, -0.000567106, -2.5179e-05, -2.5179e-05, 4.39886e-08, -1, 0.000567106, 1, 2.97068e-08, -0.000308663, -0.00229502, -2.46601)
+size = Vector3(0.02, 4.91995, 0.02)
+texture_albedo = ExtResource("1_2f2iv")
+upper_fade = 0.000985425
+lower_fade = 0.000919435

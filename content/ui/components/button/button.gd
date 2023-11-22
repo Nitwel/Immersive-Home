@@ -1,12 +1,14 @@
 extends StaticBody3D
 class_name Button3D
 
+signal on_button_down()
+signal on_button_up()
+
 @export var toggleable: bool = false
 @export var disabled: bool = false
 @export var initial_active: bool = false
 var active: bool = false :
 	set(value):
-		print("set active", value)
 		animation_player.stop()
 		if value == active:
 			return
@@ -17,8 +19,6 @@ var active: bool = false :
 			animation_player.play("down")
 		else:
 			animation_player.play_backwards("down")
-	get:
-		return active	
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var click_sound: AudioStreamPlayer = $ClickSound
@@ -27,35 +27,31 @@ func _ready():
 	if initial_active:
 		active = true
 
-func _on_click(_event):
+func _on_press_down(event):
 	if disabled:
-		return false
-
-	if !toggleable:
+		event.bubbling = false
 		return
-
-	active = !active
-	AudioPlayer.play_effect("click")
-
-	return {
-		"active": active
-	}
-
-func _on_press_down(_event):
-	if disabled:
-		return false
 
 	if toggleable:
 		return
+
+	active = true
+	on_button_down.emit()
 	
 	AudioPlayer.play_effect("click")
-	animation_player.play("down")
+	
 
-func _on_press_up(_event):
+func _on_press_up(event):
 	if disabled:
-		return false
-
-	if toggleable:
+		event.bubbling = false
 		return
 
-	animation_player.play_backwards("down")
+	if toggleable:
+		active = !active
+		if active:
+			on_button_down.emit()
+		else:
+			on_button_up.emit()
+	else:
+		active = false
+		on_button_up.emit()
