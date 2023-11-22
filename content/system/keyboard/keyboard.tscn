@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://lrehk38exd5n"]
 
-[ext_resource type="Script" path="res://content/ui/keyboard/keyboard.gd" id="1_maojw"]
+[ext_resource type="Script" path="res://content/system/keyboard/keyboard.gd" id="1_maojw"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_xdpwr"]
 [ext_resource type="Script" path="res://content/ui/menu/grid.gd" id="3_mx544"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_86fct"]

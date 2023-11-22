@@ -23,6 +23,7 @@ func _ready():
 		for key in row:
 			var button = create_key(key)
 			keys.add_child(button)
+
 			button.on_button_down.connect(func():
 				_emit_event("key_down", key)
 			)
