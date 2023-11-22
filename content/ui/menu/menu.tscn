@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=17 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="PackedScene" uid="uid://crrb0l3ekuotj" path="res://content/ui/menu/edit/edit_menu.tscn" id="4_r2raj"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dyh0ax51xqp8n" path="res://assets/icons/settings_white_24dp.svg" id="9_mel13"]
 [ext_resource type="PackedScene" uid="uid://c01gkeldvjwtr" path="res://content/ui/menu/room/room_menu.tscn" id="10_u4i1x"]
 [ext_resource type="PackedScene" uid="uid://c6r4higceibif" path="res://content/ui/menu/settings/settings_menu.tscn" id="11_7wm6b"]
+[ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="12_ov3em"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_08du6"]
 size = Vector3(0.3, 0.01, 0.3)
@@ -236,3 +237,6 @@ mesh = ExtResource("7_f4u4o")
 libraries = {
 "": SubResource("AnimationLibrary_s30cd")
 }
+
+[node name="Input" parent="." instance=ExtResource("12_ov3em")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, 0, -0.04)

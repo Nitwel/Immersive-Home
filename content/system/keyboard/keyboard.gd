@@ -6,6 +6,7 @@ const button_scene = preload("res://content/ui/components/button/button.tscn")
 @onready var keys = $Keys
 @onready var caps_button = $Caps
 @onready var backspace_button = $Backspace
+@onready var paste_button = $Paste
 var key_list = [
 	[KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, KEY_ASCIITILDE],
 	[KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I, KEY_O, KEY_P, KEY_SLASH],
@@ -57,6 +58,15 @@ func _ready():
 		_emit_event("key_up", KEY_CAPSLOCK)
 	)
 
+	paste_button.on_button_down.connect(func():
+		# There is no KEY_PASTE obviously, so we use KEY_INSERT for now
+		_emit_event("key_down", KEY_INSERT)
+	)
+
+	paste_button.on_button_up.connect(func():
+		_emit_event("key_up", KEY_INSERT)
+	)
+
 func create_key(key: Key):
 	var button = button_scene.instantiate()
 
@@ -68,7 +78,7 @@ func create_key(key: Key):
 	label.add_to_group("button_label")
 	
 	button.set_meta("key", key)
-
+	button.add_to_group("ui_focus_skip")
 	button.add_child(label)
 
 	return button

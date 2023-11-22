@@ -1,0 +1,80 @@
+[gd_scene load_steps=10 format=3 uid="uid://blrhy2uccrdn4"]
+
+[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/ui_element.material" id="1_0kd7r"]
+[ext_resource type="Script" path="res://content/ui/components/input/input.gd" id="1_uml3t"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kjbca"]
+size = Vector3(0.2, 0.006, 0.03)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x4yp8"]
+size = Vector3(0.2, 0.006, 0.03)
+
+[sub_resource type="SystemFont" id="SystemFont_nbea0"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_2736g"]
+size = Vector3(0.001, 0.02, 0.001)
+
+[sub_resource type="Animation" id="Animation_65tpe"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label/Caret:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_8ny1h"]
+resource_name = "blink"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label/Caret:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [true, false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1sy4t"]
+_data = {
+"RESET": SubResource("Animation_65tpe"),
+"blink": SubResource("Animation_8ny1h")
+}
+
+[node name="Input" type="StaticBody3D" groups=["ui_focus"]]
+script = ExtResource("1_uml3t")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.003, 0)
+material_override = ExtResource("1_0kd7r")
+mesh = SubResource("BoxMesh_kjbca")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.003, 0)
+shape = SubResource("BoxShape3D_x4yp8")
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.096, 0.00618291, 0)
+pixel_size = 0.0004
+text = "Hello World"
+font = SubResource("SystemFont_nbea0")
+horizontal_alignment = 0
+
+[node name="Caret" type="MeshInstance3D" parent="Label"]
+mesh = SubResource("BoxMesh_2736g")
+skeleton = NodePath("../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_1sy4t")
+}

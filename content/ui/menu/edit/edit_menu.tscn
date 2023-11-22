@@ -24,6 +24,7 @@ font_size = 36
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, 0.01, 0.27)
 
 [node name="NextPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
+focusable = true
 
 [node name="Decal" type="Decal" parent="Buttons/NextPageButton"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
@@ -35,6 +36,7 @@ script = ExtResource("6_pf8jy")
 
 [node name="PreviousPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0, 0)
+focusable = true
 
 [node name="Decal" type="Decal" parent="Buttons/PreviousPageButton"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.02, 0)

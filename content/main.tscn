@@ -33,13 +33,13 @@ script = ExtResource("1_uvrd4")
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
-transform = Transform3D(1, 2.18865e-10, 3.7835e-10, 3.85836e-11, 1, 2.08752e-08, -2.91038e-11, 8.6402e-12, 1, 0.0356344, 0.79808, 0.202806)
+transform = Transform3D(1, 1.8976e-10, 4.07454e-10, 6.76872e-11, 1, 2.08738e-08, -5.82077e-11, 1.04592e-11, 1, 0.0356618, 0.71033, 0.00564247)
 
 [node name="XRControllerLeft" parent="XROrigin3D" instance=ExtResource("2_2lraw")]
 transform = Transform3D(0.999999, -1.39633e-11, 0, 9.48075e-12, 1, 0, 0, 0, 1, -0.355145, 0.550439, -0.477945)
 
 [node name="XRControllerRight" type="XRController3D" parent="XROrigin3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.488349, 0.559219, -0.2988)
+transform = Transform3D(0.999999, -1.39633e-11, 0, 9.48075e-12, 1, 0, 0, 0, 1, 0.272616, 0.559282, -0.468369)
 tracker = &"right_hand"
 pose = &"aim"
 
@@ -66,4 +66,4 @@ transform = Transform3D(0.404247, 0.000180645, 0.914648, 0.00017221, 0.999999, -
 visible = false
 
 [node name="Keyboard" parent="." instance=ExtResource("9_e5n3p")]
-transform = Transform3D(0.5, -6.98186e-12, 0, 4.73988e-12, 0.5, 0, 0, 0, 0.5, -0.00874073, 0.253873, -0.357135)
+transform = Transform3D(0.499999, -6.98142e-12, 0, 4.74065e-12, 0.5, -2.27374e-13, 0, 2.27374e-13, 0.5, -0.125313, 0.424282, -0.263966)

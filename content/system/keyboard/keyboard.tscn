@@ -12,7 +12,7 @@ size = Vector3(0.744504, 0.0402036, 0.296009)
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 script = ExtResource("1_maojw")
 
-[node name="Backspace" parent="." instance=ExtResource("1_xdpwr")]
+[node name="Backspace" parent="." groups=["ui_focus_skip"] instance=ExtResource("1_xdpwr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, 0, 0.02)
 metadata/key = 4194308
 
@@ -21,7 +21,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.0
 pixel_size = 0.001
 text = "back"
 
-[node name="Caps" parent="." instance=ExtResource("1_xdpwr")]
+[node name="Caps" parent="." groups=["ui_focus_skip"] instance=ExtResource("1_xdpwr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, 0, 0.15)
 toggleable = true
 
@@ -29,6 +29,14 @@ toggleable = true
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
 pixel_size = 0.001
 text = "caps"
+
+[node name="Paste" parent="." groups=["ui_focus_skip"] instance=ExtResource("1_xdpwr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, 0, 0.18)
+
+[node name="Label3D" type="Label3D" parent="Paste"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
+pixel_size = 0.001
+text = "paste"
 
 [node name="Keys" type="Node3D" parent="."]
 script = ExtResource("3_mx544")

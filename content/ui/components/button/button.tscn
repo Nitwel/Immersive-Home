@@ -1,13 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://bsjqdvkt0u87c"]
 
 [ext_resource type="Script" path="res://content/ui/components/button/button.gd" id="1_74x7g"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_peqek"]
-albedo_color = Color(0.151534, 0.211909, 0.619523, 1)
+[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/ui_element.material" id="2_h7ln4"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_jwpm5"]
 resource_local_to_scene = true
-material = SubResource("StandardMaterial3D_peqek")
+material = ExtResource("2_h7ln4")
 size = Vector3(0.05, 0.02, 0.05)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_o4j7g"]
