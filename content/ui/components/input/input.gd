@@ -26,6 +26,7 @@ var text_handler = preload("res://content/ui/components/input/text_handler.gd").
 
 var keyboard_input: bool = false
 
+var input_plane = Plane(Vector3.UP, Vector3.ZERO)
 
 func _ready():
 	text_handler.label = label
@@ -71,14 +72,50 @@ func set_width(value: float):
 	collision.shape.size.x = value
 	label.position.x = -value / 2 + 0.002
 
-func _on_focus_in(event):
-	var pos_x = label.to_local(event.ray.get_collision_point()).x
+func _on_press_move(event):
+	var ray_pos = event.ray.global_position
+	var ray_dir = -event.ray.global_transform.basis.z
 
+	var local_pos = label.to_local(ray_pos)
+	var local_dir = label.global_transform.basis.inverse() * ray_dir
+
+	var intersection_point = input_plane.intersects_ray(local_pos, local_dir)
+
+	if intersection_point == null:
+			return
+
+	var pos_x = intersection_point.x
 	text_handler.update_caret_position(pos_x)
 
 	caret.position.x = text_handler.get_caret_position()
+	label.text = text_handler.get_display_text()
+
+func _on_focus_in(event):
+	var pos_x = label.to_local(event.ray.get_collision_point()).x
+	text_handler.update_caret_position(pos_x)
+	
+	caret.position.x = text_handler.get_caret_position()
+	label.text = text_handler.get_display_text()
 	caret.show()
 	animation.play("blink")
+
+func update_caret_position(event):
+	var ray_pos = event.ray.global_position
+	var ray_dir = -event.ray.global_transform.basis.z
+
+	var local_pos = label.to_local(ray_pos)
+	var local_dir = label.global_transform.basis.inverse() * ray_dir
+
+	var intersection_point = input_plane.intersects_ray(local_pos, local_dir)
+
+	if intersection_point == null:
+			return
+
+	var pos_x = intersection_point.x
+	text_handler.update_caret_position(pos_x)
+
+	caret.position.x = text_handler.get_caret_position()
+	
 
 func _on_focus_out(_event):
 	animation.stop()

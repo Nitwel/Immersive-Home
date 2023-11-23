@@ -44,17 +44,21 @@ func focus_caret():
 	while caret_position > overflow_index:
 		char_offset += caret_position - overflow_index
 		overflow_index = _calculate_overflow_index()
+		if overflow_index == -1:
+			break
 
 	while caret_position < char_offset:
-		char_offset = caret_position#
+		char_offset = caret_position
 		overflow_index = _calculate_overflow_index()
+		if overflow_index == -1:
+			break
 
 func get_caret_position():
 	return gap_offsets[caret_position] - gap_offsets[char_offset]
 
 func update_caret_position(click_pos_x: float):
 	caret_position = _calculate_caret_position(click_pos_x)
-	print("caret_position: ", caret_position)
+	focus_caret()
 
 func _calculate_caret_position(click_pos_x: float):
 	for i in range(1, gap_offsets.size()):
@@ -79,11 +83,8 @@ func _calculate_text_gaps():
 
 	return offsets
 
-## Returns the index of the last character that fits in the width.
-## If all characters fit, returns -1.
 func _calculate_overflow_index():
-	
 	for i in range(char_offset, gap_offsets.size()):
 		if gap_offsets[i] - gap_offsets[char_offset] >= width:
 			return i - 1
-	return -1
+	return gap_offsets.size() - 1
