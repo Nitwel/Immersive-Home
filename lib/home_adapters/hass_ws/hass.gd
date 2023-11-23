@@ -32,6 +32,9 @@ func _init(url := self.url, token := self.token):
 	connect_ws()
 
 func connect_ws():
+	if url == "" || token == "":
+		return
+
 	retries -= 1
 	if retries < 0:
 		print("Failed to connect to %s" % self.url)

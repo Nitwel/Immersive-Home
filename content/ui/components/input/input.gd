@@ -1,16 +1,26 @@
+@tool
 extends StaticBody3D
 
-@onready var caret: MeshInstance3D = $Label/Caret
 @onready var label: Label3D = $Label
-@onready var animation: AnimationPlayer = $AnimationPlayer
-
-var text: String = "Hello World":
+@export var text: String = "Hello World":
 	set(value):
 		var old_text = text
 		text = value
+		if label == null:
+			return
+		
 		label.text = value
+		if Engine.is_editor_hint():
+			return
 		gap_offsets = _calculate_text_gaps()
 		caret_position += text.length() - old_text.length()
+		text_changed.emit(value)
+
+@onready var caret: MeshInstance3D = $Label/Caret
+
+@onready var animation: AnimationPlayer = $AnimationPlayer
+
+signal text_changed(text: String)
 
 var keyboard_input: bool = false
 var gap_offsets = []
@@ -20,6 +30,11 @@ var caret_position: int = 3:
 		caret.position.x = gap_offsets[caret_position]
 
 func _ready():
+	text = text # So @tool works
+
+	if Engine.is_editor_hint():
+		return
+
 	EventSystem.on_key_down.connect(func(event):
 		if EventSystem.is_focused(self) == false:
 			return
@@ -37,6 +52,9 @@ func _input(event):
 			text = EventKey.key_to_string(event.keycode, event.shift_pressed, text.substr(0, caret_position)) + text.substr(caret_position, text.length())
 		
 func _process(_delta):
+	if Engine.is_editor_hint():
+		return
+
 	if get_tree().debug_collisions_hint && OS.get_name() != "Android":
 		_draw_debug_text_gaps()
 

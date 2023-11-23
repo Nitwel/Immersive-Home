@@ -6,6 +6,7 @@ signal on_button_up()
 
 @export var toggleable: bool = false
 @export var disabled: bool = false
+@export var external_state: bool = false
 @export var initial_active: bool = false
 var active: bool = false :
 	set(value):
@@ -31,13 +32,14 @@ func _on_press_down(event):
 		event.bubbling = false
 		return
 
-	if toggleable:
+	AudioPlayer.play_effect("click")
+
+	if external_state || toggleable:
 		return
 
 	active = true
 	on_button_down.emit()
 	
-	AudioPlayer.play_effect("click")
 	
 
 func _on_press_up(event):
@@ -45,8 +47,12 @@ func _on_press_up(event):
 		event.bubbling = false
 		return
 
+	if external_state:
+		return
+
 	if toggleable:
 		active = !active
+
 		if active:
 			on_button_down.emit()
 		else:

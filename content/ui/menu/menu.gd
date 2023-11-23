@@ -16,18 +16,9 @@ extends Node3D
 @onready var nav = $AnimationContainer/Navigation
 @onready var animation_player = $AnimationPlayer
 
-enum Menu {
-	VIEW,
-	EDIT,
-	ROOM,
-	AUTOMATE,
-	SETTINGS
-}
+var selected_nav = null
 
-var selected_menu := Menu.EDIT
 var show_menu := true:
-	get:
-		return show_menu
 	set(value):
 		show_menu = value
 		if value:
@@ -39,67 +30,47 @@ var show_menu := true:
 
 func _ready():
 	_controller.button_pressed.connect(func(button):
-		print(button)
 		if button == "by_button":
 			show_menu = !show_menu
 	)
 
-	select_menu(selected_menu)
+	select_menu(nav_edit)
 
 func _on_click(event):
-	if event.target == nav_view:
-		select_menu(Menu.VIEW)
-	elif event.target == nav_edit:
-		select_menu(Menu.EDIT)
-	elif event.target == nav_room:
-		select_menu(Menu.ROOM)
-	elif event.target == nav_automate:
-		select_menu(Menu.AUTOMATE)
-	elif event.target == nav_settings:
-		select_menu(Menu.SETTINGS)
+	select_menu(event.target)
 
-func select_menu(menu: Menu):
-	selected_menu = menu
+func select_menu(nav):
+	if _is_valid_nav(nav) == false || selected_nav == nav:
+		return
+
 	for child in content.get_children():
 		content.remove_child(child)
 
-	var menu_node = enum_to_menu(menu)
-	var nav_node = enum_to_nav(menu)
+	if selected_nav != null:
+		selected_nav.active = false
 
-	if nav_node != null:
-		nav_node.disabled = true
+	selected_nav = nav
 
-	if menu_node != null:
-		menu_node.visible = true
-		content.add_child(menu_node)
+	if selected_nav != null:
+		selected_nav.active = true
+		var menu = _nav_to_menu(selected_nav)
+		if menu != null:
+			content.add_child(menu)
+			menu.visible = true
 
-	for child in nav.get_children():
-		if child.active && child != nav_node:
-			child.active = false
-			child.disabled = false
-		
-func enum_to_nav(menu: Menu):
-	match menu:
-		Menu.VIEW:
-			return nav_view
-		Menu.EDIT:
-			return nav_edit
-		Menu.ROOM:
-			return nav_room
-		Menu.AUTOMATE:
-			return nav_automate
-		Menu.SETTINGS:
-			return nav_settings
+func _is_valid_nav(nav):
+	return nav == nav_view || nav == nav_edit || nav == nav_room || nav == nav_automate || nav == nav_settings		
 
-func enum_to_menu(menu: Menu):
-	match menu:
-		Menu.VIEW:
+func _nav_to_menu(nav):
+	match nav:
+		nav_view:
 			return null
-		Menu.EDIT:
+		nav_edit:
 			return menu_edit
-		Menu.ROOM:
+		nav_room:
 			return menu_room
-		Menu.AUTOMATE:
+		nav_automate:
 			return null
-		Menu.SETTINGS:
+		nav_settings:
 			return menu_settings
+	return null

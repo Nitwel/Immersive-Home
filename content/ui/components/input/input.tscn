@@ -26,7 +26,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [true]
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_8ny1h"]
@@ -71,6 +71,7 @@ font = SubResource("SystemFont_nbea0")
 horizontal_alignment = 0
 
 [node name="Caret" type="MeshInstance3D" parent="Label"]
+visible = false
 mesh = SubResource("BoxMesh_2736g")
 skeleton = NodePath("../..")
 

@@ -12,6 +12,7 @@ var sky_passthrough = preload("res://assets/materials/sky_passthrough.material")
 func _ready():
 	# In case we're running on the headset, use the passthrough sky
 	if OS.get_name() == "Android":
+		OS.request_permissions()
 		environment.environment.sky.set_material(sky_passthrough)
 		house.visible = false
 	else:

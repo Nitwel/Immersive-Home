@@ -10,7 +10,7 @@ const Sensor = preload("res://content/entities/sensor/sensor.tscn")
 @onready var next_page_button = $Buttons/NextPageButton
 @onready var previous_page_button = $Buttons/PreviousPageButton
 @onready var page_number_label = $PageNumberLabel
-var devices
+var devices = []
 var page = 0
 var last_device_page = 0
 var page_size = 20
@@ -19,7 +19,10 @@ var pages = 0
 var selected_device = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	devices = await HomeAdapters.adapter.get_devices()
+	HomeAdapters.adapter.adapter.on_connect.connect(func():
+		devices = await HomeAdapters.adapter.get_devices()
+		render()
+	)
 
 	next_page_button.get_node("Clickable").on_click.connect(func(_event):
 		print("next page")
@@ -29,8 +32,6 @@ func _ready():
 	previous_page_button.get_node("Clickable").on_click.connect(func(_event):
 		previous_page()
 	)
-
-	render()
 
 func update_pages():
 	if selected_device == null:
@@ -62,6 +63,9 @@ func previous_page():
 	render()
 
 func render():
+	if devices.size() == 0:
+		return
+
 	update_pages()
 	page_number_label.set_text(str(page + 1) + " / " + str(pages))
 
@@ -91,7 +95,7 @@ func render_devices():
 			_on_device_click(device_instance.id)
 		)
 		devices_node.add_child(device_instance)
-		device_instance.set_device_name(info["name"])
+		device_instance.set_device_name.call_deferred(info["name"])
 	
 	devices_node._update_container()
 		
@@ -158,6 +162,7 @@ func _on_entity_click(entity_name):
 func clear_menu():
 	for child in devices_node.get_children():
 		devices_node.remove_child(child)
+		child.queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

@@ -25,15 +25,16 @@ var adapter: Node
 
 func _init(type: ADAPTER_TYPES):
 
-	var clipboard := DisplayServer.clipboard_get()
+	var url = ""
+	var token = ""
+	var config = ConfigData.load_config()
 
-	if clipboard != null && clipboard.find(" ") != -1:
-		var clip_url = clipboard.split(" ")[0]
-		var clip_token = clipboard.split(" ")[1]
-		adapter = adapters[type].new(clip_url, clip_token)
-	else:
-		adapter = adapters[type].new()
-		
+	if config.has("url"):
+		url = config["url"] + "/api/websocket"
+	if config.has("token"):
+		token = config["token"]
+
+	adapter = adapters[type].new(url, token)
 	add_child(adapter)
 
 	for method in methods:

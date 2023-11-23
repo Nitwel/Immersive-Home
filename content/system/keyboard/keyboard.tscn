@@ -6,9 +6,9 @@
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_86fct"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k5ib7"]
-size = Vector3(0.744504, 0.0402036, 0.296009)
+size = Vector3(0.84, 0.0402036, 0.296009)
 
-[node name="Keyboard" type="StaticBody3D"]
+[node name="Keyboard" type="StaticBody3D" groups=["ui_focus_skip"]]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 script = ExtResource("1_maojw")
 
@@ -48,5 +48,5 @@ size = Vector3(0.6, 1, 1)
 script = ExtResource("4_86fct")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.276719, -0.025645, 0.0928761)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.296719, -0.025645, 0.0928761)
 shape = SubResource("BoxShape3D_k5ib7")
