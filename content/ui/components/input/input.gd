@@ -1,36 +1,36 @@
 @tool
 extends StaticBody3D
 
-@onready var label: Label3D = $Label
-@export var text: String = "Hello World":
-	set(value):
-		var old_text = text
-		text = value
-		if label == null:
-			return
-		
-		label.text = value
-		if Engine.is_editor_hint():
-			return
-		gap_offsets = _calculate_text_gaps()
-		caret_position += text.length() - old_text.length()
-		text_changed.emit(value)
+var text_handler = preload("res://content/ui/components/input/text_handler.gd").new()
 
 @onready var caret: MeshInstance3D = $Label/Caret
-
+@onready var mesh_box: MeshInstance3D = $Box
+@onready var collision: CollisionShape3D = $Collision
 @onready var animation: AnimationPlayer = $AnimationPlayer
+@onready var label: Label3D = $Label
 
-signal text_changed(text: String)
+@export_range(0.1, 2, 0.01, "suffix:m") var width: float = 0.15:
+	get:
+		return text_handler.width
+	set(value):
+		set_width(value)
+		
+@export var text: String:
+	get:
+		return text_handler.text
+	set(value):
+		text_handler.set_text(value, EventSystem.is_focused(self) == false)
+
+		if label != null:
+			label.text = text_handler.get_display_text()
 
 var keyboard_input: bool = false
-var gap_offsets = []
-var caret_position: int = 3:
-	set(value):
-		caret_position = clampi(value, 0, text.length())
-		caret.position.x = gap_offsets[caret_position]
+
 
 func _ready():
-	text = text # So @tool works
+	text_handler.label = label
+	text = text
+	width = width
 
 	if Engine.is_editor_hint():
 		return
@@ -39,7 +39,9 @@ func _ready():
 		if EventSystem.is_focused(self) == false:
 			return
 
-		text = EventKey.key_to_string(event.key, event.shift_pressed, text.substr(0, caret_position)) + text.substr(caret_position, text.length())
+		text = EventKey.key_to_string(event.key, event.shift_pressed, text.substr(0, text_handler.caret_position)) + text.substr(text_handler.caret_position, text.length())
+		caret.position.x = text_handler.get_caret_position()
+		label.text = text_handler.get_display_text()
 	)
 
 func _input(event):
@@ -49,7 +51,8 @@ func _input(event):
 			return
 
 		if keyboard_input:
-			text = EventKey.key_to_string(event.keycode, event.shift_pressed, text.substr(0, caret_position)) + text.substr(caret_position, text.length())
+			text = EventKey.key_to_string(event.keycode, event.shift_pressed, text.substr(0, text_handler.caret_position)) + text.substr(text_handler.caret_position, text.length())
+			caret.position.x = text_handler.get_caret_position()
 		
 func _process(_delta):
 	if Engine.is_editor_hint():
@@ -58,46 +61,37 @@ func _process(_delta):
 	if get_tree().debug_collisions_hint && OS.get_name() != "Android":
 		_draw_debug_text_gaps()
 
-func _calculate_caret_pos(click_pos_x: float):
-	for i in range(1, gap_offsets.size()):
-		var left = gap_offsets[i]
-		
-		if click_pos_x < left:
-			return i - 1
+func set_width(value: float):
+	text_handler.width = value
 
-	return gap_offsets.size() - 1
-	
+	if mesh_box == null || collision == null || label == null:
+		return
+
+	mesh_box.mesh.size.x = value
+	collision.shape.size.x = value
+	label.position.x = -value / 2 + 0.002
 
 func _on_focus_in(event):
-	gap_offsets = _calculate_text_gaps()
-
 	var pos_x = label.to_local(event.ray.get_collision_point()).x
 
-	caret_position = _calculate_caret_pos(pos_x)
+	text_handler.update_caret_position(pos_x)
+
+	caret.position.x = text_handler.get_caret_position()
+	caret.show()
 	animation.play("blink")
 
 func _on_focus_out(_event):
 	animation.stop()
 	caret.hide()
 
-func _calculate_text_gaps():
-	var font = label.get_font()
-	var offsets = [0.0]
-
-	var offset = 0.0
-	for i in range(text.length()):
-		var character = text[i]
-		var size = font.get_string_size(character, HORIZONTAL_ALIGNMENT_CENTER, -1, label.font_size)
-
-		offset += size.x * label.pixel_size
-		offsets.append(offset)
-	
-	return offsets
-
 func _draw_debug_text_gaps():
-	for offset in gap_offsets:
+	if text_handler.gap_offsets == null:
+		return
+
+	for i in range(text_handler.gap_offsets.size()):
+		var offset = text_handler.gap_offsets[i] - text_handler.gap_offsets[text_handler.char_offset]
 		DebugDraw3D.draw_line(
 			label.to_global(Vector3(offset, -0.01, 0)),
 			label.to_global(Vector3(offset, 0.01, 0)),
-			Color(1, 0, 0),
+			Color(1, 0, 0) if i != text_handler.overflow_index else Color(0, 1, 0)
 		)

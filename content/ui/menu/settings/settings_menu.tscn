@@ -43,6 +43,7 @@ horizontal_alignment = 0
 
 [node name="InputURL" parent="Content" instance=ExtResource("4_q3x6k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0, 0.03)
+width = 0.2
 text = "ws://192.168.33.33:8123"
 
 [node name="LabelToken" type="Label3D" parent="Content"]
@@ -54,7 +55,8 @@ horizontal_alignment = 0
 
 [node name="InputToken" parent="Content" instance=ExtResource("4_q3x6k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0, 0.07)
-text = "paste token here"
+width = 0.2
+text = "paste token here paste token here"
 
 [node name="LabelConnect" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.15, 0, 0.12)
