@@ -84,7 +84,7 @@ func _on_button_released(button: String):
 				last_collided = null
 				moved = false
 
-func _emit_event(type: String, target: Object):
+func _emit_event(type: String, target):
 	var event = EventRay.new()
 	event.controller = controller
 	event.target = target

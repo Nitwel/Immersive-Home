@@ -19,7 +19,8 @@ var text_handler = preload("res://content/ui/components/input/text_handler.gd").
 	get:
 		return text_handler.text
 	set(value):
-		text_handler.set_text(value, EventSystem.is_focused(self) == false)
+		var focused = Engine.is_editor_hint() == false && EventSystem.is_focused(self) == false
+		text_handler.set_text(value, focused)
 
 		if label != null:
 			label.text = text_handler.get_display_text()

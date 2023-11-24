@@ -4,7 +4,7 @@ var url: String = "http://192.168.33.33:8123"
 var token: String = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzZjQ0ZGM2N2Y3YzY0MDc1OGZlMWI2ZjJlNmIxZjRkNSIsImlhdCI6MTY5ODAxMDcyOCwiZXhwIjoyMDEzMzcwNzI4fQ.K6ydLUC-4Q7BNIRCU1nWlI2s6sg9UCiOu-Lpedw2zJc"
 var headers: PackedStringArray = PackedStringArray([])
 
-var devices_template = FileAccess.get_file_as_string("res://lib/home_adapters/hass/templates/devices.j2")
+var devices_template = FileAccess.get_file_as_string("res://lib/home_apis/hass/templates/devices.j2")
 
 func _init(url := self.url, token := self.token):
 	self.url = url
@@ -31,8 +31,6 @@ func get_state(entity: String):
 	var json = JSON.parse_string(data_string)
 
 	return json
-
-
 
 func set_state(entity: String, state: String, attributes: Dictionary = {}):
 	var type = entity.split('.')[0]

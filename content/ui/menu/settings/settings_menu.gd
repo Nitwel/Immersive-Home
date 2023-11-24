@@ -25,22 +25,23 @@ func _ready():
 		input_token.text = config["token"]
 
 	button_connect.on_button_down.connect(func():
-		HomeAdapters.adapter.adapter.url = input_url.text + "/api/websocket"
-		HomeAdapters.adapter.adapter.token = input_token.text
-		HomeAdapters.adapter.adapter.retries = 5
-		HomeAdapters.adapter.adapter.connect_ws()
+		var url = input_url.text + "/api/websocket"
+		var token = input_token.text
+
+		HomeApi.start_adapter("hass_ws", url, token)
 
 		ConfigData.save_config({
+			"api_type": "hass_ws",
 			"url": input_url.text,
 			"token": input_token.text
 		})
 	)
 
-	HomeAdapters.adapter.adapter.on_connect.connect(func():
+	HomeApi.on_connect.connect(func():
 		connection_status.text = "Connected"
 	)
 
-	HomeAdapters.adapter.adapter.on_disconnect.connect(func():
+	HomeApi.on_disconnect.connect(func():
 		connection_status.text = "Disconnected"
 	)
 	

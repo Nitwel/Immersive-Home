@@ -1,6 +1,10 @@
 extends Node
 
-var devices_template := FileAccess.get_file_as_string("res://lib/home_adapters/hass_ws/templates/devices.j2")
+signal on_connect()
+signal on_disconnect()
+var connected := false
+
+var devices_template := FileAccess.get_file_as_string("res://lib/home_apis/hass_ws/templates/devices.j2")
 var socket := WebSocketPeer.new()
 # in seconds
 var request_timeout := 10.0
@@ -13,16 +17,13 @@ var token := ""
 var LOG_MESSAGES := false
 
 var authenticated := false
-var loading := true
+
 var id := 1
 var entities: Dictionary = {}
 var retries := 5
 
 var entitiy_callbacks := CallbackMap.new()
 var packet_callbacks := CallbackMap.new()
-
-signal on_connect()
-signal on_disconnect()
 
 func _init(url := self.url, token := self.token):
 	self.url = url
@@ -114,7 +115,7 @@ func start_subscriptions():
 					"attributes": packet.event.a[entity]["a"]
 				}
 				entitiy_callbacks.call_key(entity, [entities[entity]])
-			loading = false
+			connected = true
 			on_connect.emit()
 
 		if packet.event.has("c"):
@@ -201,10 +202,10 @@ func decode_packet(packet: PackedByteArray):
 func encode_packet(packet: Dictionary):
 	return JSON.stringify(packet)
 
-func get_devices():
-	if loading:
-		await on_connect
+func has_connected():
+	return connected
 
+func get_devices():
 	var result = await send_request_packet({
 		"type": "render_template",
 		"template": devices_template,
@@ -218,18 +219,12 @@ func get_device(id: String):
 	pass
 
 func get_state(entity: String):
-	if loading:
-		await on_connect
-
 	if entities.has(entity):
 		return entities[entity]
 	return null
 
 
 func watch_state(entity: String, callback: Callable):
-	if loading:
-		await on_connect
-
 	entitiy_callbacks.add(entity, callback)
 
 	return func():
@@ -237,8 +232,6 @@ func watch_state(entity: String, callback: Callable):
 
 
 func set_state(entity: String, state: String, attributes: Dictionary = {}):
-	assert(!loading, "Still loading")
-
 	var domain = entity.split(".")[0]
 	var service: String
 

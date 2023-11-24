@@ -36,7 +36,7 @@ In order to contribute to this project, you need the following to be setup befor
 
 ## Fundamentals
 
-Communication with the Smart Home Environment is done using the `HomeAdapters` global. Each environment is made up of devices and entities.
+Communication with the Smart Home Environment is done using the `HomeApi` global. Each environment is made up of devices and entities.
 A device is a collection of different entities and entities can represent many different things in a smart home.
 For example, the entity of name `lights.smart_lamp_1` would control the kitchen lamps while `state.smart_lamp_1_temp` would show the current temperature of the lamp.
 
@@ -55,9 +55,9 @@ For example, the entity of name `lights.smart_lamp_1` would control the kitchen 
     └── home_adapters  (Code allowing control smart home entities)
 ```
 
-### Home Adapters
+### Home Api
 
-The `HomeAdapters` global allows to communicate with different backends and offers a set of fundamental functions allowing communication with the Smart Home.
+The `HomeApi` global allows to communicate with different backends and offers a set of fundamental functions allowing communication with the Smart Home.
 
 ```python
 Device {

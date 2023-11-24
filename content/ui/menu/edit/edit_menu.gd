@@ -19,11 +19,6 @@ var pages = 0
 var selected_device = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	HomeAdapters.adapter.adapter.on_connect.connect(func():
-		devices = await HomeAdapters.adapter.get_devices()
-		render()
-	)
-
 	next_page_button.get_node("Clickable").on_click.connect(func(_event):
 		print("next page")
 		next_page()
@@ -32,6 +27,26 @@ func _ready():
 	previous_page_button.get_node("Clickable").on_click.connect(func(_event):
 		previous_page()
 	)
+
+func _enter_tree():
+	if HomeApi.has_connected():
+		load_devices()
+	else:
+		HomeApi.on_connect.connect(func():
+			if is_inside_tree():
+				load_devices()
+		)
+
+func load_devices():
+	if devices.size() == 0:
+		devices = await HomeApi.get_devices()
+		render()
+
+		HomeApi.on_disconnect.connect(func():
+			devices = []
+			if is_inside_tree():
+				render()
+		)
 
 func update_pages():
 	if selected_device == null:
