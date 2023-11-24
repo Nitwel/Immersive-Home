@@ -68,8 +68,8 @@ horizontal_alignment = 0
 [node name="Connect" parent="Content" instance=ExtResource("1_faxng")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0.12)
 
-[node name="Sprite3D" type="Sprite3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.012, 0.12)
+[node name="Sprite3D" type="Sprite3D" parent="Content/Connect"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
 pixel_size = 0.0002
 axis = 1
 texture = ExtResource("5_muw54")
