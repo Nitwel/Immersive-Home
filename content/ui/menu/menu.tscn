@@ -168,6 +168,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
 [node name="View" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.03)
 toggleable = true
+external_state = true
 
 [node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/View"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
@@ -178,7 +179,7 @@ texture = ExtResource("5_8o1rb")
 [node name="Edit" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.09)
 toggleable = true
-initial_active = true
+external_state = true
 
 [node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/Edit"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
@@ -189,6 +190,7 @@ texture = ExtResource("6_344ot")
 [node name="Room" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.15)
 toggleable = true
+external_state = true
 
 [node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/Room"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
@@ -199,6 +201,7 @@ texture = ExtResource("7_wvovx")
 [node name="Automate" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.21)
 toggleable = true
+external_state = true
 
 [node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/Automate"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
@@ -209,6 +212,7 @@ texture = ExtResource("8_3d082")
 [node name="Settings" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.27)
 toggleable = true
+external_state = true
 
 [node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/Settings"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
@@ -220,12 +224,12 @@ texture = ExtResource("9_mel13")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
 
 [node name="EditMenu" parent="AnimationContainer/Content" instance=ExtResource("4_r2raj")]
+visible = false
 
 [node name="RoomMenu" parent="AnimationContainer/Content" instance=ExtResource("10_u4i1x")]
 visible = false
 
 [node name="SettingsMenu" parent="AnimationContainer/Content" instance=ExtResource("11_7wm6b")]
-visible = false
 
 [node name="ImmersiveHomePanels" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.37114e-10, 0, 0.01, 0, 0.01, 0, -0.01, 0, -4.37114e-10, 0.32, 0, -0.0500001)

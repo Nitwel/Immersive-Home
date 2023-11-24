@@ -13,10 +13,10 @@ var brightness = 0 # 0-255
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var stateInfo = await HomeAdapters.adapter.get_state(entity_id)
+	var stateInfo = await HomeApi.get_state(entity_id)
 	set_state(stateInfo["state"] == "on")
 
-	await HomeAdapters.adapter.watch_state(entity_id, func(new_state):
+	await HomeApi.watch_state(entity_id, func(new_state):
 		if (new_state["state"] == "on") == state:
 			return
 		set_state(new_state["state"] == "on")
@@ -44,7 +44,7 @@ func _on_click(event):
 		if !state && brightness != null:
 			attributes["brightness"] = int(brightness)
 
-		HomeAdapters.adapter.set_state(entity_id, "on" if !state else "off", attributes)
+		HomeApi.set_state(entity_id, "on" if !state else "off", attributes)
 		set_state(!state, brightness)
 	else:
 		_on_clickable_on_click(event)
@@ -71,5 +71,5 @@ func _on_clickable_on_click(event):
 
 	slider_knob.position = new_pos
 
-	HomeAdapters.adapter.set_state(entity_id, "on" if state else "off", {"brightness": int(ratio * 255)})
+	HomeApi.set_state(entity_id, "on" if state else "off", {"brightness": int(ratio * 255)})
 	set_state(state, ratio * 255)

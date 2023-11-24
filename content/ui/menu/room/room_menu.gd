@@ -25,8 +25,8 @@ func _ready():
 		add_corner(event.ray.get_collision_point())
 	)
 
-	toggle_edit_button.get_node("Clickable").on_click.connect(func(event):
-		edit_enabled = event.active
+	toggle_edit_button.get_node("Clickable").on_press_up.connect(func(event):
+		edit_enabled = event.target.active
 
 		if edit_enabled == false:
 			wall_corners.visible = false
@@ -131,7 +131,7 @@ func add_corner(position: Vector3):
 		if moving == null:
 			return
 
-		var direction = (event.ray.to_global(event.ray.target_position) - event.ray.global_position).normalized()
+		var direction = -event.ray.global_transform.basis.z
 		var new_position = ground_plane.intersects_ray(event.ray.global_position, direction)
 
 		if new_position == null:

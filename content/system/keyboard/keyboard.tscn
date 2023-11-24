@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://lrehk38exd5n"]
+
+[ext_resource type="Script" path="res://content/system/keyboard/keyboard.gd" id="1_maojw"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_xdpwr"]
+[ext_resource type="Script" path="res://content/ui/menu/grid.gd" id="3_mx544"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="4_86fct"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k5ib7"]
+size = Vector3(0.84, 0.0402036, 0.296009)
+
+[node name="Keyboard" type="StaticBody3D" groups=["ui_focus_skip"]]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+script = ExtResource("1_maojw")
+
+[node name="Backspace" parent="." groups=["ui_focus_skip"] instance=ExtResource("1_xdpwr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, 0, 0.02)
+metadata/key = 4194308
+
+[node name="Label3D" type="Label3D" parent="Backspace"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
+pixel_size = 0.001
+text = "back"
+
+[node name="Caps" parent="." groups=["ui_focus_skip"] instance=ExtResource("1_xdpwr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, 0, 0.15)
+toggleable = true
+
+[node name="Label3D" type="Label3D" parent="Caps"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
+pixel_size = 0.001
+text = "caps"
+
+[node name="Paste" parent="." groups=["ui_focus_skip"] instance=ExtResource("1_xdpwr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, 0, 0.18)
+
+[node name="Label3D" type="Label3D" parent="Paste"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
+pixel_size = 0.001
+text = "paste"
+
+[node name="Keys" type="Node3D" parent="."]
+script = ExtResource("3_mx544")
+columns = 11
+depth_gap = 0.06
+size = Vector3(0.6, 1, 1)
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("4_86fct")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.296719, -0.025645, 0.0928761)
+shape = SubResource("BoxShape3D_k5ib7")

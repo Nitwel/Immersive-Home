@@ -5,10 +5,10 @@ extends StaticBody3D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var stateInfo = await HomeAdapters.adapter.get_state(entity_id)
+	var stateInfo = await HomeApi.get_state(entity_id)
 	set_text(stateInfo)
 
-	await HomeAdapters.adapter.watch_state(entity_id, func(new_state):
+	await HomeApi.watch_state(entity_id, func(new_state):
 		set_text(new_state)
 	)
 

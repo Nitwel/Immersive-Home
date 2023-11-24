@@ -8,7 +8,7 @@ radius = 0.08
 height = 0.16
 
 [node name="Ball" type="RigidBody3D"]
-angular_damp = 39.224
+angular_damp = 4.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_orlq6")

@@ -1,0 +1,55 @@
+[configuration]
+
+entry_symbol = "debug_draw_3d_library_init"
+compatibility_minimum = "4.1"
+
+[dependencies]
+
+# example.x86_64 = { "relative or absolute path to the dependency" : "the path relative to the exported project", }
+
+macos = { }
+windows.x86_64 = { }
+linux.x86_64 = { }
+
+android.arm32 = { }
+android.arm64 = { }
+android.x86_32 = { }
+android.x86_64 = { }
+
+macos.template_release = { }
+windows.template_release.x86_64 = { }
+linux.template_release.x86_64 = { }
+
+android.template_release.arm32 = { }
+android.template_release.arm64 = { }
+android.template_release.x86_32 = { }
+android.template_release.x86_64 = { }
+
+[libraries]
+
+macos = "libs/libdd3d.macos.editor.universal.dylib"
+windows.x86_64 = "libs/libdd3d.windows.editor.x86_64.dll"
+linux.x86_64 = "libs/libdd3d.linux.editor.x86_64.so"
+
+android.arm32 = "libs/libdd3d.android.template_debug.arm32.so"
+android.arm64 = "libs/libdd3d.android.template_debug.arm64.so"
+android.x86_32 = "libs/libdd3d.android.template_debug.x86_32.so"
+android.x86_64 = "libs/libdd3d.android.template_debug.x86_64.so"
+
+macos.template_release = "libs/libdd3d.macos.template_release.universal.dylib"
+windows.template_release.x86_64 = "libs/libdd3d.windows.template_release.x86_64.dll"
+linux.template_release.x86_64 = "libs/libdd3d.linux.template_release.x86_64.so"
+
+android.template_release.arm32 = "libs/libdd3d.android.template_release.arm32.so"
+android.template_release.arm64 = "libs/libdd3d.android.template_release.arm64.so"
+android.template_release.x86_32 = "libs/libdd3d.android.template_release.x86_32.so"
+android.template_release.x86_64 = "libs/libdd3d.android.template_release.x86_64.so"
+
+macos.template_release.forced_dd3d = "libs/libdd3d.macos.template_release.universal.enabled.dylib"
+windows.template_release.x86_64.forced_dd3d = "libs/libdd3d.windows.template_release.x86_64.enabled.dll"
+linux.template_release.x86_64.forced_dd3d = "libs/libdd3d.linux.template_release.x86_64.enabled.so"
+
+android.template_release.arm32.forced_dd3d = "libs/libdd3d.android.template_release.arm32.enabled.so"
+android.template_release.arm64.forced_dd3d = "libs/libdd3d.android.template_release.arm64.enabled.so"
+android.template_release.x86_32.forced_dd3d = "libs/libdd3d.android.template_release.x86_32.enabled.so"
+android.template_release.x86_64.forced_dd3d = "libs/libdd3d.android.template_release.x86_64.enabled.so"
