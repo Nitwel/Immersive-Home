@@ -6,6 +6,9 @@ on:
       tag:
         description: "New tag name"
         required: true
+      description:
+        description: "Description of the new tag"
+        required: true
 
 jobs:
   version:
@@ -20,5 +23,5 @@ jobs:
           git config user.name "Nitwel"
           git config user.email "mail@nitwel.de"
 
-          git tag ${{ github.event.inputs.tag }}
-          git push origin ${{ github.event.inputs.tag }}
+          git tag -m "${{ github.event.inputs.description }}" ${{ github.event.inputs.tag }} main
+          git push -u origin main --tags
