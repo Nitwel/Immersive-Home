@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://content/ui/menu/edit/edit_menu.gd" id="1_34cbn"]
 [ext_resource type="Script" path="res://content/ui/menu/grid.gd" id="3_0xvyw"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_tvimg"]
-[ext_resource type="Texture2D" uid="uid://tr8yrx470k03" path="res://assets/materials/arrow_right.png" id="5_0uvv4"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="5_0josb"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="6_pf8jy"]
 
 [node name="EditMenu" type="Node3D"]
@@ -16,32 +16,39 @@ depth_gap = 0.06
 size = Vector3(0.24, 0.1, 0.1)
 
 [node name="PageNumberLabel" type="Label3D" parent="."]
-transform = Transform3D(0.1, 0, 0, 0, -4.37114e-09, 0.1, 0, -0.1, -4.37114e-09, 0.26, 0.01, 0.27)
-text = "1 / 3"
-font_size = 36
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.26, 0.01, 0.27)
+pixel_size = 0.001
+modulate = Color(0, 0, 0, 1)
+text = "0 / 0"
+font_size = 18
+outline_size = 0
 
 [node name="Buttons" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, 0.01, 0.27)
 
 [node name="NextPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
-focusable = true
-
-[node name="Decal" type="Decal" parent="Buttons/NextPageButton"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
-size = Vector3(0.04, 0.04, 0.04)
-texture_albedo = ExtResource("5_0uvv4")
 
 [node name="Clickable" type="Node" parent="Buttons/NextPageButton"]
 script = ExtResource("6_pf8jy")
 
+[node name="Label3D" type="Label3D" parent="Buttons/NextPageButton"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
+pixel_size = 0.001
+text = "navigate_next"
+font = ExtResource("5_0josb")
+font_size = 48
+outline_size = 0
+
 [node name="PreviousPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0, 0)
-focusable = true
-
-[node name="Decal" type="Decal" parent="Buttons/PreviousPageButton"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.02, 0)
-size = Vector3(0.04, 0.04, 0.04)
-texture_albedo = ExtResource("5_0uvv4")
 
 [node name="Clickable" type="Node" parent="Buttons/PreviousPageButton"]
 script = ExtResource("6_pf8jy")
+
+[node name="Label3D2" type="Label3D" parent="Buttons/PreviousPageButton"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0.012, 0)
+pixel_size = 0.001
+text = "navigate_next"
+font = ExtResource("5_0josb")
+font_size = 48
+outline_size = 0

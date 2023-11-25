@@ -28,6 +28,10 @@ EventSystem="*res://lib/globals/event_system.gd"
 
 enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg")
 
+[gui]
+
+theme/custom_font="res://assets/fonts/ui_font_500.tres"
+
 [rendering]
 
 renderer/rendering_method="mobile"

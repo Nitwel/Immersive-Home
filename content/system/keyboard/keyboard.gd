@@ -1,7 +1,7 @@
 @tool
 extends StaticBody3D
 
-const button_scene = preload("res://content/ui/components/button/button.tscn")
+const key_scene = preload("res://content/system/keyboard/key.tscn")
 
 @onready var keys = $Keys
 @onready var caps_button = $Caps
@@ -22,16 +22,16 @@ var caps = false :
 func _ready():
 	for row in key_list:
 		for key in row:
-			var button = create_key(key)
-			keys.add_child(button)
+			var key_node = create_key(key)
+			keys.add_child(key_node)
 
 			if Engine.is_editor_hint():
 				continue
 
-			button.on_button_down.connect(func():
+			key_node.on_button_down.connect(func():
 				_emit_event("key_down", key)
 			)
-			button.on_button_up.connect(func():
+			key_node.on_button_up.connect(func():
 				_emit_event("key_up", key)
 			)
 
@@ -68,20 +68,12 @@ func _ready():
 	)
 
 func create_key(key: Key):
-	var button = button_scene.instantiate()
-
-	var label = Label3D.new()
-	label.text = EventKey.key_to_string(key, caps)
-	label.pixel_size = 0.001
-	label.position = Vector3(0, 0.012, 0)
-	label.rotate_x(deg_to_rad(-90))
-	label.add_to_group("button_label")
+	var key_node = key_scene.instantiate()
 	
-	button.set_meta("key", key)
-	button.add_to_group("ui_focus_skip")
-	button.add_child(label)
+	key_node.get_node("Label").text = EventKey.key_to_string(key, caps)
+	key_node.set_meta("key", key)
 
-	return button
+	return key_node
 
 func update_labels():
 	for key_button in keys.get_children():
