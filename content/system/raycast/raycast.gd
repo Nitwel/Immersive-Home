@@ -30,6 +30,11 @@ func _handle_move():
 
 	moved = true
 
+	# reset if last_collided gets deleted
+	if is_instance_valid(last_collided) == false:
+		last_collided = null
+		return
+
 	if is_pressed:
 		_emit_event("press_move", last_collided )
 		
@@ -65,9 +70,6 @@ func _on_button_pressed(button: String):
 			_emit_event("grab_down", collider )
 
 func _on_button_released(button: String):
-	if last_collided == null:
-		return
-
 	match button:
 		"trigger_click":
 			if is_pressed:

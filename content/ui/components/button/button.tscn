@@ -81,6 +81,7 @@ _data = {
 
 [node name="Button" type="StaticBody3D" groups=["ui_focus"]]
 script = ExtResource("1_74x7g")
+label = "Example Text"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_jwpm5")
@@ -92,3 +93,12 @@ shape = SubResource("ConvexPolygonShape3D_o4j7g")
 libraries = {
 "": SubResource("AnimationLibrary_sbgno")
 }
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.011, 0)
+pixel_size = 0.001
+text = "Example Text"
+font_size = 10
+outline_size = 0
+autowrap_mode = 3
+width = 50.0

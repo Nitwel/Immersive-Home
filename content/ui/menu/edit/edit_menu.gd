@@ -1,10 +1,8 @@
 extends Node3D
 
-const Device = preload("res://content/ui/device/device.tscn")
-const Entity = preload("res://content/ui/entity/entity.tscn")
-const Switch = preload("res://content/entities/switch/switch.tscn")
-const Light = preload("res://content/entities/light/light.tscn")
-const Sensor = preload("res://content/entities/sensor/sensor.tscn")
+const Device = preload("./device/device.tscn")
+const Entity = preload("./entity/entity.tscn")
+const EntityCreator = preload("./entity_creator.gd")
 
 @onready var devices_node: GridContainer3D = $Devices
 @onready var next_page_button = $Buttons/NextPageButton
@@ -150,29 +148,11 @@ func _on_entity_click(entity_name):
 		return
 
 	var type = entity_name.split(".")[0]
-	print(type)
 	AudioPlayer.play_effect("spawn")
 
-	if type == "switch":
-		var switch = Switch.instantiate()
-		switch.entity_id = entity_name
-
-		switch.set_position(global_position)
-		get_node("/root").add_child(switch)
-
-	if type == "light":
-		var light = Light.instantiate()
-		light.entity_id = entity_name
-
-		light.set_position(global_position)
-		get_node("/root").add_child(light)
-
-	if type == "sensor":
-		var sensor = Sensor.instantiate()
-		sensor.entity_id = entity_name
-
-		sensor.set_position(global_position)
-		get_node("/root").add_child(sensor)
+	var entity = EntityCreator.create_entity(type, entity_name)
+	entity.set_position(global_position)
+	get_node("/root").add_child(entity)
 	
 func clear_menu():
 	for child in devices_node.get_children():

@@ -1,8 +1,28 @@
+@tool
+
 extends StaticBody3D
 class_name Button3D
 
 signal on_button_down()
 signal on_button_up()
+
+const IconFont = preload("res://assets/icons/icons.tres")
+
+@onready var label_node: Label3D = $Label
+
+@export var label: String = "":
+	set(value):
+		if !is_inside_tree(): await ready
+		label_node.text = value
+	get:
+		return label_node.text
+@export var icon: bool = false:
+	set(value):
+		icon = value
+
+		if !is_inside_tree(): await ready
+		label_node.font = IconFont if value else null
+		label_node.font_size = 48 if value else 10
 
 @export var toggleable: bool = false
 @export var disabled: bool = false
@@ -26,7 +46,7 @@ var active: bool = false :
 func _ready():
 	if initial_active:
 		active = true
-
+		
 func _on_press_down(event):
 	if disabled:
 		event.bubbling = false
