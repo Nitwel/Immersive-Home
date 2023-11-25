@@ -4,13 +4,27 @@
 
 Immersive Home is project to bring Smart Home and Mixed Reality technologies together for an intuitive and immersive experience.
 
-## Features
+## Planned Features
 
 - **Fast and Intuitive control over IoT devices**
 - **Live overview over your smart home**
 - **Simple way for creating automations**
 - **Comfortable way of consuming virtual media unobstructed**
 - **Advanced automations based on position in room**
+
+## Try it out
+
+<a href="https://github.com/Nitwel/Immersive-Home/releases/latest/download/Android.zip">
+	<img height="32" src="assets/badges/github.svg" alt="Badge linking to GitHub" />
+</a>
+
+<a href="https://nitwel.itch.io/immersive-home">
+	<img height="32" src="assets/badges/itch.svg" alt="Badge linking to itch.io" />
+</a>
+
+<a href="https://sidequestvr.com/app/26827/immersive-home">
+	<img height="32" src="assets/badges/sidequest.svg" alt="Badge linking to sidequest" />
+</a>
 
 ## Supported Devices
 
@@ -21,13 +35,11 @@ Immersive Home is project to bring Smart Home and Mixed Reality technologies tog
 - Meta Quest 2 / Pro / 3
 
 ## Connecting to your Home Assistant Instance
-Right now, as a temporary solution, the app will use whatever is saved into your clipboard to connect to your Home Assistant instance.
-Format: `ws://<ip/url>:<port>/api/websocket <token>`
-Example `ws://192.168.0.31:8123/api/websocket eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIzZjQ0ZGM2N2Y3YzY0MDc1OGZlMWI2ZjJlNmIxZjRkNSIsImlhdCI6MTY5ODAxMDcyOCwiZXhwIjoyMDEzMzcwNzI4fQ.K6ydLUC-4Q7BNIRCU1nWlI2s6sg9UCiOu-Lpedw2zJc`
-
+Go to the settings tab (the gear icon) and enter the url of your Home Assistant instance.
+In order to authenticate, you have to generate a long-lived access token in Home Assistant.
 To generate a HASS token, login into your dashboard, click on your name (bottom left), scroll down and create a long-lived access token.
 
-You can check if you are properly connected by opening the settings tab in the app and looking at the bottom right corner.
+Finally, click the connect button and you should be connected to your Home Assistant instance.
 
 # 🛠 Development
 
