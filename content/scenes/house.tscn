@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://83lb5p4e0qk0"]
 
-[ext_resource type="PackedScene" uid="uid://c0pyxkvyd8uca" path="res://assets/living_room/scene.gltf" id="1_mu2l0"]
+[ext_resource type="PackedScene" uid="uid://ckeofsveitosi" path="res://assets/living_room/scene.gltf" id="1_mu2l0"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_b3o5e"]
 size = Vector2(5, 2)

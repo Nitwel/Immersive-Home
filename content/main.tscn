@@ -25,6 +25,9 @@ background_color = Color(0.466667, 0.47451, 0.462745, 0)
 sky = SubResource("Sky_vhymk")
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_sky_contribution = 0.72
+ssao_enabled = true
+ssao_radius = 6.52
+ssao_intensity = 5.68
 
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, -0.000296142, 0.000270963, 0.000296143, 1, -4.61078e-06, -0.000270962, 4.67014e-06, 1, 0, 0, 0)

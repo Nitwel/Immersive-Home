@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_faxng"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="3_qmg6q"]
 [ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="4_q3x6k"]
-[ext_resource type="Texture2D" uid="uid://co5fgm68t4j6o" path="res://assets/icons/wifi_white_24dp.svg" id="5_muw54"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="5_eiwd4"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_e51x8"]
 size = Vector3(0.3, 0.01, 0.3)
@@ -20,9 +20,12 @@ mesh = SubResource("BoxMesh_e51x8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0102286, 0)
 
 [node name="Label3D" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.184377, 0, 0.253575)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.134377, 0, 0.253575)
 pixel_size = 0.001
+modulate = Color(0, 0, 0, 1)
 text = "Spawn Ball"
+font_size = 18
+outline_size = 0
 
 [node name="Button" parent="Content" instance=ExtResource("1_faxng")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0458097, 0, 0.253575)
@@ -30,17 +33,29 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0458097, 0, 0.253575)
 [node name="Clickable" type="Node" parent="Content/Button"]
 script = ExtResource("3_qmg6q")
 
+[node name="Label3D" type="Label3D" parent="Content/Button"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+pixel_size = 0.001
+text = "ball"
+font_size = 18
+outline_size = 0
+
 [node name="ConnectionStatus" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.250698, 0, 0.161303)
-pixel_size = 0.0003
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.250698, 0, 0.151303)
+pixel_size = 0.001
+modulate = Color(0, 0, 0, 1)
 text = "Disconnected"
+font_size = 8
+outline_size = 0
 
 [node name="LabelURL" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.03)
-pixel_size = 0.0005
+pixel_size = 0.001
+modulate = Color(0, 0, 0, 1)
 text = "url:
 "
-font_size = 36
+font_size = 18
+outline_size = 0
 horizontal_alignment = 0
 
 [node name="InputURL" parent="Content" instance=ExtResource("4_q3x6k")]
@@ -49,9 +64,11 @@ text = "ws://192.168.33.33:8123"
 
 [node name="LabelToken" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.07)
-pixel_size = 0.0005
+pixel_size = 0.001
+modulate = Color(0, 0, 0, 1)
 text = "token:"
-font_size = 36
+font_size = 18
+outline_size = 0
 horizontal_alignment = 0
 
 [node name="InputToken" parent="Content" instance=ExtResource("4_q3x6k")]
@@ -60,16 +77,20 @@ text = "..."
 
 [node name="LabelConnect" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.14, 0, 0.12)
-pixel_size = 0.0005
+pixel_size = 0.001
+modulate = Color(0, 0, 0, 1)
 text = "Connect"
-font_size = 36
+font_size = 18
+outline_size = 0
 horizontal_alignment = 0
 
 [node name="Connect" parent="Content" instance=ExtResource("1_faxng")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0.12)
 
-[node name="Sprite3D" type="Sprite3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.012, 0.12)
-pixel_size = 0.0002
-axis = 1
-texture = ExtResource("5_muw54")
+[node name="Label3D" type="Label3D" parent="Content/Connect"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
+pixel_size = 0.001
+text = "wifi"
+font = ExtResource("5_eiwd4")
+font_size = 42
+outline_size = 0

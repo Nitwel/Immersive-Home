@@ -1,18 +1,17 @@
-[gd_scene load_steps=16 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=13 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="3_5qlpm"]
 [ext_resource type="PackedScene" uid="uid://crrb0l3ekuotj" path="res://content/ui/menu/edit/edit_menu.tscn" id="4_r2raj"]
-[ext_resource type="Texture2D" uid="uid://cattgsppxnbq4" path="res://assets/icons/visibility_white_24dp.svg" id="5_8o1rb"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_w4i01"]
-[ext_resource type="Texture2D" uid="uid://csq5a4gk6ba5b" path="res://assets/icons/widgets_white_24dp.svg" id="6_344ot"]
-[ext_resource type="ArrayMesh" uid="uid://cejvc23wfwjqj" path="res://assets/immersive_home_panels/immersive_home_panels.obj" id="7_f4u4o"]
-[ext_resource type="Texture2D" uid="uid://jodf3dm654j3" path="res://assets/icons/view_in_ar_white_24dp.svg" id="7_wvovx"]
-[ext_resource type="Texture2D" uid="uid://dch6rwihrl3i2" path="res://assets/icons/schema_white_24dp.svg" id="8_3d082"]
-[ext_resource type="Texture2D" uid="uid://dyh0ax51xqp8n" path="res://assets/icons/settings_white_24dp.svg" id="9_mel13"]
+[ext_resource type="ArrayMesh" uid="uid://cbqhhnknyium2" path="res://assets/immersive_home_panels/immersive_home_panels.obj" id="7_f4u4o"]
 [ext_resource type="PackedScene" uid="uid://c01gkeldvjwtr" path="res://content/ui/menu/room/room_menu.tscn" id="10_u4i1x"]
 [ext_resource type="PackedScene" uid="uid://c6r4higceibif" path="res://content/ui/menu/settings/settings_menu.tscn" id="11_7wm6b"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ti5t2"]
+
 [sub_resource type="BoxMesh" id="BoxMesh_08du6"]
+material = SubResource("StandardMaterial3D_ti5t2")
 size = Vector3(0.3, 0.01, 0.3)
 
 [sub_resource type="Animation" id="Animation_61md4"]
@@ -170,66 +169,76 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.03)
 toggleable = true
 external_state = true
 
-[node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/View"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
-pixel_size = 0.0002
-axis = 1
-texture = ExtResource("5_8o1rb")
+[node name="Label3D" type="Label3D" parent="AnimationContainer/Navigation/View"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
+pixel_size = 0.001
+text = "visibility"
+font = ExtResource("3_5qlpm")
+font_size = 48
+outline_size = 0
 
 [node name="Edit" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.09)
 toggleable = true
 external_state = true
 
-[node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/Edit"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
-pixel_size = 0.0002
-axis = 1
-texture = ExtResource("6_344ot")
+[node name="Label3D2" type="Label3D" parent="AnimationContainer/Navigation/Edit"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
+pixel_size = 0.001
+text = "widgets"
+font = ExtResource("3_5qlpm")
+font_size = 48
+outline_size = 0
 
 [node name="Room" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.15)
 toggleable = true
 external_state = true
 
-[node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/Room"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
-pixel_size = 0.0002
-axis = 1
-texture = ExtResource("7_wvovx")
+[node name="Label3D3" type="Label3D" parent="AnimationContainer/Navigation/Room"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
+pixel_size = 0.001
+text = "view_in_ar"
+font = ExtResource("3_5qlpm")
+font_size = 48
+outline_size = 0
 
 [node name="Automate" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.21)
 toggleable = true
 external_state = true
 
-[node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/Automate"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
-pixel_size = 0.0002
-axis = 1
-texture = ExtResource("8_3d082")
+[node name="Label3D4" type="Label3D" parent="AnimationContainer/Navigation/Automate"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
+pixel_size = 0.001
+text = "schema"
+font = ExtResource("3_5qlpm")
+font_size = 48
+outline_size = 0
 
 [node name="Settings" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.27)
 toggleable = true
 external_state = true
 
-[node name="Sprite3D" type="Sprite3D" parent="AnimationContainer/Navigation/Settings"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
-pixel_size = 0.0002
-axis = 1
-texture = ExtResource("9_mel13")
+[node name="Label3D5" type="Label3D" parent="AnimationContainer/Navigation/Settings"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
+pixel_size = 0.001
+text = "settings"
+font = ExtResource("3_5qlpm")
+font_size = 48
+outline_size = 0
 
 [node name="Content" type="Node3D" parent="AnimationContainer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
 
 [node name="EditMenu" parent="AnimationContainer/Content" instance=ExtResource("4_r2raj")]
-visible = false
 
 [node name="RoomMenu" parent="AnimationContainer/Content" instance=ExtResource("10_u4i1x")]
 visible = false
 
 [node name="SettingsMenu" parent="AnimationContainer/Content" instance=ExtResource("11_7wm6b")]
+visible = false
 
 [node name="ImmersiveHomePanels" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.37114e-10, 0, 0.01, 0, 0.01, 0, -0.01, 0, -4.37114e-10, 0.32, 0, -0.0500001)

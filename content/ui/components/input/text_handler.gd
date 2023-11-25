@@ -72,14 +72,12 @@ func _calculate_caret_position(click_pos_x: float):
 func _calculate_text_gaps():
 	var font = label.get_font()
 	var offsets = [0.0]
-	var offset = 0.0
 
 	for i in range(text.length()):
-		var character = text[i]
-		var size = font.get_string_size(character, HORIZONTAL_ALIGNMENT_CENTER, -1, label.font_size)
-
-		offset += size.x * label.pixel_size
-		offsets.append(offset)
+		var chars = text.substr(0, i + 1) # Can't use single chars because of kerning.
+		var size = font.get_string_size(chars, HORIZONTAL_ALIGNMENT_CENTER, -1, label.font_size)
+		
+		offsets.append(size.x * label.pixel_size)
 
 	return offsets
 

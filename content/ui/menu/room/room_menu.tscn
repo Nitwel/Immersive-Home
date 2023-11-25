@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://c01gkeldvjwtr"]
+[gd_scene load_steps=9 format=3 uid="uid://c01gkeldvjwtr"]
 
 [ext_resource type="Script" path="res://content/ui/menu/room/room_menu.gd" id="1_ch4jb"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="2_elugy"]
 [ext_resource type="Material" uid="uid://bbx6fv7jq50tr" path="res://content/ui/menu/room/walls.tres" id="3_fke3j"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_whl7a"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="5_kr7ln"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_08sv0"]
 
@@ -49,7 +50,18 @@ toggleable = true
 [node name="Clickable" type="Node" parent="Interface/ToggleEdit"]
 script = ExtResource("2_elugy")
 
-[node name="Label3D" type="Label3D" parent="Interface"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.17, -1.86265e-09, 0.05)
+[node name="Label3D" type="Label3D" parent="Interface/ToggleEdit"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
 pixel_size = 0.001
+text = "room_preferences"
+font = ExtResource("5_kr7ln")
+font_size = 48
+outline_size = 0
+
+[node name="Label3D" type="Label3D" parent="Interface"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.13, -1.86265e-09, 0.05)
+pixel_size = 0.001
+modulate = Color(0, 0, 0, 1)
 text = "Edit Room"
+font_size = 18
+outline_size = 0
