@@ -14,6 +14,8 @@ Immersive Home is project to bring Smart Home and Mixed Reality technologies tog
 
 ## Try it out
 
+Right now you can try out the app for free using either of the following pages:
+
 <a href="https://github.com/Nitwel/Immersive-Home/releases/latest/download/Android.zip">
 	<img height="32" src="assets/badges/github.svg" alt="Badge linking to GitHub" />
 </a>
@@ -25,6 +27,12 @@ Immersive Home is project to bring Smart Home and Mixed Reality technologies tog
 <a href="https://sidequestvr.com/app/26827/immersive-home">
 	<img height="32" src="assets/badges/sidequest.svg" alt="Badge linking to sidequest" />
 </a>
+
+💕 If you like to see the project grow to support more devices and interaction methods, consider supporting the project using these methods:
+
+- Donate using [PayPal]( https://paypal.me/nitwel) or [GitHub Sponsors](https://github.com/sponsors/Nitwel)
+- Buying the app on [itch.io](https://nitwel.itch.io/immersive-home)
+- Contributing to the project by creating issues or pull requests
 
 ## Supported Devices
 
