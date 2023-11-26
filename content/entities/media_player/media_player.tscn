@@ -5,13 +5,13 @@
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="3_bguto"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vi3eg"]
-size = Vector3(0.23, 0.07, 0.01)
+size = Vector3(0.23, 0.142768, 0.01)
 
-[node name="MediaPlayer" type="StaticBody3D"]
+[node name="MediaPlayer" type="StaticBody3D" groups=["entity"]]
 script = ExtResource("1_ame17")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0364514, -0.01)
 shape = SubResource("BoxShape3D_vi3eg")
 
 [node name="Previous" parent="." instance=ExtResource("1_8opk3")]

@@ -13,15 +13,12 @@ const IconFont = preload("res://assets/icons/icons.tres")
 @export var label: String = "":
 	set(value):
 		label = value
-		if label_node == null:
-			return
+		if !is_node_ready(): await ready
 		label_node.text = value
 @export var icon: bool = false:
 	set(value):
 		icon = value
-
-		if label_node == null:
-			return
+		if !is_node_ready(): await ready
 
 		if value:
 			label_node.font = IconFont
@@ -50,9 +47,6 @@ var active: bool = false :
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 func _ready():
-	label = label
-	icon = icon
-
 	if initial_active:
 		active = true
 		

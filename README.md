@@ -139,6 +139,7 @@ Thus I've decided to use a custom event system that is similar to the one used i
 
 | Group | Description |
 | -- | -- |
+| `entity` | Marks the object as being an entity placed in space |
 | `ui_focus` | The element can be focused |
 | `ui_focus_skip` | The focus will not be reset. Useful for keyboard |
 
@@ -182,3 +183,7 @@ Click at the link to get a list of the supported controls.
 	- Ckeck Internet under the permissions
 	- Under Resources > Filters to export, add `*.j2`
 7. `<uses-feature android:name="com.oculus.feature.CONTEXTUAL_BOUNDARYLESS_APP" android:required="true" />` can be added to the `AndroidManifest.xml` to disable the boundary system.
+
+## Troubleshooting
+
+- If you encounter unexpected behavior when building compared to running locally, it may be that the cached data of godot is corrupted or outdated. Try deleting the `.godot` folder and / or all `*.import` files.
