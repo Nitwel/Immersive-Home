@@ -2,7 +2,7 @@
 
 #  🏠 Introduction
 
-Immersive Home is project to bring Smart Home and Mixed Reality technologies together for an intuitive and immersive experience. ![Demo Video](https://www.youtube.com/watch?v=vk6uTYOINY4)
+Immersive Home is project to bring Smart Home and Mixed Reality technologies together for an intuitive and immersive experience. [Demo Video](https://www.youtube.com/watch?v=vk6uTYOINY4)
 
 ## Planned Features
 
