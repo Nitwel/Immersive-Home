@@ -17,12 +17,11 @@ var pages = 0
 var selected_device = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	next_page_button.get_node("Clickable").on_click.connect(func(_event):
-		print("next page")
+	next_page_button.on_button_down.connect(func():
 		next_page()
 	)
 
-	previous_page_button.get_node("Clickable").on_click.connect(func(_event):
+	previous_page_button.on_button_down.connect(func():
 		previous_page()
 	)
 
