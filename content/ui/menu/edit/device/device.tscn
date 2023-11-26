@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dbe8slnyhro2n"]
 
-[ext_resource type="Script" path="res://content/ui/device/device.gd" id="1_rbo86"]
+[ext_resource type="Script" path="res://content/ui/menu/edit/device/device.gd" id="1_rbo86"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_go2es"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="3_6wicx"]
 
@@ -8,15 +8,6 @@
 script = ExtResource("1_rbo86")
 
 [node name="Button" parent="." instance=ExtResource("2_go2es")]
-
-[node name="Label" type="Label3D" parent="Button"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.0142873, 0)
-pixel_size = 0.001
-text = "Texttexttexttexttexttextext"
-font_size = 7
-outline_size = 0
-autowrap_mode = 3
-width = 50.0
 
 [node name="Clickable" type="Node" parent="."]
 script = ExtResource("3_6wicx")

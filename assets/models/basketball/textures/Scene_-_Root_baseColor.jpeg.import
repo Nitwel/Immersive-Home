@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bbfwq7mhqgwjm"
-path.s3tc="res://.godot/imported/teleport_arrow.png-f1bd44b6f478277692b3fa29171b62d3.s3tc.ctex"
-path.etc2="res://.godot/imported/teleport_arrow.png-f1bd44b6f478277692b3fa29171b62d3.etc2.ctex"
+uid="uid://bw35kpxn8wn1t"
+path.s3tc="res://.godot/imported/Scene_-_Root_baseColor.jpeg-669d7332c39c241b55cea79d53931b22.s3tc.ctex"
+path.etc2="res://.godot/imported/Scene_-_Root_baseColor.jpeg-669d7332c39c241b55cea79d53931b22.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/godot-xr-tools/images/teleport_arrow.png"
-dest_files=["res://.godot/imported/teleport_arrow.png-f1bd44b6f478277692b3fa29171b62d3.s3tc.ctex", "res://.godot/imported/teleport_arrow.png-f1bd44b6f478277692b3fa29171b62d3.etc2.ctex"]
+source_file="res://assets/models/basketball/textures/Scene_-_Root_baseColor.jpeg"
+dest_files=["res://.godot/imported/Scene_-_Root_baseColor.jpeg-669d7332c39c241b55cea79d53931b22.s3tc.ctex", "res://.godot/imported/Scene_-_Root_baseColor.jpeg-669d7332c39c241b55cea79d53931b22.etc2.ctex"]
 
 [params]
 

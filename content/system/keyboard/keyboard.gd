@@ -1,7 +1,7 @@
 @tool
 extends StaticBody3D
 
-const key_scene = preload("res://content/system/keyboard/key.tscn")
+const button_scene = preload("res://content/ui/components/button/button.tscn")
 
 @onready var keys = $Keys
 @onready var caps_button = $Caps
@@ -68,9 +68,11 @@ func _ready():
 	)
 
 func create_key(key: Key):
-	var key_node = key_scene.instantiate()
+	var key_node = button_scene.instantiate()
 	
-	key_node.get_node("Label").text = EventKey.key_to_string(key, caps)
+	key_node.label = EventKey.key_to_string(key, caps)
+	key_node.add_to_group("ui_focus_skip")
+	key_node.get_node("Label").font_size = 32
 	key_node.set_meta("key", key)
 
 	return key_node

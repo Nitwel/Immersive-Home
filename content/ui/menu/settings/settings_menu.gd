@@ -1,6 +1,7 @@
 extends Node3D
 
-const ball_scene = preload("res://content/ui/menu/settings/ball.tscn")
+const ball_scene = preload("./ball.tscn")
+const credits_scene = preload("./credits.tscn")
 
 @onready var clickable = $Content/Button/Clickable
 @onready var connection_status = $Content/ConnectionStatus
@@ -8,13 +9,25 @@ const ball_scene = preload("res://content/ui/menu/settings/ball.tscn")
 @onready var input_url = $Content/InputURL
 @onready var input_token = $Content/InputToken
 @onready var button_connect = $Content/Connect
+@onready var credits = $Content/Credits/Clickable
+@onready var background = $Background
 
 func _ready():
+	background.visible = false
+
 	clickable.on_click.connect(func(event):
 		var ball = ball_scene.instantiate()
 		ball.transform = event.controller.transform
 		ball.linear_velocity = -event.controller.transform.basis.z * 5 + Vector3(0, 5, 0)
 		get_tree().root.add_child(ball)
+	)
+
+	credits.on_click.connect(func(_event):
+		print("_active_controller")
+		var credits_instance = credits_scene.instantiate()
+		get_tree().root.add_child(credits_instance)
+		var label = $Content/Credits/Label
+		credits_instance.global_position =  + label.to_global(label.position + Vector3(0.1, 0, -0.15))
 	)
 
 	var config = ConfigData.load_config()

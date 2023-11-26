@@ -1,17 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://cn3axur15ftft"]
+[gd_scene load_steps=4 format=3 uid="uid://cn3axur15ftft"]
+
+[ext_resource type="PackedScene" uid="uid://o1qeng8cu244" path="res://assets/models/basketball/scene.gltf" id="1_x2hv5"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_f6jtg"]
+bounce = 0.7
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_orlq6"]
 radius = 0.08
 
-[sub_resource type="SphereMesh" id="SphereMesh_rfu32"]
-radius = 0.08
-height = 0.16
-
 [node name="Ball" type="RigidBody3D"]
+physics_material_override = SubResource("PhysicsMaterial_f6jtg")
 angular_damp = 4.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_orlq6")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("SphereMesh_rfu32")
+[node name="scene" parent="." instance=ExtResource("1_x2hv5")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)

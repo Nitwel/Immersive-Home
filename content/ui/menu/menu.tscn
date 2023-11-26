@@ -1,7 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=12 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
-[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="3_5qlpm"]
 [ext_resource type="PackedScene" uid="uid://crrb0l3ekuotj" path="res://content/ui/menu/edit/edit_menu.tscn" id="4_r2raj"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_w4i01"]
 [ext_resource type="ArrayMesh" uid="uid://cbqhhnknyium2" path="res://assets/immersive_home_panels/immersive_home_panels.obj" id="7_f4u4o"]
@@ -166,68 +165,38 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
 
 [node name="View" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.03)
+label = "visibility"
+icon = true
 toggleable = true
 external_state = true
-
-[node name="Label3D" type="Label3D" parent="AnimationContainer/Navigation/View"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
-pixel_size = 0.001
-text = "visibility"
-font = ExtResource("3_5qlpm")
-font_size = 48
-outline_size = 0
 
 [node name="Edit" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.09)
+label = "widgets"
+icon = true
 toggleable = true
 external_state = true
-
-[node name="Label3D2" type="Label3D" parent="AnimationContainer/Navigation/Edit"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
-pixel_size = 0.001
-text = "widgets"
-font = ExtResource("3_5qlpm")
-font_size = 48
-outline_size = 0
 
 [node name="Room" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.15)
+label = "view_in_ar"
+icon = true
 toggleable = true
 external_state = true
-
-[node name="Label3D3" type="Label3D" parent="AnimationContainer/Navigation/Room"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
-pixel_size = 0.001
-text = "view_in_ar"
-font = ExtResource("3_5qlpm")
-font_size = 48
-outline_size = 0
 
 [node name="Automate" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.21)
+label = "schema"
+icon = true
 toggleable = true
 external_state = true
-
-[node name="Label3D4" type="Label3D" parent="AnimationContainer/Navigation/Automate"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
-pixel_size = 0.001
-text = "schema"
-font = ExtResource("3_5qlpm")
-font_size = 48
-outline_size = 0
 
 [node name="Settings" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.27)
+label = "settings"
+icon = true
 toggleable = true
 external_state = true
-
-[node name="Label3D5" type="Label3D" parent="AnimationContainer/Navigation/Settings"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
-pixel_size = 0.001
-text = "settings"
-font = ExtResource("3_5qlpm")
-font_size = 48
-outline_size = 0
 
 [node name="Content" type="Node3D" parent="AnimationContainer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)

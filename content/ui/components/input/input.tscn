@@ -55,6 +55,7 @@ _data = {
 [node name="Input" type="StaticBody3D" groups=["ui_focus"]]
 script = ExtResource("1_uml3t")
 width = 0.2
+text = "Example"
 
 [node name="Box" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.003, 0)
@@ -68,6 +69,7 @@ shape = SubResource("BoxShape3D_x4yp8")
 [node name="Label" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.098, 0.00618291, 0)
 pixel_size = 0.001
+text = "Example"
 font = ExtResource("3_ij5fh")
 font_size = 18
 outline_size = 0

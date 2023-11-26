@@ -13,17 +13,24 @@ var text_handler = preload("res://content/ui/components/input/text_handler.gd").
 	get:
 		return text_handler.width
 	set(value):
-		set_width(value)
+		text_handler.width = value
+
+		if !is_node_ready(): await ready
+
+		mesh_box.mesh.size.x = value
+		collision.shape.size.x = value
+		label.position.x = -value / 2 + 0.002
 		
 @export var text: String:
 	get:
 		return text_handler.text
 	set(value):
 		var focused = Engine.is_editor_hint() == false && EventSystem.is_focused(self) == false
-		text_handler.set_text(value, focused)
+		
+		if !is_node_ready(): await ready
 
-		if label != null:
-			label.text = text_handler.get_display_text()
+		text_handler.set_text(value, focused)
+		label.text = text_handler.get_display_text()
 
 var keyboard_input: bool = false
 
@@ -31,8 +38,6 @@ var input_plane = Plane(Vector3.UP, Vector3.ZERO)
 
 func _ready():
 	text_handler.label = label
-	text = text
-	width = width
 
 	if Engine.is_editor_hint():
 		return
@@ -62,17 +67,7 @@ func _process(_delta):
 
 	if get_tree().debug_collisions_hint && OS.get_name() != "Android":
 		_draw_debug_text_gaps()
-
-func set_width(value: float):
-	text_handler.width = value
-
-	if mesh_box == null || collision == null || label == null:
-		return
-
-	mesh_box.mesh.size.x = value
-	collision.shape.size.x = value
-	label.position.x = -value / 2 + 0.002
-
+	
 func _on_press_move(event):
 	var ray_pos = event.ray.global_position
 	var ray_dir = -event.ray.global_transform.basis.z

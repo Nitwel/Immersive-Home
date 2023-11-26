@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://xo0o5nrfjl23"]
 
-[ext_resource type="Script" path="res://content/ui/entity/entity.gd" id="1_825oj"]
+[ext_resource type="Script" path="res://content/ui/menu/edit/entity/entity.gd" id="1_825oj"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="2_i054q"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_aa3i4"]

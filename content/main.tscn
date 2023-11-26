@@ -25,7 +25,6 @@ background_color = Color(0.466667, 0.47451, 0.462745, 0)
 sky = SubResource("Sky_vhymk")
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_sky_contribution = 0.72
-ssao_enabled = true
 ssao_radius = 6.52
 ssao_intensity = 5.68
 

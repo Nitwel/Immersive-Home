@@ -1,9 +1,10 @@
 extends Node3D
 
-const wall_corner_scene = preload("res://content/ui/menu/room/wall_corner.tscn")
-const wall_edge_scene = preload("res://content/ui/menu/room/wall_edge.tscn")
+const wall_corner_scene = preload("./wall_corner.tscn")
+const wall_edge_scene = preload("./wall_edge.tscn")
 
 @onready var teleport_root = $TeleportRoot
+@onready var background = $Background
 @onready var wall_corners = $TeleportRoot/WallCorners
 @onready var wall_edges = $TeleportRoot/WallEdges
 @onready var wall_mesh = $TeleportRoot/WallMesh
@@ -16,6 +17,7 @@ var edit_enabled = false
 
 func _ready():
 	remove_child(teleport_root)
+	background.visible = false
 	get_tree().get_root().get_node("Main").add_child.call_deferred(teleport_root)
 
 	teleport_root.get_node("Ground/Clickable").on_click.connect(func(event):

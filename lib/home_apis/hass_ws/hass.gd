@@ -245,6 +245,15 @@ func set_state(entity: String, state: String, attributes: Dictionary = {}):
 			service = 'turn_on'
 		elif state == 'off':
 			service = 'turn_off'
+	elif domain == 'media_player':
+		if state == 'play':
+			service = 'media_play'
+		elif state == "pause":
+			service = "media_pause"
+		elif state == "next":
+			service = "media_next_track"
+		elif state == "previous":
+			service = "media_previous_track"
 
 	if service == null:
 		return null

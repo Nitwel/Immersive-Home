@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://lrehk38exd5n"]
+[gd_scene load_steps=7 format=3 uid="uid://lrehk38exd5n"]
 
 [ext_resource type="Script" path="res://content/system/keyboard/keyboard.gd" id="1_maojw"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_xdpwr"]
-[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="3_3glvw"]
 [ext_resource type="Script" path="res://content/ui/menu/grid.gd" id="3_mx544"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_86fct"]
 
@@ -18,38 +17,20 @@ script = ExtResource("1_maojw")
 
 [node name="Backspace" parent="." groups=["ui_focus_skip"] instance=ExtResource("1_xdpwr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, 0, 0.02)
+label = "backspace"
+icon = true
 metadata/key = 4194308
-
-[node name="Label3D" type="Label3D" parent="Backspace"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
-pixel_size = 0.001
-text = "backspace"
-font = ExtResource("3_3glvw")
-font_size = 48
-outline_size = 0
 
 [node name="Caps" parent="." groups=["ui_focus_skip"] instance=ExtResource("1_xdpwr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, 0, 0.15)
+label = "keyboard_capslock"
+icon = true
 toggleable = true
-
-[node name="Label3D" type="Label3D" parent="Caps"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
-pixel_size = 0.001
-text = "keyboard_capslock"
-font = ExtResource("3_3glvw")
-font_size = 48
-outline_size = 0
 
 [node name="Paste" parent="." groups=["ui_focus_skip"] instance=ExtResource("1_xdpwr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, 0, 0.18)
-
-[node name="Label3D" type="Label3D" parent="Paste"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.012, 0)
-pixel_size = 0.001
-text = "assignment"
-font = ExtResource("3_3glvw")
-font_size = 48
-outline_size = 0
+label = "assignment"
+icon = true
 
 [node name="Keys" type="Node3D" parent="."]
 script = ExtResource("3_mx544")
