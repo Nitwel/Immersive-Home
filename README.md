@@ -117,15 +117,15 @@ It is also possible to bubble up information by returning a dictionary from a fu
 
 | Function called | Args | Description |
 | -- | -- | -- |
-| `_on_click` | `[event: EventRay]` | The back trigger button has been pressed and released |
-| `_on_press_down` | `[event: EventRay]` | The back trigger button has been pressed down |
-| `_on_press_move` | `[event: EventRay]` | The back trigger button has been moved while pressed down |
-| `_on_press_up` | `[event: EventRay]` | The back trigger button has been released |
-| `_on_grab_down` | `[event: EventRay]` | The side grab button been pressed down |
-| `_on_grab_move` | `[event: EventRay]` | The side grab button been pressed down |
-| `_on_grab_up` | `[event: EventRay]` | The side grab button been released |
-| `_on_ray_enter` | `[event: EventRay]` | The ray-cast enters the the collision body |
-| `_on_ray_leave` | `[event: EventRay]` | The ray-cast leaves the the collision body |
+| `_on_click` | `[event: EventPointer]` | The back trigger button has been pressed and released |
+| `_on_press_down` | `[event: EventPointer]` | The back trigger button has been pressed down |
+| `_on_press_move` | `[event: EventPointer]` | The back trigger button has been moved while pressed down |
+| `_on_press_up` | `[event: EventPointer]` | The back trigger button has been released |
+| `_on_grab_down` | `[event: EventPointer]` | The side grab button been pressed down |
+| `_on_grab_move` | `[event: EventPointer]` | The side grab button been pressed down |
+| `_on_grab_up` | `[event: EventPointer]` | The side grab button been released |
+| `_on_ray_enter` | `[event: EventPointer]` | The ray-cast enters the the collision body |
+| `_on_ray_leave` | `[event: EventPointer]` | The ray-cast leaves the the collision body |
 | `_on_key_down` | `[event: EventKey]` | The ray-cast leaves the the collision body |
 | `_on_key_up` | `[event: EventKey]` | The ray-cast leaves the the collision body |
 | `_on_focus_in` | `[event: EventFocus]` | The node is got focused |

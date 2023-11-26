@@ -4,15 +4,15 @@ const FN_PREFIX = "_on_"
 const SIGNAL_PREFIX = "on_"
 
 # Interaction Events
-signal on_click(event: EventRay)
-signal on_press_down(event: EventRay)
-signal on_press_move(event: EventRay)
-signal on_press_up(event: EventRay)
-signal on_grab_down(event: EventRay)
-signal on_grab_move(event: EventRay)
-signal on_grab_up(event: EventRay)
-signal on_ray_enter(event: EventRay)
-signal on_ray_leave(event: EventRay)
+signal on_click(event: EventPointer)
+signal on_press_down(event: EventPointer)
+signal on_press_move(event: EventPointer)
+signal on_press_up(event: EventPointer)
+signal on_grab_down(event: EventPointer)
+signal on_grab_move(event: EventPointer)
+signal on_grab_up(event: EventPointer)
+signal on_ray_enter(event: EventPointer)
+signal on_ray_leave(event: EventPointer)
 
 signal on_key_down(event: EventKey)
 signal on_key_up(event: EventKey)
@@ -33,7 +33,7 @@ func emit(type: String, event: Event):
 func is_focused(node: Node):
 	return _active_node == node
 
-func _handle_focus(event: EventRay):
+func _handle_focus(event: EventPointer):
 	if event.target != null && event.target.is_in_group("ui_focus_skip"):
 		return
 

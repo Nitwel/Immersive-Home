@@ -36,7 +36,7 @@ outline_size = 0
 autowrap_mode = 3
 
 [node name="Room" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -0.06)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 9.31323e-10, -0.049608)
 pixel_size = 0.001
 modulate = Color(0, 0, 0, 1)
 text = "This work is based on \"Living Room\" (https://sketchfab.com/3d-models/living-room-2978ca6c93fb4f5c83e346d5ecdef0b0) by Chin.Seng.Choy (https://sketchfab.com/Chin.Seng.Choy) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)"
