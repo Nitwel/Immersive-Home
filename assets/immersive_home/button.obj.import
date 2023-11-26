@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://iv4lk77axlk4"
+path="res://.godot/imported/button.obj-e6c969b54c5afbe601f3ea5c30bde0ec.mesh"
+
+[deps]
+
+files=["res://.godot/imported/button.obj-e6c969b54c5afbe601f3ea5c30bde0ec.mesh"]
+
+source_file="res://assets/immersive_home/button.obj"
+dest_files=["res://.godot/imported/button.obj-e6c969b54c5afbe601f3ea5c30bde0ec.mesh", "res://.godot/imported/button.obj-e6c969b54c5afbe601f3ea5c30bde0ec.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

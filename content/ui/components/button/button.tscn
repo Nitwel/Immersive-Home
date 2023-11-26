@@ -1,12 +1,12 @@
 [gd_scene load_steps=8 format=3 uid="uid://bsjqdvkt0u87c"]
 
 [ext_resource type="Script" path="res://content/ui/components/button/button.gd" id="1_74x7g"]
-[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/ui_element.material" id="2_h7ln4"]
+[ext_resource type="ArrayMesh" uid="uid://iv4lk77axlk4" path="res://assets/immersive_home/button.obj" id="2_cve3l"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_jwpm5"]
-resource_local_to_scene = true
-material = ExtResource("2_h7ln4")
-size = Vector3(0.05, 0.02, 0.05)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8s8ln"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0, 0.501961, 0.886275, 1)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_o4j7g"]
 points = PackedVector3Array(-0.025, -0.01, -0.025, -0.025, 0.01, -0.025, 0.025, -0.01, -0.025, -0.025, -0.01, 0.025, -0.025, 0.01, 0.025, 0.025, 0.01, -0.025, 0.025, -0.01, 0.025, 0.025, 0.01, 0.025)
@@ -84,7 +84,9 @@ script = ExtResource("1_74x7g")
 label = "Example Text"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_jwpm5")
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+mesh = ExtResource("2_cve3l")
+surface_material_override/0 = SubResource("StandardMaterial3D_8s8ln")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("ConvexPolygonShape3D_o4j7g")
