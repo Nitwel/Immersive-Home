@@ -1,6 +1,10 @@
 extends RayCast3D
 
+@onready var cursor: Node3D = $Cursor
+@onready var decal: Decal = $Decal
+
 @export var is_right: bool = true
+@export var with_decal: bool = false
 
 var controller: XRController3D
 var timespan_click = 200.0
@@ -22,6 +26,20 @@ func _ready():
 func _physics_process(_delta):
 	_handle_enter_leave()
 	_handle_move()
+	_handle_cursor()
+
+func _handle_cursor():
+	var collider = get_collider()
+
+	if collider == null:
+		cursor.visible = false
+		if with_decal: decal.visible = true
+		return
+
+	cursor.visible = true
+	decal.visible = false
+	cursor.global_transform.origin = get_collision_point() + get_collision_normal() * 0.001 # offset to avoid z-fighting
+	cursor.global_transform.basis = Basis.looking_at(get_collision_normal(), Vector3.UP)
 
 func _handle_move():
 	var time_passed = Time.get_ticks_msec() - time_pressed
