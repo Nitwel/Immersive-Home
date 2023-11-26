@@ -1,14 +1,57 @@
-[gd_scene load_steps=2 format=3 uid="uid://dyktdg7ggiwl4"]
+[gd_scene load_steps=5 format=3 uid="uid://dyktdg7ggiwl4"]
 
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_8opk3"]
+[ext_resource type="Script" path="res://content/entities/media_player/media_player.gd" id="1_ame17"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="3_bguto"]
 
-[node name="Node3D" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_vi3eg"]
+size = Vector3(0.23, 0.07, 0.01)
 
-[node name="Button" parent="." instance=ExtResource("1_8opk3")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -4.65661e-08, 0, 0)
+[node name="MediaPlayer" type="StaticBody3D"]
+script = ExtResource("1_ame17")
 
-[node name="Button2" parent="." instance=ExtResource("1_8opk3")]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)
+shape = SubResource("BoxShape3D_vi3eg")
+
+[node name="Previous" parent="." instance=ExtResource("1_8opk3")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.07, 0, 0)
+label = "skip_previous"
+icon = true
 
-[node name="Button3" parent="." instance=ExtResource("1_8opk3")]
+[node name="Play" parent="." instance=ExtResource("1_8opk3")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -4.65661e-08, 0, 0)
+label = "pause"
+icon = true
+
+[node name="Next" parent="." instance=ExtResource("1_8opk3")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.07, 0, 0)
+label = "skip_next"
+icon = true
+
+[node name="PlayingInfo" type="Node3D" parent="."]
+
+[node name="Title" type="Label3D" parent="PlayingInfo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0.07, 0)
+pixel_size = 0.001
+text = "All Falls Down"
+font_size = 24
+outline_size = 4
+horizontal_alignment = 0
+
+[node name="Artist" type="Label3D" parent="PlayingInfo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0.05, 0)
+pixel_size = 0.001
+text = "Alan Walker"
+font_size = 16
+outline_size = 4
+horizontal_alignment = 0
+
+[node name="Logo" type="Sprite3D" parent="PlayingInfo"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+pixel_size = 0.001
+
+[node name="HTTPRequest" type="HTTPRequest" parent="PlayingInfo"]
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("3_bguto")
