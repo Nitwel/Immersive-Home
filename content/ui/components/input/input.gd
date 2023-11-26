@@ -13,9 +13,11 @@ var text_handler = preload("res://content/ui/components/input/text_handler.gd").
 	get:
 		return text_handler.width
 	set(value):
+		width = value
 		text_handler.width = value
 
-		if !is_inside_tree(): await ready
+		if mesh_box == null:
+			return
 
 		mesh_box.mesh.size.x = value
 		collision.shape.size.x = value
@@ -25,10 +27,12 @@ var text_handler = preload("res://content/ui/components/input/text_handler.gd").
 	get:
 		return text_handler.text
 	set(value):
+		text = value
 		var focused = Engine.is_editor_hint() == false && EventSystem.is_focused(self) == false
-		text_handler.set_text(value, focused)
+		if label == null:
+			return
 
-		if !is_inside_tree(): await ready
+		text_handler.set_text(value, focused)
 		label.text = text_handler.get_display_text()
 
 var keyboard_input: bool = false
@@ -37,6 +41,8 @@ var input_plane = Plane(Vector3.UP, Vector3.ZERO)
 
 func _ready():
 	text_handler.label = label
+	width = width
+	text = text
 
 	if Engine.is_editor_hint():
 		return

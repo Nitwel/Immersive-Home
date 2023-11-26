@@ -12,17 +12,23 @@ const IconFont = preload("res://assets/icons/icons.tres")
 
 @export var label: String = "":
 	set(value):
-		if !is_inside_tree(): await ready
+		label = value
+		if label_node == null:
+			return
 		label_node.text = value
-	get:
-		return label_node.text
 @export var icon: bool = false:
 	set(value):
 		icon = value
 
-		if !is_inside_tree(): await ready
-		label_node.font = IconFont if value else null
-		label_node.font_size = 48 if value else 10
+		if label_node == null:
+			return
+
+		if value:
+			label_node.font = IconFont
+			label_node.font_size = 48
+			label_node.width = 1000
+			label_node.autowrap_mode = TextServer.AUTOWRAP_OFF
+		
 
 @export var toggleable: bool = false
 @export var disabled: bool = false
@@ -44,6 +50,9 @@ var active: bool = false :
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 func _ready():
+	label = label
+	icon = icon
+
 	if initial_active:
 		active = true
 		

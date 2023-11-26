@@ -31,7 +31,7 @@ func _enter_tree():
 		load_devices()
 	else:
 		HomeApi.on_connect.connect(func():
-			if is_inside_tree():
+			if is_node_ready():
 				load_devices()
 		)
 
@@ -42,7 +42,7 @@ func load_devices():
 
 		HomeApi.on_disconnect.connect(func():
 			devices = []
-			if is_inside_tree():
+			if is_node_ready():
 				render()
 		)
 
