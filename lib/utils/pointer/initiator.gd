@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 
 enum Type {
 	CONTROLLER_LEFT,

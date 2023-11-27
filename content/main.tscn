@@ -52,6 +52,7 @@ mesh = SubResource("BoxMesh_ir3co")
 [node name="Raycast" parent="XROrigin3D/XRControllerRight" instance=ExtResource("3_67lii")]
 
 [node name="Hands" parent="XROrigin3D" node_paths=PackedStringArray("ray_left", "ray_right") instance=ExtResource("4_v8xu6")]
+transform = Transform3D(0.999968, -1.39576e-11, 0, 9.52038e-12, 0.999984, -2.59206e-11, -2.91038e-11, 5.22959e-11, 0.999984, 0, 0, 0)
 ray_left = NodePath("../XRControllerLeft/Raycast")
 ray_right = NodePath("../XRControllerRight/Raycast")
 

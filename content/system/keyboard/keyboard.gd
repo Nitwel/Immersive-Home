@@ -71,8 +71,8 @@ func create_key(key: Key):
 	var key_node = button_scene.instantiate()
 	
 	key_node.label = EventKey.key_to_string(key, caps)
-	key_node.add_to_group("ui_focus_skip")
-	key_node.get_node("Label").font_size = 32
+	key_node.focusable = false
+	key_node.font_size = 32
 	key_node.set_meta("key", key)
 
 	return key_node

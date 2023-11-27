@@ -16,16 +16,19 @@ shape = SubResource("BoxShape3D_vi3eg")
 
 [node name="Previous" parent="." instance=ExtResource("1_8opk3")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.07, 0, 0)
+focusable = true
 label = "skip_previous"
 icon = true
 
 [node name="Play" parent="." instance=ExtResource("1_8opk3")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -4.65661e-08, 0, 0)
+focusable = true
 label = "pause"
 icon = true
 
 [node name="Next" parent="." instance=ExtResource("1_8opk3")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.07, 0, 0)
+focusable = true
 label = "skip_next"
 icon = true
 

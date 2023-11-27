@@ -2,15 +2,19 @@ extends Node3D
 
 const Pointer = preload("res://lib/utils/pointer/pointer.gd")
 const Initiator = preload("res://lib/utils/pointer/initiator.gd")
+const Finger = preload("res://lib/utils/touch/finger.gd")
+const Touch = preload("res://lib/utils/touch/touch.gd")
 
 @onready var hand_right: OpenXRHand = $XRHandRight
 @onready var hand_left: OpenXRHand = $XRHandLeft
 @export var ray_left: RayCast3D
 @export var ray_right: RayCast3D
 var initiator: Initiator = Initiator.new()
+var touch: Touch
 var pointer: Pointer
 var press_distance = 0.03
-var grip_distance = 0.05
+var grip_distance = 0.03
+var close_distance = 0.1
 
 var pressed_left = false
 var pressed_right = false
@@ -18,6 +22,11 @@ var grabbed_left = false
 var grabbed_right = false
 
 func _ready():
+	touch = Touch.new({
+		Finger.Type.INDEX_RIGHT: $XRHandRight/IndexTip/IndexArea
+	})
+	add_child(touch)
+
 	_ready_hand(hand_right)
 
 func _ready_hand(hand: OpenXRHand):
@@ -40,31 +49,55 @@ func _process_hand(hand: OpenXRHand):
 	var distance_trigger = index_tip.global_position.distance_to(thumb_tip.global_position)
 	var distance_grab = middle_tip.global_position.distance_to(thumb_tip.global_position)
 
+	var distance_target = _ray.get_collision_point().distance_to(_ray.global_position) 
+
+	var trigger_close = distance_trigger <= press_distance
+	var grab_close = distance_grab <= grip_distance
+	var distance_close = distance_target <= close_distance
+
 	if hand == hand_left:
-		if distance_trigger <= press_distance && !pressed_left:
-			initiator.on_press.emit(Initiator.EventType.TRIGGER)
-			pressed_left = true
-		elif distance_trigger > press_distance && pressed_left:
-			initiator.on_release.emit(Initiator.EventType.TRIGGER)
-			pressed_left = false
-
-		if distance_grab <= grip_distance && !grabbed_left:
-			initiator.on_press.emit(Initiator.EventType.GRIP)
-			grabbed_left = true
-		elif distance_grab > grip_distance && grabbed_left:
-			initiator.on_release.emit(Initiator.EventType.GRIP)
-			grabbed_left = false
+		
+		if !distance_close:
+			if trigger_close && !pressed_left:
+				initiator.on_press.emit(Initiator.EventType.TRIGGER)
+				pressed_left = true
+			elif !trigger_close && pressed_left:
+				initiator.on_release.emit(Initiator.EventType.TRIGGER)
+				pressed_left = false
+		
+			if grab_close && !grabbed_left:
+				initiator.on_press.emit(Initiator.EventType.GRIP)
+				grabbed_left = true
+			elif !grab_close && grabbed_left:
+				initiator.on_release.emit(Initiator.EventType.GRIP)
+				grabbed_left = false
+		else:
+			if trigger_close && !grabbed_right:
+				initiator.on_press.emit(Initiator.EventType.GRIP)
+				grabbed_right = true
+			elif !trigger_close && grabbed_right:
+				initiator.on_release.emit(Initiator.EventType.GRIP)
+				grabbed_right = false
 	else:
-		if distance_trigger <= press_distance && !pressed_right:
-			initiator.on_press.emit(Initiator.EventType.TRIGGER)
-			pressed_right = true
-		elif distance_trigger > press_distance && pressed_right:
-			initiator.on_release.emit(Initiator.EventType.TRIGGER)
-			pressed_right = false
+		if !distance_close:
+			if trigger_close && !pressed_right:
+				initiator.on_press.emit(Initiator.EventType.TRIGGER)
+				pressed_right = true
+			elif !trigger_close && pressed_right:
+				initiator.on_release.emit(Initiator.EventType.TRIGGER)
+				pressed_right = false
 
-		if distance_grab <= grip_distance && !grabbed_right:
-			initiator.on_press.emit(Initiator.EventType.GRIP)
-			grabbed_right = true
-		elif distance_grab > grip_distance && grabbed_right:
-			initiator.on_release.emit(Initiator.EventType.GRIP)
-			grabbed_right = false
+			if grab_close && !grabbed_right:
+				initiator.on_press.emit(Initiator.EventType.GRIP)
+				grabbed_right = true
+			elif !grab_close && grabbed_right:
+				initiator.on_release.emit(Initiator.EventType.GRIP)
+				grabbed_right = false
+
+		else:
+			if trigger_close && !grabbed_right:
+				initiator.on_press.emit(Initiator.EventType.GRIP)
+				grabbed_right = true
+			elif !trigger_close && grabbed_right:
+				initiator.on_release.emit(Initiator.EventType.GRIP)
+				grabbed_right = false

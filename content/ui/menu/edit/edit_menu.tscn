@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://crrb0l3ekuotj"]
+[gd_scene load_steps=4 format=3 uid="uid://crrb0l3ekuotj"]
 
 [ext_resource type="Script" path="res://content/ui/menu/edit/edit_menu.gd" id="1_34cbn"]
 [ext_resource type="Script" path="res://content/ui/menu/grid.gd" id="3_0xvyw"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_tvimg"]
-[ext_resource type="Script" path="res://content/functions/clickable.gd" id="6_pf8jy"]
 
 [node name="EditMenu" type="Node3D"]
 script = ExtResource("1_34cbn")
@@ -26,16 +25,12 @@ outline_size = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, 0.01, 0.27)
 
 [node name="NextPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
+focusable = true
 label = "navigate_next"
 icon = true
 
-[node name="Clickable" type="Node" parent="Buttons/NextPageButton"]
-script = ExtResource("6_pf8jy")
-
 [node name="PreviousPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0, 0)
+focusable = true
 label = "navigate_before"
 icon = true
-
-[node name="Clickable" type="Node" parent="Buttons/PreviousPageButton"]
-script = ExtResource("6_pf8jy")

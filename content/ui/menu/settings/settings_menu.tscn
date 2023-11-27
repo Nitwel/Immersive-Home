@@ -32,6 +32,7 @@ outline_size = 0
 
 [node name="Button" parent="Content" instance=ExtResource("1_faxng")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0458097, 0, 0.253575)
+focusable = true
 label = "sports_basketball"
 icon = true
 
@@ -84,6 +85,7 @@ horizontal_alignment = 0
 
 [node name="Connect" parent="Content" instance=ExtResource("1_faxng")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0.12)
+focusable = true
 label = "wifi"
 icon = true
 

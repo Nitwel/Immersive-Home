@@ -9,6 +9,8 @@ bounce = 0.7
 radius = 0.08
 
 [node name="Ball" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 4
 physics_material_override = SubResource("PhysicsMaterial_f6jtg")
 angular_damp = 4.0
 

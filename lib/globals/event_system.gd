@@ -20,37 +20,40 @@ signal on_key_up(event: EventKey)
 signal on_focus_in(event: EventFocus)
 signal on_focus_out(event: EventFocus)
 
+signal on_touch_enter(event: EventTouch)
+signal on_touch_move(event: EventTouch)
+signal on_touch_leave(event: EventTouch)
+
 var _active_node: Node = null
 
 func emit(type: String, event: Event):
 	if event is EventBubble:
 		_bubble_call(type, event.target, event)
-		if type == "press_down":
-			_handle_focus(event)
 	else:
 		_root_call(type, event)
 
 func is_focused(node: Node):
 	return _active_node == node
 
-func _handle_focus(event: EventPointer):
-	if event.target != null && event.target.is_in_group("ui_focus_skip"):
+func _handle_focus(event: EventBubble):
+	var target = event.target
+
+	if target != null && target.is_in_group("ui_focus_skip"):
 		return
 
 	var event_focus = EventFocus.new()
 	event_focus.previous_target = _active_node
-	event_focus.target = event.target
-	event_focus.ray = event.ray
+	event_focus.target = target
 
 	if _active_node != null && _active_node.has_method(FN_PREFIX + "focus_out"):
 		_active_node.call(FN_PREFIX + "focus_out", event_focus)
 		on_focus_out.emit(event_focus)
 
-	if event.target == null || event.target.is_in_group("ui_focus") == false:
+	if target == null || target.is_in_group("ui_focus") == false:
 		_active_node = null
 		return
 
-	_active_node = event.target
+	_active_node = target
 
 	if _active_node != null && _active_node.has_method(FN_PREFIX + "focus_in"):
 		_active_node.call(FN_PREFIX + "focus_in", event_focus)
@@ -69,6 +72,9 @@ func _bubble_call(type: String, target: Variant, event: EventBubble):
 
 		if event.bubbling == false:
 			return false
+
+	if type == "press_down" || type == "touch_enter":
+			_handle_focus(event)
 
 	for child in target.get_children():
 		if child is Function && child.has_method(FN_PREFIX + type):

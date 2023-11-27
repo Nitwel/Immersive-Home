@@ -140,7 +140,7 @@ Thus I've decided to use a custom event system that is similar to the one used i
 | Group | Description |
 | -- | -- |
 | `entity` | Marks the object as being an entity placed in space |
-| `ui_focus` | The element can be focused |
+| `ui_focus` | The element can be focused, can be a parent |
 | `ui_focus_skip` | The focus will not be reset. Useful for keyboard |
 
 

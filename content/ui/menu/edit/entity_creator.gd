@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 
 const Switch = preload("res://content/entities/switch/switch.tscn")
 const Light = preload("res://content/entities/light/light.tscn")
