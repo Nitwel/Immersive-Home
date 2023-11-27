@@ -23,7 +23,10 @@ var grabbed_right = false
 
 func _ready():
 	touch = Touch.new({
-		Finger.Type.INDEX_RIGHT: $XRHandRight/IndexTip/IndexArea
+		Finger.Type.INDEX_RIGHT: $XRHandRight/IndexTip/IndexArea,
+		Finger.Type.INDEX_LEFT: $XRHandLeft/IndexTip/IndexArea,
+		Finger.Type.MIDDLE_RIGHT: $XRHandRight/MiddleTip/MiddleArea,
+		Finger.Type.MIDDLE_LEFT: $XRHandLeft/MiddleTip/MiddleArea
 	})
 	add_child(touch)
 

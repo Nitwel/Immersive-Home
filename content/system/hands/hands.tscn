@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bsx12q23v8apy"]
+[gd_scene load_steps=5 format=3 uid="uid://bsx12q23v8apy"]
 
 [ext_resource type="Script" path="res://content/system/hands/hands.gd" id="1_c4f76"]
 [ext_resource type="PackedScene" uid="uid://c0kow4g10wolq" path="res://assets/models/hands_steam/right_hand.glb" id="1_uekbj"]
@@ -7,9 +7,6 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dopke"]
 radius = 0.001
 height = 0.02
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_wty44"]
-size = Vector3(0.0274034, 0.194213, 0.133443)
 
 [node name="Hands" type="Node3D"]
 script = ExtResource("1_c4f76")
@@ -31,6 +28,16 @@ external_skeleton = NodePath("../left_hand/Armature_001/Skeleton3D")
 [node name="Marker3D" type="Marker3D" parent="XRHandLeft/IndexTip"]
 gizmo_extents = 0.02
 
+[node name="IndexArea" type="Area3D" parent="XRHandLeft/IndexTip"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.01)
+collision_layer = 2
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandLeft/IndexTip/IndexArea"]
+transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_dopke")
+
 [node name="ThumbTip" type="BoneAttachment3D" parent="XRHandLeft"]
 transform = Transform3D(0.937246, 0.0284254, -0.347508, 0.0184905, 0.991216, 0.130949, 0.348178, -0.129157, 0.928488, 0.0498668, 0.0560917, -0.0797768)
 bone_name = "Thumb_Tip_L"
@@ -50,6 +57,16 @@ external_skeleton = NodePath("../left_hand/Armature_001/Skeleton3D")
 
 [node name="Marker3D" type="Marker3D" parent="XRHandLeft/MiddleTip"]
 gizmo_extents = 0.02
+
+[node name="IndexArea" type="Area3D" parent="XRHandLeft/MiddleTip"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.01)
+collision_layer = 2
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandLeft/MiddleTip/IndexArea"]
+transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_dopke")
 
 [node name="XRHandRight" type="OpenXRHand" parent="."]
 transform = Transform3D(0.999998, -0.000567105, -2.5179e-05, -2.51789e-05, 4.39886e-08, -0.999999, 0.000567104, 0.999999, 2.97064e-08, 0.264391, 0, 0)
@@ -99,14 +116,15 @@ external_skeleton = NodePath("../right_hand/Armature/Skeleton3D")
 [node name="Marker3D" type="Marker3D" parent="XRHandRight/MiddleTip"]
 gizmo_extents = 0.02
 
-[node name="AnimatableBody3D" type="AnimatableBody3D" parent="XRHandRight"]
-transform = Transform3D(1, 0, 4.7579e-13, 0, 1, 0, -3.16048e-12, 1.77636e-15, 1, 5.36442e-07, -9.16771e-10, 0.0208378)
-collision_layer = 4
-collision_mask = 4
+[node name="IndexArea" type="Area3D" parent="XRHandRight/MiddleTip"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.01)
+collision_layer = 2
+collision_mask = 2
+monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandRight/AnimatableBody3D"]
-transform = Transform3D(1, 0, 4.7579e-13, -1.16415e-10, 1, 0, -1.04364e-11, 1.77636e-15, 1, -0.0166854, -0.0757538, 4.16786e-07)
-shape = SubResource("BoxShape3D_wty44")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandRight/MiddleTip/IndexArea"]
+transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_dopke")
 
 [editable path="XRHandLeft/left_hand"]
 [editable path="XRHandRight/right_hand"]

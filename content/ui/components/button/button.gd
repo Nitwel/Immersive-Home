@@ -18,9 +18,9 @@ const IconFont = preload("res://assets/icons/icons.tres")
 		focusable = value
 		if !is_node_ready(): await ready
 		if value:
-			$Body.add_to_group("ui_focus_skip")
+			add_to_group("ui_focus_skip")
 		else:
-			$Body.remove_from_group("ui_focus_skip")
+			remove_from_group("ui_focus_skip")
 
 @export var font_size: int = 10:
 	set(value):
@@ -71,14 +71,11 @@ func _ready():
 		active = true
 
 func update_animation():
-	print(1)
 	var length = animation_player.get_animation("down").length
 
 	if active && animation_player.current_animation_position != length:
-		print(2)
 		animation_player.play("down")
 	elif !active && animation_player.current_animation_position != 0:
-		print(3)
 		animation_player.play_backwards("down")
 		
 func _on_press_down(event):
@@ -114,6 +111,7 @@ func _on_touch_enter(event: EventTouch):
 	animation_player.stop()
 	animation_player.speed_scale = 0
 	animation_player.current_animation = "down"
+	AudioPlayer.play_effect("click")
 	_touch_change(event)
 
 func _on_touch_move(event: EventTouch):
