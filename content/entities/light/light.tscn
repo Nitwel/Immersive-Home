@@ -1,27 +1,12 @@
-[gd_scene load_steps=15 format=3 uid="uid://cw86rc42dv2d8"]
+[gd_scene load_steps=9 format=3 uid="uid://cw86rc42dv2d8"]
 
 [ext_resource type="Script" path="res://content/entities/light/light.gd" id="1_ykxy3"]
-[ext_resource type="Texture2D" uid="uid://br3p0c2foputg" path="res://assets/materials/swich_on.png" id="2_6gn2e"]
-[ext_resource type="Texture2D" uid="uid://co2ishj2hx57p" path="res://assets/materials/switch_off.png" id="3_qlm62"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_4sfxb"]
 [ext_resource type="Material" uid="uid://vce66e7sbc3n" path="res://content/entities/light/light_on.tres" id="5_50gph"]
+[ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="6_mhjlm"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
 radius = 0.05
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_ldpuo"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_6gn2e")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_qlm62")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [sub_resource type="Animation" id="Animation_afofi"]
 length = 0.001
@@ -36,18 +21,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(1, 0.85098, 0, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Knob:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector3(0, 0.0492394, -0.0903599)]
 }
 
 [sub_resource type="Animation" id="Animation_7o31s"]
@@ -72,36 +45,12 @@ _data = {
 "light": SubResource("Animation_7o31s")
 }
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_j3pn3"]
-top_radius = 0.004
-bottom_radius = 0.004
-height = 0.1
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_tysib"]
-height = 0.1
-radius = 0.01
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_13uml"]
-albedo_color = Color(0.231373, 0.239216, 0.231373, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_s8215"]
-material = SubResource("StandardMaterial3D_13uml")
-top_radius = 0.006
-bottom_radius = 0.006
-height = 0.004
-
 [node name="Light" type="StaticBody3D" groups=["entity"]]
 collision_mask = 0
 script = ExtResource("1_ykxy3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_ukj14")
-
-[node name="Icon" type="AnimatedSprite3D" parent="."]
-visible = false
-pixel_size = 0.0005
-billboard = 1
-sprite_frames = SubResource("SpriteFrames_ldpuo")
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("4_4sfxb")
@@ -126,23 +75,9 @@ libraries = {
 "": SubResource("AnimationLibrary_8a76q")
 }
 
-[node name="Rod" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0903599)
-collision_mask = 0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Rod"]
-mesh = SubResource("CylinderMesh_j3pn3")
-skeleton = NodePath("../..")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Rod"]
-shape = SubResource("CylinderShape3D_tysib")
-
-[node name="Knob" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0492394, -0.0903599)
-mesh = SubResource("CylinderMesh_s8215")
-
-[node name="RodBottom" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0501399, -0.090675)
-
-[node name="RodTop" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0498752, -0.090942)
+[node name="Slider" parent="." instance=ExtResource("6_mhjlm")]
+transform = Transform3D(-4.37114e-08, 1, 0, 1, 4.37114e-08, 8.74228e-08, 8.74228e-08, 3.82137e-15, -1, 0.00190757, -0.00579122, -0.0914348)
+max = 100.0
+value = 100.0
+step = 1.0
+size = Vector3(10, 0.4, 1)

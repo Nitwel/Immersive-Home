@@ -49,7 +49,7 @@ outline_size = 4
 horizontal_alignment = 0
 
 [node name="Logo" type="Sprite3D" parent="PlayingInfo"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.178254, 0)
 pixel_size = 0.001
 
 [node name="HTTPRequest" type="HTTPRequest" parent="PlayingInfo"]

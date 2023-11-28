@@ -1,5 +1,6 @@
 @tool
 extends StaticBody3D
+class_name Input3D
 
 var text_handler = preload("res://content/ui/components/input/text_handler.gd").new()
 

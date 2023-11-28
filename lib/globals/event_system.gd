@@ -36,8 +36,6 @@ func is_focused(node: Node):
 	return _active_node == node
 
 func _handle_focus(target: Variant, event: EventBubble):
-	print("focus ", target, " ", target.get_groups(), " ", event)
-
 	if target != null:
 		if target.is_in_group("ui_focus_skip"):
 			return false
@@ -57,8 +55,6 @@ func _handle_focus(target: Variant, event: EventBubble):
 		return false
 
 	_active_node = target
-
-	print("focus", _active_node )
 
 	if _active_node != null && _active_node.has_method(FN_PREFIX + "focus_in"):
 		_active_node.call(FN_PREFIX + "focus_in", event_focus)
