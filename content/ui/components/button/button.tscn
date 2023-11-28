@@ -77,6 +77,8 @@ label = "Example Text"
 
 [node name="Body" type="StaticBody3D" parent="." groups=["ui_focus_skip"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+collision_layer = 2
+collision_mask = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.005, 0)
@@ -103,8 +105,8 @@ libraries = {
 
 [node name="FingerArea" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0101447, 0)
-collision_layer = 2
-collision_mask = 2
+collision_layer = 4
+collision_mask = 0
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="FingerArea"]

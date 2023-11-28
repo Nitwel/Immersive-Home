@@ -79,11 +79,10 @@ func create_key(key: Key):
 
 func update_labels():
 	for key_button in keys.get_children():
-		var label = key_button.get_children()[key_button.get_children().size() - 1]
 		if caps:
-			label.text = label.text.to_upper()
+			key_button.label = key_button.label.to_upper()
 		else:
-			label.text = label.text.to_lower()
+			key_button.label = key_button.label.to_lower()
 
 func _emit_event(type: String, key: Key):
 	var event = EventKey.new()

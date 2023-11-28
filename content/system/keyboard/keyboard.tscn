@@ -13,6 +13,8 @@ size = Vector3(0.79, 0.01, 0.26)
 
 [node name="Keyboard" type="StaticBody3D" groups=["ui_focus_stop"]]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_maojw")
 
 [node name="Backspace" parent="." instance=ExtResource("1_xdpwr")]

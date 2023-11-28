@@ -36,6 +36,14 @@ import/fbx/enabled=false
 
 theme/custom_font="res://assets/fonts/ui_font_500.tres"
 
+[layer_names]
+
+3d_physics/layer_1="entities"
+3d_physics/layer_2="interface"
+3d_physics/layer_3="touch"
+3d_physics/layer_4="physics"
+3d_physics/layer_5="room"
+
 [rendering]
 
 renderer/rendering_method="mobile"

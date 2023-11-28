@@ -27,10 +27,17 @@ func _ready():
 		add_corner(event.ray.get_collision_point())
 	)
 
-	toggle_edit_button.get_node("Clickable").on_press_up.connect(func(event):
-		edit_enabled = event.target.active
+	toggle_edit_button.on_button_down.connect(func():
+			edit_enabled = true
 
-		if edit_enabled == false:
+			wall_corners.visible = true
+			wall_edges.visible = true
+			wall_mesh.visible = false
+	)
+
+	toggle_edit_button.on_button_up.connect(func():
+			edit_enabled = false
+
 			wall_corners.visible = false
 			wall_edges.visible = false
 			wall_mesh.mesh = generate_mesh()
@@ -45,14 +52,13 @@ func _ready():
 
 			for collision in collisions:
 				var static_body = StaticBody3D.new()
+				static_body.set_collision_layer_value(4, true)
+				static_body.set_collision_layer_value(5, true)
+				static_body.collision_mask = 0
 				static_body.add_child(collision)
 				wall_collisions.add_child(static_body)
 			
 			wall_mesh.visible = true
-		else:
-			wall_corners.visible = true
-			wall_edges.visible = true
-			wall_mesh.visible = false
 	)
 
 func generate_mesh():
