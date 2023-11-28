@@ -1,6 +1,7 @@
 extends StaticBody3D
 
 @export var entity_id = "media_player.bedroomspeaker"
+@export var image_width = 0.15
 
 @onready var previous = $Previous
 @onready var next = $Next
@@ -66,9 +67,12 @@ func load_image(url: String):
 	var image = Image.new()
 	var error = image.load_jpg_from_buffer(result[3])
 
+	var pixel_size = image_width / image.get_size().x
+
 	if error != OK:
 		print("Error loading image: ", error)
 		return
 
 	var texture = ImageTexture.create_from_image(image)
 	logo.texture = texture
+	logo.pixel_size = pixel_size
