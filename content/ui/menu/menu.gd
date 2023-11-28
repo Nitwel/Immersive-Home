@@ -1,5 +1,7 @@
 extends Node3D
 
+const Proxy = preload("res://lib/utils/proxy.gd")
+
 @onready var _controller := XRHelpers.get_xr_controller(self)
 
 @onready var nav_view = $AnimationContainer/Navigation/View
@@ -34,10 +36,25 @@ func _ready():
 			show_menu = !show_menu
 	)
 
-	select_menu(nav_edit)
+	var nav_buttons = [
+		nav_view,
+		nav_edit,
+		nav_room,
+		nav_automate,
+		nav_settings
+	]
 
-func _on_click(event):
-	select_menu(event.target)
+	for nav_button in nav_buttons:
+		var getter = func():
+			return nav_button == selected_nav
+		
+		var setter = func(value):
+			if value:
+				select_menu(nav_button)
+
+		nav_button.external_value = Proxy.new(getter, setter)
+
+	select_menu(nav_edit)
 
 func select_menu(nav):
 	if _is_valid_nav(nav) == false || selected_nav == nav:
@@ -46,13 +63,15 @@ func select_menu(nav):
 	for child in content.get_children():
 		content.remove_child(child)
 
-	if selected_nav != null:
-		selected_nav.active = false
+	var old_nav = selected_nav
 
 	selected_nav = nav
 
+	if old_nav != null:
+		old_nav.update_animation()
+
 	if selected_nav != null:
-		selected_nav.active = true
+		selected_nav.update_animation()
 		var menu = _nav_to_menu(selected_nav)
 		if menu != null:
 			content.add_child(menu)

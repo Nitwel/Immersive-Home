@@ -68,6 +68,10 @@ func _process(_delta):
 	if get_tree().debug_collisions_hint && OS.get_name() != "Android":
 		_draw_debug_text_gaps()
 	
+func _on_press_down(event):
+	var pos_x = label.to_local(event.ray.get_collision_point()).x
+	text_handler.update_caret_position(pos_x)
+
 func _on_press_move(event):
 	var ray_pos = event.ray.global_position
 	var ray_dir = -event.ray.global_transform.basis.z
@@ -86,10 +90,7 @@ func _on_press_move(event):
 	caret.position.x = text_handler.get_caret_position()
 	label.text = text_handler.get_display_text()
 
-func _on_focus_in(event):
-	var pos_x = label.to_local(event.ray.get_collision_point()).x
-	text_handler.update_caret_position(pos_x)
-	
+func _on_focus_in(_event):
 	caret.position.x = text_handler.get_caret_position()
 	label.text = text_handler.get_display_text()
 	caret.show()
@@ -114,6 +115,7 @@ func update_caret_position(event):
 	
 
 func _on_focus_out(_event):
+	print("focus out")
 	animation.stop()
 	caret.hide()
 

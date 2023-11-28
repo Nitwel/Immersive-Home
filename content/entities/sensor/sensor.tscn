@@ -7,6 +7,7 @@
 radius = 0.1
 
 [node name="Sensor" type="StaticBody3D" groups=["entity"]]
+collision_mask = 0
 script = ExtResource("1_57ac8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

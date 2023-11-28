@@ -8,6 +8,7 @@
 size = Vector3(0.23, 0.142768, 0.01)
 
 [node name="MediaPlayer" type="StaticBody3D" groups=["entity"]]
+collision_mask = 0
 script = ExtResource("1_ame17")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

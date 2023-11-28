@@ -1,7 +1,6 @@
 extends Node3D
 
-const Device = preload("./device/device.tscn")
-const Entity = preload("./entity/entity.tscn")
+const ButtonScene = preload("res://content/ui/components/button/button.tscn")
 const EntityCreator = preload("./entity_creator.gd")
 
 @onready var devices_node: GridContainer3D = $Devices
@@ -101,33 +100,33 @@ func render_devices():
 	for device in page_devices:
 		var info = device.values()[0]
 
-		var device_instance = Device.instantiate()
-		device_instance.id = device.keys()[0]
-		device_instance.get_node("Clickable").on_click.connect(func(_event):
-			_on_device_click(device_instance.id)
+		var button_instance = ButtonScene.instantiate()
+		button_instance.label = info["name"]
+		button_instance.on_button_down.connect(func():
+			_on_device_click(device.keys()[0])
 		)
-		devices_node.add_child(device_instance)
-		device_instance.set_device_name.call_deferred(info["name"])
+		devices_node.add_child(button_instance)
 	
 	devices_node._update_container()
 		
 func render_entities():
 	var entities = get_page()
 
-	var back_button = Entity.instantiate()
-	back_button.get_node("Clickable").on_click.connect(func(_event):
+	var back_button = ButtonScene.instantiate()
+	back_button.label = "arrow_back"
+	back_button.icon = true
+	back_button.on_button_down.connect(func():
 		_on_entity_click("#back")
 	)
 	devices_node.add_child(back_button)
-	back_button.set_entity_name("#back")
 	
 	for entity in entities:
-		var entity_instance = Entity.instantiate()
-		entity_instance.get_node("Clickable").on_click.connect(func(_event):
+		var button_instance = ButtonScene.instantiate()
+		button_instance.label = entity
+		button_instance.on_button_down.connect(func():
 			_on_entity_click(entity)
 		)
-		devices_node.add_child(entity_instance)
-		entity_instance.set_entity_name(entity)
+		devices_node.add_child(button_instance)
 
 	devices_node._update_container()
 	

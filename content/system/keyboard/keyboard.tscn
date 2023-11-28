@@ -11,24 +11,29 @@ size = Vector3(0.79, 0.01, 0.26)
 [sub_resource type="BoxMesh" id="BoxMesh_7rntc"]
 size = Vector3(0.79, 0.01, 0.26)
 
-[node name="Keyboard" type="StaticBody3D" groups=["ui_focus_skip"]]
+[node name="Keyboard" type="StaticBody3D" groups=["ui_focus_stop"]]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_maojw")
 
-[node name="Backspace" parent="." groups=["ui_focus_skip"] instance=ExtResource("1_xdpwr")]
+[node name="Backspace" parent="." instance=ExtResource("1_xdpwr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, 0, 0.02)
+focusable = false
 label = "backspace"
 icon = true
 metadata/key = 4194308
 
-[node name="Caps" parent="." groups=["ui_focus_skip"] instance=ExtResource("1_xdpwr")]
+[node name="Caps" parent="." instance=ExtResource("1_xdpwr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, 0, 0.15)
+focusable = false
 label = "keyboard_capslock"
 icon = true
 toggleable = true
 
-[node name="Paste" parent="." groups=["ui_focus_skip"] instance=ExtResource("1_xdpwr")]
+[node name="Paste" parent="." instance=ExtResource("1_xdpwr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, 0, 0.18)
+focusable = false
 label = "assignment"
 icon = true
 

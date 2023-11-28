@@ -1,4 +1,4 @@
-extends Object
+extends RefCounted
 
 var label: Label3D
 

@@ -18,6 +18,8 @@ script = ExtResource("1_ch4jb")
 [node name="TeleportRoot" type="Node3D" parent="."]
 
 [node name="Ground" type="StaticBody3D" parent="TeleportRoot"]
+collision_layer = 24
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TeleportRoot/Ground"]
 shape = SubResource("WorldBoundaryShape3D_08sv0")

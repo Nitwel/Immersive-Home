@@ -1,15 +1,31 @@
 @tool
 
-extends StaticBody3D
+extends Node3D
 class_name Button3D
+
+const Proxy = preload("res://lib/utils/proxy.gd")
 
 signal on_button_down()
 signal on_button_up()
 
 const IconFont = preload("res://assets/icons/icons.tres")
 
-@onready var label_node: Label3D = $Label
+@onready var label_node: Label3D = $Body/Label
+@onready var finger_area: Area3D = $FingerArea
 
+@export var focusable: bool = true:
+	set(value):
+		focusable = value
+		if value == false:
+			add_to_group("ui_focus_stop")
+		else:
+			remove_from_group("ui_focus_stop")
+
+@export var font_size: int = 10:
+	set(value):
+		font_size = value
+		if !is_node_ready(): await ready
+		label_node.font_size = value
 @export var label: String = "":
 	set(value):
 		label = value
@@ -25,30 +41,41 @@ const IconFont = preload("res://assets/icons/icons.tres")
 			label_node.font_size = 48
 			label_node.width = 1000
 			label_node.autowrap_mode = TextServer.AUTOWRAP_OFF
+		else:
+			label_node.font = null
+			label_node.font_size = font_size
+			label_node.width = 50
+			label_node.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		
-
 @export var toggleable: bool = false
 @export var disabled: bool = false
-@export var external_state: bool = false
 @export var initial_active: bool = false
-var active: bool = false :
+var external_value: Proxy = null
+var active: bool = false:
+	get:
+		if external_value != null:
+			return external_value.value
+		return active
 	set(value):
-		animation_player.stop()
-		if value == active:
-			return
-
-		active = value
-
-		if active:
-			animation_player.play("down")
+		if external_value != null:
+			external_value.value = value
 		else:
-			animation_player.play_backwards("down")
+			active = value
+		update_animation()
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 func _ready():
 	if initial_active:
 		active = true
+
+func update_animation():
+	var length = animation_player.get_animation("down").length
+
+	if active && animation_player.current_animation_position != length:
+		animation_player.play("down")
+	elif !active && animation_player.current_animation_position != 0:
+		animation_player.play_backwards("down")
 		
 func _on_press_down(event):
 	if disabled:
@@ -57,20 +84,15 @@ func _on_press_down(event):
 
 	AudioPlayer.play_effect("click")
 
-	if external_state || toggleable:
+	if toggleable:
 		return
 
 	active = true
 	on_button_down.emit()
 	
-	
-
 func _on_press_up(event):
 	if disabled:
 		event.bubbling = false
-		return
-
-	if external_state:
 		return
 
 	if toggleable:
@@ -83,3 +105,54 @@ func _on_press_up(event):
 	else:
 		active = false
 		on_button_up.emit()
+
+func _on_touch_enter(event: EventTouch):
+	animation_player.stop()
+	animation_player.speed_scale = 0
+	animation_player.current_animation = "down"
+	AudioPlayer.play_effect("click")
+	_touch_change(event)
+
+func _on_touch_move(event: EventTouch):
+	_touch_change(event)
+
+func _on_touch_leave(_event: EventTouch):
+	animation_player.stop()
+	animation_player.speed_scale = 1
+
+	if toggleable:
+		active = !active
+		if active:
+			on_button_up.emit() 
+		else:
+			on_button_down.emit()
+	
+
+func _touch_change(event: EventTouch):
+	if disabled:
+		event.bubbling = false
+		return
+
+	var pos = Vector3(0, 1, 0)
+	for finger in event.fingers:
+		var finger_pos = to_local(finger.area.global_position)
+		if pos.y > finger_pos.y:
+			pos = finger_pos
+
+	var button_height = finger_area.get_node("CollisionShape3D").shape.size.y
+	var button_center = finger_area.position.y
+
+	var percent = clamp((button_center + button_height / 2 - pos.y) / (button_height / 2), 0, 1)
+
+	if !active && percent < 1:
+		on_button_down.emit()
+	elif active && percent >= 1:
+		on_button_up.emit()
+		
+	animation_player.seek(percent * animation_player.current_animation_length, true)
+
+	if toggleable:
+		return
+	
+	active = percent < 1
+	

@@ -3,7 +3,7 @@ extends Node3D
 const ball_scene = preload("./ball.tscn")
 const credits_scene = preload("./credits.tscn")
 
-@onready var clickable = $Content/Button/Clickable
+@onready var ball_button = $Content/Button
 @onready var connection_status = $Content/ConnectionStatus
 
 @onready var input_url = $Content/InputURL
@@ -15,10 +15,12 @@ const credits_scene = preload("./credits.tscn")
 func _ready():
 	background.visible = false
 
-	clickable.on_click.connect(func(event):
+	ball_button.on_button_down.connect(func():
 		var ball = ball_scene.instantiate()
-		ball.transform = event.controller.transform
-		ball.linear_velocity = -event.controller.transform.basis.z * 5 + Vector3(0, 5, 0)
+		var controller = XRHelpers.get_right_controller(self)
+
+		ball.transform = controller.transform
+		ball.linear_velocity = -controller.transform.basis.z * 5 + Vector3(0, 5, 0)
 		get_tree().root.add_child(ball)
 	)
 

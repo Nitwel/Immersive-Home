@@ -6,6 +6,7 @@
 [node name="Raycast" type="RayCast3D"]
 transform = Transform3D(0.999999, -1.39624e-11, 0, 9.48108e-12, 0.999999, 0, 0, 4.54747e-13, 0.999998, -0.000467122, 0.00228411, -0.0016689)
 target_position = Vector3(0, 0, -5)
+collision_mask = 19
 script = ExtResource("1_gp8nv")
 
 [node name="Decal" type="Decal" parent="."]
@@ -18,6 +19,6 @@ lower_fade = 0.000919435
 [node name="Cursor" type="Node3D" parent="."]
 
 [node name="CursorSprite" type="Sprite3D" parent="Cursor"]
-transform = Transform3D(0.03, 3.25261e-20, -2.20405e-39, -3.25261e-20, 0.03, -2.03288e-21, 0, 2.03288e-21, 0.03, 0, 0, 0)
+transform = Transform3D(0.03, 2.71051e-20, 0, -5.42101e-20, 0.03, -2.03288e-21, -2.46521e-33, 2.5411e-21, 0.03, 0, 0, 0)
 pixel_size = 0.001
 texture = ExtResource("1_2f2iv")

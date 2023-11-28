@@ -8,6 +8,7 @@
 script = ExtResource("1_rbo86")
 
 [node name="Button" parent="." instance=ExtResource("2_go2es")]
+focusable = true
 
 [node name="Clickable" type="Node" parent="."]
 script = ExtResource("3_6wicx")

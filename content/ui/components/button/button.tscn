@@ -1,12 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://bsjqdvkt0u87c"]
+[gd_scene load_steps=9 format=3 uid="uid://bsjqdvkt0u87c"]
 
 [ext_resource type="Script" path="res://content/ui/components/button/button.gd" id="1_74x7g"]
-[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/ui_element.material" id="2_h7ln4"]
+[ext_resource type="ArrayMesh" uid="uid://iv4lk77axlk4" path="res://assets/immersive_home/button.obj" id="2_cve3l"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_jwpm5"]
-resource_local_to_scene = true
-material = ExtResource("2_h7ln4")
-size = Vector3(0.05, 0.02, 0.05)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8s8ln"]
+transparency = 1
+albedo_color = Color(0, 0.501961, 0.886275, 1)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_o4j7g"]
 points = PackedVector3Array(-0.025, -0.01, -0.025, -0.025, 0.01, -0.025, 0.025, -0.01, -0.025, -0.025, -0.01, 0.025, -0.025, 0.01, 0.025, 0.025, 0.01, -0.025, 0.025, -0.01, 0.025, 0.025, 0.01, 0.025)
@@ -16,60 +15,50 @@ length = 0.001
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position:y")
+tracks/0/path = NodePath("Body:scale:y")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("MeshInstance3D:position:y")
+tracks/1/path = NodePath("Body:position:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(0.01, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
 
 [sub_resource type="Animation" id="Animation_iu2ed"]
 resource_name = "down"
 length = 0.2
+step = 0.01
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath(".:position:y")
+tracks/0/path = NodePath("Body:scale:y")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, -0.01, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.12, -0.00966179, 0.500747, -0.13, 0.00874269, 0.25, 0),
 "times": PackedFloat32Array(0, 0.2)
 }
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("MeshInstance3D:mesh:size:y")
+tracks/1/path = NodePath("Body:position:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(0.02, -0.25, 0, 0.25, 0, 0.01, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 0.2)
-}
-tracks/2/type = "bezier"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("MeshInstance3D:position:y")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0.005, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(0.0101447, -0.25, 0, 0.12, 0.000134136, 0.0051993, -0.12, 0.000145131, 0.25, 0),
 "times": PackedFloat32Array(0, 0.2)
 }
 
@@ -79,26 +68,46 @@ _data = {
 "down": SubResource("Animation_iu2ed")
 }
 
-[node name="Button" type="StaticBody3D" groups=["ui_focus"]]
+[sub_resource type="BoxShape3D" id="BoxShape3D_bqjii"]
+size = Vector3(0.0501598, 0.0195937, 0.0501598)
+
+[node name="Button" type="Node3D" groups=["ui_focus"]]
 script = ExtResource("1_74x7g")
 label = "Example Text"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_jwpm5")
+[node name="Body" type="StaticBody3D" parent="." groups=["ui_focus_skip"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+collision_layer = 2
+collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.005, 0)
+mesh = ExtResource("2_cve3l")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_8s8ln")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
 shape = SubResource("ConvexPolygonShape3D_o4j7g")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_sbgno")
-}
-
-[node name="Label" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.011, 0)
+[node name="Label" type="Label3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.005, 0)
 pixel_size = 0.001
 text = "Example Text"
 font_size = 10
 outline_size = 0
 autowrap_mode = 3
 width = 50.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_sbgno")
+}
+
+[node name="FingerArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0101447, 0)
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FingerArea"]
+shape = SubResource("BoxShape3D_bqjii")

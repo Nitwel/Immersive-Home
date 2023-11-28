@@ -91,6 +91,7 @@ bottom_radius = 0.006
 height = 0.004
 
 [node name="Light" type="StaticBody3D" groups=["entity"]]
+collision_mask = 0
 script = ExtResource("1_ykxy3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -127,6 +128,7 @@ libraries = {
 
 [node name="Rod" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0903599)
+collision_mask = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Rod"]
 mesh = SubResource("CylinderMesh_j3pn3")
