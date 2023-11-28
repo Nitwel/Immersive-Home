@@ -115,6 +115,7 @@ func update_caret_position(event):
 	
 
 func _on_focus_out(_event):
+	print("focus out")
 	animation.stop()
 	caret.hide()
 

@@ -35,11 +35,14 @@ func emit(type: String, event: Event):
 func is_focused(node: Node):
 	return _active_node == node
 
-func _handle_focus(event: EventBubble):
-	var target = event.target
+func _handle_focus(target: Variant, event: EventBubble):
+	print("focus ", target, " ", target.get_groups(), " ", event)
 
-	if target != null && target.is_in_group("ui_focus_skip"):
-		return
+	if target != null:
+		if target.is_in_group("ui_focus_skip"):
+			return false
+		if target.is_in_group("ui_focus_stop"):
+			return true
 
 	var event_focus = EventFocus.new()
 	event_focus.previous_target = _active_node
@@ -51,15 +54,19 @@ func _handle_focus(event: EventBubble):
 
 	if target == null || target.is_in_group("ui_focus") == false:
 		_active_node = null
-		return
+		return false
 
 	_active_node = target
+
+	print("focus", _active_node )
 
 	if _active_node != null && _active_node.has_method(FN_PREFIX + "focus_in"):
 		_active_node.call(FN_PREFIX + "focus_in", event_focus)
 		on_focus_in.emit(event_focus)
 
-func _bubble_call(type: String, target: Variant, event: EventBubble):
+	return true
+
+func _bubble_call(type: String, target: Variant, event: EventBubble, focused = false):
 	if target == null:
 		return false
 
@@ -73,8 +80,8 @@ func _bubble_call(type: String, target: Variant, event: EventBubble):
 		if event.bubbling == false:
 			return false
 
-	if type == "press_down" || type == "touch_enter":
-			_handle_focus(event)
+	if (type == "press_down" || type == "touch_enter") && focused == false:
+			focused = _handle_focus(target, event)
 
 	for child in target.get_children():
 		if child is Function && child.has_method(FN_PREFIX + type):
@@ -83,7 +90,7 @@ func _bubble_call(type: String, target: Variant, event: EventBubble):
 	var parent = target.get_parent()
 
 	if parent != null && parent is Node:
-		_bubble_call(type, parent, event)
+		_bubble_call(type, parent, event, focused)
 	else:
 		# in case the top has been reached
 		_root_call(type, event)

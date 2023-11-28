@@ -141,7 +141,8 @@ Thus I've decided to use a custom event system that is similar to the one used i
 | -- | -- |
 | `entity` | Marks the object as being an entity placed in space |
 | `ui_focus` | The element can be focused, can be a parent |
-| `ui_focus_skip` | The focus will not be reset. Useful for keyboard |
+| `ui_focus_skip` | Focus checking on this element will be skipped |
+| `ui_focus_stop` | The focus will not be reset. Useful for keyboard |
 
 
 ### Functions

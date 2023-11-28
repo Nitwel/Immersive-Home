@@ -11,7 +11,7 @@ size = Vector3(0.79, 0.01, 0.26)
 [sub_resource type="BoxMesh" id="BoxMesh_7rntc"]
 size = Vector3(0.79, 0.01, 0.26)
 
-[node name="Keyboard" type="StaticBody3D" groups=["ui_focus_skip"]]
+[node name="Keyboard" type="StaticBody3D" groups=["ui_focus_stop"]]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 script = ExtResource("1_maojw")
 

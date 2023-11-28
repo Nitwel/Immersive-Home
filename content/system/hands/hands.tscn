@@ -28,13 +28,13 @@ external_skeleton = NodePath("../left_hand/Armature_001/Skeleton3D")
 [node name="Marker3D" type="Marker3D" parent="XRHandLeft/IndexTip"]
 gizmo_extents = 0.02
 
-[node name="IndexArea" type="Area3D" parent="XRHandLeft/IndexTip"]
+[node name="TouchArea" type="Area3D" parent="XRHandLeft/IndexTip"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.01)
 collision_layer = 2
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandLeft/IndexTip/IndexArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandLeft/IndexTip/TouchArea"]
 transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_dopke")
 
@@ -58,13 +58,13 @@ external_skeleton = NodePath("../left_hand/Armature_001/Skeleton3D")
 [node name="Marker3D" type="Marker3D" parent="XRHandLeft/MiddleTip"]
 gizmo_extents = 0.02
 
-[node name="IndexArea" type="Area3D" parent="XRHandLeft/MiddleTip"]
+[node name="TouchArea" type="Area3D" parent="XRHandLeft/MiddleTip"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.01)
 collision_layer = 2
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandLeft/MiddleTip/IndexArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandLeft/MiddleTip/TouchArea"]
 transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_dopke")
 
@@ -86,13 +86,13 @@ external_skeleton = NodePath("../right_hand/Armature/Skeleton3D")
 [node name="Marker3D" type="Marker3D" parent="XRHandRight/IndexTip"]
 gizmo_extents = 0.02
 
-[node name="IndexArea" type="Area3D" parent="XRHandRight/IndexTip"]
+[node name="TouchArea" type="Area3D" parent="XRHandRight/IndexTip"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.01)
 collision_layer = 2
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandRight/IndexTip/IndexArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandRight/IndexTip/TouchArea"]
 transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_dopke")
 
@@ -116,13 +116,13 @@ external_skeleton = NodePath("../right_hand/Armature/Skeleton3D")
 [node name="Marker3D" type="Marker3D" parent="XRHandRight/MiddleTip"]
 gizmo_extents = 0.02
 
-[node name="IndexArea" type="Area3D" parent="XRHandRight/MiddleTip"]
+[node name="TouchArea" type="Area3D" parent="XRHandRight/MiddleTip"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.01)
 collision_layer = 2
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandRight/MiddleTip/IndexArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandRight/MiddleTip/TouchArea"]
 transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_dopke")
 

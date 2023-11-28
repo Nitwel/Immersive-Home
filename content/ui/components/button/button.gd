@@ -16,11 +16,10 @@ const IconFont = preload("res://assets/icons/icons.tres")
 @export var focusable: bool = true:
 	set(value):
 		focusable = value
-		if !is_node_ready(): await ready
-		if value:
-			add_to_group("ui_focus_skip")
+		if value == false:
+			add_to_group("ui_focus_stop")
 		else:
-			remove_from_group("ui_focus_skip")
+			remove_from_group("ui_focus_stop")
 
 @export var font_size: int = 10:
 	set(value):

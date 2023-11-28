@@ -73,10 +73,9 @@ size = Vector3(0.0501598, 0.0195937, 0.0501598)
 
 [node name="Button" type="Node3D" groups=["ui_focus"]]
 script = ExtResource("1_74x7g")
-focusable = null
 label = "Example Text"
 
-[node name="Body" type="StaticBody3D" parent="."]
+[node name="Body" type="StaticBody3D" parent="." groups=["ui_focus_skip"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
