@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dyktdg7ggiwl4"]
+[gd_scene load_steps=7 format=3 uid="uid://dyktdg7ggiwl4"]
 
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_8opk3"]
 [ext_resource type="Script" path="res://content/entities/media_player/media_player.gd" id="1_ame17"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="3_bguto"]
+[ext_resource type="PackedScene" path="res://content/ui/components/slider/slider.tscn" id="4_w73hw"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="5_koe28"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vi3eg"]
 size = Vector3(0.23, 0.142768, 0.01)
@@ -56,3 +58,20 @@ pixel_size = 0.001
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("3_bguto")
+
+[node name="Slider" parent="." instance=ExtResource("4_w73hw")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.0562844, 0)
+max = 100.0
+value = 30.0
+step = 1.0
+show_label = true
+label_unit = "%"
+size = Vector3(15, 0.4, 1)
+
+[node name="Label3D" type="Label3D" parent="Slider"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.088399, 0, 0)
+pixel_size = 0.001
+text = "volume_up"
+font = ExtResource("5_koe28")
+font_size = 18
+outline_size = 4

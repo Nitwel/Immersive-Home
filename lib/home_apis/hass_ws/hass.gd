@@ -254,6 +254,8 @@ func set_state(entity: String, state: String, attributes: Dictionary = {}):
 			service = "media_next_track"
 		elif state == "previous":
 			service = "media_previous_track"
+		elif state == "volume":
+			service = "volume_set"
 
 	if service == null:
 		return null
