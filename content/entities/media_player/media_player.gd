@@ -10,8 +10,11 @@ extends StaticBody3D
 @onready var title = $PlayingInfo/Title
 @onready var artist = $PlayingInfo/Artist
 @onready var http_request = $PlayingInfo/HTTPRequest
+@onready var slider = $Slider
 
 var playing = false
+var volume = 50
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -37,11 +40,15 @@ func _ready():
 		HomeApi.set_state(entity_id, "next")
 	)
 
+	slider.on_value_changed.connect(set_volume)
+
+
+func set_volume(value):
+	volume = value
+	HomeApi.set_state(entity_id, "volume", {"volume_level": value / 100})
 
 func set_state(stateInfo):
 	var state = stateInfo["state"]
-
-	print("State changed to ", stateInfo)
 
 	if state == "playing":
 		if stateInfo["attributes"].has("entity_picture_local"):
@@ -49,6 +56,9 @@ func set_state(stateInfo):
 		title.text = stateInfo["attributes"]["media_title"]
 		artist.text = stateInfo["attributes"]["media_artist"]
 
+		volume = float(stateInfo["attributes"]["volume_level"]) * 100
+		slider.value = volume
+		
 		playing = true
 		play.label = "pause"
 	else:
