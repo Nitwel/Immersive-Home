@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://content/entities/light/light.gd" id="1_ykxy3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_4sfxb"]
 [ext_resource type="Material" uid="uid://vce66e7sbc3n" path="res://content/entities/light/light_on.tres" id="5_50gph"]
-[ext_resource type="PackedScene" path="res://content/ui/components/slider/slider.tscn" id="6_mhjlm"]
+[ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="6_mhjlm"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
 radius = 0.05

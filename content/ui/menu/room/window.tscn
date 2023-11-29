@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://scu77f1crn6"]
+
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="2_g70gm"]
+[ext_resource type="Texture2D" uid="uid://ddkdqduooyt5e" path="res://assets/ComfyUI_00480_2.png" id="3_qlot3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xx1h5"]
+shading_mode = 0
+albedo_texture = ExtResource("3_qlot3")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ndue5"]
+size = Vector2(1, 1)
+orientation = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_00pto"]
+size = Vector3(1, 1, 0.02)
+
+[node name="Window" type="StaticBody3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.000999987)
+material_override = SubResource("StandardMaterial3D_xx1h5")
+mesh = SubResource("PlaneMesh_ndue5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_00pto")
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("2_g70gm")
