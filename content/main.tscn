@@ -37,6 +37,7 @@ script = ExtResource("1_uvrd4")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
 transform = Transform3D(1, 1.8976e-10, 4.07454e-10, 6.76872e-11, 1, 2.08738e-08, -5.82077e-11, 1.04592e-11, 1, 0.0356618, 0.71033, 0.00564247)
+current = true
 
 [node name="XRControllerLeft" parent="XROrigin3D" instance=ExtResource("2_2lraw")]
 transform = Transform3D(0.999999, -1.39633e-11, 0, 9.48075e-12, 1, 0, 0, 0, 1, -0.355145, 0.550439, -0.477945)

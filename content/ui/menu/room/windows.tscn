@@ -1,29 +1,63 @@
-[gd_scene load_steps=2 format=3 uid="uid://bubusve8ijc7h"]
+[gd_scene load_steps=5 format=3 uid="uid://bubusve8ijc7h"]
 
 [ext_resource type="PackedScene" uid="uid://scu77f1crn6" path="res://content/ui/menu/room/window.tscn" id="1_nl1ra"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="2_tt5ej"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gsqto"]
+size = Vector3(0.86, 1.58, 0.07)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a74ne"]
+size = Vector3(0.75, 2.37, 0.09)
 
 [node name="Windows" type="Node3D"]
 
-[node name="Window" parent="." instance=ExtResource("1_nl1ra")]
-transform = Transform3D(0.32, 0, 0, 0, 1.04, 0, 0, 0, 1, 0, 0, 0)
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
 
-[node name="Window3" parent="." instance=ExtResource("1_nl1ra")]
-transform = Transform3D(0.32, 0, 0, 0, 1.04, 0, 0, 0, 1, 0.49, 0, 0)
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.27, 0)
+shape = SubResource("BoxShape3D_gsqto")
 
-[node name="Window2" parent="." instance=ExtResource("1_nl1ra")]
-transform = Transform3D(0.76, 0, 0, 0, 0.35, 0, 0, 0, 1, 0.26, 0.71, -0.04)
+[node name="Window" parent="StaticBody3D" instance=ExtResource("1_nl1ra")]
+transform = Transform3D(0.32, 0, 0, 0, 1.04, 0, 0, 0, 1, -0.23, 0, 0.001)
+skeleton = NodePath("../..")
 
-[node name="Window8" parent="." instance=ExtResource("1_nl1ra")]
-transform = Transform3D(0.76, 0, 0, 0, 0.35, 0, 0, 0, 1, 1.67, 1.84, -0.04)
+[node name="Window3" parent="StaticBody3D" instance=ExtResource("1_nl1ra")]
+transform = Transform3D(0.32, 0, 0, 0, 1.04, 0, 0, 0, 1, 0.23, 0, 0.001)
+skeleton = NodePath("../..")
 
-[node name="Window4" parent="." instance=ExtResource("1_nl1ra")]
-transform = Transform3D(0.34, 0, 0, 0, 1.03, 0, 0, 0, 1, 1.45, 1.1, -0.03)
+[node name="Window2" parent="StaticBody3D" instance=ExtResource("1_nl1ra")]
+transform = Transform3D(0.76, 0, 0, 0, 0.35, 0, 0, 0, 1, 0, 0.88, 0)
+skeleton = NodePath("../..")
 
-[node name="Window5" parent="." instance=ExtResource("1_nl1ra")]
-transform = Transform3D(0.34, 0, 0, 0, 1.03, 0, 0, 0, 1, 1.9, 1.1, -0.03)
+[node name="Movable2" type="Node" parent="StaticBody3D"]
+script = ExtResource("2_tt5ej")
 
-[node name="Window6" parent="." instance=ExtResource("1_nl1ra")]
-transform = Transform3D(0.34, 0, 0, 0, 0.73, 0, 0, 0, 1, 1.45, 0.14, -0.03)
+[node name="StaticBody3D2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35061, 0, 0)
 
-[node name="Window7" parent="." instance=ExtResource("1_nl1ra")]
-transform = Transform3D(0.34, 0, 0, 0, 0.73, 0, 0, 0, 1, 1.9, 0.14, -0.03)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, 0)
+shape = SubResource("BoxShape3D_a74ne")
+
+[node name="Window8" parent="StaticBody3D2" instance=ExtResource("1_nl1ra")]
+transform = Transform3D(0.76, 0, 0, 0, 0.35, 0, 0, 0, 1, 0, 1.39, 0)
+skeleton = NodePath("../..")
+
+[node name="Window4" parent="StaticBody3D2" instance=ExtResource("1_nl1ra")]
+transform = Transform3D(0.34, 0, 0, 0, 1.03, 0, 0, 0, 1, -0.21, 0.52, 0)
+skeleton = NodePath("../..")
+
+[node name="Window5" parent="StaticBody3D2" instance=ExtResource("1_nl1ra")]
+transform = Transform3D(0.34, 0, 0, 0, 1.03, 0, 0, 0, 1, 0.21, 0.52, 0)
+skeleton = NodePath("../..")
+
+[node name="Window6" parent="StaticBody3D2" instance=ExtResource("1_nl1ra")]
+transform = Transform3D(0.34, 0, 0, 0, 0.73, 0, 0, 0, 1, 0.21, -0.44, 0)
+skeleton = NodePath("../..")
+
+[node name="Window7" parent="StaticBody3D2" instance=ExtResource("1_nl1ra")]
+transform = Transform3D(0.34, 0, 0, 0, 0.73, 0, 0, 0, 1, -0.21, -0.44, 0)
+skeleton = NodePath("../..")
+
+[node name="Movable" type="Node" parent="StaticBody3D2"]
+script = ExtResource("2_tt5ej")
