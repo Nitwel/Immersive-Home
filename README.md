@@ -16,19 +16,19 @@ Immersive Home is project to bring Smart Home and Mixed Reality technologies tog
 
 Right now you can try out the app for free using either of the following pages:
 
-<a href="https://www.oculus.com/experiences/quest/7533875049973382/">
+<a href="https://www.oculus.com/experiences/quest/7533875049973382/" target="_blank">
 	<img height="32" src="assets/badges/meta.svg" alt="Badge linking to Meta App Lab" />
 </a>
 
-<a href="https://github.com/Nitwel/Immersive-Home/releases/latest/download/Android.zip">
+<a href="https://github.com/Nitwel/Immersive-Home/releases/latest/download/Android.zip" target="_blank">
 	<img height="32" src="assets/badges/github.svg" alt="Badge linking to GitHub" />
 </a>
 
-<a href="https://nitwel.itch.io/immersive-home">
+<a href="https://nitwel.itch.io/immersive-home" target="_blank">
 	<img height="32" src="assets/badges/itch.svg" alt="Badge linking to itch.io" />
 </a>
 
-<a href="https://sidequestvr.com/app/26827/immersive-home">
+<a href="https://sidequestvr.com/app/26827/immersive-home" target="_blank">
 	<img height="32" src="assets/badges/sidequest.svg" alt="Badge linking to sidequest" />
 </a>
 
