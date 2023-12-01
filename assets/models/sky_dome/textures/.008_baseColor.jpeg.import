@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://q4va5chi4k7f"
-path.s3tc="res://.godot/imported/logo-background.png-3d5691e6c32be592c284587b43087aae.s3tc.ctex"
-path.etc2="res://.godot/imported/logo-background.png-3d5691e6c32be592c284587b43087aae.etc2.ctex"
+uid="uid://dusb35tmwrnm2"
+path.s3tc="res://.godot/imported/.008_baseColor.jpeg-270b6ad0873950b636fd20291833d78a.s3tc.ctex"
+path.etc2="res://.godot/imported/.008_baseColor.jpeg-270b6ad0873950b636fd20291833d78a.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/logo-background.png"
-dest_files=["res://.godot/imported/logo-background.png-3d5691e6c32be592c284587b43087aae.s3tc.ctex", "res://.godot/imported/logo-background.png-3d5691e6c32be592c284587b43087aae.etc2.ctex"]
+source_file="res://assets/models/sky_dome/textures/.008_baseColor.jpeg"
+dest_files=["res://.godot/imported/.008_baseColor.jpeg-270b6ad0873950b636fd20291833d78a.s3tc.ctex", "res://.godot/imported/.008_baseColor.jpeg-270b6ad0873950b636fd20291833d78a.etc2.ctex"]
 
 [params]
 

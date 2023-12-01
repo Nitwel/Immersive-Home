@@ -1,16 +1,90 @@
-[gd_scene load_steps=4 format=3 uid="uid://scu77f1crn6"]
+[gd_scene load_steps=9 format=3 uid="uid://crl02od5o86ii"]
 
-[ext_resource type="Texture2D" uid="uid://ddkdqduooyt5e" path="res://assets/ComfyUI_00480_2.png" id="3_qlot3"]
+[ext_resource type="Material" uid="uid://cmmo2p0up0dns" path="res://content/ui/menu/room/window.tres" id="1_jpfo1"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="2_ff8e1"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xx1h5"]
-shading_mode = 0
-albedo_texture = ExtResource("3_qlot3")
+[sub_resource type="QuadMesh" id="QuadMesh_crf2x"]
+size = Vector2(0.34, 1.04)
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_ndue5"]
-size = Vector2(1, 1)
-orientation = 2
+[sub_resource type="QuadMesh" id="QuadMesh_5ykyi"]
+size = Vector2(0.76, 0.35)
 
-[node name="MeshInstance3D" type="MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.000999987)
-material_override = SubResource("StandardMaterial3D_xx1h5")
-mesh = SubResource("PlaneMesh_ndue5")
+[sub_resource type="BoxShape3D" id="BoxShape3D_hdsvs"]
+size = Vector3(0.81, 1.62, 0.15)
+
+[sub_resource type="QuadMesh" id="QuadMesh_qw3nn"]
+size = Vector2(0.36, 1.08)
+
+[sub_resource type="QuadMesh" id="QuadMesh_7dnwh"]
+size = Vector2(0.36, 0.73)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r2ahp"]
+size = Vector3(0.82, 2.44, 0.15)
+
+[node name="Window" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0)
+material_override = ExtResource("1_jpfo1")
+mesh = SubResource("QuadMesh_crf2x")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.46, 0, 0)
+material_override = ExtResource("1_jpfo1")
+mesh = SubResource("QuadMesh_crf2x")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22, 0.88, 0)
+material_override = ExtResource("1_jpfo1")
+mesh = SubResource("QuadMesh_5ykyi")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.205, 0.28, 0)
+shape = SubResource("BoxShape3D_hdsvs")
+
+[node name="Movable" type="Node" parent="StaticBody3D"]
+script = ExtResource("2_ff8e1")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.07, 0.94, 0)
+material_override = ExtResource("1_jpfo1")
+mesh = SubResource("QuadMesh_5ykyi")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.86, 0.04, 0)
+material_override = ExtResource("1_jpfo1")
+mesh = SubResource("QuadMesh_qw3nn")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.29, 0.04, 0)
+material_override = ExtResource("1_jpfo1")
+mesh = SubResource("QuadMesh_qw3nn")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.29, -0.95, 0)
+material_override = ExtResource("1_jpfo1")
+mesh = SubResource("QuadMesh_7dnwh")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, -0.95, 0)
+material_override = ExtResource("1_jpfo1")
+mesh = SubResource("QuadMesh_7dnwh")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.06, -0.13, 0)
+shape = SubResource("BoxShape3D_r2ahp")
+
+[node name="Movable2" type="Node" parent="StaticBody3D2"]
+script = ExtResource("2_ff8e1")

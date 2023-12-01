@@ -44,6 +44,15 @@ font_size = 14
 outline_size = 0
 autowrap_mode = 3
 
+[node name="Room2" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 4.65661e-09, 0.0471446)
+pixel_size = 0.001
+modulate = Color(0, 0, 0, 1)
+text = "This work is based on \"Sky Dome\" (https://sketchfab.com/3d-models/sky-dome-95b2fd979c3f4a84b707a43772f7b2cd) by exiS7-Gs (https://sketchfab.com/exiS7-Gs) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)"
+font_size = 14
+outline_size = 0
+autowrap_mode = 3
+
 [node name="Button" parent="Content" instance=ExtResource("2_dejch")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, 0, -0.22)
 label = "close"

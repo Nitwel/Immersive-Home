@@ -19,10 +19,10 @@ transform = Transform3D(0.999999, -1.39628e-11, 0, 9.48119e-12, 0.999999, -4.547
 hand_skeleton = NodePath("left_hand/Armature_001/Skeleton3D")
 
 [node name="left_hand" parent="XRHandLeft" instance=ExtResource("2_n73lt")]
-transform = Transform3D(1, 4.42441e-11, 0, -1.06936e-10, 1, 1.81899e-12, 5.82077e-11, -1.81899e-12, 1, 0, 0, 0.033)
+transform = Transform3D(1, 4.42441e-11, 0, -1.06936e-10, 1, 1.81899e-12, 5.82077e-11, -1.81899e-12, 1, 0, 0, 0)
 
 [node name="IndexTip" type="BoneAttachment3D" parent="XRHandLeft"]
-transform = Transform3D(0.19221, -0.669965, -0.717079, 0.977075, 0.19881, 0.076153, 0.0915428, -0.715277, 0.692819, 0.0345973, 0.0355402, -0.131767)
+transform = Transform3D(0.19221, -0.669965, -0.717079, 0.977075, 0.19881, 0.076153, 0.0915428, -0.715277, 0.692819, 0.0345973, 0.0355402, -0.164767)
 bone_name = "Index_Tip_L"
 bone_idx = 9
 use_external_skeleton = true
@@ -42,7 +42,7 @@ transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 
 shape = SubResource("CapsuleShape3D_dopke")
 
 [node name="ThumbTip" type="BoneAttachment3D" parent="XRHandLeft"]
-transform = Transform3D(0.937246, 0.0284254, -0.347508, 0.0184905, 0.991216, 0.130949, 0.348178, -0.129157, 0.928488, 0.0498668, 0.0560917, -0.0797768)
+transform = Transform3D(0.937246, 0.0284254, -0.347508, 0.0184905, 0.991216, 0.130949, 0.348178, -0.129157, 0.928488, 0.0498668, 0.0560917, -0.112777)
 bone_name = "Thumb_Tip_L"
 bone_idx = 4
 use_external_skeleton = true
@@ -52,7 +52,7 @@ external_skeleton = NodePath("../left_hand/Armature_001/Skeleton3D")
 gizmo_extents = 0.02
 
 [node name="MiddleTip" type="BoneAttachment3D" parent="XRHandLeft"]
-transform = Transform3D(0.0812012, -0.650531, -0.755125, 0.996577, 0.064817, 0.051326, 0.0155558, -0.756708, 0.653568, 0.032112, 0.00654224, -0.138612)
+transform = Transform3D(0.0812012, -0.650531, -0.755125, 0.996577, 0.064817, 0.051326, 0.0155558, -0.756708, 0.653568, 0.032112, 0.00654224, -0.171612)
 bone_name = "Middle_Tip_L"
 bone_idx = 14
 use_external_skeleton = true
@@ -89,13 +89,12 @@ hand = 1
 hand_skeleton = NodePath("right_hand/Armature/Skeleton3D")
 
 [node name="right_hand" parent="XRHandRight" instance=ExtResource("1_uekbj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.033)
 
 [node name="vr_glove_right_slim" parent="XRHandRight/right_hand/Armature/Skeleton3D" index="0"]
 transform = Transform3D(1, 0, 4.7579e-13, 0, 1, 0, -1.34149e-12, 1.77636e-15, 1, 0, 0, 0)
 
 [node name="IndexTip" type="BoneAttachment3D" parent="XRHandRight"]
-transform = Transform3D(0.19221, 0.669966, 0.717079, -0.091543, -0.715277, 0.69282, 0.977075, -0.19881, -0.0761527, -0.0345977, -0.164767, -0.00254008)
+transform = Transform3D(0.19221, 0.669966, 0.717079, -0.091543, -0.715277, 0.69282, 0.977075, -0.19881, -0.0761527, -0.0345977, -0.164767, -0.0355401)
 bone_name = "Index_Tip_R"
 bone_idx = 9
 use_external_skeleton = true
@@ -115,7 +114,7 @@ transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 
 shape = SubResource("CapsuleShape3D_dopke")
 
 [node name="ThumbTip" type="BoneAttachment3D" parent="XRHandRight"]
-transform = Transform3D(0.937246, -0.0284254, 0.347508, -0.348179, -0.129158, 0.928488, 0.0184906, -0.991216, -0.130949, -0.0498677, -0.112777, -0.0230909)
+transform = Transform3D(0.937246, -0.0284254, 0.347508, -0.348179, -0.129158, 0.928488, 0.0184906, -0.991216, -0.130949, -0.0498677, -0.112777, -0.0560909)
 bone_name = "Thumb_Tip_R"
 bone_idx = 4
 use_external_skeleton = true
@@ -125,7 +124,7 @@ external_skeleton = NodePath("../right_hand/Armature/Skeleton3D")
 gizmo_extents = 0.02
 
 [node name="MiddleTip" type="BoneAttachment3D" parent="XRHandRight"]
-transform = Transform3D(0.0812011, 0.650531, 0.755126, -0.0155557, -0.756708, 0.653568, 0.996576, -0.0648169, -0.0513262, -0.032112, -0.171612, 0.0264578)
+transform = Transform3D(0.0812011, 0.650531, 0.755126, -0.0155557, -0.756708, 0.653568, 0.996576, -0.0648169, -0.0513262, -0.032112, -0.171612, -0.00654216)
 bone_name = "Middle_Tip_R"
 bone_idx = 14
 use_external_skeleton = true
@@ -145,7 +144,7 @@ transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 
 shape = SubResource("CapsuleShape3D_dopke")
 
 [node name="AnimatableBody3D" type="AnimatableBody3D" parent="XRHandRight"]
-transform = Transform3D(1, 0, 4.7579e-13, -5.82077e-11, 1, 0, -4.97947e-12, 1.77636e-15, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 4.7579e-13, 0, 1, 0, -1.34149e-12, 1.77636e-15, 1, 0, 0, 0)
 collision_layer = 8
 collision_mask = 8
 
