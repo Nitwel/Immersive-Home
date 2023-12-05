@@ -1,0 +1,11 @@
+Model Information:
+* title:	Sky Dome
+* source:	https://sketchfab.com/3d-models/sky-dome-95b2fd979c3f4a84b707a43772f7b2cd
+* author:	exiS7-Gs (https://sketchfab.com/exiS7-Gs)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Sky Dome" (https://sketchfab.com/3d-models/sky-dome-95b2fd979c3f4a84b707a43772f7b2cd) by exiS7-Gs (https://sketchfab.com/exiS7-Gs) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

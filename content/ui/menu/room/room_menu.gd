@@ -2,7 +2,7 @@ extends Node3D
 
 const wall_corner_scene = preload("./wall_corner.tscn")
 const wall_edge_scene = preload("./wall_edge.tscn")
-const windows_scene = preload("./windows.tscn")
+const window_scene = preload("./window.tscn")
 
 @onready var teleport_root = $TeleportRoot
 @onready var background = $Background
@@ -23,7 +23,7 @@ func _ready():
 	get_tree().get_root().get_node("Main").add_child.call_deferred(teleport_root)
 
 	spawn_windows.on_button_down.connect(func():
-		get_tree().root.get_node("Main").add_child.call_deferred(windows_scene.instantiate())
+		get_tree().root.get_node("Main").add_child.call_deferred(window_scene.instantiate())
 	)
 
 	teleport_root.get_node("Ground/Clickable").on_click.connect(func(event):

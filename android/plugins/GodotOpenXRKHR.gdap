@@ -1,7 +1,0 @@
-[config]
-
-name="GodotOpenXRKHR"
-binary_type="local"
-binary="godotopenxrkhr/godotopenxrkhr-release.aar"
-
-[dependencies]

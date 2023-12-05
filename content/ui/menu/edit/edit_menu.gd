@@ -149,6 +149,10 @@ func _on_entity_click(entity_name):
 	AudioPlayer.play_effect("spawn")
 
 	var entity = EntityCreator.create_entity(type, entity_name)
+
+	if entity == null:
+		return
+
 	entity.set_position(global_position)
 	get_node("/root").add_child(entity)
 	
