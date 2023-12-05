@@ -9,7 +9,7 @@ radius = 0.001
 height = 0.02
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1pxrt"]
-size = Vector3(0.14, 0.0577792, 0.169383)
+size = Vector3(0.14, 0.0224609, 0.169383)
 
 [node name="Hands" type="Node3D"]
 script = ExtResource("1_c4f76")
@@ -77,7 +77,7 @@ collision_layer = 8
 collision_mask = 8
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandLeft/AnimatableBody3D"]
-transform = Transform3D(1, 8.67362e-19, 4.75779e-13, -2.32831e-10, 1, -1.77636e-14, -4.97946e-12, 1.77636e-15, 1, -7.7486e-07, 1.33878e-09, -0.030436)
+transform = Transform3D(1, 1.05818e-16, 4.75779e-13, -2.32831e-10, 1, -1.77636e-14, -4.97946e-12, 1.77636e-15, 1, -7.7486e-07, 1.33878e-09, -0.030436)
 shape = SubResource("BoxShape3D_1pxrt")
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="XRHandLeft"]

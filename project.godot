@@ -54,6 +54,7 @@ theme/custom_font="res://assets/fonts/ui_font_500.tres"
 
 [rendering]
 
+renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality=4
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality.mobile=4
