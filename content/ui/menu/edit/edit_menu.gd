@@ -154,7 +154,7 @@ func _on_entity_click(entity_name):
 		return
 
 	entity.set_position(global_position)
-	get_node("/root").add_child(entity)
+	get_node("/root/Main").add_child(entity)
 	
 func clear_menu():
 	for child in devices_node.get_children():

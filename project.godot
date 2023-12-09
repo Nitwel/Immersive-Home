@@ -23,6 +23,7 @@ Request="*res://lib/globals/request.gd"
 HomeApi="*res://lib/globals/home_api.gd"
 AudioPlayer="*res://lib/globals/audio_player.gd"
 EventSystem="*res://lib/globals/event_system.gd"
+SaveSystem="*res://lib/globals/save_system.gd"
 
 [editor_plugins]
 

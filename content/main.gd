@@ -55,4 +55,3 @@ func vector_key_mapping(key_positive_x: int, key_negative_x: int, key_positive_y
 		vec = vec.normalized()
 	
 	return vec
-

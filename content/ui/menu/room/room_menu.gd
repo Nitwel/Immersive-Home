@@ -41,31 +41,32 @@ func _ready():
 			wall_mesh.visible = false
 	)
 
-	toggle_edit_button.on_button_up.connect(func():
-			edit_enabled = false
+	toggle_edit_button.on_button_up.connect(_handle_button_up)
 
-			wall_corners.visible = false
-			wall_edges.visible = false
-			wall_mesh.mesh = generate_mesh()
+func _handle_button_up():
+	edit_enabled = false
 
-			if wall_mesh.mesh == null:
-				return
-				
-			var collisions = generate_collision(wall_mesh.mesh)
+	wall_corners.visible = false
+	wall_edges.visible = false
+	wall_mesh.mesh = generate_mesh()
+
+	if wall_mesh.mesh == null:
+		return
 		
-			for old_coll in wall_collisions.get_children():
-				old_coll.queue_free()
+	var collisions = generate_collision(wall_mesh.mesh)
 
-			for collision in collisions:
-				var static_body = StaticBody3D.new()
-				static_body.set_collision_layer_value(4, true)
-				static_body.set_collision_layer_value(5, true)
-				static_body.collision_mask = 0
-				static_body.add_child(collision)
-				wall_collisions.add_child(static_body)
-			
-			wall_mesh.visible = true
-	)
+	for old_coll in wall_collisions.get_children():
+		old_coll.queue_free()
+
+	for collision in collisions:
+		var static_body = StaticBody3D.new()
+		static_body.set_collision_layer_value(4, true)
+		static_body.set_collision_layer_value(5, true)
+		static_body.collision_mask = 0
+		static_body.add_child(collision)
+		wall_collisions.add_child(static_body)
+	
+	wall_mesh.visible = true
 
 func generate_mesh():
 	var corner_count = wall_corners.get_child_count()
@@ -200,3 +201,17 @@ func corners_to_edge_transform(from_pos: Vector3, to_pos: Vector3) -> Transform3
 
 	var edge_transform = Transform3D(edge_basis, edge_position)
 	return edge_transform
+
+func _save():
+	return {
+		"corners": wall_corners.get_children().map(func(corner): return corner.position),
+	}
+
+func _load(data):
+	for corner in data["corners"]:
+		add_corner(corner)
+	
+	_handle_button_up()
+	
+	queue_free()
+	

@@ -47,6 +47,7 @@ func start_adapter(type: String, url: String, token: String):
 	add_child(api)
 
 	api.on_connect.connect(func():
+		SaveSystem.load()
 		on_connect.emit()
 	)
 
@@ -92,3 +93,7 @@ func set_state(entity: String, state: String, attributes: Dictionary = {}):
 func watch_state(entity: String, callback: Callable):
 	assert(has_connected(), "Not connected")
 	return api.watch_state(entity, callback)
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST || what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		SaveSystem.save()
