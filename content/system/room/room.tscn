@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://content/system/room/room.gd" id="1_fccq0"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="1_ugebq"]
-[ext_resource type="Material" path="res://content/system/room/walls.tres" id="3_al1ev"]
+[ext_resource type="Material" uid="uid://bbx6fv7jq50tr" path="res://content/system/room/walls.tres" id="3_al1ev"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_08sv0"]
 
