@@ -31,3 +31,9 @@ func _on_click(event):
 
 func _on_request_completed():
 	pass
+
+func _save():
+	return {
+		"transform": transform,
+		"entity_id": entity_id
+	}

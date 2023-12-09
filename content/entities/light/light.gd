@@ -56,3 +56,9 @@ func _on_click(event):
 
 		HomeApi.set_state(entity_id, "on" if !state else "off", attributes)
 		set_state(!state, brightness)
+
+func _save():
+	return {
+		"transform": transform,
+		"entity_id": entity_id
+	}
