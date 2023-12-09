@@ -4,6 +4,7 @@ const Switch = preload("res://content/entities/switch/switch.tscn")
 const Light = preload("res://content/entities/light/light.tscn")
 const Sensor = preload("res://content/entities/sensor/sensor.tscn")
 const MediaPlayer = preload("res://content/entities/media_player/media_player.tscn")
+const Camera = preload("res://content/entities/camera/camera.tscn")
 
 static func create_entity(type: String, id: String):
 	var entity = null
@@ -17,6 +18,8 @@ static func create_entity(type: String, id: String):
 			entity = Sensor.instantiate()
 		"media_player":
 			entity = MediaPlayer.instantiate()
+		"camera":
+			entity = Camera.instantiate()
 		_:
 			return null
 

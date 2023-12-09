@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://b0nq4wjfckxsa"]
+
+[ext_resource type="Script" path="res://content/entities/camera/camera.gd" id="1_htxq3"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="2_e2u6o"]
+[ext_resource type="Script" path="res://content/functions/occludable.gd" id="3_jheyx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_te0pn"]
+size = Vector3(0.15, 0.15, 0.01)
+
+[node name="Camera" type="StaticBody3D" groups=["entity"]]
+script = ExtResource("1_htxq3")
+
+[node name="View" type="Sprite3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_te0pn")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("2_e2u6o")
+
+[node name="Occludable" type="Node" parent="."]
+script = ExtResource("3_jheyx")
