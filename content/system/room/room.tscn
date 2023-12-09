@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://bswgmclohuqui"]
+
+[ext_resource type="Script" path="res://content/system/room/room.gd" id="1_fccq0"]
+[ext_resource type="Script" path="res://content/functions/clickable.gd" id="1_ugebq"]
+[ext_resource type="Material" path="res://content/system/room/walls.tres" id="3_al1ev"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_08sv0"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_7dibq"]
+
+[node name="Room" type="Node3D"]
+script = ExtResource("1_fccq0")
+
+[node name="Ground" type="StaticBody3D" parent="."]
+collision_layer = 24
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("WorldBoundaryShape3D_08sv0")
+
+[node name="Clickable" type="Node" parent="Ground"]
+script = ExtResource("1_ugebq")
+
+[node name="WallCorners" type="Node3D" parent="."]
+
+[node name="WallEdges" type="Node3D" parent="."]
+
+[node name="WallMesh" type="MeshInstance3D" parent="."]
+material_override = ExtResource("3_al1ev")
+mesh = SubResource("ArrayMesh_7dibq")
+
+[node name="WallCollisions" type="Node3D" parent="."]
