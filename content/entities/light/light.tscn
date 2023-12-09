@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://cw86rc42dv2d8"]
+[gd_scene load_steps=10 format=3 uid="uid://cw86rc42dv2d8"]
 
 [ext_resource type="Script" path="res://content/entities/light/light.gd" id="1_ykxy3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_4sfxb"]
 [ext_resource type="Material" uid="uid://vce66e7sbc3n" path="res://content/entities/light/light_on.tres" id="5_50gph"]
+[ext_resource type="Script" path="res://content/functions/occludable.gd" id="5_oh4jg"]
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="6_mhjlm"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
@@ -51,6 +52,9 @@ script = ExtResource("1_ykxy3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_ukj14")
+
+[node name="Occludable" type="Node" parent="."]
+script = ExtResource("5_oh4jg")
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("4_4sfxb")
