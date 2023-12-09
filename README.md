@@ -148,6 +148,10 @@ Thus I've decided to use a custom event system that is similar to the one used i
 | `ui_focus_skip` | Focus checking on this element will be skipped |
 | `ui_focus_stop` | The focus will not be reset. Useful for keyboard |
 
+### Saving and Loading
+
+In order for an entity to be saved, it has to implement the `_save` function returning a dictionary of the data that should be saved.
+When loading, first the saved node gets instantiated, then either the `_load` function is called with the saved data, or when no `_load` function is implemented, the saved data directly applied to the node.
 
 ### Functions
 
