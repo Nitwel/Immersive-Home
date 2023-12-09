@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://content/functions/occludable.gd" id="5_j5ucu"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
-radius = 0.1
+radius = 0.0482081
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ldpuo"]
 animations = [{
@@ -31,7 +31,7 @@ script = ExtResource("1_8ffhi")
 shape = SubResource("SphereShape3D_ukj14")
 
 [node name="Icon" type="AnimatedSprite3D" parent="."]
-pixel_size = 0.0005
+pixel_size = 0.0002
 billboard = 1
 sprite_frames = SubResource("SpriteFrames_ldpuo")
 
