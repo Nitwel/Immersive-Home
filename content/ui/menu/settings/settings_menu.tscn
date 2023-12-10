@@ -113,3 +113,13 @@ outline_size = 0
 
 [node name="Clickable" type="Node" parent="Content/Credits"]
 script = ExtResource("3_qmg6q")
+
+[node name="Save" parent="Content" instance=ExtResource("1_faxng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 0, 0.17)
+label = "save"
+icon = true
+
+[node name="ClearSave" parent="Content" instance=ExtResource("1_faxng")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0.17)
+label = "close"
+icon = true

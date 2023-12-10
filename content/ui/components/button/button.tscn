@@ -2,10 +2,7 @@
 
 [ext_resource type="Script" path="res://content/ui/components/button/button.gd" id="1_74x7g"]
 [ext_resource type="ArrayMesh" uid="uid://iv4lk77axlk4" path="res://assets/immersive_home/button.obj" id="2_cve3l"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8s8ln"]
-transparency = 1
-albedo_color = Color(0, 0.501961, 0.886275, 1)
+[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_wx7av"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_o4j7g"]
 points = PackedVector3Array(-0.025, -0.01, -0.025, -0.025, 0.01, -0.025, 0.025, -0.01, -0.025, -0.025, -0.01, 0.025, -0.025, 0.01, 0.025, 0.025, 0.01, -0.025, 0.025, -0.01, 0.025, 0.025, 0.01, 0.025)
@@ -82,15 +79,15 @@ collision_mask = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.005, 0)
+material_override = ExtResource("2_wx7av")
 mesh = ExtResource("2_cve3l")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_8s8ln")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
 shape = SubResource("ConvexPolygonShape3D_o4j7g")
 
 [node name="Label" type="Label3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.005, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.0107199, 0)
 pixel_size = 0.001
 text = "Example Text"
 font_size = 10

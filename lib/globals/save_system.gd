@@ -2,6 +2,9 @@ extends Node
 
 const VariantSerializer = preload("res://lib/utils/variant_serializer.gd")
 
+func clear():
+	_clear_save_tree(get_tree().root.get_node("Main"))
+
 func save():
 	if HomeApi.has_connected() == false:
 		return
@@ -38,6 +41,12 @@ func load():
 	else:
 		_build_save_tree(save_tree)
 
+func _clear_save_tree(node: Node):
+	for child in node.get_children():
+		_clear_save_tree(child)
+
+	if node.has_method("_save"):
+		node.queue_free()
 
 func _generate_save_tree(node: Node):
 	var children = []

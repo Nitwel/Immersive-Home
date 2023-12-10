@@ -1,8 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://b0nq4wjfckxsa"]
+[gd_scene load_steps=6 format=3 uid="uid://b0nq4wjfckxsa"]
 
 [ext_resource type="Script" path="res://content/entities/camera/camera.gd" id="1_htxq3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_e2u6o"]
 [ext_resource type="Script" path="res://content/functions/occludable.gd" id="3_jheyx"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_830bv"]
+size = Vector2(0.15, 0.15)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_te0pn"]
 size = Vector3(0.15, 0.15, 0.01)
@@ -13,6 +16,8 @@ script = ExtResource("1_htxq3")
 [node name="View" type="Sprite3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.00451169)
+mesh = SubResource("QuadMesh_830bv")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_te0pn")
