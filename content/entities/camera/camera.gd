@@ -5,6 +5,7 @@ extends StaticBody3D
 
 @onready var view = $View
 @onready var http_request = $HTTPRequest
+@onready var mesh = $MeshInstance3D
 
 
 # Called when the node enters the scene tree for the first time.
@@ -20,12 +21,14 @@ func _ready():
 func set_state(stateInfo):
 	if stateInfo == null:
 		view.texture = null
+		mesh.visible = true
 		return
 
 	var state = stateInfo["state"]
 
 	if state == "unavailable":
 		view.texture = null
+		mesh.visible = true
 		return
 
 	if stateInfo["attributes"].has("entity_picture"):
@@ -53,6 +56,7 @@ func load_image(url: String):
 	var texture = ImageTexture.create_from_image(image)
 	view.texture = texture
 	view.pixel_size = pixel_size
+	mesh.visible = false
 
 func _save():
 	return {
