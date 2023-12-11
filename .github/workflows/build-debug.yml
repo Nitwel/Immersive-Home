@@ -8,6 +8,9 @@ on:
 env:
   GODOT_VERSION: 4.2
   EXPORT_NAME: immersive-home
+  GODOT_ANDROID_KEYSTORE_RELEASE_PATH: /home/runner/work/Immersive-Home/Immersive-Home/debug.keystore
+  GODOT_ANDROID_KEYSTORE_RELEASE_USER: androiddebugkey
+  GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: android
 
 jobs:
   # job id, can be anything
@@ -39,9 +42,6 @@ jobs:
         run: |
           keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999 -deststoretype pkcs12
 
-          mkdir -p ~/.config/godot
-          cp -v ./editor_settings-4.tres ~/.config/godot/
-
           mkdir -p ./android/build
           touch ./android/build/.gdignore
 
@@ -54,7 +54,7 @@ jobs:
       - name: export game
         id: export
         # Use latest version (see releases for all versions)
-        uses: moorbren/godot-export
+        uses: nitwel/godot-export@latest
         with:
           # Defining all the required inputs
           godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.2/Godot_v4.2-stable_linux.x86_64.zip

@@ -46,38 +46,22 @@ jobs:
 
           echo "${{ secrets.KEYSTORE_RELEASE }}" | base64 -di > release.keystore
 
-          mkdir -p ~/.config/godot
-          cp -v ./editor_settings-4.tres ~/.config/godot/
-
           mkdir -p ./android/build
           touch ./android/build/.gdignore
-
-          wget -nv https://downloads.tuxfamily.org/godotengine/4.2/Godot_v4.2-stable_export_templates.tpz -O ./godot_templates.tpz
-          unzip -q ./godot_templates.tpz -d .
-          rm ./godot_templates.tpz
-          unzip -q ./templates/android_source.zip -d ./android/build/
-          rm ./templates/android_source.zip
-
-          sed -i 's/singleInstancePerTask/singleTask/g' ./android/build/AndroidManifest.xml
-
-          versioncode=$(eval "git tag | grep -v "test" | wc -l")
-          sed -i "s/BUILD_VERSION_CODE/$versioncode/g" export_presets.cfg
-          sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$versioncode\"/g" ./android/build/AndroidManifest.xml
-
-          sed -i 's/BUILD_VERSION/${{ github.ref_name }}/g' export_presets.cfg
-          sed -i "s/android:versionName=\"1.0\"/android:versionName=\"${{ github.ref_name }}\"/g" ./android/build/AndroidManifest.xml
 
       - name: export game
         id: export
         # Use latest version (see releases for all versions)
-        uses: moorbren/godot-export
+        uses: nitwel/godot-export@latest
         with:
           # Defining all the required inputs
           godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.2/Godot_v4.2-stable_linux.x86_64.zip
           godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.2/Godot_v4.2-stable_export_templates.tpz
           relative_project_path: ./
           archive_output: true
-          presets_to_export: "AndroidProduction"
+          filter_exports: "AndroidProduction"
+          version: ${{ github.ref_name }}"
+          production: true
 
       - name: create release
         uses: ncipollo/release-action@v1.11.2
