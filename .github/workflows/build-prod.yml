@@ -76,8 +76,8 @@ jobs:
         uses: firebelley/godot-export@v5.2.1
         with:
           # Defining all the required inputs
-          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.2.1/rc1/Godot_v4.2.1-rc1_linux.x86_64.zip
-          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.2.1/rc1/Godot_v4.2.1-rc1_export_templates.tpz
+          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.2.1/rc1/Godot_v4.2-rc1_linux.x86_64.zip
+          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.2.1/rc1/Godot_v4.2-rc1_export_templates.tpz
           relative_project_path: ./
           archive_output: true
 
