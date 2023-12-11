@@ -11,7 +11,7 @@ const wall_edge_scene = preload("./wall_edge.tscn")
 @onready var ground = $Ground/Clickable
 
 var moving = null
-var editable := true:
+var editable := false:
 	set(value):
 		if value == editable:
 			return
@@ -197,6 +197,8 @@ func _save():
 	}
 
 func _load(data):
+	await ready
+
 	for corner in data["corners"]:
 		add_corner(corner)
 
