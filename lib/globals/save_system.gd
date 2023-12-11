@@ -22,6 +22,8 @@ func save():
 	save_file.store_line(json_text)
 
 func load():
+	clear()
+
 	if HomeApi.has_connected() == false:
 		return
 

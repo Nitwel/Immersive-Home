@@ -19,6 +19,10 @@ func _ready():
 			rooms.add_child(room)
 		else:
 			room = rooms.get_child(0)
+			if rooms.get_child_count() > 1:
+				for child in rooms.get_children():
+					if child != room:
+						child.queue_free()
 	)
 
 	spawn_windows.on_button_down.connect(func():
