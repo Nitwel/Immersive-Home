@@ -29,7 +29,6 @@ script = ExtResource("2_elugy")
 [node name="Label3D" type="Label3D" parent="Interface"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.13, -1.86265e-09, 0.05)
 pixel_size = 0.001
-modulate = Color(0, 0, 0, 1)
 text = "Edit Room"
 font_size = 18
 outline_size = 0
@@ -37,7 +36,6 @@ outline_size = 0
 [node name="CreateBlur" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.15, 0.01, 0.261858)
 pixel_size = 0.001
-modulate = Color(0, 0, 0, 1)
 text = "Fake Windows"
 font_size = 18
 outline_size = 0

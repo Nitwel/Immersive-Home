@@ -2,6 +2,9 @@ extends Node
 
 const VariantSerializer = preload("res://lib/utils/variant_serializer.gd")
 
+func clear():
+	_clear_save_tree(get_tree().root.get_node("Main"))
+
 func save():
 	if HomeApi.has_connected() == false:
 		return
@@ -19,6 +22,8 @@ func save():
 	save_file.store_line(json_text)
 
 func load():
+	clear()
+
 	if HomeApi.has_connected() == false:
 		return
 
@@ -38,6 +43,12 @@ func load():
 	else:
 		_build_save_tree(save_tree)
 
+func _clear_save_tree(node: Node):
+	for child in node.get_children():
+		_clear_save_tree(child)
+
+	if node.has_method("_save"):
+		node.queue_free()
 
 func _generate_save_tree(node: Node):
 	var children = []
@@ -76,10 +87,13 @@ func _generate_save_tree(node: Node):
 func _build_save_tree(tree: Dictionary):
 	var new_object = load(tree["filename"]).instantiate()
 
-	get_node(tree["parent"]).add_child(new_object)
-
 	if new_object.has_method("_load"):
 		new_object.call("_load", VariantSerializer.parse_value(tree["data"]))
 	else:
 		for key in tree["data"].keys():
 			new_object.set(key, VariantSerializer.parse_value(tree["data"][key]))
+
+	get_node(tree["parent"]).add_child(new_object)
+
+	for child in tree["children"]:
+		_build_save_tree(child)

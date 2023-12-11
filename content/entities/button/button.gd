@@ -21,7 +21,14 @@ func _ready():
 
 func set_state(state):
 	if state.attributes.has("friendly_name"):
-		button.label = state.attributes["friendly_name"]
+		var name = state.attributes["friendly_name"]
+
+		if name.begins_with("icon:"):
+			name = name.substr(5)
+			button.icon = true
+		else:
+			button.icon = false
+		button.label = name
 
 func _save():
 	return {

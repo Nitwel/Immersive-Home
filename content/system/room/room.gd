@@ -11,7 +11,7 @@ const wall_edge_scene = preload("./wall_edge.tscn")
 @onready var ground = $Ground/Clickable
 
 var moving = null
-var editable := true:
+var editable := false:
 	set(value):
 		if value == editable:
 			return
@@ -36,6 +36,10 @@ func _start_edit_mode():
 	wall_corners.visible = true
 	wall_edges.visible = true
 	wall_mesh.visible = false
+	wall_mesh.mesh = null
+
+	for old_coll in wall_collisions.get_children():
+		old_coll.queue_free()
 
 func _end_edit_mode():
 	wall_corners.visible = false
@@ -46,9 +50,6 @@ func _end_edit_mode():
 		return
 		
 	var collisions = generate_collision(wall_mesh.mesh)
-
-	for old_coll in wall_collisions.get_children():
-		old_coll.queue_free()
 
 	for collision in collisions:
 		var static_body = StaticBody3D.new()
@@ -196,6 +197,8 @@ func _save():
 	}
 
 func _load(data):
+	await ready
+
 	for corner in data["corners"]:
 		add_corner(corner)
 

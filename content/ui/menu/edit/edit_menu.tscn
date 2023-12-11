@@ -16,7 +16,6 @@ size = Vector3(0.24, 0.1, 0.1)
 [node name="PageNumberLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.26, 0.01, 0.27)
 pixel_size = 0.001
-modulate = Color(0, 0, 0, 1)
 text = "0 / 0"
 font_size = 18
 outline_size = 0
@@ -25,12 +24,10 @@ outline_size = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, 0.01, 0.27)
 
 [node name="NextPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
-focusable = true
 label = "navigate_next"
 icon = true
 
 [node name="PreviousPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0, 0)
-focusable = true
 label = "navigate_before"
 icon = true

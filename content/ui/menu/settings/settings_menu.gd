@@ -10,6 +10,8 @@ const credits_scene = preload("./credits.tscn")
 @onready var input_token = $Content/InputToken
 @onready var button_connect = $Content/Connect
 @onready var credits = $Content/Credits/Clickable
+@onready var save = $Content/Save
+@onready var clear_save = $Content/ClearSave
 @onready var background = $Background
 
 func _ready():
@@ -50,6 +52,14 @@ func _ready():
 			"url": input_url.text,
 			"token": input_token.text
 		})
+	)
+
+	save.on_button_down.connect(func():
+		SaveSystem.save()
+	)
+
+	clear_save.on_button_down.connect(func():
+		SaveSystem.clear()
 	)
 
 	HomeApi.on_connect.connect(func():

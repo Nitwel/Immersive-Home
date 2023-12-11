@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://blrhy2uccrdn4"]
 
-[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/ui_element.material" id="1_0kd7r"]
+[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="1_0kd7r"]
 [ext_resource type="Script" path="res://content/ui/components/input/input.gd" id="1_uml3t"]
 [ext_resource type="FontVariation" uid="uid://d2ofyimg5s65q" path="res://assets/fonts/ui_font_500.tres" id="3_ij5fh"]
 
