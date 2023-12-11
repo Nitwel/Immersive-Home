@@ -8,9 +8,9 @@ on:
 env:
   GODOT_VERSION: 4.2
   EXPORT_NAME: immersive-home
-  GODOT_ANDROID_KEYSTORE_RELEASE_PATH: /home/runner/work/Immersive-Home/Immersive-Home/debug.keystore
-  GODOT_ANDROID_KEYSTORE_RELEASE_USER: androiddebugkey
-  GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: android
+  GODOT_ANDROID_KEYSTORE_DEBUG_PATH: /home/runner/work/Immersive-Home/Immersive-Home/debug.keystore
+  GODOT_ANDROID_KEYSTORE_DEBUG_USER: androiddebugkey
+  GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: android
 
 jobs:
   # job id, can be anything
