@@ -54,7 +54,7 @@ jobs:
       - name: export game
         id: export
         # Use latest version (see releases for all versions)
-        uses: firebelley/godot-export@v5.2.1
+        uses: moorbren/godot-export
         with:
           # Defining all the required inputs
           godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.2/Godot_v4.2-stable_linux.x86_64.zip
@@ -62,6 +62,7 @@ jobs:
           export_debug: true
           relative_project_path: ./
           archive_output: true
+          presets_to_export: "Android"
 
       - name: create release
         uses: ncipollo/release-action@v1.11.2
