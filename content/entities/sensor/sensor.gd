@@ -5,9 +5,6 @@ extends StaticBody3D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if HomeApi.has_connected() == false:
-		await HomeApi.on_connect
-
 	var stateInfo = await HomeApi.get_state(entity_id)
 	set_text(stateInfo)
 

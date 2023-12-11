@@ -85,10 +85,13 @@ func _generate_save_tree(node: Node):
 func _build_save_tree(tree: Dictionary):
 	var new_object = load(tree["filename"]).instantiate()
 
-	get_node(tree["parent"]).add_child(new_object)
-
 	if new_object.has_method("_load"):
 		new_object.call("_load", VariantSerializer.parse_value(tree["data"]))
 	else:
 		for key in tree["data"].keys():
 			new_object.set(key, VariantSerializer.parse_value(tree["data"][key]))
+
+	get_node(tree["parent"]).add_child(new_object)
+
+	for child in tree["children"]:
+		_build_save_tree(child)
