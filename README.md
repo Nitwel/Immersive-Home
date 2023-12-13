@@ -135,6 +135,7 @@ It is also possible to bubble up information by returning a dictionary from a fu
 | `_on_key_up` | `[event: EventKey]` | The ray-cast leaves the the collision body |
 | `_on_focus_in` | `[event: EventFocus]` | The node is got focused |
 | `_on_focus_out` | `[event: EventFocus]` | The node lost focus |
+| `_on_notify` | `[event: EventNotify]` | The ui notification system |
 
 After considering using the build in godot event system, I've decided that it would be better to use a custom event system.
 The reason being that we would have to check each tick if the event matches the desired one which seems very inefficient compared to using signals like the browser does.
