@@ -62,7 +62,7 @@ jobs:
           export_debug: true
           relative_project_path: ./
           archive_output: true
-          presets_to_export: "Android"
+          filter_exports: "Android"
 
       - name: create release
         uses: ncipollo/release-action@v1.11.2
