@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://crrb0l3ekuotj"]
 
 [ext_resource type="Script" path="res://content/ui/menu/edit/edit_menu.gd" id="1_34cbn"]
-[ext_resource type="Script" path="res://content/ui/menu/grid.gd" id="3_0xvyw"]
+[ext_resource type="Script" path="res://content/ui/components/grid_container/grid_container.gd" id="3_0xvyw"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_tvimg"]
 
 [node name="EditMenu" type="Node3D"]

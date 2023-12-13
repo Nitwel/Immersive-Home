@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://content/system/keyboard/keyboard.gd" id="1_maojw"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_xdpwr"]
-[ext_resource type="Script" path="res://content/ui/menu/grid.gd" id="3_mx544"]
+[ext_resource type="Script" path="res://content/ui/components/grid_container/grid_container.gd" id="3_mx544"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_86fct"]
 [ext_resource type="Material" uid="uid://bnwimm214q67g" path="res://assets/materials/sec-500.material" id="5_8c8rc"]
 [ext_resource type="Script" path="res://content/functions/occludable.gd" id="6_y4sdl"]

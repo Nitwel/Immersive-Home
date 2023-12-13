@@ -24,6 +24,8 @@ signal on_touch_enter(event: EventTouch)
 signal on_touch_move(event: EventTouch)
 signal on_touch_leave(event: EventTouch)
 
+signal on_notify(event: EventNotify)
+
 var _active_node: Node = null
 
 func emit(type: String, event: Event):
@@ -31,6 +33,12 @@ func emit(type: String, event: Event):
 		_bubble_call(type, event.target, event)
 	else:
 		_root_call(type, event)
+
+func notify(message: String, type := EventNotify.Type.INFO):
+	var event = EventNotify.new()
+	event.message = message
+	event.type = type
+	emit("notify", event)
 
 func is_focused(node: Node):
 	return _active_node == node
