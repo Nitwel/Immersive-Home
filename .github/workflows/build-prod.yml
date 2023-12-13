@@ -49,8 +49,6 @@ jobs:
           mkdir -p ./android/build
           touch ./android/build/.gdignore
 
-          versioncode=$(eval "git tag | grep - v "test" | wc - l")
-
       - name: export game
         id: export
         # Use latest version (see releases for all versions)
