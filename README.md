@@ -47,7 +47,8 @@ Right now you can try out the app for free using either of the following pages:
 - Meta Quest 2 / Pro / 3
 
 ## Connecting to your Home Assistant Instance
-Go to the settings tab (the gear icon) and enter the url of your Home Assistant instance.
+Go to the settings tab (the gear icon) and enter the url `ws://hass.example.com:8123` of your Home Assistant instance.
+You can use the paste button on the keyboard in order to not have to manually type the url and token.
 In order to authenticate, you have to generate a long-lived access token in Home Assistant.
 To generate a HASS token, login into your dashboard, click on your name (bottom left), scroll down and create a long-lived access token.
 
