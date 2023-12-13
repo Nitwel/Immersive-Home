@@ -213,6 +213,9 @@ visible = false
 [node name="SettingsMenu" parent="AnimationContainer/Content" instance=ExtResource("11_7wm6b")]
 visible = false
 
+[node name="NotifyPlace" type="Marker3D" parent="AnimationContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0, -0.05)
+
 [node name="ImmersiveHomePanels" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.37114e-10, 0, 0.01, 0, 0.01, 0, -0.01, 0, -4.37114e-10, 0.32, 0, -0.0500001)
 visible = false

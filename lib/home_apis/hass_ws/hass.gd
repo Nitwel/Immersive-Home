@@ -20,8 +20,6 @@ var authenticated := false
 
 var id := 1
 var entities: Dictionary = {}
-var retries := 5
-
 var entitiy_callbacks := CallbackMap.new()
 var packet_callbacks := CallbackMap.new()
 
@@ -36,18 +34,13 @@ func connect_ws():
 	if url == "" || token == "":
 		return
 
-	retries -= 1
-	if retries < 0:
-		print("Failed to connect to %s" % self.url)
-		return
-
 	print("Connecting to %s" % self.url)
 	socket.connect_to_url(self.url)
 	set_process(true)
 
 	# https://github.com/godotengine/godot/issues/84423
 	# Otherwise the WebSocketPeer will crash when receiving large packets
-	socket.set_inbound_buffer_size(65535 * 2)
+	socket.set_inbound_buffer_size(65535 * 4)
 
 func _process(delta):
 	socket.poll()
@@ -66,7 +59,13 @@ func _process(delta):
 	elif state == WebSocketPeer.STATE_CLOSED:
 		var code = socket.get_close_code()
 		var reason = socket.get_close_reason()
-		print("WS connection closed with code: %s, reason: %s" % [code, reason])
+
+		if reason == "":
+			reason = "Invalid URL"
+
+		var message = "WS connection closed with code: %s, reason: %s" % [code, reason]
+		EventSystem.notify(message, EventNotify.Type.DANGER)
+		print(message)
 		handle_disconnect()
 
 func handle_packet(packet: Dictionary):
@@ -83,6 +82,8 @@ func handle_packet(packet: Dictionary):
 		start_subscriptions()
 		
 	elif packet.type == "auth_invalid":
+		EventSystem.notify("Failed to authenticate, invalid auth token", EventNotify.Type.DANGER)
+		print("Failed to authenticate, invalid auth token")
 		handle_disconnect()
 	else:
 		packet_callbacks.call_key(int(packet.id), [packet])
@@ -135,9 +136,6 @@ func handle_disconnect():
 	authenticated = false
 	set_process(false)
 	on_disconnect.emit()
-
-	# Reconnect
-	connect_ws()
 
 func send_subscribe_packet(packet: Dictionary, callback: Callable):
 	packet.id = id

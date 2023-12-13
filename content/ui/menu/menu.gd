@@ -1,6 +1,7 @@
 extends Node3D
 
 const Proxy = preload("res://lib/utils/proxy.gd")
+const Notification = preload("res://content/ui/components/notification/notification.tscn")
 
 @onready var _controller := XRHelpers.get_xr_controller(self)
 
@@ -17,6 +18,7 @@ const Proxy = preload("res://lib/utils/proxy.gd")
 @onready var content = $AnimationContainer/Content
 @onready var nav = $AnimationContainer/Navigation
 @onready var animation_player = $AnimationPlayer
+@onready var notify_place = $AnimationContainer/NotifyPlace
 
 var selected_nav = null
 
@@ -34,6 +36,21 @@ func _ready():
 	_controller.button_pressed.connect(func(button):
 		if button == "by_button":
 			show_menu = !show_menu
+	)
+
+	EventSystem.on_notify.connect(func(event: EventNotify):
+		var notification_node = Notification.instantiate()
+		notification_node.text = event.message
+		notification_node.type = event.type
+
+		for child in notify_place.get_children():
+			child.position += Vector3(0, 0, -0.06)
+
+		notify_place.add_child(notification_node)
+
+		
+		
+		
 	)
 
 	var nav_buttons = [
