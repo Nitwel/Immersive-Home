@@ -3,7 +3,7 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bd7h22w1o77fp"
+uid="uid://bu07alt6vkbaq"
 path="res://.godot/imported/Hand_Glove_L.gltf-ac6c06fe48ca0d7ce0f9faffd177a897.scn"
 
 [deps]
@@ -22,7 +22,6 @@ meshes/generate_lods=true
 meshes/create_shadow_meshes=true
 meshes/light_baking=1
 meshes/lightmap_texel_size=0.2
-meshes/force_disable_compression=false
 skins/use_named_skins=true
 animation/import=true
 animation/fps=30
@@ -30,5 +29,4 @@ animation/trimming=false
 animation/remove_immutable_tracks=true
 import_script/path=""
 _subresources={}
-gltf/naming_version=0
 gltf/embedded_image_handling=1
