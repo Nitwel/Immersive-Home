@@ -64,8 +64,6 @@ jobs:
           sed -i 's/BUILD_VERSION/${{ github.ref_name }}/g' export_presets.cfg
           sed -i "s/android:versionName=\"1.0\"/android:versionName=\"${{ github.ref_name }}\"/g" ./android/build/AndroidManifest.xml
 
-          godot -v -e --quit --headless
-
       - name: export game
         id: export
         # Use latest version (see releases for all versions)

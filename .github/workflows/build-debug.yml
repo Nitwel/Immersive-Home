@@ -51,8 +51,6 @@ jobs:
           unzip -q ./templates/android_source.zip -d ./android/build/
           rm ./templates/android_source.zip
 
-          godot -v -e --quit --headless
-
       - name: export game
         id: export
         # Use latest version (see releases for all versions)
