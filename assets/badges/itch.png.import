@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d2m7dsy45cm45"
-path="res://.godot/imported/github.svg-b4e0b9256be113f9a0665e9c95790b59.ctex"
+uid="uid://b4c5y06to8w3r"
+path="res://.godot/imported/itch.png-f44f8160828fcc4db89b824752bc0b29.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/badges/github.svg"
-dest_files=["res://.godot/imported/github.svg-b4e0b9256be113f9a0665e9c95790b59.ctex"]
+source_file="res://assets/badges/itch.png"
+dest_files=["res://.godot/imported/itch.png-f44f8160828fcc4db89b824752bc0b29.ctex"]
 
 [params]
 
@@ -32,6 +32,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

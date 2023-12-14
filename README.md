@@ -4,6 +4,30 @@
 
 Immersive Home is project to bring Smart Home and Mixed Reality technologies together for an intuitive and immersive experience. [Demo Video](https://www.youtube.com/watch?v=vk6uTYOINY4)
 
+<a href="https://immersive-home.org" target="_blank" style="text-decoration: none">
+	<img height="32" src="assets/badges/website.png" alt="Badge linking to our website" />
+</a>
+
+<a href="https://discord.gg/DWWtDfVeus" target="_blank" style="text-decoration: none">
+	<img height="32" src="assets/badges/discord.png" alt="Badge linking to our discord" />
+</a>
+
+<a href="https://www.oculus.com/experiences/quest/7533875049973382/" target="_blank" style="text-decoration: none">
+	<img height="32" src="assets/badges/meta.png" alt="Badge linking to Meta App Lab" />
+</a>
+
+<a href="https://github.com/Nitwel/Immersive-Home/releases/latest/download/Android.zip" target="_blank" style="text-decoration: none">
+	<img height="32" src="assets/badges/github.png" alt="Badge linking to GitHub" />
+</a>
+
+<a href="https://nitwel.itch.io/immersive-home" target="_blank" style="text-decoration: none">
+	<img height="32" src="assets/badges/itch.png" alt="Badge linking to itch.io" />
+</a>
+
+<a href="https://sidequestvr.com/app/26827/immersive-home" target="_blank" style="text-decoration: none">
+	<img height="32" src="assets/badges/sidequest.png" alt="Badge linking to sidequest" />
+</a>
+
 ## Planned Features
 
 - **Fast and Intuitive control over IoT devices**
@@ -12,25 +36,7 @@ Immersive Home is project to bring Smart Home and Mixed Reality technologies tog
 - **Comfortable way of consuming virtual media unobstructed**
 - **Advanced automations based on position in room**
 
-## Try it out
-
-Right now you can try out the app for free using either of the following pages:
-
-<a href="https://www.oculus.com/experiences/quest/7533875049973382/" target="_blank">
-	<img height="32" src="assets/badges/meta.svg" alt="Badge linking to Meta App Lab" />
-</a>
-
-<a href="https://github.com/Nitwel/Immersive-Home/releases/latest/download/Android.zip" target="_blank">
-	<img height="32" src="assets/badges/github.svg" alt="Badge linking to GitHub" />
-</a>
-
-<a href="https://nitwel.itch.io/immersive-home" target="_blank">
-	<img height="32" src="assets/badges/itch.svg" alt="Badge linking to itch.io" />
-</a>
-
-<a href="https://sidequestvr.com/app/26827/immersive-home" target="_blank">
-	<img height="32" src="assets/badges/sidequest.svg" alt="Badge linking to sidequest" />
-</a>
+## Support the Project
 
 💕 If you like to see the project grow to support more devices and interaction methods, consider supporting the project using these methods:
 
