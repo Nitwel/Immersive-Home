@@ -4,27 +4,27 @@
 
 Immersive Home is project to bring Smart Home and Mixed Reality technologies together for an intuitive and immersive experience. [Demo Video](https://www.youtube.com/watch?v=vk6uTYOINY4)
 
-<a href="https://immersive-home.org" target="_blank" style="text-decoration: none">
+<a href="https://immersive-home.org" target="_blank" style="text-decoration: none !important">
 	<img height="32" src="assets/badges/website.png" alt="Badge linking to our website" />
 </a>
 
-<a href="https://discord.gg/DWWtDfVeus" target="_blank" style="text-decoration: none">
+<a href="https://discord.gg/DWWtDfVeus" target="_blank" style="text-decoration: none !important">
 	<img height="32" src="assets/badges/discord.png" alt="Badge linking to our discord" />
 </a>
 
-<a href="https://www.oculus.com/experiences/quest/7533875049973382/" target="_blank" style="text-decoration: none">
+<a href="https://www.oculus.com/experiences/quest/7533875049973382/" target="_blank" style="text-decoration: none !important">
 	<img height="32" src="assets/badges/meta.png" alt="Badge linking to Meta App Lab" />
 </a>
 
-<a href="https://github.com/Nitwel/Immersive-Home/releases/latest/download/Android.zip" target="_blank" style="text-decoration: none">
+<a href="https://github.com/Nitwel/Immersive-Home/releases/latest/download/Android.zip" target="_blank" style="text-decoration: none !important">
 	<img height="32" src="assets/badges/github.png" alt="Badge linking to GitHub" />
 </a>
 
-<a href="https://nitwel.itch.io/immersive-home" target="_blank" style="text-decoration: none">
+<a href="https://nitwel.itch.io/immersive-home" target="_blank" style="text-decoration: none !important">
 	<img height="32" src="assets/badges/itch.png" alt="Badge linking to itch.io" />
 </a>
 
-<a href="https://sidequestvr.com/app/26827/immersive-home" target="_blank" style="text-decoration: none">
+<a href="https://sidequestvr.com/app/26827/immersive-home" target="_blank" style="text-decoration: none !important">
 	<img height="32" src="assets/badges/sidequest.png" alt="Badge linking to sidequest" />
 </a>
 
