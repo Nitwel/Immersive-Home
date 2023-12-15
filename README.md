@@ -28,6 +28,8 @@ Immersive Home is project to bring Smart Home and Mixed Reality technologies tog
 	<img height="32" src="assets/badges/sidequest.png" alt="Badge linking to sidequest" />
 </a>
 
+[Setup Guide](http://immersive-home.org/news/7)
+
 ## Planned Features
 
 - **Fast and Intuitive control over IoT devices**
