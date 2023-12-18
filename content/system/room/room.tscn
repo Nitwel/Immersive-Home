@@ -1,31 +1,31 @@
-[gd_scene load_steps=7 format=3 uid="uid://bswgmclohuqui"]
+[gd_scene load_steps=10 format=3 uid="uid://bswgmclohuqui"]
 
 [ext_resource type="Script" path="res://content/system/room/room.gd" id="1_fccq0"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="1_ugebq"]
 [ext_resource type="Material" uid="uid://bbx6fv7jq50tr" path="res://content/system/room/walls.tres" id="3_al1ev"]
+[ext_resource type="Script" path="res://lib/utils/state_machine/state_machine.gd" id="4_nbbo6"]
+[ext_resource type="Script" path="res://content/system/room/states/view.gd" id="6_g066t"]
+[ext_resource type="Script" path="res://content/system/room/states/edit.gd" id="7_ap14h"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_08sv0"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_7dibq"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_ap613"]
+plane = Plane(0, -1, 0, 0)
 
 [node name="Room" type="Node3D"]
 script = ExtResource("1_fccq0")
 
-[node name="Ground" type="StaticBody3D" parent="."]
+[node name="Floor" type="StaticBody3D" parent="."]
 collision_layer = 24
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
 shape = SubResource("WorldBoundaryShape3D_08sv0")
 
-[node name="Clickable" type="Node" parent="Ground"]
+[node name="Clickable" type="Node" parent="Floor"]
 script = ExtResource("1_ugebq")
-
-[node name="WallCorners" type="Node3D" parent="."]
-
-[node name="WallEdges" type="Node3D" parent="."]
 
 [node name="WallMesh" type="MeshInstance3D" parent="."]
 material_override = ExtResource("3_al1ev")
@@ -33,10 +33,28 @@ mesh = SubResource("ArrayMesh_7dibq")
 
 [node name="WallCollisions" type="Node3D" parent="."]
 
-[node name="Celing" type="StaticBody3D" parent="."]
-transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 3.07, 0)
-collision_layer = 0
+[node name="Ceiling" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+collision_layer = 24
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Celing"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ceiling"]
 shape = SubResource("WorldBoundaryShape3D_ap613")
+disabled = true
+
+[node name="Clickable" type="Node" parent="Ceiling"]
+script = ExtResource("1_ugebq")
+
+[node name="WallCorners" type="Node3D" parent="Ceiling"]
+
+[node name="WallEdges" type="Node3D" parent="Ceiling"]
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("current_state")]
+script = ExtResource("4_nbbo6")
+current_state = NodePath("View")
+
+[node name="View" type="Node" parent="StateMachine"]
+script = ExtResource("6_g066t")
+
+[node name="Edit" type="Node" parent="StateMachine"]
+script = ExtResource("7_ap14h")
