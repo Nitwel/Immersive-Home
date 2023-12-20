@@ -2,7 +2,7 @@ extends Node3D
 
 @onready var wall_corners = $Ceiling/WallCorners
 @onready var wall_edges = $Ceiling/WallEdges
-@onready var wall_mesh = $WallMesh
+@onready var wall_mesh: MeshInstance3D = $WallMesh
 @onready var wall_collisions = $WallCollisions
 
 @onready var room_floor = $Floor
@@ -23,6 +23,8 @@ func get_corner(index: int) -> MeshInstance3D:
 func get_edge(index: int) -> MeshInstance3D:
 	return wall_edges.get_child(index % wall_edges.get_child_count())
 
+func has_point(point: Vector3) -> bool:
+	return wall_mesh.get_aabb().has_point(point)
 
 func _save():
 	return {

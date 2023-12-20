@@ -1,5 +1,5 @@
 extends State
-const Room = preload("res://content/system/room/room.gd")
+const Room = preload("res://content/system/house/room/room.gd")
 
 var room: Room
 

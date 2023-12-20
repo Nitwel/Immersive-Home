@@ -53,6 +53,8 @@ func generate_mesh():
 	st.add_vertex(first_corner.position)
 	st.add_vertex(first_corner.position + wall_up)
 
+	# TODO: Implement Rust Binding for cdt algorithm to fill floor and ceiling
+
 	st.index()
 	st.generate_normals()
 	st.generate_tangents()

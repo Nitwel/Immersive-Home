@@ -1,7 +1,6 @@
 extends Node3D
 
 const ButtonScene = preload("res://content/ui/components/button/button.tscn")
-const EntityCreator = preload("./entity_creator.gd")
 
 @onready var devices_node: GridContainer3D = $Devices
 @onready var next_page_button = $Buttons/NextPageButton
@@ -145,22 +144,11 @@ func _on_entity_click(entity_name):
 		render()
 		return
 
-	var type = entity_name.split(".")[0]
 	AudioPlayer.play_effect("spawn")
 
-	var entity = EntityCreator.create_entity(type, entity_name)
-
-	if entity == null:
-		return
-
-	entity.set_position(global_position)
-	get_node("/root/Main").add_child(entity)
+	House.body.create_entity(entity_name, global_position)
 	
 func clear_menu():
 	for child in devices_node.get_children():
 		devices_node.remove_child(child)
 		child.queue_free()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
