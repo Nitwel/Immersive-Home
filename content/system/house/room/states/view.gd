@@ -17,6 +17,8 @@ func _on_enter():
 
 	if room.wall_mesh.mesh == null:
 		return
+
+	room.ceiling_mesh.mesh = generate_ceiling_mesh()
 		
 	var collisions = generate_collision()
 
@@ -53,13 +55,52 @@ func generate_mesh():
 	st.add_vertex(first_corner.position)
 	st.add_vertex(first_corner.position + wall_up)
 
-	# TODO: Implement Rust Binding for cdt algorithm to fill floor and ceiling
-
 	st.index()
 	st.generate_normals()
 	st.generate_tangents()
 	var mesh = st.commit()
 	
+	return mesh
+
+func generate_ceiling_mesh():
+	var points: PackedVector2Array = PackedVector2Array()
+	var edges: PackedInt32Array = PackedInt32Array()
+	var triangles: PackedInt32Array
+
+	for i in range(corner_count):
+		var corner = room.get_corner(i)
+		points.append(Vector2(corner.position.x, corner.position.z))
+		edges.append(i)
+		edges.append((i + 1) % corner_count)
+
+	var cdt: ConstrainedTriangulation = ConstrainedTriangulation.new()
+
+	cdt.init(true, true, 0.1)
+
+	cdt.insert_vertices(points)
+	cdt.insert_edges(edges)
+
+	cdt.erase_outer_triangles()
+
+	points = cdt.get_all_vertices()
+	triangles = cdt.get_all_triangles()
+
+	var st = SurfaceTool.new()
+
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+
+	for i in range(points.size()):
+		st.add_vertex(Vector3(points[i].x, 0, points[i].y))
+
+	for i in range(triangles.size()):
+		st.add_index(triangles[i])
+
+	st.index()
+	st.generate_normals()
+	st.generate_tangents()
+
+	var mesh = st.commit()
+
 	return mesh
 
 func generate_collision():

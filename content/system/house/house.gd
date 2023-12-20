@@ -21,16 +21,24 @@ func create_room(room_name: String, level: int) -> RoomType:
 
 	return room
 
-func edit_room(room_name: String):
+func edit_room(room_name):
+	var room = find_room(room_name)
+
+	if room == editing_room:
+		return
+
 	if editing_room != null:
 		editing_room.editable = false
 		editing_room = null
+	
+	if room != null:
+		room.editable = true
+		editing_room = room
 
-	var room = find_room(room_name)
-	room.editable = true
-	editing_room = room
+func is_editiong(room_name):
+	return editing_room != null && editing_room.name == room_name
 
-func find_room(room_name: String):
+func find_room(room_name):
 	for level in levels.get_children():
 		for room in level.get_children():
 			if room.name == room_name:
@@ -45,7 +53,7 @@ func find_room_at(entity_position: Vector3):
 	return null
 
 func get_level(level: int):
-	return levels.get_index(level)
+	return levels.get_child(level)
 
 func get_rooms(level: int):
 	return get_level(level).get_children()

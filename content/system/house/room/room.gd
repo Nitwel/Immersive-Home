@@ -3,6 +3,7 @@ extends Node3D
 @onready var wall_corners = $Ceiling/WallCorners
 @onready var wall_edges = $Ceiling/WallEdges
 @onready var wall_mesh: MeshInstance3D = $WallMesh
+@onready var ceiling_mesh: MeshInstance3D = $CeilingMesh
 @onready var wall_collisions = $WallCollisions
 
 @onready var room_floor = $Floor
@@ -12,6 +13,8 @@ extends Node3D
 
 var editable: bool = false:
 	set(value):
+		if !is_node_ready(): await ready
+
 		if value:
 			state_machine.change_to("Edit")
 		else:
@@ -29,11 +32,14 @@ func has_point(point: Vector3) -> bool:
 func _save():
 	return {
 		"corners": wall_corners.get_children().map(func(corner): return corner.position),
+		"name": name
 	}
 
 func _load(data):
 	await ready
 	return
+
+	name = data["name"]
 
 	state_machine.change_to("Edit")
 

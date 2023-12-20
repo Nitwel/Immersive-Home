@@ -31,6 +31,9 @@ script = ExtResource("1_ugebq")
 material_override = ExtResource("3_al1ev")
 mesh = SubResource("ArrayMesh_7dibq")
 
+[node name="CeilingMesh" type="MeshInstance3D" parent="."]
+material_override = ExtResource("3_al1ev")
+
 [node name="WallCollisions" type="Node3D" parent="."]
 
 [node name="Ceiling" type="StaticBody3D" parent="."]

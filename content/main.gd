@@ -7,16 +7,14 @@ var sky_passthrough = preload("res://assets/materials/sky_passthrough.material")
 @onready var camera: XRCamera3D = $XROrigin3D/XRCamera3D
 @onready var controller_left = $XROrigin3D/XRControllerLeft
 @onready var controller_right = $XROrigin3D/XRControllerRight
-@onready var house = $House
 
 func _ready():
 	# In case we're running on the headset, use the passthrough sky
 	if OS.get_name() == "Android":
 		# OS.request_permissions()
 		environment.environment.sky.set_material(sky_passthrough)
-		house.visible = false
 	else:
-		house.visible = true
+		RenderingServer.set_debug_generate_wireframes(true)
 
 func _process(delta):
 	if OS.get_name() != "Android":
@@ -34,6 +32,11 @@ func _process(delta):
 		camera.position += movement
 		controller_left.position += movement
 		controller_right.position += movement
+
+func _input(event):
+	if event is InputEventKey and Input.is_key_pressed(KEY_F10):
+		var vp = get_viewport()
+		vp.debug_draw = (vp.debug_draw + 1) % 5
 		
 
 func vector_key_mapping(key_positive_x: int, key_negative_x: int, key_positive_y: int, key_negative_y: int):

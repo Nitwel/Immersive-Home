@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://c01gkeldvjwtr"]
+[gd_scene load_steps=6 format=3 uid="uid://c01gkeldvjwtr"]
 
 [ext_resource type="Script" path="res://content/ui/menu/room/room_menu.gd" id="1_ch4jb"]
 [ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_7m4yn"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_cghmp"]
+[ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="4_pbj71"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_e37nn"]
 size = Vector3(0.3, 0.01, 0.3)
@@ -18,9 +19,20 @@ mesh = SubResource("BoxMesh_e37nn")
 [node name="Interface" type="Node3D" parent="."]
 
 [node name="Rooms" type="Node3D" parent="Interface"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.01, 0.12)
 
-[node name="Button" parent="Interface" instance=ExtResource("4_cghmp")]
+[node name="AddRoom" parent="Interface" instance=ExtResource("4_cghmp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, 0, 0.27)
 label = "add"
 icon = true
+
+[node name="SaveRoom" parent="Interface" instance=ExtResource("4_cghmp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, 0, 0.27)
+visible = false
+label = "save"
+icon = true
+
+[node name="Input" parent="Interface" instance=ExtResource("4_pbj71")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0.005, 0.27)
+width = 0.15
+text = "New Room"
