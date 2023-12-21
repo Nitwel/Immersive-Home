@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbemihbxkd4ll"]
+
+[ext_resource type="Script" path="res://content/system/house/house.gd" id="1_p8amj"]
+
+[node name="House" type="Node3D"]
+script = ExtResource("1_p8amj")
+
+[node name="Levels" type="Node3D" parent="."]
+
+[node name="Level0" type="Node3D" parent="Levels"]

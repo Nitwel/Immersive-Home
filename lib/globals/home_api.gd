@@ -96,4 +96,5 @@ func watch_state(entity: String, callback: Callable):
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST || what == NOTIFICATION_WM_GO_BACK_REQUEST:
-		SaveSystem.save()
+		# SaveSystem.save()
+		pass

@@ -1,4 +1,5 @@
 extends RefCounted
+class_name EntityFactory
 
 const Switch = preload("res://content/entities/switch/switch.tscn")
 const Light = preload("res://content/entities/light/light.tscn")
@@ -7,8 +8,9 @@ const MediaPlayer = preload("res://content/entities/media_player/media_player.ts
 const Camera = preload("res://content/entities/camera/camera.tscn")
 const ButtonEntity = preload("res://content/entities/button/button.tscn")
 
-static func create_entity(type: String, id: String):
+static func create_entity(id: String):
 	var entity = null
+	var type = id.split(".")[0]
 
 	match type:
 		"switch":
