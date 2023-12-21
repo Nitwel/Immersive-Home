@@ -1,11 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://dlj5chj7ndgua"]
+[gd_scene load_steps=5 format=3 uid="uid://dlj5chj7ndgua"]
 
-[ext_resource type="Material" uid="uid://j12e5wwthtaa" path="res://content/ui/menu/room/edge.tres" id="1_b21dw"]
+[ext_resource type="Material" uid="uid://j12e5wwthtaa" path="res://content/system/house/room/edge.tres" id="1_hs3tw"]
+[ext_resource type="Script" path="res://content/functions/clickable.gd" id="2_cfvx2"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_a2dct"]
-material = ExtResource("1_b21dw")
+material = ExtResource("1_hs3tw")
 radius = 0.01
 height = 1.0
 
-[node name="MeshInstance3D" type="MeshInstance3D"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6m53l"]
+radius = 0.04
+height = 1.0
+
+[node name="StaticBody3D" type="StaticBody3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_a2dct")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_6m53l")
+
+[node name="Clickable" type="Node" parent="."]
+script = ExtResource("2_cfvx2")

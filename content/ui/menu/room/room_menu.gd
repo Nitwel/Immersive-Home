@@ -3,8 +3,8 @@ extends Node3D
 const Room = preload("res://content/system/house/room/room.tscn")
 const RoomType = preload("res://content/system/house/room/room.gd")
 
-const material_selected = preload("res://content/system/house/room/walls_selected.tres")
-const material_unselected = preload("res://content/system/house/room/walls.tres")
+const material_selected = preload("./room_selected.tres")
+const material_unselected = preload("./room_unselected.tres")
 
 const window_scene = preload("./window.tscn")
 
@@ -66,7 +66,12 @@ func _ready():
 		else:
 			if edit_room:
 				edit_room = false
-				House.body.edit_room(null)
+
+				if !House.body.is_valid_room(selected_room):
+					House.body.delete_room(selected_room)
+					selected_room = null
+				else:
+					House.body.edit_room(null)
 				_generate_room_map()
 			else:
 				edit_room = true
@@ -141,13 +146,11 @@ func _generate_room_map():
 			if aabb_end.z > current_max.y:
 				current_max.y = aabb_end.z
 
-	print(current_min, " ", current_max)
+	if current_min == null:
+		return
 
 	var current_size = current_max - current_min
-
 	var target_scale = target_size / current_size
-
-	print(target_scale)
 	var scale_value = min(target_scale.x, target_scale.y)
 
 	rooms_map.position.x = -current_min.x * scale_value

@@ -35,6 +35,27 @@ func edit_room(room_name):
 		room.editable = true
 		editing_room = room
 
+func is_valid_room(room_name):
+	var room = find_room(room_name)
+
+	if room == null:
+		return
+
+	return room.wall_corners.get_child_count() >= 3
+			
+
+func delete_room(room_name):
+	var room = find_room(room_name)
+
+	if room == null:
+		return
+
+	if editing_room == room:
+		editing_room = null
+
+	room.get_parent().remove_child(room)
+	room.queue_free()
+
 func is_editiong(room_name):
 	return editing_room != null && editing_room.name == room_name
 

@@ -29,6 +29,10 @@ func get_edge(index: int) -> MeshInstance3D:
 func has_point(point: Vector3) -> bool:
 	return wall_mesh.get_aabb().has_point(point)
 
+func remove_corner(index: int):
+	get_corner(index).queue_free()
+	get_edge(index).queue_free()
+
 func _save():
 	return {
 		"corners": wall_corners.get_children().map(func(corner): return corner.position),
