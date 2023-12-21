@@ -3,29 +3,44 @@ extends Node3D
 const Room = preload("res://content/system/house/room/room.tscn")
 const RoomType = preload("res://content/system/house/room/room.gd")
 
+const material_selected = preload("res://content/system/house/room/walls_selected.tres")
+const material_unselected = preload("res://content/system/house/room/walls.tres")
+
 const window_scene = preload("./window.tscn")
 
 @onready var background = $Background
-@onready var add_room_button = $Interface/AddRoom
-@onready var save_room_button = $Interface/SaveRoom
+@onready var room_button = $Interface/Button
 @onready var input = $Interface/Input
 @onready var rooms_map = $Interface/Rooms
 
 var selected_room = null:
 	set(value):
-		selected_room = value
+		if selected_room != null && value == null:
+			room_button.label = "add"
+			input.text = "New Room %s" % (rooms_map.get_child_count() + 1)
+
+		if selected_room != null:
+			var old_room = get_room(selected_room)
+			if old_room != null:
+				old_room.get_node("MeshInstance3D").material_override = material_unselected
+
 		if value != null:
-			save_room_button.visible = true
-		else:
-			save_room_button.visible = false
+			input.text = value
+			edit_room = false
+			var new_room = get_room(value)
+			if new_room != null:
+				new_room.get_node("MeshInstance3D").material_override = material_selected
+
+				
+		selected_room = value
 
 var edit_room = false:
 	set(value):
 		edit_room = value
 		if value:
-			save_room_button.label = "save"
+			room_button.label = "save"
 		else:
-			save_room_button.label = "edit"
+			room_button.label = "edit"
 
 func _ready():
 	background.visible = false
@@ -38,51 +53,67 @@ func _ready():
 
 	)
 
-	add_room_button.on_button_down.connect(func():
-		var room_name = input.text
-		House.body.create_room(room_name, 0)
-		selected_room = room_name
-		edit_room = true
-		add_room_button.visible = false
+	room_button.on_button_down.connect(func():
+		if selected_room == null:
+			var room_name = input.text
+			if get_room(room_name) != null:
+				EventSystem.notify("Name already taken", EventNotify.Type.WARNING)
+				return
+			
+			House.body.create_room(room_name, 0)
+			selected_room = room_name
+			edit_room = true
+		else:
+			if edit_room:
+				edit_room = false
+				House.body.edit_room(null)
+				_generate_room_map()
+			else:
+				edit_room = true
+				House.body.edit_room(selected_room)
 	)
 
-	save_room_button.on_button_down.connect(func():
-		if edit_room:
-			edit_room = false
-			add_room_button.visible = true
-			House.body.edit_room(null)
-			_generate_room_map()
-		else:
-			edit_room = true
-			House.body.edit_room(selected_room)
-	)
+func get_room(room_name):
+	if rooms_map.has_node("%s" % room_name):
+		return rooms_map.get_node("%s" % room_name)
+	return null
 
 func _on_click(event: EventPointer):
 	if event.target.get_parent() == rooms_map:
 		var room_name = event.target.name
+
+		if selected_room == room_name:
+			selected_room = null
+			House.body.edit_room(null)
+			return
+
 		selected_room = room_name
-		edit_room = false
-		add_room_button.visible = false
-		House.body.edit_room(selected_room)
 
 func _generate_room_map():
 	var rooms = House.body.get_rooms(0)
 
-	var target_size = Vector2(0.3, 0.2)
+	var target_size = Vector2(0.3, 0.24)
 
 	for old_room in rooms_map.get_children():
 		old_room.queue_free()
+		await old_room.tree_exited
 
-	var current_min = Vector2(0, 0)
-	var current_max = Vector2(0, 0)
+	var current_min = null
+	var current_max = null
 
 	for room in rooms:
-		var body = StaticBody3D.new()
-
 		var mesh = room.ceiling_mesh.mesh
+		if mesh == null:
+			continue
+
+		var body = StaticBody3D.new()
+		body.name = room.name
+
+		
 		var mesh_instance = MeshInstance3D.new()
+		mesh_instance.name = "MeshInstance3D"
 		mesh_instance.mesh = mesh
-		mesh_instance.material_override = load("res://content/system/house/room/walls.tres")
+		mesh_instance.material_override = material_unselected if selected_room != room.name else material_selected
 		body.add_child(mesh_instance)
 
 		var collision_shape = CollisionShape3D.new()
@@ -91,21 +122,35 @@ func _generate_room_map():
 
 		rooms_map.add_child(body)
 
-		if mesh.get_aabb().position.x < current_min.x:
-			current_min.x = mesh.get_aabb().position.x
+		var aabb_position = room.ceiling_mesh.to_global(mesh.get_aabb().position)
+		var aabb_end = room.ceiling_mesh.to_global(mesh.get_aabb().end)
 
-		if mesh.get_aabb().position.z < current_min.y:
-			current_min.y = mesh.get_aabb().position.z
+		if current_min == null:
+			current_min = Vector2(aabb_position.x, aabb_position.z)
+			current_max = Vector2(aabb_end.x, aabb_end.z)
+		else:
+			if aabb_position.x < current_min.x:
+				current_min.x = aabb_position.x
 
-		if mesh.get_aabb().end.x > current_max.x:
-			current_max.x = mesh.get_aabb().end.x
+			if aabb_position.z < current_min.y:
+				current_min.y = aabb_position.z
 
-		if mesh.get_aabb().end.z > current_max.y:
-			current_max.y = mesh.get_aabb().end.z
+			if aabb_end.x > current_max.x:
+				current_max.x = aabb_end.x
+
+			if aabb_end.z > current_max.y:
+				current_max.y = aabb_end.z
+
+	print(current_min, " ", current_max)
 
 	var current_size = current_max - current_min
 
 	var target_scale = target_size / current_size
-	var scale_value = max(target_scale.x, target_scale.y)
+
+	print(target_scale)
+	var scale_value = min(target_scale.x, target_scale.y)
+
+	rooms_map.position.x = -current_min.x * scale_value
+	rooms_map.position.z = -current_min.y * scale_value
 
 	rooms_map.scale = Vector3(scale_value, scale_value, scale_value)

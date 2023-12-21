@@ -19,6 +19,9 @@ func _on_enter():
 		return
 
 	room.ceiling_mesh.mesh = generate_ceiling_mesh()
+	room.room_ceiling.get_node("CollisionShape3D").shape = room.ceiling_mesh.mesh.create_trimesh_shape()
+	room.room_floor.get_node("CollisionShape3D").shape = room.ceiling_mesh.mesh.create_trimesh_shape()
+	room.room_ceiling.get_node("CollisionShape3D").shape.backface_collision = true
 		
 	var collisions = generate_collision()
 
@@ -34,6 +37,7 @@ func _on_enter():
 
 func _on_leave():
 	room.wall_mesh.mesh = null
+	room.ceiling_mesh.mesh = null
 
 	for collision in room.wall_collisions.get_children():
 		collision.queue_free()

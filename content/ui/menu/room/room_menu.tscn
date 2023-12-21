@@ -21,18 +21,11 @@ mesh = SubResource("BoxMesh_e37nn")
 [node name="Rooms" type="Node3D" parent="Interface"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.01, 0.12)
 
-[node name="AddRoom" parent="Interface" instance=ExtResource("4_cghmp")]
+[node name="Button" parent="Interface" instance=ExtResource("4_cghmp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, 0, 0.27)
 label = "add"
 icon = true
 
-[node name="SaveRoom" parent="Interface" instance=ExtResource("4_cghmp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, 0, 0.27)
-visible = false
-label = "save"
-icon = true
-
 [node name="Input" parent="Interface" instance=ExtResource("4_pbj71")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0.005, 0.27)
-width = 0.15
-text = "New Room"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.005, 0.27)
+text = "New Room 1"
