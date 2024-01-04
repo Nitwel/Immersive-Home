@@ -40,7 +40,7 @@ func connect_ws():
 
 	# https://github.com/godotengine/godot/issues/84423
 	# Otherwise the WebSocketPeer will crash when receiving large packets
-	socket.set_inbound_buffer_size(65535 * 4)
+	socket.set_inbound_buffer_size(pow(2, 22)) # ~4MB buffer
 
 func _process(delta):
 	socket.poll()
