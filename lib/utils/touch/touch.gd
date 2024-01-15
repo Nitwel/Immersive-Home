@@ -22,6 +22,8 @@ func _ready():
 
 func _physics_process(_delta):
 	for area in areas_entered.keys():
+		if areas_entered.has(area) == false:
+			return
 		_emit_event("touch_move", area)
 
 func _on_area_entered(finger_type, area):

@@ -20,26 +20,27 @@ collision_mask = 2
 script = ExtResource("1_maojw")
 
 [node name="Backspace" parent="." instance=ExtResource("1_xdpwr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, 0, 0.02)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.349964, 0, -0.0700361)
 focusable = false
 label = "backspace"
 icon = true
 metadata/key = 4194308
 
 [node name="Caps" parent="." instance=ExtResource("1_xdpwr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, 0, 0.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.370036, 0, 0.059964)
 focusable = false
 label = "keyboard_capslock"
 icon = true
 toggleable = true
 
 [node name="Paste" parent="." instance=ExtResource("1_xdpwr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.66, 0, 0.18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.349964, 0, 0.089964)
 focusable = false
 label = "assignment"
 icon = true
 
 [node name="Keys" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.310036, 0, -0.090036)
 script = ExtResource("3_mx544")
 columns = 11
 depth_gap = 0.06
@@ -49,11 +50,11 @@ size = Vector3(0.6, 1, 1)
 script = ExtResource("4_86fct")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.300719, -0.009645, 0.0928761)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0093171, -0.009645, 0.00284005)
 shape = SubResource("BoxShape3D_k5ib7")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.300719, -0.009645, 0.0928761)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0093171, -0.009645, 0.00284005)
 material_override = ExtResource("5_8c8rc")
 mesh = SubResource("BoxMesh_7rntc")
 
