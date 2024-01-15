@@ -8,6 +8,8 @@ var sky_passthrough = preload("res://assets/materials/sky_passthrough.material")
 @onready var controller_left = $XROrigin3D/XRControllerLeft
 @onready var controller_right = $XROrigin3D/XRControllerRight
 @onready var house = $House
+@onready var menu = $Menu
+@onready var keyboard = $Keyboard
 
 func _ready():
 	# In case we're running on the headset, use the passthrough sky
@@ -17,6 +19,67 @@ func _ready():
 		house.visible = false
 	else:
 		house.visible = true
+
+	controller_left.button_pressed.connect(func(name):
+		_emit_action(name, true, false)
+	)
+
+	controller_right.button_pressed.connect(func(name):
+		_emit_action(name, true, true)
+	)
+
+	controller_left.button_released.connect(func(name):
+		_emit_action(name, false, false)
+	)
+
+	controller_right.button_released.connect(func(name):
+		_emit_action(name, false, true)
+	)
+
+	remove_child(menu)
+	remove_child(keyboard)
+
+	EventSystem.on_action_down.connect(func(action):
+		if action.name == "menu_button":
+			_toggle_menu()
+	)
+
+	EventSystem.on_focus_in.connect(func(event):
+		if keyboard.is_inside_tree():
+			return
+
+		add_child(keyboard)
+		if event.previous_target == null:
+			keyboard.global_transform = menu.get_node("AnimationContainer/KeyboardPlace").global_transform
+	)
+
+	EventSystem.on_focus_out.connect(func(event):
+		if !keyboard.is_inside_tree():
+			return
+
+		remove_child(keyboard)
+	)
+
+func _toggle_menu():
+	if menu.show_menu == false:
+		add_child(menu)
+		menu.global_transform = _get_menu_transform()
+	menu.show_menu = !menu.show_menu
+	await menu.get_node("AnimationPlayer").animation_finished
+	if menu.show_menu == false:
+		remove_child(menu)
+
+func _emit_action(name: String, value, right_controller: bool = true):
+	var event = EventAction.new()
+	event.name = name
+	event.value = value
+	event.right_controller = right_controller
+
+	match typeof(value):
+		TYPE_BOOL:
+			EventSystem.emit("action_down" if value else "action_up", event)
+		TYPE_FLOAT, TYPE_VECTOR2:
+			EventSystem.emit("action_value", event)
 
 func _process(delta):
 	if OS.get_name() != "Android":
@@ -34,7 +97,18 @@ func _process(delta):
 		camera.position += movement
 		controller_left.position += movement
 		controller_right.position += movement
-		
+
+func _input(evnet):
+	if Input.is_key_pressed(KEY_M):
+		_toggle_menu()
+
+func _get_menu_transform():
+	var transform = camera.get_global_transform()
+	transform.origin -= transform.basis.z * 0.5
+
+	transform.basis = transform.basis.rotated(transform.basis.x, deg_to_rad(90))
+
+	return transform
 
 func vector_key_mapping(key_positive_x: int, key_negative_x: int, key_positive_y: int, key_negative_y: int):
 	var x = 0
