@@ -46,11 +46,11 @@ func _ready():
 	background.visible = false
 
 	HomeApi.on_connect.connect(func():
-		var rooms = House.body.get_rooms(0)
+		# var rooms = House.body.get_rooms(0)
 
 		# for room in rooms:
 		# 	var mesh = room.wall_mesh
-
+		pass
 	)
 
 	room_button.on_button_down.connect(func():
