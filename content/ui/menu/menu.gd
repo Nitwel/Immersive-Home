@@ -3,8 +3,6 @@ extends Node3D
 const Proxy = preload("res://lib/utils/proxy.gd")
 const Notification = preload("res://content/ui/components/notification/notification.tscn")
 
-@onready var _controller := XRHelpers.get_xr_controller(self)
-
 @onready var nav_view = $AnimationContainer/Navigation/View
 @onready var nav_edit: Button3D = $AnimationContainer/Navigation/Edit
 @onready var menu_edit: Node3D = $AnimationContainer/Content/EditMenu
@@ -22,7 +20,7 @@ const Notification = preload("res://content/ui/components/notification/notificat
 
 var selected_nav = null
 
-var show_menu := true:
+var show_menu := false:
 	set(value):
 		show_menu = value
 		if value:
@@ -33,11 +31,6 @@ var show_menu := true:
 			AudioPlayer.play_effect("close_menu")
 
 func _ready():
-	_controller.button_pressed.connect(func(button):
-		if button == "by_button":
-			show_menu = !show_menu
-	)
-
 	EventSystem.on_notify.connect(func(event: EventNotify):
 		var notification_node = Notification.instantiate()
 		notification_node.text = event.message
@@ -47,10 +40,6 @@ func _ready():
 			child.position += Vector3(0, 0, -0.06)
 
 		notify_place.add_child(notification_node)
-
-		
-		
-		
 	)
 
 	var nav_buttons = [

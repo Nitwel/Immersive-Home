@@ -1,7 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://b30w6tywfj4fp"]
+[gd_scene load_steps=10 format=3 uid="uid://b30w6tywfj4fp"]
 
 [ext_resource type="Script" path="res://content/system/controller_left/controller_left.gd" id="1_2j3qs"]
-[ext_resource type="PackedScene" uid="uid://c3kdssrmv84kv" path="res://content/ui/menu/menu.tscn" id="1_ccbr3"]
 [ext_resource type="PackedScene" uid="uid://dqjcqdhe3rbtn" path="res://assets/models/trash_bin/trash_bin.gltf" id="3_m33ce"]
 [ext_resource type="PackedScene" uid="uid://d3f8glx1xgm5w" path="res://content/system/raycast/raycast.tscn" id="4_n7lao"]
 
@@ -103,11 +102,8 @@ script = ExtResource("1_2j3qs")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_ir3co")
 
-[node name="Menu" parent="." instance=ExtResource("1_ccbr3")]
-transform = Transform3D(1, -0.000382732, -0.000120985, 8.65898e-05, 0.5, -0.866025, 0.000391948, 0.866025, 0.5, 0.0669508, 0.0876772, -0.101157)
-
 [node name="trash_bin" parent="." instance=ExtResource("3_m33ce")]
-transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0.106903, -0.228617, 0.132214)
+transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0.0864577, -0.119983, 0.0462675)
 
 [node name="Area3D" type="Area3D" parent="trash_bin"]
 transform = Transform3D(25, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0)

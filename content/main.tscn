@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://eecv28y6jxk4"]
+[gd_scene load_steps=15 format=3 uid="uid://eecv28y6jxk4"]
 
 [ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_i4c04"]
 [ext_resource type="Script" path="res://content/main.gd" id="1_uvrd4"]
@@ -7,15 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://bsx12q23v8apy" path="res://content/system/hands/hands.tscn" id="4_v8xu6"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="5_3qc8g"]
 [ext_resource type="Material" uid="uid://bf5ina366dwm6" path="res://assets/materials/sky.material" id="5_wgwf8"]
+[ext_resource type="PackedScene" uid="uid://c3kdssrmv84kv" path="res://content/ui/menu/menu.tscn" id="8_du83w"]
+[ext_resource type="PackedScene" uid="uid://83lb5p4e0qk0" path="res://content/scenes/house.tscn" id="8_qkrg7"]
 [ext_resource type="PackedScene" uid="uid://lrehk38exd5n" path="res://content/system/keyboard/keyboard.tscn" id="9_e5n3p"]
 [ext_resource type="PackedScene" uid="uid://cbemihbxkd4ll" path="res://content/system/house/house.tscn" id="9_np6mw"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58yb"]
-ao_enabled = true
-
-[sub_resource type="BoxMesh" id="BoxMesh_ir3co"]
-material = SubResource("StandardMaterial3D_m58yb")
-size = Vector3(0.01, 0.01, 0.01)
 
 [sub_resource type="Sky" id="Sky_vhymk"]
 sky_material = ExtResource("5_wgwf8")
@@ -29,9 +24,23 @@ ambient_light_sky_contribution = 0.72
 ssao_radius = 6.52
 ssao_intensity = 5.68
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58yb"]
+ao_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_ir3co"]
+material = SubResource("StandardMaterial3D_m58yb")
+size = Vector3(0.01, 0.01, 0.01)
+
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, -0.000296142, 0.000270963, 0.000296143, 1, -4.61078e-06, -0.000270962, 4.67014e-06, 1, 0, 0, 0)
 script = ExtResource("1_uvrd4")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7ghp0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.834925, -0.386727, -0.39159, 0.550364, 0.586681, 0.594058, 2.91038e-11, -0.711511, 0.702675, -2.91038e-10, 7.21041, 2.06458)
+shadow_enabled = true
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
@@ -61,18 +70,18 @@ ray_right = NodePath("../XRControllerRight/Raycast")
 [node name="StartXR" parent="." instance=ExtResource("1_i4c04")]
 enable_passthrough = true
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_7ghp0")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.834925, -0.386727, -0.39159, 0.550364, 0.586681, 0.594058, 0, -0.711511, 0.702675, 0, 7.21041, 2.06458)
-shadow_enabled = true
-
 [node name="XRSimulator" parent="." instance=ExtResource("5_3qc8g")]
 xr_origin = NodePath("../XROrigin3D")
 
+[node name="Menu" parent="." instance=ExtResource("8_du83w")]
+transform = Transform3D(0.999998, -0.000514899, -6.55874e-05, 1.96975e-05, 0.163911, -0.986474, 0.000518685, 0.986474, 0.163911, -0.0165588, 0.796337, -0.634317)
+
 [node name="Keyboard" parent="." instance=ExtResource("9_e5n3p")]
-transform = Transform3D(0.499999, -6.98142e-12, 0, 4.74065e-12, 0.5, -2.27374e-13, 0, 2.27374e-13, 0.5, -0.125313, 0.424282, -0.263966)
+transform = Transform3D(0.499999, -0.000139169, -6.50204e-05, 5.24307e-05, 0.353553, -0.353553, 0.000144383, 0.353553, 0.353553, -0.0199266, 0.550784, -0.47368)
+
+[node name="House" parent="." instance=ExtResource("8_qkrg7")]
+transform = Transform3D(0.404247, 0.000180645, 0.914648, 0.00017221, 0.999999, -0.000273614, -0.914648, 0.00026812, 0.404247, -0.343479, 0.000110551, 1.91547)
+visible = false
 
 [node name="Rooms" type="Node3D" parent="."]
 

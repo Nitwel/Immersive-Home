@@ -17,6 +17,10 @@ signal on_ray_leave(event: EventPointer)
 signal on_key_down(event: EventKey)
 signal on_key_up(event: EventKey)
 
+signal on_action_down(event: EventAction)
+signal on_action_up(event: EventAction)
+signal on_action_value(event: EventAction)
+
 signal on_focus_in(event: EventFocus)
 signal on_focus_out(event: EventFocus)
 
