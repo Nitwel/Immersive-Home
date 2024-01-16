@@ -44,6 +44,9 @@ func load():
 	var json_text = save_file.get_line()
 	var save_tree = JSON.parse_string(json_text)
 
+	if save_tree == null:
+		return
+
 	if save_tree is Array:
 		for tree in save_tree:
 			_build_save_tree(tree)

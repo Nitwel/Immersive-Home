@@ -27,7 +27,7 @@ func get_edge(index: int) -> MeshInstance3D:
 	return wall_edges.get_child(index % wall_edges.get_child_count())
 
 func has_point(point: Vector3) -> bool:
-	return wall_mesh.get_aabb().has_point(point)
+	return get_aabb().has_point(point)
 
 func remove_corner(index: int):
 	get_corner(index).queue_free()
@@ -38,6 +38,26 @@ func _save():
 		"corners": wall_corners.get_children().map(func(corner): return corner.position),
 		"name": name
 	}
+
+func get_aabb():
+	if wall_corners.get_child_count() == 0:
+		return AABB()
+
+	var min_pos = wall_corners.get_child(0).position
+	var max_pos = wall_corners.get_child(0).position
+
+	for corner in wall_corners.get_children():
+		min_pos.x = min(min_pos.x, corner.position.x)
+		min_pos.z = min(min_pos.z, corner.position.z)
+
+		max_pos.x = max(max_pos.x, corner.position.x)
+		max_pos.z = max(max_pos.z, corner.position.z)
+
+	min_pos.y = room_floor.position.y
+	max_pos.y = room_ceiling.position.y
+
+	return AABB(to_global(min_pos), to_global(max_pos) - to_global(min_pos))
+		
 
 func _load(data):
 	await ready

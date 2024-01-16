@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://bexxngoxcegul"]
+
+[ext_resource type="Script" path="res://content/system/armband/armband.gd" id="1_4tskg"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_egcvm"]
+
+[node name="Armband" type="Node3D"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+script = ExtResource("1_4tskg")
+
+[node name="Menu" parent="." instance=ExtResource("1_egcvm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04, 0, 0.04)
+label = "menu"
+icon = true
+
+[node name="Mini" parent="." instance=ExtResource("1_egcvm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0, 0.04)
+label = "view_comfy"
+icon = true
+
+[node name="Clock" type="Label3D" parent="."]
+transform = Transform3D(1, 4.37114e-08, 4.37114e-08, -4.37114e-08, -4.37114e-08, 1, 4.37114e-08, -1, -4.37114e-08, 0, 0.02, -0.02)
+pixel_size = 0.001
+text = "10:00"

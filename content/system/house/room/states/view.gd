@@ -13,6 +13,8 @@ func _on_enter():
 
 	room_height = room.get_corner(0).global_position.y
 
+	room.wall_mesh.visible = true
+	room.ceiling_mesh.visible = true
 	room.wall_mesh.mesh = generate_mesh()
 
 	if room.wall_mesh.mesh == null:
@@ -36,8 +38,8 @@ func _on_enter():
 	room.wall_mesh.visible = true
 
 func _on_leave():
-	room.wall_mesh.mesh = null
-	room.ceiling_mesh.mesh = null
+	room.wall_mesh.visible = false
+	room.ceiling_mesh.visible = false
 
 	for collision in room.wall_collisions.get_children():
 		collision.queue_free()

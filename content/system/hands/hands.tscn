@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bsx12q23v8apy"]
+[gd_scene load_steps=7 format=3 uid="uid://bsx12q23v8apy"]
 
 [ext_resource type="Script" path="res://content/system/hands/hands.gd" id="1_c4f76"]
 [ext_resource type="PackedScene" uid="uid://c0kow4g10wolq" path="res://assets/models/hands_steam/right_hand.glb" id="1_uekbj"]
 [ext_resource type="PackedScene" uid="uid://dt4ksvogfctkr" path="res://assets/models/hands_steam/left_hand.glb" id="2_n73lt"]
+[ext_resource type="PackedScene" uid="uid://bexxngoxcegul" path="res://content/system/armband/armband.tscn" id="3_ck75s"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dopke"]
 radius = 0.001
@@ -42,7 +43,7 @@ transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 
 shape = SubResource("CapsuleShape3D_dopke")
 
 [node name="ThumbTip" type="BoneAttachment3D" parent="XRHandLeft"]
-transform = Transform3D(0.937246, 0.0284254, -0.347508, 0.0184905, 0.991216, 0.130949, 0.348178, -0.129157, 0.928488, 0.0498668, 0.0560917, -0.112777)
+transform = Transform3D(0.937246, 0.0284254, -0.347508, 0.0184905, 0.991216, 0.130949, 0.348178, -0.129157, 0.928487, 0.0498668, 0.0560917, -0.112777)
 bone_name = "Thumb_Tip_L"
 bone_idx = 4
 use_external_skeleton = true
@@ -52,7 +53,7 @@ external_skeleton = NodePath("../left_hand/Armature_001/Skeleton3D")
 gizmo_extents = 0.02
 
 [node name="MiddleTip" type="BoneAttachment3D" parent="XRHandLeft"]
-transform = Transform3D(0.0812012, -0.650531, -0.755125, 0.996577, 0.064817, 0.051326, 0.0155558, -0.756708, 0.653568, 0.032112, 0.00654224, -0.171612)
+transform = Transform3D(0.0812012, -0.650531, -0.755125, 0.996576, 0.064817, 0.051326, 0.0155558, -0.756708, 0.653567, 0.032112, 0.00654224, -0.171612)
 bone_name = "Middle_Tip_L"
 bone_idx = 14
 use_external_skeleton = true
@@ -80,6 +81,9 @@ collision_mask = 8
 transform = Transform3D(1, 1.05818e-16, 4.75779e-13, -2.32831e-10, 1, -1.77636e-14, -4.97946e-12, 1.77636e-15, 1, -7.7486e-07, 1.33878e-09, -0.030436)
 shape = SubResource("BoxShape3D_1pxrt")
 
+[node name="Armband" parent="XRHandLeft/AnimatableBody3D" instance=ExtResource("3_ck75s")]
+transform = Transform3D(0.5, -8.74228e-08, 0, 8.74228e-08, 0.5, 0, 0, 0, 0.5, 0, 5.00223e-14, 0.11)
+
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="XRHandLeft"]
 remote_path = NodePath("../AnimatableBody3D")
 
@@ -94,7 +98,7 @@ hand_skeleton = NodePath("right_hand/Armature/Skeleton3D")
 transform = Transform3D(1, 0, 4.7579e-13, 0, 1, 0, -1.34149e-12, 1.77636e-15, 1, 0, 0, 0)
 
 [node name="IndexTip" type="BoneAttachment3D" parent="XRHandRight"]
-transform = Transform3D(0.19221, 0.669966, 0.717079, -0.091543, -0.715277, 0.69282, 0.977075, -0.19881, -0.0761527, -0.0345977, -0.164767, -0.0355401)
+transform = Transform3D(0.19221, 0.669966, 0.717078, -0.091543, -0.715277, 0.69282, 0.977075, -0.19881, -0.0761527, -0.0345978, -0.164767, -0.0355401)
 bone_name = "Index_Tip_R"
 bone_idx = 9
 use_external_skeleton = true

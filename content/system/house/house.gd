@@ -4,8 +4,13 @@ const Room = preload("./room/room.tscn")
 const RoomType = preload("./room/room.gd")
 
 @onready var levels = $Levels
+@onready var collision_shape = $Levels/CollisionShape3D
 
 var editing_room: RoomType = null
+var mini_view: bool = false:
+	set(value):
+		mini_view = value
+		update_mini_view()
 
 func create_room(room_name: String, level: int) -> RoomType:
 	if editing_room != null:
@@ -76,6 +81,28 @@ func find_room_at(entity_position: Vector3):
 func get_level(level: int):
 	return levels.get_child(level)
 
+func get_level_aabb(level: int):
+	var rooms = get_level(level).get_children()
+	if rooms.size() == 0:
+		return AABB()
+
+	var min_pos = rooms[0].get_aabb().position
+	var max_pos = min_pos + rooms[0].get_aabb().size
+
+	for room in rooms:
+		var room_min = room.get_aabb().position
+		var room_max = room_min + room.get_aabb().size
+
+		min_pos.x = min(min_pos.x, room_min.x)
+		min_pos.y = min(min_pos.y, room_min.y)
+		min_pos.z = min(min_pos.z, room_min.z)
+
+		max_pos.x = max(max_pos.x, room_max.x)
+		max_pos.y = max(max_pos.y, room_max.y)
+		max_pos.z = max(max_pos.z, room_max.z)
+
+	return AABB(min_pos, max_pos - min_pos)
+
 func get_rooms(level: int):
 	return get_level(level).get_children()
 
@@ -93,4 +120,23 @@ func create_entity(entity_id: String, entity_position: Vector3):
 	room.add_child(entity)
 	entity.global_position = entity_position
 
-	
+func update_mini_view():
+	collision_shape.disabled = !mini_view
+
+	if mini_view:
+		var aabb = get_level_aabb(0)
+		aabb.position.y = -0.03
+		aabb.size.y = 0.06
+		var center = aabb.position + aabb.size / 2.0
+
+		collision_shape.global_position = center
+		collision_shape.shape.size = aabb.size
+	else:
+		levels.position = Vector3(0, 0, 0)
+
+	levels.scale.x = 0.2 if mini_view else 1.0
+	levels.scale.y = 0.2 if mini_view else 1.0
+	levels.scale.z = 0.2 if mini_view else 1.0
+
+	for room in get_rooms(0):
+		room.state_machine.change_to("Mini" if mini_view else "View")

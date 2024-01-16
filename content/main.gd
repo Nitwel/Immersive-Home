@@ -40,7 +40,9 @@ func _ready():
 
 	EventSystem.on_action_down.connect(func(action):
 		if action.name == "menu_button":
-			_toggle_menu()
+			toggle_menu()
+		elif action.name == "by_button":
+			House.body.mini_view = !House.body.mini_view
 	)
 
 	EventSystem.on_focus_in.connect(func(event):
@@ -59,7 +61,7 @@ func _ready():
 		remove_child(keyboard)
 	)
 
-func _toggle_menu():
+func toggle_menu():
 	if menu.show_menu == false:
 		add_child(menu)
 		menu.global_transform = _get_menu_transform()
@@ -103,7 +105,7 @@ func _input(event):
 		vp.debug_draw = (vp.debug_draw + 1) % 5
 		
 	if event is InputEventKey and Input.is_key_pressed(KEY_M):
-		_toggle_menu()
+		toggle_menu()
 
 func _get_menu_transform():
 	var transform = camera.get_global_transform()

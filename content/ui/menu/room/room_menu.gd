@@ -97,14 +97,15 @@ func _on_click(event: EventPointer):
 func _generate_room_map():
 	var rooms = House.body.get_rooms(0)
 
-	var target_size = Vector2(0.3, 0.24)
+	var target_size = Vector3(0.3, 1, 0.24)
 
 	for old_room in rooms_map.get_children():
 		old_room.queue_free()
 		await old_room.tree_exited
 
-	var current_min = null
-	var current_max = null
+	var aabb = House.body.get_level_aabb(0)
+	var current_min = aabb.position
+	var current_max = aabb.position + aabb.size
 
 	for room in rooms:
 		var mesh = room.ceiling_mesh.mesh
@@ -127,33 +128,14 @@ func _generate_room_map():
 
 		rooms_map.add_child(body)
 
-		var aabb_position = room.ceiling_mesh.to_global(mesh.get_aabb().position)
-		var aabb_end = room.ceiling_mesh.to_global(mesh.get_aabb().end)
-
-		if current_min == null:
-			current_min = Vector2(aabb_position.x, aabb_position.z)
-			current_max = Vector2(aabb_end.x, aabb_end.z)
-		else:
-			if aabb_position.x < current_min.x:
-				current_min.x = aabb_position.x
-
-			if aabb_position.z < current_min.y:
-				current_min.y = aabb_position.z
-
-			if aabb_end.x > current_max.x:
-				current_max.x = aabb_end.x
-
-			if aabb_end.z > current_max.y:
-				current_max.y = aabb_end.z
-
 	if current_min == null:
 		return
 
 	var current_size = current_max - current_min
 	var target_scale = target_size / current_size
-	var scale_value = min(target_scale.x, target_scale.y)
+	var scale_value = min(target_scale.x, target_scale.z)
 
 	rooms_map.position.x = -current_min.x * scale_value
-	rooms_map.position.z = -current_min.y * scale_value
+	rooms_map.position.z = -current_min.z * scale_value
 
 	rooms_map.scale = Vector3(scale_value, scale_value, scale_value)
