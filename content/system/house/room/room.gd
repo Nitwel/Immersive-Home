@@ -33,12 +33,6 @@ func remove_corner(index: int):
 	get_corner(index).queue_free()
 	get_edge(index).queue_free()
 
-func _save():
-	return {
-		"corners": wall_corners.get_children().map(func(corner): return corner.position),
-		"name": name
-	}
-
 func get_aabb():
 	if wall_corners.get_child_count() == 0:
 		return AABB()
@@ -58,6 +52,11 @@ func get_aabb():
 
 	return AABB(to_global(min_pos), to_global(max_pos) - to_global(min_pos))
 		
+func _save():
+	return {
+		"corners": wall_corners.get_children().map(func(corner): return corner.position),
+		"name": name
+	}
 
 func _load(data):
 	await ready

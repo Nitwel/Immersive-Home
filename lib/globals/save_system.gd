@@ -6,6 +6,8 @@ signal loaded()
 signal unloaded()
 
 var is_loaded := false
+var export_config = ConfigFile.new()
+var export_config_path = "res://export_presets.cfg"
 
 func clear():
 	await _clear_save_tree(get_tree().root.get_node("Main"))
@@ -25,11 +27,14 @@ func save():
 
 	var save_tree = _generate_save_tree(get_tree().root.get_node("Main"))
 
-	var json_text = JSON.stringify(save_tree)
+	var json_text = JSON.stringify({
+		"version": "1.0.0",
+		"tree": save_tree
+	})
 	save_file.store_line(json_text)
 
 func load():
-	await clear()
+	await clear()	
 
 	if HomeApi.has_connected() == false:
 		return
@@ -42,7 +47,15 @@ func load():
 		return
 
 	var json_text = save_file.get_line()
-	var save_tree = JSON.parse_string(json_text)
+	var save_data = JSON.parse_string(json_text)
+
+	save_data = migrate(save_data)
+
+	if save_data == null:
+		save()
+		return
+
+	var save_tree = save_data["tree"]
 
 	if save_tree == null:
 		return
@@ -55,6 +68,72 @@ func load():
 
 	loaded.emit()
 	is_loaded = true
+
+func migrate(data: Dictionary):
+	var migration_version = data["migration"]
+	var migrations = load_migrations()
+
+	if migration_version == null || migrations == {}:
+		return null
+
+	var migration_keys = migrations.keys().sort()
+
+	for key in migration_keys:
+		if is_migration_newer(migration_version, key):
+			var migration = migrations[key]
+
+			data = migration.migrate(data)
+
+			data["migration"] = key
+
+	return data
+
+func is_migration_newer(version, new_version):
+	var version_split = version.split(".")
+	var new_version_split = new_version.split(".")
+
+	for i in range(0, 3):
+		if int(version_split[i]) > int(new_version_split[i]):
+			return false
+		elif int(version_split[i]) < int(new_version_split[i]):
+			return true
+
+	return false
+	
+func load_migrations():
+	var migrations = {}
+	var migrations_dir := DirAccess.open("res://lib/migrations")
+
+	if migrations == null:
+		return {}
+
+	migrations_dir.list_dir_begin()
+	var file_name = migrations_dir.get_next()
+
+	while file_name != "":
+		if file_name.ends_with(".gd"):
+			var version = file_name.substr(0, -3)
+
+			migrations[version] = load("res://lib/migrations/%s" % file_name)
+
+		file_name = migrations_dir.get_next()
+
+	migrations_dir.list_dir_end()
+
+	return migrations
+	
+func get_version():
+	var config_error = export_config.load(export_config_path)
+
+	if config_error != OK:
+		return null
+
+	var version = export_config.get_value("preset.1.options", "version/name")
+
+	if version == null:
+		return null
+
+	return version
 
 func _clear_save_tree(node: Node):
 	for child in node.get_children():

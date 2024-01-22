@@ -5,11 +5,12 @@ const Notification = preload("res://content/ui/components/notification/notificat
 
 @onready var nav_view = $AnimationContainer/Navigation/View
 @onready var nav_edit: Button3D = $AnimationContainer/Navigation/Edit
-@onready var menu_edit: Node3D = $AnimationContainer/Content/EditMenu
 @onready var nav_room = $AnimationContainer/Navigation/Room
-@onready var menu_room: Node3D = $AnimationContainer/Content/RoomMenu
 @onready var nav_automate = $AnimationContainer/Navigation/Automate
 @onready var nav_settings = $AnimationContainer/Navigation/Settings
+@onready var menu_view: Node3D = $AnimationContainer/Content/ViewMenu
+@onready var menu_edit: Node3D = $AnimationContainer/Content/EditMenu
+@onready var menu_room: Node3D = $AnimationContainer/Content/RoomMenu
 @onready var menu_settings: Node3D = $AnimationContainer/Content/SettingsMenu
 
 @onready var menu_root = $AnimationContainer
@@ -89,7 +90,7 @@ func _is_valid_nav(nav):
 func _nav_to_menu(nav):
 	match nav:
 		nav_view:
-			return null
+			return menu_view
 		nav_edit:
 			return menu_edit
 		nav_room:

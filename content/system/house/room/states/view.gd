@@ -11,7 +11,7 @@ func _on_enter():
 	if corner_count < 3:
 		return
 
-	room_height = room.get_corner(0).global_position.y
+	room_height = room.room_ceiling.position.y
 
 	room.wall_mesh.visible = true
 	room.ceiling_mesh.visible = true

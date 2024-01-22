@@ -12,6 +12,14 @@ var mini_view: bool = false:
 		mini_view = value
 		update_mini_view()
 
+var target_size: float = 1.0
+
+func _physics_process(delta):
+	levels.scale.x = lerp(levels.scale.x, target_size, 10.0 * delta)
+	levels.scale.y = lerp(levels.scale.y, target_size, 10.0 * delta)
+	levels.scale.z = lerp(levels.scale.z, target_size, 10.0 * delta)
+
+
 func create_room(room_name: String, level: int) -> RoomType:
 	if editing_room != null:
 		editing_room.editable = false
@@ -134,9 +142,7 @@ func update_mini_view():
 	else:
 		levels.position = Vector3(0, 0, 0)
 
-	levels.scale.x = 0.2 if mini_view else 1.0
-	levels.scale.y = 0.2 if mini_view else 1.0
-	levels.scale.z = 0.2 if mini_view else 1.0
+	target_size = 0.1 if mini_view else 1.0
 
 	for room in get_rooms(0):
 		room.state_machine.change_to("Mini" if mini_view else "View")
