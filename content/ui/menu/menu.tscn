@@ -187,7 +187,7 @@ shape = SubResource("ConvexPolygonShape3D_mgnm0")
 [node name="Tabs" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("initial_selected")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
 script = ExtResource("4_eavfx")
-initial_selected = NodePath("View")
+initial_selected = NodePath("")
 
 [node name="View" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.03)

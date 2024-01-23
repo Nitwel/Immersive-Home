@@ -1,9 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://c01gkeldvjwtr"]
+[gd_scene load_steps=9 format=3 uid="uid://c01gkeldvjwtr"]
 
 [ext_resource type="Script" path="res://content/ui/menu/room/room_menu.gd" id="1_ch4jb"]
 [ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_7m4yn"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_cghmp"]
-[ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="4_pbj71"]
+[ext_resource type="Script" path="res://content/ui/components/tabs/tabs.gd" id="5_ddrep"]
+[ext_resource type="PackedScene" uid="uid://dd71loi64gnmp" path="res://content/ui/menu/room/views/overview.tscn" id="6_206ad"]
+[ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="6_ba00g"]
+[ext_resource type="PackedScene" uid="uid://bpta22fahai46" path="res://content/ui/menu/room/views/rooms.tscn" id="7_2f8e0"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_e37nn"]
 size = Vector3(0.3, 0.01, 0.3)
@@ -18,22 +21,21 @@ mesh = SubResource("BoxMesh_e37nn")
 
 [node name="Interface" type="Node3D" parent="."]
 
-[node name="Rooms" type="Node3D" parent="Interface"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.01, 0.12)
+[node name="Tabs3D" type="Node3D" parent="Interface"]
+script = ExtResource("5_ddrep")
 
-[node name="Button" parent="Interface" instance=ExtResource("4_cghmp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, 0, 0.27)
-label = "add"
-icon = true
-
-[node name="Input" parent="Interface" instance=ExtResource("4_pbj71")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.005, 0.27)
-text = "New Room 1"
-
-[node name="Button2" parent="." instance=ExtResource("4_cghmp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0)
+[node name="Overview" parent="Interface/Tabs3D" instance=ExtResource("4_cghmp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, -0.02)
 label = "Overview"
 
-[node name="Button" parent="." instance=ExtResource("4_cghmp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, 0)
+[node name="Rooms" parent="Interface/Tabs3D" instance=ExtResource("4_cghmp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, -0.02)
 label = "Rooms"
+
+[node name="TabsContent3D" type="Node3D" parent="Interface" node_paths=PackedStringArray("tabs")]
+script = ExtResource("6_ba00g")
+tabs = NodePath("../Tabs3D")
+
+[node name="Overview" parent="Interface/TabsContent3D" instance=ExtResource("6_206ad")]
+
+[node name="Rooms" parent="Interface/TabsContent3D" instance=ExtResource("7_2f8e0")]

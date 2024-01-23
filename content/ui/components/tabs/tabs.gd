@@ -25,3 +25,4 @@ func _ready():
 		)
 
 		option.external_value = proxy
+		option.toggleable = true

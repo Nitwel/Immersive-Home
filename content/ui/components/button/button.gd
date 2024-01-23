@@ -3,8 +3,6 @@
 extends Node3D
 class_name Button3D
 
-const Proxy = preload("res://lib/utils/proxy.gd")
-
 signal on_button_down()
 signal on_button_up()
 
@@ -38,7 +36,7 @@ const IconFont = preload("res://assets/icons/icons.tres")
 
 		if value:
 			label_node.font = IconFont
-			label_node.font_size = 48
+			label_node.font_size = 36
 			label_node.width = 1000
 			label_node.autowrap_mode = TextServer.AUTOWRAP_OFF
 		else:
@@ -52,11 +50,11 @@ const IconFont = preload("res://assets/icons/icons.tres")
 @export var initial_active: bool = false
 var external_value: Proxy = null:
 	set(value):
-		print("set external value", value)
+		if !is_node_ready(): await ready
+
 		external_value = value
 		if value != null:
 			value.on_set.connect(func(_value):
-				print("external value changed", _value)
 				update_animation()
 			)
 
@@ -66,6 +64,8 @@ var active: bool = false:
 			return external_value.value
 		return active
 	set(value):
+		if !is_node_ready(): await ready
+
 		if external_value != null:
 			external_value.value = value
 		else:
