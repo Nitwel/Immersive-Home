@@ -50,7 +50,16 @@ const IconFont = preload("res://assets/icons/icons.tres")
 @export var toggleable: bool = false
 @export var disabled: bool = false
 @export var initial_active: bool = false
-var external_value: Proxy = null
+var external_value: Proxy = null:
+	set(value):
+		print("set external value", value)
+		external_value = value
+		if value != null:
+			value.on_set.connect(func(_value):
+				print("external value changed", _value)
+				update_animation()
+			)
+
 var active: bool = false:
 	get:
 		if external_value != null:

@@ -29,3 +29,11 @@ icon = true
 [node name="Input" parent="Interface" instance=ExtResource("4_pbj71")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.005, 0.27)
 text = "New Room 1"
+
+[node name="Button2" parent="." instance=ExtResource("4_cghmp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0)
+label = "Overview"
+
+[node name="Button" parent="." instance=ExtResource("4_cghmp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, 0)
+label = "Rooms"

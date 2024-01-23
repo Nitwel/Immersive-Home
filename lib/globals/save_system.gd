@@ -49,13 +49,13 @@ func load():
 	var json_text = save_file.get_line()
 	var save_data = JSON.parse_string(json_text)
 
+	if save_data.has("version") == false:
+		save()
+		return
+
 	var save_tree = save_data["tree"]
 
 	if save_tree == null:
-		return
-
-	if save_tree.has("version") == false:
-		save()
 		return
 
 	if save_tree is Array:

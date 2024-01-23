@@ -23,14 +23,14 @@ mesh = SubResource("BoxMesh_e51x8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.007, 0)
 
 [node name="Label3D" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.134377, 0, 0.253575)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.124377, 0, 0.263575)
 pixel_size = 0.001
 text = "Spawn Ball"
 font_size = 18
 outline_size = 0
 
 [node name="Button" parent="Content" instance=ExtResource("1_faxng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0458097, 0, 0.253575)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0358097, 0, 0.263575)
 label = "sports_basketball"
 icon = true
 
@@ -109,11 +109,11 @@ outline_size = 0
 script = ExtResource("3_qmg6q")
 
 [node name="Save" parent="Content" instance=ExtResource("1_faxng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 0, 0.17)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0.12)
 label = "save"
 icon = true
 
 [node name="ClearSave" parent="Content" instance=ExtResource("1_faxng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0.17)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, 0.12)
 label = "close"
 icon = true
