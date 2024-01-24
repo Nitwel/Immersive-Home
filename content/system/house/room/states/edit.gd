@@ -64,7 +64,7 @@ func add_floor_corner(position: Vector3):
 	floor_corner.position = position
 
 	height_edge = wall_edge_scene.instantiate()
-	height_edge.transform = corners_to_edge_transform(position, position + Vector3.UP * room.room_ceiling.global_position.y)
+	height_edge.align_to_corners(position, position + Vector3.UP * room.room_ceiling.global_position.y)
 
 	floor_corner.get_node("Clickable").on_grab_down.connect(func(event):
 		if !is_active() || moving != null:
@@ -86,7 +86,7 @@ func add_floor_corner(position: Vector3):
 
 		moving.position = new_position
 
-		height_edge.transform = corners_to_edge_transform(new_position, new_position + Vector3.UP * room.room_ceiling.global_position.y)
+		height_edge.align_to_corners(new_position, new_position + Vector3.UP * room.room_ceiling.global_position.y)
 
 		room.get_corner(moving_index).position.x = new_position.x
 		room.get_corner(moving_index).position.z = new_position.z
@@ -94,8 +94,8 @@ func add_floor_corner(position: Vector3):
 		if room.wall_edges.get_child_count() == 0:
 			return
 
-		room.get_edge(moving_index).transform = corners_to_edge_transform(new_position, room.get_corner(moving_index + 1).position)
-		room.get_edge(moving_index - 1).transform = corners_to_edge_transform(room.get_corner(moving_index - 1).position, new_position)	
+		room.get_edge(moving_index).align_to_corners(new_position, room.get_corner(moving_index + 1).position)
+		room.get_edge(moving_index - 1).align_to_corners(room.get_corner(moving_index - 1).position, new_position)	
 	)
 
 	floor_corner.get_node("Clickable").on_grab_up.connect(func(_event):
@@ -134,7 +134,7 @@ func add_height_corner(position: Vector3):
 			return
 
 		room.room_ceiling.position.y = new_position.y
-		height_edge.transform = corners_to_edge_transform(floor_corner.global_position, height_corner.global_position)
+		height_edge.align_to_corners(floor_corner.global_position, height_corner.global_position)
 		
 	)
 
@@ -175,9 +175,8 @@ func add_corner(position: Vector3, index: int = -1):
 			if room.wall_edges.get_child_count() == 0:
 				return
 
-			var edge_transform = corners_to_edge_transform(room.get_corner(moving_index - 1).position, room.get_corner(moving_index + 1).position)
-			room.get_edge(moving_index).transform = edge_transform
-			room.get_edge(moving_index - 1).transform = edge_transform
+			room.get_edge(moving_index).align_to_corners(room.get_corner(moving_index - 1).position, room.get_corner(moving_index + 1).position)
+			room.get_edge(moving_index - 1).transform = room.get_edge(moving_index).transform
 
 			return
 
@@ -191,8 +190,8 @@ func add_corner(position: Vector3, index: int = -1):
 		if room.wall_edges.get_child_count() == 0:
 			return
 
-		room.get_edge(moving_index).transform = corners_to_edge_transform(new_position, room.get_corner(moving_index + 1).position)
-		room.get_edge(moving_index - 1).transform = corners_to_edge_transform(room.get_corner(moving_index - 1).position, new_position)	
+		room.get_edge(moving_index).align_to_corners(new_position, room.get_corner(moving_index + 1).position)
+		room.get_edge(moving_index - 1).align_to_corners(room.get_corner(moving_index - 1).position, new_position)	
 	)
 
 	corner.get_node("Clickable").on_grab_up.connect(func(_event):
@@ -208,21 +207,20 @@ func add_corner(position: Vector3, index: int = -1):
 	room.wall_corners.move_child(corner, index)
 
 	var num_corners = room.wall_corners.get_child_count()
-	var edge
 
 	if num_corners > 1:
-		edge = add_edge(position, room.get_corner(index + 1).position, index)
+		add_edge(position, room.get_corner(index + 1).position, index)
 
 	if num_corners > 2:
 		if num_corners != room.wall_edges.get_child_count():
 			add_edge(room.get_corner(-2).position, room.get_corner(-1).position, -2)
 		else:
-			room.get_edge(index - 1).transform = corners_to_edge_transform(room.get_corner(index - 1).position, position)
+			room.get_edge(index - 1).align_to_corners(room.get_corner(index - 1).position, position)
 			
 
 func add_edge(from_pos: Vector3, to_pos: Vector3, index: int = -1):
 	var edge: StaticBody3D = wall_edge_scene.instantiate()
-	edge.transform = corners_to_edge_transform(from_pos, to_pos)
+	edge.align_to_corners(from_pos, to_pos)
 
 	edge.get_node("Clickable").on_press_down.connect(func(event):
 		var point = event.ray.get_collision_point()
@@ -234,18 +232,3 @@ func add_edge(from_pos: Vector3, to_pos: Vector3, index: int = -1):
 	room.wall_edges.add_child(edge)
 	room.wall_edges.move_child(edge, index)
 	return edge
-
-func corners_to_edge_transform(from_pos: Vector3, to_pos: Vector3) -> Transform3D:
-	var diff = to_pos - from_pos
-	var direction = diff.normalized()
-	var tangent = Vector3(direction.z, 0, -direction.x).normalized()
-
-	if tangent == Vector3.ZERO:
-		tangent = Vector3(1, 0, 0)
-
-	var edge_position = from_pos + diff / 2
-
-	var edge_basis = Basis(tangent, diff, tangent.cross(direction))
-	
-	var edge_transform = Transform3D(edge_basis, edge_position)
-	return edge_transform

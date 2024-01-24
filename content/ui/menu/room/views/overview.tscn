@@ -1,15 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://dd71loi64gnmp"]
+[gd_scene load_steps=3 format=3 uid="uid://dd71loi64gnmp"]
 
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_fteh8"]
+[ext_resource type="Script" path="res://content/ui/menu/room/views/overview.gd" id="1_jesad"]
 
 [node name="Overview" type="Node3D"]
+script = ExtResource("1_jesad")
 
-[node name="Button2" parent="." instance=ExtResource("1_fteh8")]
+[node name="EditButton" parent="." instance=ExtResource("1_fteh8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 0, 0.07)
-label = "add"
+label = "edit"
 icon = true
 
-[node name="Button3" parent="." instance=ExtResource("1_fteh8")]
+[node name="FixButton" parent="." instance=ExtResource("1_fteh8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0.07)
 label = "healing"
 icon = true

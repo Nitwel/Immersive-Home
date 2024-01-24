@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://dlj5chj7ndgua"]
+[gd_scene load_steps=6 format=3 uid="uid://dlj5chj7ndgua"]
 
+[ext_resource type="Script" path="res://content/system/house/room/wall_edge.gd" id="1_0c5rj"]
 [ext_resource type="Material" uid="uid://j12e5wwthtaa" path="res://content/system/house/room/edge.tres" id="1_hs3tw"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="2_cfvx2"]
 
@@ -13,6 +14,7 @@ radius = 0.04
 height = 1.0
 
 [node name="StaticBody3D" type="StaticBody3D"]
+script = ExtResource("1_0c5rj")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_a2dct")

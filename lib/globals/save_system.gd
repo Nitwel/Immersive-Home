@@ -49,6 +49,9 @@ func load():
 	var json_text = save_file.get_line()
 	var save_data = JSON.parse_string(json_text)
 
+	if save_data == null:
+		return
+
 	if save_data.has("version") == false:
 		save()
 		return

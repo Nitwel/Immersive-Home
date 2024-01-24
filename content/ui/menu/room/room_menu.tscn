@@ -21,8 +21,9 @@ mesh = SubResource("BoxMesh_e37nn")
 
 [node name="Interface" type="Node3D" parent="."]
 
-[node name="Tabs3D" type="Node3D" parent="Interface"]
+[node name="Tabs3D" type="Node3D" parent="Interface" node_paths=PackedStringArray("initial_selected")]
 script = ExtResource("5_ddrep")
+initial_selected = NodePath("Overview")
 
 [node name="Overview" parent="Interface/Tabs3D" instance=ExtResource("4_cghmp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, -0.02)

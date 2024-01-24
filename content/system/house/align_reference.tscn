@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://jls16btb8nko"]
+
+[ext_resource type="Script" path="res://content/system/house/align_reference.gd" id="1_8fatp"]
+[ext_resource type="PackedScene" uid="uid://brf6mm2gxj7y2" path="res://content/system/house/room/wall_corner.tscn" id="2_ppkie"]
+[ext_resource type="PackedScene" uid="uid://dlj5chj7ndgua" path="res://content/system/house/room/wall_edge.tscn" id="3_6o3xn"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="3_7ktdq"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0e4xu"]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.2
+
+[node name="AlignReference" type="Node3D"]
+script = ExtResource("1_8fatp")
+
+[node name="Corner1" parent="." instance=ExtResource("2_ppkie")]
+
+[node name="Movable" type="Node" parent="Corner1"]
+script = ExtResource("3_7ktdq")
+restricted = true
+lock_rotation = true
+
+[node name="Corner2" parent="Corner1" instance=ExtResource("2_ppkie")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+
+[node name="Movable" type="Node" parent="Corner1/Corner2"]
+script = ExtResource("3_7ktdq")
+lock_rotation = true
+
+[node name="Edge" parent="." instance=ExtResource("3_6o3xn")]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.5, 0, 0)
+
+[node name="Marker3D" type="Marker3D" parent="Edge"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Edge/Marker3D"]
+mesh = SubResource("CylinderMesh_0e4xu")

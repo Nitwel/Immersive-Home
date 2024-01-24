@@ -5,7 +5,9 @@ const RoomType = preload("./room/room.gd")
 
 @onready var levels = $Levels
 @onready var collision_shape = $Levels/CollisionShape3D
+@onready var align_reference = $AlignReference
 
+var fixing_reference: bool = false
 var editing_room: RoomType = null
 var mini_view: bool = false:
 	set(value):
@@ -146,3 +148,21 @@ func update_mini_view():
 
 	for room in get_rooms(0):
 		room.state_machine.change_to("Mini" if mini_view else "View")
+
+func edit_reference():
+	fixing_reference = false
+	align_reference.disabled = false
+
+func fix_reference():
+	fixing_reference = true
+	align_reference.disabled = false
+	align_reference.update_initial_positions()
+
+func save_reference():
+	if fixing_reference:
+		var align_transform = align_reference.global_transform
+		transform = align_reference.get_new_transform(transform)
+		align_reference.global_transform = align_transform
+
+	align_reference.disabled = true
+	align_reference.update_initial_positions()

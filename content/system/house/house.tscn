@@ -1,9 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://cbemihbxkd4ll"]
+[gd_scene load_steps=6 format=3 uid="uid://cbemihbxkd4ll"]
 
 [ext_resource type="Script" path="res://content/system/house/house.gd" id="1_p8amj"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_w1auk"]
+[ext_resource type="PackedScene" uid="uid://jls16btb8nko" path="res://content/system/house/align_reference.tscn" id="3_e1tcn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x81up"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_uovmo"]
+radius = 0.02
+height = 0.4
 
 [node name="House" type="Node3D"]
 script = ExtResource("1_p8amj")
@@ -20,3 +25,10 @@ disabled = true
 script = ExtResource("2_w1auk")
 restricted = true
 lock_rotation = true
+
+[node name="AlignReference" parent="." instance=ExtResource("3_e1tcn")]
+disabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_uovmo")

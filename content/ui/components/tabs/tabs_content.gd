@@ -10,6 +10,8 @@ func _ready():
 
 	for child in children:
 		child.visible = true
+		if tabs.selected != null && tabs.selected.get_index() == child.get_index():
+			continue
 		remove_child(child)
 
 	tabs.on_select.connect(func(index):
