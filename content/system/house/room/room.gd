@@ -51,3 +51,16 @@ func get_aabb():
 	max_pos.y = room_ceiling.position.y
 
 	return AABB(to_global(min_pos), to_global(max_pos) - to_global(min_pos))
+
+func update_store():
+	var store_room = Store.house.get_room(name)
+
+	var corners = []
+
+	for corner in wall_corners.get_children():
+		corners.append(Vector2(corner.position.x, corner.position.z))
+
+	store_room.corners = corners
+	store_room.height = room_ceiling.position.y
+
+	Store.house.save_local()

@@ -11,7 +11,7 @@ static func stringify_value(value):
 			return value.map(func(item):
 				return stringify_value(item)
 			)
-		TYPE_BOOL, TYPE_INT, TYPE_FLOAT, TYPE_STRING:
+		TYPE_BOOL, TYPE_INT, TYPE_FLOAT, TYPE_STRING, TYPE_NIL:
 			return value
 		TYPE_VECTOR2:
 			return {

@@ -86,9 +86,3 @@ func load_image(url: String):
 	var texture = ImageTexture.create_from_image(image)
 	logo.texture = texture
 	logo.pixel_size = pixel_size
-
-func _save():
-	return {
-		"transform": transform,
-		"entity_id": entity_id
-	}

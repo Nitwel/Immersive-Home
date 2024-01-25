@@ -22,9 +22,3 @@ func set_text(stateInfo):
 		text += " " + stateInfo["attributes"]["unit_of_measurement"]
 
 	label.text = text
-
-func _save():
-	return {
-		"transform": transform,
-		"entity_id": entity_id
-	}

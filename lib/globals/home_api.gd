@@ -24,14 +24,10 @@ var api: Node
 func _ready():
 	print("HomeApi ready")
 
-	var config = ConfigData.load_config()
+	var success = Store.settings.load_local()
 
-	if config.has("api_type") && config.has("url") && config.has("token"):
-		var type = config["api_type"]
-		var url = config["url"] + "/api/websocket"
-		var token = config["token"]
-
-		start_adapter(type, url, token)
+	if success:
+		start_adapter(Store.settings.type, Store.settings.url, Store.settings.token)
 	
 
 func start_adapter(type: String, url: String, token: String):
@@ -47,7 +43,7 @@ func start_adapter(type: String, url: String, token: String):
 	add_child(api)
 
 	api.on_connect.connect(func():
-		SaveSystem.load()
+		Store.house.load_local()
 		on_connect.emit()
 	)
 
@@ -96,5 +92,5 @@ func watch_state(entity: String, callback: Callable):
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST || what == NOTIFICATION_WM_GO_BACK_REQUEST:
-		# SaveSystem.save()
+		# Store.house.save_local()
 		pass

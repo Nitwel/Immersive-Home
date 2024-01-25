@@ -29,9 +29,3 @@ func set_state(state):
 		else:
 			button.icon = false
 		button.label = name
-
-func _save():
-	return {
-		"transform": transform,
-		"entity_id": entity_id
-	}

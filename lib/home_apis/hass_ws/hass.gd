@@ -34,13 +34,13 @@ func connect_ws():
 	if url == "" || token == "":
 		return
 
-	print("Connecting to %s" % self.url)
-	socket.connect_to_url(self.url)
+	print("Connecting to %s" % url + "/api/websocket")
+	socket.connect_to_url(url + "/api/websocket")
 	set_process(true)
 
 	# https://github.com/godotengine/godot/issues/84423
 	# Otherwise the WebSocketPeer will crash when receiving large packets
-	socket.set_inbound_buffer_size(pow(2, 22)) # ~4MB buffer
+	socket.set_inbound_buffer_size(pow(2, 23)) # ~8MB buffer
 
 func _process(delta):
 	socket.poll()

@@ -44,3 +44,12 @@ func get_new_transform(old_transform: Transform3D):
 	marker.scale = Vector3(1, 1, 1)
 	return marker.global_transform
 
+func update_align_reference():
+	corner1.global_position = Store.house.align_position1
+	corner2.global_position = Store.house.align_position2
+
+	edge.align_to_corners(corner1.global_position, corner2.global_position)
+
+func update_store():
+	Store.house.align_position1 = corner1.global_position
+	Store.house.align_position2 = corner2.global_position

@@ -65,3 +65,5 @@ script = ExtResource("7_ap14h")
 
 [node name="Mini" type="Node" parent="StateMachine"]
 script = ExtResource("6_g4qca")
+
+[node name="Entities" type="Node3D" parent="."]

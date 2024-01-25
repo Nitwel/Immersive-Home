@@ -32,6 +32,8 @@ func _on_enter():
 	room.room_floor.get_node("Clickable").on_click.connect(_on_click_floor)
 
 func _on_leave():
+	room.update_store()
+
 	room.wall_corners.visible = false
 	room.wall_edges.visible = false
 	
@@ -68,7 +70,7 @@ func add_floor_corner(position: Vector3):
 	floor_corner.position = position
 
 	height_edge = wall_edge_scene.instantiate()
-	height_edge.align_to_corners(position, position + Vector3.UP * room.room_ceiling.global_position.y)
+	height_edge.align_to_corners(position, position + Vector3.UP * room.room_ceiling.position.y)
 
 	floor_corner.get_node("Clickable").on_grab_down.connect(func(event):
 		if !is_active() || moving != null:

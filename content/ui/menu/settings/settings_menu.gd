@@ -34,32 +34,29 @@ func _ready():
 		credits_instance.global_position =  + label.to_global(label.position + Vector3(0.1, 0, -0.15))
 	)
 
-	var config = ConfigData.load_config()
-
-	if config.has("url"):
-		input_url.text = config["url"]
-	if config.has("token"):
-		input_token.text = config["token"]
+	input_url.text = Store.settings.url
+	input_token.text = Store.settings.token
 
 	button_connect.on_button_down.connect(func():
-		var url = input_url.text + "/api/websocket"
+		var url = input_url.text
 		var token = input_token.text
 
 		HomeApi.start_adapter("hass_ws", url, token)
 
-		ConfigData.save_config({
-			"api_type": "hass_ws",
-			"url": input_url.text,
-			"token": input_token.text
-		})
+		Store.settings.url = url
+		Store.settings.token = token
+
+		Store.settings.save_local()
 	)
 
 	save.on_button_down.connect(func():
-		SaveSystem.save()
+		House.body.save_all_entities()
+		Store.house.save_local()
 	)
 
 	clear_save.on_button_down.connect(func():
-		SaveSystem.clear()
+		Store.house.clear()
+		House.body.update_house()
 	)
 
 	HomeApi.on_connect.connect(func():

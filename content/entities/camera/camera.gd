@@ -57,9 +57,3 @@ func load_image(url: String):
 	view.texture = texture
 	view.pixel_size = pixel_size
 	mesh.visible = false
-
-func _save():
-	return {
-		"transform": transform,
-		"entity_id": entity_id
-	}
