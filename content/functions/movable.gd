@@ -26,11 +26,10 @@ func _on_grab_move(_event: EventPointer):
 		get_parent().global_position = hit_node.global_position
 
 	if !lock_rotation:
-		get_parent().global_rotation = hit_node.global_rotation
+		get_parent().global_basis = hit_node.global_basis
 		on_move.emit(get_parent().global_position, get_parent().global_rotation)
 	else:
 		on_move.emit(get_parent().global_position, Vector3(0, 0, 0))
-
 
 func _on_grab_up(event: EventPointer):
 	event.initiator.node.remove_child(hit_node)

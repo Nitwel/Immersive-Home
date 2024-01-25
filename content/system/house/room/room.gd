@@ -51,22 +51,3 @@ func get_aabb():
 	max_pos.y = room_ceiling.position.y
 
 	return AABB(to_global(min_pos), to_global(max_pos) - to_global(min_pos))
-		
-func _save():
-	return {
-		"corners": wall_corners.get_children().map(func(corner): return corner.position),
-		"name": name
-	}
-
-func _load(data):
-	await ready
-	return
-
-	name = data["name"]
-
-	state_machine.change_to("Edit")
-
-	for corner in data["corners"]:
-		state_machine.current_state.add_corner(corner)
-
-	state_machine.change_to("View")

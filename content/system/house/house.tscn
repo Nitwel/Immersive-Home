@@ -23,4 +23,5 @@ restricted = true
 lock_rotation = true
 
 [node name="AlignReference" parent="." instance=ExtResource("3_e1tcn")]
+visible = false
 disabled = true

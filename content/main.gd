@@ -50,8 +50,7 @@ func _ready():
 			return
 
 		add_child(keyboard)
-		if event.previous_target == null:
-			keyboard.global_transform = menu.get_node("AnimationContainer/KeyboardPlace").global_transform
+		keyboard.global_transform = menu.get_node("AnimationContainer/KeyboardPlace").global_transform
 	)
 
 	EventSystem.on_focus_out.connect(func(event):

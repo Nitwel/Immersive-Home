@@ -15,7 +15,7 @@ var selected_room = null:
 	set(value):
 		if selected_room != null && value == null:
 			room_button.label = "add"
-			input.text = "New Room %s" % (rooms_map.get_child_count() + 1)
+			input.text = "Room %s" % (rooms_map.get_child_count() + 1)
 
 		if selected_room != null:
 			var old_room = get_room(selected_room)

@@ -1,9 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://jls16btb8nko"]
+[gd_scene load_steps=7 format=3 uid="uid://jls16btb8nko"]
 
 [ext_resource type="Script" path="res://content/system/house/align_reference.gd" id="1_8fatp"]
 [ext_resource type="PackedScene" uid="uid://brf6mm2gxj7y2" path="res://content/system/house/room/wall_corner.tscn" id="2_ppkie"]
 [ext_resource type="PackedScene" uid="uid://dlj5chj7ndgua" path="res://content/system/house/room/wall_edge.tscn" id="3_6o3xn"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="3_7ktdq"]
+[ext_resource type="Material" uid="uid://dxyuncqxagt28" path="res://content/system/house/room/walls_mini.tres" id="4_jkpj4"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_k2m3v"]
+top_radius = 0.001
+bottom_radius = 0.05
+height = 0.1
 
 [node name="AlignReference" type="Node3D"]
 script = ExtResource("1_8fatp")
@@ -18,6 +24,11 @@ lock_rotation = true
 [node name="Corner2" parent="Corner1" instance=ExtResource("2_ppkie")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 
+[node name="MeshInstance3D" parent="Corner1/Corner2" index="1"]
+transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
+material_override = ExtResource("4_jkpj4")
+mesh = SubResource("CylinderMesh_k2m3v")
+
 [node name="Movable" type="Node" parent="Corner1/Corner2"]
 script = ExtResource("3_7ktdq")
 lock_rotation = true
@@ -26,3 +37,5 @@ lock_rotation = true
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.5, 0, 0)
 
 [node name="Marker3D" type="Marker3D" parent="Edge"]
+
+[editable path="Corner1/Corner2"]
