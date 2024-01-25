@@ -20,6 +20,7 @@ func _on_enter():
 		height_edge.visible = true
 
 	room.room_ceiling.get_node("CollisionShape3D").disabled = (floor_corner == null && height_corner == null)
+	room.room_floor.get_node("CollisionShape3D").disabled = false
 
 	var ceiling_shape = WorldBoundaryShape3D.new()
 	ceiling_shape.plane = Plane(Vector3.DOWN, 0)
@@ -38,6 +39,9 @@ func _on_leave():
 		floor_corner.visible = false
 		height_corner.visible = false
 		height_edge.visible = false
+
+	room.room_ceiling.get_node("CollisionShape3D").disabled = true
+	room.room_floor.get_node("CollisionShape3D").disabled = true
 
 	room.room_ceiling.get_node("Clickable").on_click.disconnect(_on_click_ceiling)
 	room.room_floor.get_node("Clickable").on_click.disconnect(_on_click_floor)

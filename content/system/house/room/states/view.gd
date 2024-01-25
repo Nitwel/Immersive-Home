@@ -20,10 +20,16 @@ func _on_enter():
 	if room.wall_mesh.mesh == null:
 		return
 
+	var ceiling_shape = room.room_ceiling.get_node("CollisionShape3D")
+	var floor_shape = room.room_floor.get_node("CollisionShape3D")
+
+	ceiling_shape.disabled = false
+	floor_shape.disabled = false
+
 	room.ceiling_mesh.mesh = generate_ceiling_mesh()
-	room.room_ceiling.get_node("CollisionShape3D").shape = room.ceiling_mesh.mesh.create_trimesh_shape()
-	room.room_floor.get_node("CollisionShape3D").shape = room.ceiling_mesh.mesh.create_trimesh_shape()
-	room.room_ceiling.get_node("CollisionShape3D").shape.backface_collision = true
+	ceiling_shape.shape = room.ceiling_mesh.mesh.create_trimesh_shape()
+	floor_shape.shape = room.ceiling_mesh.mesh.create_trimesh_shape()
+	ceiling_shape.shape.backface_collision = true
 		
 	var collisions = generate_collision()
 
@@ -40,6 +46,9 @@ func _on_enter():
 func _on_leave():
 	room.wall_mesh.visible = false
 	room.ceiling_mesh.visible = false
+
+	room.room_ceiling.get_node("CollisionShape3D").disabled = true
+	room.room_floor.get_node("CollisionShape3D").disabled = true
 
 	for collision in room.wall_collisions.get_children():
 		collision.queue_free()
