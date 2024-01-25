@@ -1,8 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://c01gkeldvjwtr"]
+[gd_scene load_steps=9 format=3 uid="uid://c01gkeldvjwtr"]
 
 [ext_resource type="Script" path="res://content/ui/menu/room/room_menu.gd" id="1_ch4jb"]
-[ext_resource type="Script" path="res://content/functions/clickable.gd" id="2_elugy"]
-[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_whl7a"]
+[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_7m4yn"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_cghmp"]
+[ext_resource type="Script" path="res://content/ui/components/tabs/tabs.gd" id="5_ddrep"]
+[ext_resource type="PackedScene" uid="uid://dd71loi64gnmp" path="res://content/ui/menu/room/views/overview.tscn" id="6_206ad"]
+[ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="6_ba00g"]
+[ext_resource type="PackedScene" uid="uid://bpta22fahai46" path="res://content/ui/menu/room/views/rooms.tscn" id="7_2f8e0"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_e37nn"]
 size = Vector3(0.3, 0.01, 0.3)
@@ -12,35 +16,27 @@ script = ExtResource("1_ch4jb")
 
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.15)
+material_override = ExtResource("2_7m4yn")
 mesh = SubResource("BoxMesh_e37nn")
 
 [node name="Interface" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
 
-[node name="ToggleEdit" parent="Interface" instance=ExtResource("3_whl7a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0, 0.05)
-label = "room_preferences"
-icon = true
-toggleable = true
+[node name="Tabs3D" type="Node3D" parent="Interface" node_paths=PackedStringArray("initial_selected")]
+script = ExtResource("5_ddrep")
+initial_selected = NodePath("Overview")
 
-[node name="Clickable" type="Node" parent="Interface/ToggleEdit"]
-script = ExtResource("2_elugy")
+[node name="Overview" parent="Interface/Tabs3D" instance=ExtResource("4_cghmp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, -0.02)
+label = "Overview"
 
-[node name="Label3D" type="Label3D" parent="Interface"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.13, -1.86265e-09, 0.05)
-pixel_size = 0.001
-text = "Edit Room"
-font_size = 18
-outline_size = 0
+[node name="Rooms" parent="Interface/Tabs3D" instance=ExtResource("4_cghmp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, -0.02)
+label = "Rooms"
 
-[node name="CreateBlur" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.15, 0.01, 0.261858)
-pixel_size = 0.001
-text = "Fake Windows"
-font_size = 18
-outline_size = 0
+[node name="TabsContent3D" type="Node3D" parent="Interface" node_paths=PackedStringArray("tabs")]
+script = ExtResource("6_ba00g")
+tabs = NodePath("../Tabs3D")
 
-[node name="SpawnWindows" parent="." instance=ExtResource("3_whl7a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0, 0.26)
-label = "lens_blur"
-icon = true
+[node name="Overview" parent="Interface/TabsContent3D" instance=ExtResource("6_206ad")]
+
+[node name="Rooms" parent="Interface/TabsContent3D" instance=ExtResource("7_2f8e0")]

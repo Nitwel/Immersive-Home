@@ -8,8 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="5_3qc8g"]
 [ext_resource type="Material" uid="uid://bf5ina366dwm6" path="res://assets/materials/sky.material" id="5_wgwf8"]
 [ext_resource type="PackedScene" uid="uid://c3kdssrmv84kv" path="res://content/ui/menu/menu.tscn" id="8_du83w"]
-[ext_resource type="PackedScene" uid="uid://83lb5p4e0qk0" path="res://content/scenes/house.tscn" id="8_qkrg7"]
 [ext_resource type="PackedScene" uid="uid://lrehk38exd5n" path="res://content/system/keyboard/keyboard.tscn" id="9_e5n3p"]
+[ext_resource type="PackedScene" uid="uid://cbemihbxkd4ll" path="res://content/system/house/house.tscn" id="9_np6mw"]
 
 [sub_resource type="Sky" id="Sky_vhymk"]
 sky_material = ExtResource("5_wgwf8")
@@ -78,10 +78,8 @@ transform = Transform3D(0.999998, -0.000514899, -6.55874e-05, 1.96975e-05, 0.163
 [node name="Keyboard" parent="." instance=ExtResource("9_e5n3p")]
 transform = Transform3D(0.499999, -0.000139169, -6.50204e-05, 5.24307e-05, 0.353553, -0.353553, 0.000144383, 0.353553, 0.353553, -0.0199266, 0.550784, -0.47368)
 
-[node name="House" parent="." instance=ExtResource("8_qkrg7")]
-transform = Transform3D(0.404247, 0.000180645, 0.914648, 0.00017221, 0.999999, -0.000273614, -0.914648, 0.00026812, 0.404247, -0.343479, 0.000110551, 1.91547)
-visible = false
-
 [node name="Rooms" type="Node3D" parent="."]
+
+[node name="House" parent="." instance=ExtResource("9_np6mw")]
 
 [editable path="XROrigin3D/XRControllerLeft"]

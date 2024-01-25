@@ -90,5 +90,4 @@ func _emit_event(type: String, key: Key):
 	event.shift_pressed = caps
 	
 	EventSystem.emit(type, event)
-	print("Emitting event: " + type + " " + EventKey.key_to_string(key, caps))
 

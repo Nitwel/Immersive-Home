@@ -16,9 +16,8 @@ func _ready():
 	if OS.get_name() == "Android":
 		# OS.request_permissions()
 		environment.environment.sky.set_material(sky_passthrough)
-		house.visible = false
 	else:
-		house.visible = true
+		RenderingServer.set_debug_generate_wireframes(true)
 
 	controller_left.button_pressed.connect(func(name):
 		_emit_action(name, true, false)
@@ -41,7 +40,9 @@ func _ready():
 
 	EventSystem.on_action_down.connect(func(action):
 		if action.name == "menu_button":
-			_toggle_menu()
+			toggle_menu()
+		elif action.name == "by_button":
+			House.body.mini_view = !House.body.mini_view
 	)
 
 	EventSystem.on_focus_in.connect(func(event):
@@ -49,8 +50,7 @@ func _ready():
 			return
 
 		add_child(keyboard)
-		if event.previous_target == null:
-			keyboard.global_transform = menu.get_node("AnimationContainer/KeyboardPlace").global_transform
+		keyboard.global_transform = menu.get_node("AnimationContainer/KeyboardPlace").global_transform
 	)
 
 	EventSystem.on_focus_out.connect(func(event):
@@ -60,7 +60,7 @@ func _ready():
 		remove_child(keyboard)
 	)
 
-func _toggle_menu():
+func toggle_menu():
 	if menu.show_menu == false:
 		add_child(menu)
 		menu.global_transform = _get_menu_transform()
@@ -98,9 +98,13 @@ func _process(delta):
 		controller_left.position += movement
 		controller_right.position += movement
 
-func _input(evnet):
-	if Input.is_key_pressed(KEY_M):
-		_toggle_menu()
+func _input(event):
+	if event is InputEventKey and Input.is_key_pressed(KEY_F10):
+		var vp = get_viewport()
+		vp.debug_draw = (vp.debug_draw + 1) % 5
+		
+	if event is InputEventKey and Input.is_key_pressed(KEY_M):
+		toggle_menu()
 
 func _get_menu_transform():
 	var transform = camera.get_global_transform()

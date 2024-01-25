@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://ddpxthb414unp"]
+
+[ext_resource type="Script" path="res://content/ui/menu/view/view_menu.gd" id="1_hxajx"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_qan1b"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_qr3bi"]
+size = Vector3(0.3, 0.01, 0.3)
+
+[node name="ViewMenu" type="Node3D"]
+script = ExtResource("1_hxajx")
+
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.15)
+mesh = SubResource("BoxMesh_qr3bi")
+
+[node name="Content" type="Node3D" parent="."]
+
+[node name="MiniView" parent="Content" instance=ExtResource("2_qan1b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0.03)
+label = "view_comfy"
+icon = true

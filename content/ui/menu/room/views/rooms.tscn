@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bpta22fahai46"]
+
+[ext_resource type="Script" path="res://content/ui/menu/room/views/rooms.gd" id="1_3a1oa"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_y3lty"]
+[ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="2_hstw7"]
+
+[node name="Rooms" type="Node3D"]
+script = ExtResource("1_3a1oa")
+
+[node name="Rooms" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.01, 0.12)
+
+[node name="Button" parent="." instance=ExtResource("1_y3lty")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, 0, 0.27)
+label = "add"
+icon = true
+
+[node name="Input" parent="." instance=ExtResource("2_hstw7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.005, 0.27)
+text = "Room 1"

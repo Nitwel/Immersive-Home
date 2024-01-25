@@ -24,6 +24,7 @@ HomeApi="*res://lib/globals/home_api.gd"
 AudioPlayer="*res://lib/globals/audio_player.gd"
 EventSystem="*res://lib/globals/event_system.gd"
 SaveSystem="*res://lib/globals/save_system.gd"
+House="*res://lib/globals/house_body.gd"
 
 [editor_plugins]
 

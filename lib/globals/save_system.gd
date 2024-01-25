@@ -2,8 +2,17 @@ extends Node
 
 const VariantSerializer = preload("res://lib/utils/variant_serializer.gd")
 
+signal loaded()
+signal unloaded()
+
+var is_loaded := false
+var export_config = ConfigFile.new()
+var export_config_path = "res://export_presets.cfg"
+
 func clear():
 	await _clear_save_tree(get_tree().root.get_node("Main"))
+	unloaded.emit()
+	is_loaded = false
 
 func save():
 	if HomeApi.has_connected() == false:
@@ -18,7 +27,10 @@ func save():
 
 	var save_tree = _generate_save_tree(get_tree().root.get_node("Main"))
 
-	var json_text = JSON.stringify(save_tree)
+	var json_text = JSON.stringify({
+		"version": get_version(),
+		"tree": save_tree
+	})
 	save_file.store_line(json_text)
 
 func load():
@@ -35,13 +47,41 @@ func load():
 		return
 
 	var json_text = save_file.get_line()
-	var save_tree = JSON.parse_string(json_text)
+	var save_data = JSON.parse_string(json_text)
+
+	if save_data == null:
+		return
+
+	if save_data.has("version") == false:
+		save()
+		return
+
+	var save_tree = save_data["tree"]
+
+	if save_tree == null:
+		return
 
 	if save_tree is Array:
 		for tree in save_tree:
 			_build_save_tree(tree)
 	else:
 		_build_save_tree(save_tree)
+
+	loaded.emit()
+	is_loaded = true
+
+func get_version():
+	var config_error = export_config.load(export_config_path)
+
+	if config_error != OK:
+		return null
+
+	var version = export_config.get_value("preset.1.options", "version/name")
+
+	if version == null:
+		return null
+
+	return version
 
 func _clear_save_tree(node: Node):
 	for child in node.get_children():

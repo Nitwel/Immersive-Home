@@ -1,11 +1,14 @@
-[gd_scene load_steps=16 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=19 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="Material" uid="uid://bnwimm214q67g" path="res://assets/materials/sec-500.material" id="2_0x5at"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_8coxu"]
+[ext_resource type="Script" path="res://content/ui/components/tabs/tabs.gd" id="4_eavfx"]
 [ext_resource type="PackedScene" uid="uid://crrb0l3ekuotj" path="res://content/ui/menu/edit/edit_menu.tscn" id="4_r2raj"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_w4i01"]
+[ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="6_7rntr"]
 [ext_resource type="ArrayMesh" uid="uid://cbqhhnknyium2" path="res://assets/immersive_home_panels/immersive_home_panels.obj" id="7_f4u4o"]
+[ext_resource type="PackedScene" uid="uid://ddpxthb414unp" path="res://content/ui/menu/view/view_menu.tscn" id="8_71pkg"]
 [ext_resource type="PackedScene" uid="uid://c01gkeldvjwtr" path="res://content/ui/menu/room/room_menu.tscn" id="10_u4i1x"]
 [ext_resource type="PackedScene" uid="uid://c6r4higceibif" path="res://content/ui/menu/settings/settings_menu.tscn" id="11_7wm6b"]
 
@@ -181,48 +184,58 @@ skeleton = NodePath("../..")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, 0, 0.15)
 shape = SubResource("ConvexPolygonShape3D_mgnm0")
 
-[node name="Navigation" type="Node3D" parent="AnimationContainer"]
+[node name="Tabs" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("initial_selected")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
+script = ExtResource("4_eavfx")
+initial_selected = NodePath("View")
 
-[node name="View" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
+[node name="View" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.03)
 label = "visibility"
 icon = true
 toggleable = true
 
-[node name="Edit" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
+[node name="Edit" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.09)
 label = "widgets"
 icon = true
 toggleable = true
 
-[node name="Room" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
+[node name="Room" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.15)
 label = "view_in_ar"
 icon = true
 toggleable = true
 
-[node name="Automate" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
+[node name="Automate" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.21)
 label = "schema"
 icon = true
 toggleable = true
 
-[node name="Settings" parent="AnimationContainer/Navigation" instance=ExtResource("5_w4i01")]
+[node name="Settings" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.27)
 label = "settings"
 icon = true
 toggleable = true
 
-[node name="Content" type="Node3D" parent="AnimationContainer"]
+[node name="TabsContent" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("tabs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
+script = ExtResource("6_7rntr")
+tabs = NodePath("../Tabs")
 
-[node name="EditMenu" parent="AnimationContainer/Content" instance=ExtResource("4_r2raj")]
-
-[node name="RoomMenu" parent="AnimationContainer/Content" instance=ExtResource("10_u4i1x")]
+[node name="ViewMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("8_71pkg")]
 visible = false
 
-[node name="SettingsMenu" parent="AnimationContainer/Content" instance=ExtResource("11_7wm6b")]
+[node name="EditMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("4_r2raj")]
+
+[node name="RoomMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("10_u4i1x")]
+visible = false
+
+[node name="AutomateMenu" type="Node3D" parent="AnimationContainer/TabsContent"]
+visible = false
+
+[node name="SettingsMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("11_7wm6b")]
 visible = false
 
 [node name="NotifyPlace" type="Marker3D" parent="AnimationContainer"]

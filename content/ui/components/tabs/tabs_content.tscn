@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://wewhef3qmulp"]
+
+[ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="1_ljgkj"]
+
+[node name="TabsContent" type="Node3D"]
+script = ExtResource("1_ljgkj")

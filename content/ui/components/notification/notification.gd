@@ -13,7 +13,6 @@ extends Node3D
 	set(value):
 		type = value
 		if !is_node_ready(): await ready
-		print(value, " ", _type_to_string(value))
 		icon_label.text = _type_to_string(value)
 @export var text: String = "":
 	set(value):
