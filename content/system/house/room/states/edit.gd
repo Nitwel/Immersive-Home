@@ -273,4 +273,7 @@ func update_store():
 	store_room.corners = corners
 	store_room.height = room.room_ceiling.position.y
 
+	if corners.size() > 3:
+		Store.house.rooms.erase(store_room)
+
 	Store.house.save_local()
