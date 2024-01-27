@@ -1,6 +1,7 @@
-extends StaticBody3D
+extends Entity
 
-@export var entity_id = "camera.bedroomspeaker"
+const Entity = preload("../entity.gd")
+
 @export var view_width = 0.15
 
 @onready var view = $View
@@ -10,6 +11,8 @@ extends StaticBody3D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	super()
+
 	var stateInfo = await HomeApi.get_state(entity_id)
 
 	set_state(stateInfo)
@@ -57,9 +60,3 @@ func load_image(url: String):
 	view.texture = texture
 	view.pixel_size = pixel_size
 	mesh.visible = false
-
-func _save():
-	return {
-		"transform": transform,
-		"entity_id": entity_id
-	}

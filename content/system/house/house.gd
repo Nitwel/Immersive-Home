@@ -16,21 +16,47 @@ var mini_view: bool = false:
 
 var target_size: float = 1.0
 
+func _ready():
+	Store.house.on_loaded.connect(func():
+		update_house()
+	)
+
 func _physics_process(delta):
 	levels.scale.x = lerp(levels.scale.x, target_size, 10.0 * delta)
 	levels.scale.y = lerp(levels.scale.y, target_size, 10.0 * delta)
 	levels.scale.z = lerp(levels.scale.z, target_size, 10.0 * delta)
 
+func update_house():
+	for old_room in get_rooms(0):
+		old_room.queue_free()
+		await old_room.tree_exited
+
+	align_reference.update_align_reference()
+
+	for index in range(Store.house.rooms.size()):
+		var new_room = Store.house.rooms[index]
+		create_room(new_room.name, 0)
+
+	for entity in Store.house.entities:
+		var entity_instance = create_entity_in(entity.id, entity.room)
+
+		if entity_instance == null:
+			continue
+
+		entity_instance.global_rotation = entity.rotation
 
 func create_room(room_name: String, level: int) -> RoomType:
-	if editing_room != null:
-		editing_room.editable = false
-		editing_room = null
+	var existing_room = Store.house.get_room(room_name)
+
+	if existing_room == null:
+		Store.house.rooms.append({
+			"name": room_name,
+			"height": 2.0,
+			"corners": [],
+		})
 
 	var room = Room.instantiate()
 	room.name = room_name
-	room.editable = true
-	editing_room = room
 	
 	get_level(level).add_child(room)
 
@@ -70,22 +96,21 @@ func delete_room(room_name):
 
 	room.get_parent().remove_child(room)
 	room.queue_free()
+	await room.tree_exited
 
 func is_editiong(room_name):
 	return editing_room != null && editing_room.name == room_name
 
 func find_room(room_name):
-	for level in levels.get_children():
-		for room in level.get_children():
-			if room.name == room_name:
-				return room
+	for room in get_rooms(0):
+		if room.name == room_name:
+			return room
 	return null
 
 func find_room_at(entity_position: Vector3):
-	for level in levels.get_children():
-		for room in level.get_children():
-			if room.has_point(entity_position):
-				return room
+	for room in get_rooms(0):
+		if room.has_point(entity_position):
+			return room
 	return null
 
 func get_level(level: int):
@@ -120,15 +145,37 @@ func create_entity(entity_id: String, entity_position: Vector3):
 	var room = find_room_at(entity_position)
 
 	if room == null:
-		return
+		return null
 
 	var entity = EntityFactory.create_entity(entity_id)
 
 	if entity == null:
-		return
+		return null
 
-	room.add_child(entity)
+	room.get_node("Entities").add_child(entity)
 	entity.global_position = entity_position
+
+	save_all_entities()
+
+	return entity
+
+func create_entity_in(entity_id: String, room_name: String):
+	var room = find_room(room_name)
+
+	if room == null:
+		return null
+
+	var entity = EntityFactory.create_entity(entity_id)
+
+	if entity == null:
+		return null
+
+	room.get_node("Entities").add_child(entity)
+	entity.global_position = room.get_aabb().position + room.get_aabb().size / 2.0
+
+	save_all_entities()
+
+	return entity
 
 func update_mini_view():
 	collision_shape.disabled = !mini_view
@@ -166,3 +213,22 @@ func save_reference():
 
 	align_reference.disabled = true
 	align_reference.update_initial_positions()
+
+	align_reference.update_store()
+	Store.house.save_local()
+
+func save_all_entities():
+	Store.house.entities.clear()
+
+	for room in get_rooms(0):
+		for entity in room.get_node("Entities").get_children():
+			var entity_data = {
+				"id": entity.entity_id,
+				"position": entity.global_position,
+				"rotation": entity.global_rotation,
+				"room": String(room.name)
+			}
+
+			Store.house.entities.append(entity_data)
+					
+	Store.house.save_local()

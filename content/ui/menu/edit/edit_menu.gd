@@ -146,7 +146,10 @@ func _on_entity_click(entity_name):
 
 	AudioPlayer.play_effect("spawn")
 
-	House.body.create_entity(entity_name, global_position)
+	var entity = House.body.create_entity(entity_name, global_position)
+
+	if entity == null:
+		EventSystem.notify("Entity is not in Room", EventNotify.Type.INFO)
 	
 func clear_menu():
 	for child in devices_node.get_children():

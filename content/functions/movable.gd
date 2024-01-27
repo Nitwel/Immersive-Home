@@ -3,6 +3,7 @@ extends Function
 class_name Movable
 
 signal on_move(position: Vector3, rotation: Vector3)
+signal on_moved()
 
 @export var restricted: bool = false
 @export var restrict_movement: Callable
@@ -33,6 +34,7 @@ func _on_grab_move(_event: EventPointer):
 
 func _on_grab_up(event: EventPointer):
 	event.initiator.node.remove_child(hit_node)
+	on_moved.emit()
 
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := PackedStringArray()

@@ -30,3 +30,9 @@ func change_to(new_state: String) -> void:
 	add_child(current_state)
 	current_state._on_enter()
 	changed.emit(new_state, old_state)
+
+func get_state(state_name: String) -> Node:
+	if states.has(state_name) == false:
+		return null
+
+	return states[state_name]

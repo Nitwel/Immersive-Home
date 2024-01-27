@@ -1,9 +1,12 @@
-extends Node3D
+extends Entity
 
-var entity_id = "button.plug_printer_2"
+const Entity = preload("../entity.gd")
+
 @onready var button = $Button
 
 func _ready():
+	super()
+
 	var stateInfo = await HomeApi.get_state(entity_id)
 
 	if stateInfo == null:
@@ -29,9 +32,3 @@ func set_state(state):
 		else:
 			button.icon = false
 		button.label = name
-
-func _save():
-	return {
-		"transform": transform,
-		"entity_id": entity_id
-	}

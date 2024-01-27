@@ -1,10 +1,13 @@
-extends StaticBody3D
+extends Entity
 
-@export var entity_id = "switch.plug_printer_2"
+const Entity = preload("../entity.gd")
+
 @onready var sprite: AnimatedSprite3D = $Icon
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	super()
+
 	var stateInfo = await HomeApi.get_state(entity_id)
 	if stateInfo == null:
 		return
@@ -31,9 +34,3 @@ func _on_click(event):
 
 func _on_request_completed():
 	pass
-
-func _save():
-	return {
-		"transform": transform,
-		"entity_id": entity_id
-	}

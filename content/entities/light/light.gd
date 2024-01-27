@@ -1,6 +1,7 @@
-extends StaticBody3D
+extends Entity
 
-@export var entity_id = "switch.plug_printer_2"
+const Entity = preload("../entity.gd")
+
 @export var color_off = Color(0.23, 0.23, 0.23)
 @export var color_on = Color(1.0, 0.85, 0.0)
 
@@ -12,6 +13,8 @@ var brightness = 0 # 0-255
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	super()
+
 	var stateInfo = await HomeApi.get_state(entity_id)
 	set_state(stateInfo["state"] == "on")
 
@@ -56,9 +59,3 @@ func _on_click(event):
 
 		HomeApi.set_state(entity_id, "on" if !state else "off", attributes)
 		set_state(!state, brightness)
-
-func _save():
-	return {
-		"transform": transform,
-		"entity_id": entity_id
-	}

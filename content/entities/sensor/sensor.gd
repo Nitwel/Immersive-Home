@@ -1,10 +1,13 @@
-extends StaticBody3D
+extends Entity
 
-@export var entity_id = "sensor.sun_next_dawn"
+const Entity = preload("../entity.gd")
+
 @onready var label: Label3D = $Label
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	super()
+
 	var stateInfo = await HomeApi.get_state(entity_id)
 	set_text(stateInfo)
 
@@ -22,9 +25,3 @@ func set_text(stateInfo):
 		text += " " + stateInfo["attributes"]["unit_of_measurement"]
 
 	label.text = text
-
-func _save():
-	return {
-		"transform": transform,
-		"entity_id": entity_id
-	}
