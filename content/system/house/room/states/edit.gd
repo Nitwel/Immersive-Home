@@ -22,6 +22,7 @@ func _on_enter():
 		add_floor_corner(Vector3(corners[0].x, 0, corners[0].y))
 		add_height_corner(Vector3(corners[0].x, 0, corners[0].y))
 		room.room_ceiling.position.y = room_store.height
+		height_edge.align_to_corners(floor_corner.global_position, height_corner.global_position)
 
 		for i in range(1, corners.size()):
 			add_corner(Vector3(corners[i].x, 0, corners[i].y))
@@ -117,14 +118,14 @@ func add_floor_corner(position: Vector3):
 
 		height_edge.align_to_corners(new_position, new_position + Vector3.UP * room.room_ceiling.global_position.y)
 
-		room.get_corner(moving_index).position.x = new_position.x
-		room.get_corner(moving_index).position.z = new_position.z
+		get_corner(moving_index).position.x = new_position.x
+		get_corner(moving_index).position.z = new_position.z
 
 		if room.wall_edges.get_child_count() == 0:
 			return
 
-		room.get_edge(moving_index).align_to_corners(new_position, room.get_corner(moving_index + 1).position)
-		room.get_edge(moving_index - 1).align_to_corners(room.get_corner(moving_index - 1).position, new_position)	
+		get_edge(moving_index).align_to_corners(new_position, get_corner(moving_index + 1).position)
+		get_edge(moving_index - 1).align_to_corners(get_corner(moving_index - 1).position, new_position)	
 	)
 
 	floor_corner.get_node("Clickable").on_grab_up.connect(func(_event):
@@ -199,13 +200,13 @@ func add_corner(position: Vector3, index: int = -1):
 
 			new_position = event.ray.global_position + direction
 
-			room.get_corner(moving_index).global_position = new_position
+			get_corner(moving_index).global_position = new_position
 
 			if room.wall_edges.get_child_count() == 0:
 				return
 
-			room.get_edge(moving_index).align_to_corners(room.get_corner(moving_index - 1).position, room.get_corner(moving_index + 1).position)
-			room.get_edge(moving_index - 1).transform = room.get_edge(moving_index).transform
+			get_edge(moving_index).align_to_corners(get_corner(moving_index - 1).position, get_corner(moving_index + 1).position)
+			get_edge(moving_index - 1).transform = get_edge(moving_index).transform
 
 			return
 
@@ -219,14 +220,14 @@ func add_corner(position: Vector3, index: int = -1):
 		if room.wall_edges.get_child_count() == 0:
 			return
 
-		room.get_edge(moving_index).align_to_corners(new_position, room.get_corner(moving_index + 1).position)
-		room.get_edge(moving_index - 1).align_to_corners(room.get_corner(moving_index - 1).position, new_position)	
+		get_edge(moving_index).align_to_corners(new_position, get_corner(moving_index + 1).position)
+		get_edge(moving_index - 1).align_to_corners(get_corner(moving_index - 1).position, new_position)	
 	)
 
 	corner.get_node("Clickable").on_grab_up.connect(func(_event):
 		if deleting:
 			var moving_index = moving.get_index()
-			room.remove_corner(moving_index)
+			remove_corner(moving_index)
 
 		moving = null
 		deleting = false
@@ -238,13 +239,13 @@ func add_corner(position: Vector3, index: int = -1):
 	var num_corners = room.wall_corners.get_child_count()
 
 	if num_corners > 1:
-		add_edge(position, room.get_corner(index + 1).position, index)
+		add_edge(position, get_corner(index + 1).position, index)
 
 	if num_corners > 2:
 		if num_corners != room.wall_edges.get_child_count():
-			add_edge(room.get_corner(-2).position, room.get_corner(-1).position, -2)
+			add_edge(get_corner(-2).position, get_corner(-1).position, -2)
 		else:
-			room.get_edge(index - 1).align_to_corners(room.get_corner(index - 1).position, position)
+			get_edge(index - 1).align_to_corners(get_corner(index - 1).position, position)
 			
 
 func add_edge(from_pos: Vector3, to_pos: Vector3, index: int = -1):
@@ -273,7 +274,7 @@ func update_store():
 	store_room.corners = corners
 	store_room.height = room.room_ceiling.position.y
 
-	if corners.size() > 3:
-		Store.house.rooms.erase(store_room)
+	if corners.size() < 3:
+		House.body.delete_room(room.name)
 
 	Store.house.save_local()

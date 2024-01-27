@@ -38,7 +38,11 @@ func update_house():
 		create_room(new_room.name, 0)
 
 	for entity in Store.house.entities:
-		var entity_instance = create_entity(entity.id, entity.position)
+		var entity_instance = create_entity_in(entity.id, entity.room)
+
+		if entity_instance == null:
+			continue
+
 		entity_instance.global_rotation = entity.rotation
 
 func create_room(room_name: String, level: int) -> RoomType:
@@ -92,6 +96,7 @@ func delete_room(room_name):
 
 	room.get_parent().remove_child(room)
 	room.queue_free()
+	await room.tree_exited
 
 func is_editiong(room_name):
 	return editing_room != null && editing_room.name == room_name
@@ -140,15 +145,33 @@ func create_entity(entity_id: String, entity_position: Vector3):
 	var room = find_room_at(entity_position)
 
 	if room == null:
-		return
+		return null
 
 	var entity = EntityFactory.create_entity(entity_id)
 
 	if entity == null:
-		return
+		return null
 
 	room.get_node("Entities").add_child(entity)
 	entity.global_position = entity_position
+
+	save_all_entities()
+
+	return entity
+
+func create_entity_in(entity_id: String, room_name: String):
+	var room = find_room(room_name)
+
+	if room == null:
+		return null
+
+	var entity = EntityFactory.create_entity(entity_id)
+
+	if entity == null:
+		return null
+
+	room.get_node("Entities").add_child(entity)
+	entity.global_position = room.get_aabb().position + room.get_aabb().size / 2.0
 
 	save_all_entities()
 

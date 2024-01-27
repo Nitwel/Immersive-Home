@@ -96,6 +96,9 @@ func _generate_room_map():
 		old_room.queue_free()
 		await old_room.tree_exited
 
+	if rooms.size() == 0:
+		return
+
 	var current_min = Vector2(rooms[0].corners[0].x, rooms[0].corners[0].y)
 	var current_max = current_min
 
