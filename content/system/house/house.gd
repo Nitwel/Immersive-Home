@@ -43,6 +43,7 @@ func update_house():
 		if entity_instance == null:
 			continue
 
+		entity_instance.global_position = entity.position
 		entity_instance.global_rotation = entity.rotation
 
 func create_room(room_name: String, level: int) -> RoomType:
