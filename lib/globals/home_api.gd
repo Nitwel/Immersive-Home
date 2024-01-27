@@ -27,7 +27,7 @@ func _ready():
 	var success = Store.settings.load_local()
 
 	if success:
-		start_adapter(Store.settings.type, Store.settings.url, Store.settings.token)
+		start_adapter(Store.settings.type.to_lower(), Store.settings.url, Store.settings.token)
 	
 
 func start_adapter(type: String, url: String, token: String):

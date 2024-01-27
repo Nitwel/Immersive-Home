@@ -1,6 +1,7 @@
-extends StaticBody3D
+extends Entity
 
-@export var entity_id = "media_player.bedroomspeaker"
+const Entity = preload("../entity.gd")
+
 @export var image_width = 0.15
 
 @onready var previous = $Previous
@@ -18,6 +19,8 @@ var volume = 50
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	super()
+
 	var stateInfo = await HomeApi.get_state(entity_id)
 	set_state(stateInfo)
 

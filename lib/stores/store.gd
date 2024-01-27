@@ -32,7 +32,7 @@ func create_dict():
 
 func use_dict(dict: Dictionary):
 	for prop_info in get_property_list():
-		if prop_info.name.begins_with("_"):
+		if prop_info.name.begins_with("_") || prop_info.hint_string != "":
 			continue
 
 		var prop = get(prop_info.name)
@@ -57,8 +57,7 @@ func save_local(path = _save_path):
 	var json_text = JSON.stringify(data)
 	save_file.store_line(json_text)
 
-	_loaded = true
-	on_loaded.emit()
+	on_saved.emit()
 
 	return true
 
@@ -71,7 +70,15 @@ func load_local(path = _save_path):
 	if save_file == null:
 		return false
 
-	var json_text = save_file.get_line()
+	var json_text = save_file.get_as_text()
 	var save_data = VariantSerializer.parse_value(JSON.parse_string(json_text))
 
+	if save_data == null:
+		return false
+
 	use_dict(save_data)
+
+	_loaded = true
+	on_loaded.emit()
+
+	return true

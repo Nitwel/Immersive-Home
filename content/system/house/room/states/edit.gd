@@ -11,13 +11,20 @@ var height_corner: StaticBody3D = null
 var height_edge: StaticBody3D = null
 
 func _on_enter():
-	room.wall_corners.visible = true
-	room.wall_edges.visible = true
+	var room_store = Store.house.get_room(room.name)
 
-	if floor_corner != null:
-		floor_corner.visible = true
-		height_corner.visible = true
-		height_edge.visible = true
+	if room_store == null:
+		return
+
+	var corners = room_store.corners
+	
+	if corners.size() > 0:
+		add_floor_corner(Vector3(corners[0].x, 0, corners[0].y))
+		add_height_corner(Vector3(corners[0].x, 0, corners[0].y))
+		room.room_ceiling.position.y = room_store.height
+
+		for i in range(1, corners.size()):
+			add_corner(Vector3(corners[i].x, 0, corners[i].y))
 
 	room.room_ceiling.get_node("CollisionShape3D").disabled = (floor_corner == null && height_corner == null)
 	room.room_floor.get_node("CollisionShape3D").disabled = false
@@ -32,21 +39,37 @@ func _on_enter():
 	room.room_floor.get_node("Clickable").on_click.connect(_on_click_floor)
 
 func _on_leave():
-	room.update_store()
+	update_store()
 
-	room.wall_corners.visible = false
-	room.wall_edges.visible = false
+	for child in room.wall_corners.get_children():
+		child.queue_free()
+		await child.tree_exited
+
+	for child in room.wall_edges.get_children():
+		child.queue_free()
+		await child.tree_exited
 	
 	if floor_corner != null:
-		floor_corner.visible = false
-		height_corner.visible = false
-		height_edge.visible = false
+		floor_corner.queue_free()
+		await floor_corner.tree_exited
+		height_edge.queue_free()
+		await height_edge.tree_exited
 
 	room.room_ceiling.get_node("CollisionShape3D").disabled = true
 	room.room_floor.get_node("CollisionShape3D").disabled = true
 
 	room.room_ceiling.get_node("Clickable").on_click.disconnect(_on_click_ceiling)
 	room.room_floor.get_node("Clickable").on_click.disconnect(_on_click_floor)
+
+func get_corner(index: int) -> MeshInstance3D:
+	return room.wall_corners.get_child(index % room.wall_corners.get_child_count())
+
+func get_edge(index: int) -> MeshInstance3D:
+	return room.wall_edges.get_child(index % room.wall_edges.get_child_count())
+
+func remove_corner(index: int):
+	get_corner(index).queue_free()
+	get_edge(index).queue_free()
 
 func _on_click_floor(event):
 	if floor_corner != null && height_corner != null:
@@ -238,3 +261,16 @@ func add_edge(from_pos: Vector3, to_pos: Vector3, index: int = -1):
 	room.wall_edges.add_child(edge)
 	room.wall_edges.move_child(edge, index)
 	return edge
+
+func update_store():
+	var store_room = Store.house.get_room(room.name)
+
+	var corners = []
+
+	for corner in room.wall_corners.get_children():
+		corners.append(Vector2(corner.position.x, corner.position.z))
+
+	store_room.corners = corners
+	store_room.height = room.room_ceiling.position.y
+
+	Store.house.save_local()

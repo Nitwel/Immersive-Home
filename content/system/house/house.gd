@@ -27,36 +27,34 @@ func _physics_process(delta):
 	levels.scale.z = lerp(levels.scale.z, target_size, 10.0 * delta)
 
 func update_house():
-	for room in get_rooms(0):
-		room.queue_free()
+	for old_room in get_rooms(0):
+		old_room.queue_free()
+		await old_room.tree_exited
 
 	align_reference.update_align_reference()
 
-	for room in Store.house.rooms:
-			create_room(room.name, 0)
-			# TODO: Make room load itself!
+	for index in range(Store.house.rooms.size()):
+		var new_room = Store.house.rooms[index]
+		create_room(new_room.name, 0)
 
 	for entity in Store.house.entities:
 		var entity_instance = create_entity(entity.id, entity.position)
 		entity_instance.global_rotation = entity.rotation
 
 func create_room(room_name: String, level: int) -> RoomType:
-	if editing_room != null:
-		editing_room.editable = false
-		editing_room = null
+	var existing_room = Store.house.get_room(room_name)
+
+	if existing_room == null:
+		Store.house.rooms.append({
+			"name": room_name,
+			"height": 2.0,
+			"corners": [],
+		})
 
 	var room = Room.instantiate()
 	room.name = room_name
-	room.editable = true
-	editing_room = room
 	
 	get_level(level).add_child(room)
-
-	Store.house.rooms.append({
-		"name": room_name,
-		"height": 2.0,
-		"corners": [],
-	})
 
 	return room
 
@@ -152,6 +150,8 @@ func create_entity(entity_id: String, entity_position: Vector3):
 	room.get_node("Entities").add_child(entity)
 	entity.global_position = entity_position
 
+	save_all_entities()
+
 	return entity
 
 func update_mini_view():
@@ -203,8 +203,9 @@ func save_all_entities():
 				"id": entity.entity_id,
 				"position": entity.global_position,
 				"rotation": entity.global_rotation,
-				"room": room.name
+				"room": String(room.name)
 			}
 
 			Store.house.entities.append(entity_data)
 					
+	Store.house.save_local()

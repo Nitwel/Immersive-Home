@@ -27,15 +27,16 @@ func _ready():
 	)
 
 	credits.on_click.connect(func(_event):
-		print("_active_controller")
 		var credits_instance = credits_scene.instantiate()
 		get_tree().root.add_child(credits_instance)
 		var label = $Content/Credits/Label
 		credits_instance.global_position =  + label.to_global(label.position + Vector3(0.1, 0, -0.15))
 	)
 
-	input_url.text = Store.settings.url
-	input_token.text = Store.settings.token
+	Store.settings.on_loaded.connect(func():
+		input_url.text = Store.settings.url
+		input_token.text = Store.settings.token
+	)
 
 	button_connect.on_button_down.connect(func():
 		var url = input_url.text

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bswgmclohuqui"]
+[gd_scene load_steps=10 format=3 uid="uid://bswgmclohuqui"]
 
 [ext_resource type="Script" path="res://content/system/house/room/room.gd" id="1_fccq0"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="1_ugebq"]
@@ -9,8 +9,6 @@
 [ext_resource type="Script" path="res://content/system/house/room/states/edit.gd" id="7_ap14h"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_08sv0"]
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_7dibq"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_ap613"]
 plane = Plane(0, -1, 0, 0)
@@ -30,7 +28,6 @@ script = ExtResource("1_ugebq")
 
 [node name="WallMesh" type="MeshInstance3D" parent="."]
 material_override = ExtResource("3_al1ev")
-mesh = SubResource("ArrayMesh_7dibq")
 
 [node name="CeilingMesh" type="MeshInstance3D" parent="."]
 material_override = ExtResource("3_al1ev")

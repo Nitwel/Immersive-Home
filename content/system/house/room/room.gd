@@ -20,47 +20,103 @@ var editable: bool = false:
 		else:
 			state_machine.change_to("View")
 
-func get_corner(index: int) -> MeshInstance3D:
-	return wall_corners.get_child(index % wall_corners.get_child_count())
-
-func get_edge(index: int) -> MeshInstance3D:
-	return wall_edges.get_child(index % wall_edges.get_child_count())
-
 func has_point(point: Vector3) -> bool:
 	return get_aabb().has_point(point)
 
-func remove_corner(index: int):
-	get_corner(index).queue_free()
-	get_edge(index).queue_free()
-
 func get_aabb():
-	if wall_corners.get_child_count() == 0:
+	var room_store = Store.house.get_room(name)
+
+	var corners = room_store.corners
+
+	if corners.size() == 0:
 		return AABB()
 
-	var min_pos = wall_corners.get_child(0).position
-	var max_pos = wall_corners.get_child(0).position
+	var min_pos = Vector3(corners[0].x, 0, corners[0].y)
+	var max_pos = min_pos
 
-	for corner in wall_corners.get_children():
-		min_pos.x = min(min_pos.x, corner.position.x)
-		min_pos.z = min(min_pos.z, corner.position.z)
+	for corner in corners:
+		min_pos.x = min(min_pos.x, corner.x)
+		min_pos.z = min(min_pos.z, corner.y)
 
-		max_pos.x = max(max_pos.x, corner.position.x)
-		max_pos.z = max(max_pos.z, corner.position.z)
+		max_pos.x = max(max_pos.x, corner.x)
+		max_pos.z = max(max_pos.z, corner.y)
 
-	min_pos.y = room_floor.position.y
-	max_pos.y = room_ceiling.position.y
+	min_pos.y = 0
+	max_pos.y = room_store.height
 
 	return AABB(to_global(min_pos), to_global(max_pos) - to_global(min_pos))
 
-func update_store():
-	var store_room = Store.house.get_room(name)
+static func generate_wall_mesh(room_store: Dictionary):
+	if room_store.corners.size() < 2:
+		return null
 
-	var corners = []
+	var st = SurfaceTool.new()
+	var wall_up = Vector3.UP * room_store.height
 
-	for corner in wall_corners.get_children():
-		corners.append(Vector2(corner.position.x, corner.position.z))
+	st.begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
 
-	store_room.corners = corners
-	store_room.height = room_ceiling.position.y
+	for corner in room_store.corners:
+		var corner3D = Vector3(corner.x, 0, corner.y)
 
-	Store.house.save_local()
+		st.add_vertex(corner3D)
+		st.add_vertex(corner3D + wall_up)
+
+	var first_corner = Vector3(room_store.corners[0].x, 0, room_store.corners[0].y)
+
+	st.add_vertex(first_corner)
+	st.add_vertex(first_corner + wall_up)
+
+	st.index()
+	st.generate_normals()
+	st.generate_tangents()
+	var mesh = st.commit()
+	
+	return mesh
+
+static func generate_ceiling_mesh(room_store: Dictionary):
+
+	var points: PackedVector2Array = PackedVector2Array()
+	var edges: PackedInt32Array = PackedInt32Array()
+	var triangles: PackedInt32Array
+
+	var corners = room_store.corners
+
+	if corners.size() < 3:
+		return null
+
+	for i in range(corners.size()):
+		var corner = corners[i]
+		points.append(Vector2(corner.x, corner.y))
+		edges.append(i)
+		edges.append((i + 1) % corners.size())
+
+	var cdt: ConstrainedTriangulation = ConstrainedTriangulation.new()
+
+	cdt.init(true, true, 0.1)
+
+	cdt.insert_vertices(points)
+	cdt.insert_edges(edges)
+
+	cdt.erase_outer_triangles()
+
+	points = cdt.get_all_vertices()
+	triangles = cdt.get_all_triangles()
+
+	var st = SurfaceTool.new()
+
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+
+	for i in range(points.size()):
+		st.add_vertex(Vector3(points[i].x, 0, points[i].y))
+
+	for i in range(triangles.size()):
+		st.add_index(triangles[i])
+
+	st.index()
+	st.generate_normals()
+	st.generate_tangents()
+
+	var mesh = st.commit()
+
+	return mesh
+
