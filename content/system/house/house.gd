@@ -37,8 +37,6 @@ func update_house():
 		var new_room = Store.house.rooms[index]
 		create_room(new_room.name, 0)
 
-		print(Store.house.entities)
-
 	for entity_index in range(Store.house.entities.size()):
 		var entity = Store.house.entities[entity_index]
 
