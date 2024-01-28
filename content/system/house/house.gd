@@ -37,7 +37,9 @@ func update_house():
 		var new_room = Store.house.rooms[index]
 		create_room(new_room.name, 0)
 
-	for entity in Store.house.entities:
+	for entity_index in range(Store.house.entities.size()):
+		var entity = Store.house.entities[entity_index]
+
 		var entity_instance = create_entity_in(entity.id, entity.room)
 
 		if entity_instance == null:
@@ -174,8 +176,6 @@ func create_entity_in(entity_id: String, room_name: String):
 	room.get_node("Entities").add_child(entity)
 	entity.global_position = room.get_aabb().position + room.get_aabb().size / 2.0
 
-	save_all_entities()
-
 	return entity
 
 func update_mini_view():
@@ -189,6 +189,17 @@ func update_mini_view():
 
 		collision_shape.global_position = center
 		collision_shape.shape.size = aabb.size
+
+		var camera = get_node("/root/Main/XROrigin3D/XRCamera3D")
+		var camera_position = camera.global_position
+		var camera_direction = -camera.global_transform.basis.z
+
+		camera_position.y *= 0.5
+		camera_direction.y = 0.0
+
+
+		var target_position = camera_position + camera_direction.normalized() * 0.2
+		levels.global_position = target_position - center * 0.1
 	else:
 		levels.position = Vector3(0, 0, 0)
 
