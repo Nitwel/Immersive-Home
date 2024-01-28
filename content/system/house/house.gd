@@ -189,6 +189,17 @@ func update_mini_view():
 
 		collision_shape.global_position = center
 		collision_shape.shape.size = aabb.size
+
+		var camera = get_node("/root/Main/XROrigin3D/XRCamera3D")
+		var camera_position = camera.global_position
+		var camera_direction = -camera.global_transform.basis.z
+
+		camera_position.y *= 0.5
+		camera_direction.y = 0.0
+
+
+		var target_position = camera_position + camera_direction.normalized() * 0.2
+		levels.global_position = target_position - center * 0.1
 	else:
 		levels.position = Vector3(0, 0, 0)
 
