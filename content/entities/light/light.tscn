@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cw86rc42dv2d8"]
+[gd_scene load_steps=18 format=3 uid="uid://cw86rc42dv2d8"]
 
 [ext_resource type="Script" path="res://content/entities/light/light.gd" id="1_ykxy3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_4sfxb"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="6_mhjlm"]
 [ext_resource type="Texture2D" uid="uid://hy2f6is7qjyv" path="res://assets/canvas.png" id="7_ximu1"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="8_1sfll"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="8_nhcff"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
 radius = 0.05
@@ -59,6 +60,7 @@ bottom_radius = 0.08
 height = 0.01
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1jd14"]
+resource_local_to_scene = true
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_x68ys"]
 top_radius = 0.01
@@ -68,6 +70,8 @@ height = 0.005
 [node name="Light" type="StaticBody3D" groups=["entity"]]
 collision_mask = 0
 script = ExtResource("1_ykxy3")
+color_off = null
+color_on = null
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_ukj14")
@@ -128,3 +132,22 @@ script = ExtResource("8_1sfll")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.65661e-10, 0.01, 0)
 material_override = SubResource("StandardMaterial3D_1jd14")
 mesh = SubResource("CylinderMesh_x68ys")
+
+[node name="Modes" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.11, 0)
+
+[node name="Next" parent="Modes" instance=ExtResource("8_nhcff")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.04, 0, 0)
+label = "navigate_next"
+icon = true
+
+[node name="Previous" parent="Modes" instance=ExtResource("8_nhcff")]
+transform = Transform3D(1, 0, 0, 0, 2.98023e-08, -1, 0, 1, 2.98023e-08, -0.1, 0, 0)
+label = "navigate_before"
+icon = true
+
+[node name="Label" type="Label3D" parent="Modes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, 0, 0)
+pixel_size = 0.001
+text = "Default"
+horizontal_alignment = 0

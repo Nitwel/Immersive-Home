@@ -10,6 +10,10 @@ const color_wheel_img := preload("res://assets/canvas.png")
 @onready var slider: Slider3D = $Slider
 @onready var color_wheel = $ColorWheel
 @onready var color_puck = $ColorWheel/Puck
+@onready var modes = $Modes
+@onready var mode_next = $Modes/Next
+@onready var mode_before = $Modes/Previous
+@onready var mode_label = $Modes/Label
 
 var state = true
 var brightness = 0 # 0-255
@@ -20,6 +24,36 @@ func _ready():
 
 	var stateInfo = await HomeApi.get_state(entity_id)
 	set_state(stateInfo["state"] == "on")
+
+	if stateInfo.has("attributes") && stateInfo["attributes"].has("effect_list") && stateInfo["attributes"]["effect_list"].size() > 0:
+		mode_label.text = stateInfo["attributes"]["effect"]
+
+		mode_next.on_button_down.connect(func():
+			var index = stateInfo["attributes"]["effect_list"].find(stateInfo["attributes"]["effect"])
+			if index == -1:
+				index = 0
+			else:
+				index = (index + 1) % stateInfo["attributes"]["effect_list"].size()
+
+			mode_label.text = stateInfo["attributes"]["effect_list"][index]
+
+			HomeApi.set_state(entity_id, "on", {"effect": stateInfo["attributes"]["effect_list"][index]})
+		)
+
+		mode_before.on_button_down.connect(func():
+			var index = stateInfo["attributes"]["effect_list"].find(stateInfo["attributes"]["effect"])
+			if index == -1:
+				index = 0
+			else:
+				index = (index - 1) % stateInfo["attributes"]["effect_list"].size()
+
+			mode_label.text = stateInfo["attributes"]["effect_list"][index]
+
+			HomeApi.set_state(entity_id, "on", {"effect": stateInfo["attributes"]["effect_list"][index]})
+		)
+	else:
+		remove_child(modes)
+
 
 	if stateInfo.has("attributes") && stateInfo["attributes"].has("supported_color_modes") && stateInfo["attributes"]["supported_color_modes"].has("rgb"):
 		color_wheel.get_node("Clickable").on_press_down.connect(func(event: EventPointer):
@@ -35,7 +69,7 @@ func _ready():
 			color_puck.position = Vector3(target_point.x, color_puck.position.y, target_point.z)
 
 			var attributes = {
-				"rgb_color": [int(color.r * 255), int(color.g * 255), int(color.b * 255)]
+				"rgb_color": [int(color.r * 255), int(color.g * 255), int(color.b * 255)],
 			}
 
 			HomeApi.set_state(entity_id, "on", attributes)
