@@ -37,7 +37,11 @@ func update_house():
 		var new_room = Store.house.rooms[index]
 		create_room(new_room.name, 0)
 
-	for entity in Store.house.entities:
+		print(Store.house.entities)
+
+	for entity_index in range(Store.house.entities.size()):
+		var entity = Store.house.entities[entity_index]
+
 		var entity_instance = create_entity_in(entity.id, entity.room)
 
 		if entity_instance == null:
@@ -173,8 +177,6 @@ func create_entity_in(entity_id: String, room_name: String):
 
 	room.get_node("Entities").add_child(entity)
 	entity.global_position = room.get_aabb().position + room.get_aabb().size / 2.0
-
-	save_all_entities()
 
 	return entity
 
