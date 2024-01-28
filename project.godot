@@ -63,4 +63,5 @@ lights_and_shadows/directional_shadow/soft_shadow_filter_quality.mobile=4
 [xr]
 
 openxr/enabled=true
+openxr/startup_alert=false
 shaders/enabled=true
