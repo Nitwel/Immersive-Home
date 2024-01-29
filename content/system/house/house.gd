@@ -97,9 +97,15 @@ func delete_room(room_name):
 	if editing_room == room:
 		editing_room = null
 
-	room.get_parent().remove_child(room)
 	room.queue_free()
 	await room.tree_exited
+
+	var store_room = Store.house.get_room(room_name)
+
+	if store_room != null:
+		Store.house.rooms.erase(store_room)
+
+	Store.house.save_local()
 
 func is_editiong(room_name):
 	return editing_room != null && editing_room.name == room_name
@@ -221,15 +227,24 @@ func fix_reference():
 
 func save_reference():
 	if fixing_reference:
+		for room in get_rooms(0):
+			room.editable = true
+
 		var align_transform = align_reference.global_transform
-		transform = align_reference.get_new_transform(transform)
+		transform = align_reference.get_new_transform()
 		align_reference.global_transform = align_transform
+
+		align_reference.update_store()
+
+		for room in get_rooms(0):
+			room.editable = false
+
+		save_all_entities()
 
 	align_reference.disabled = true
 	align_reference.visible = false
 	align_reference.update_initial_positions()
 
-	align_reference.update_store()
 	Store.house.save_local()
 
 func save_all_entities():

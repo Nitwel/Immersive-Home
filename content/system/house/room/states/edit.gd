@@ -19,13 +19,13 @@ func _on_enter():
 	var corners = room_store.corners
 	
 	if corners.size() > 0:
-		add_floor_corner(Vector3(corners[0].x, 0, corners[0].y))
-		add_height_corner(Vector3(corners[0].x, 0, corners[0].y))
+		add_floor_corner(room.to_local(Vector3(corners[0].x, 0, corners[0].y)))
+		add_height_corner(room.to_local(Vector3(corners[0].x, 0, corners[0].y)))
 		room.room_ceiling.position.y = room_store.height
-		height_edge.align_to_corners(floor_corner.global_position, height_corner.global_position)
+		height_edge.align_to_corners(floor_corner.position, floor_corner.position + Vector3.UP * room.room_ceiling.position.y)
 
 		for i in range(1, corners.size()):
-			add_corner(Vector3(corners[i].x, 0, corners[i].y))
+			add_corner(room.to_local(Vector3(corners[i].x, 0, corners[i].y)))
 
 	room.room_ceiling.get_node("CollisionShape3D").disabled = (floor_corner == null && height_corner == null)
 	room.room_floor.get_node("CollisionShape3D").disabled = false
@@ -164,7 +164,7 @@ func add_height_corner(position: Vector3):
 			return
 
 		room.room_ceiling.position.y = new_position.y
-		height_edge.align_to_corners(floor_corner.global_position, height_corner.global_position)
+		height_edge.align_to_corners(floor_corner.position, floor_corner.position + Vector3.UP * room.room_ceiling.position.y)
 		
 	)
 
@@ -266,15 +266,15 @@ func add_edge(from_pos: Vector3, to_pos: Vector3, index: int = -1):
 func update_store():
 	var store_room = Store.house.get_room(room.name)
 
+	if store_room == null:
+		return
+
 	var corners = []
 
 	for corner in room.wall_corners.get_children():
-		corners.append(Vector2(corner.position.x, corner.position.z))
+		corners.append(Vector2(corner.global_position.x, corner.global_position.z))
 
 	store_room.corners = corners
 	store_room.height = room.room_ceiling.position.y
-
-	if corners.size() < 3:
-		House.body.delete_room(room.name)
 
 	Store.house.save_local()
