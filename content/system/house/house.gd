@@ -210,11 +210,13 @@ func update_mini_view():
 
 func edit_reference():
 	fixing_reference = false
+	align_reference.visible = true
 	align_reference.disabled = false
 
 func fix_reference():
 	fixing_reference = true
 	align_reference.disabled = false
+	align_reference.visible = true
 	align_reference.update_initial_positions()
 
 func save_reference():
@@ -224,6 +226,7 @@ func save_reference():
 		align_reference.global_transform = align_transform
 
 	align_reference.disabled = true
+	align_reference.visible = false
 	align_reference.update_initial_positions()
 
 	align_reference.update_store()

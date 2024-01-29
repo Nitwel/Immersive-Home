@@ -12,7 +12,7 @@ static func key_to_string(key: Key, caps: bool = false, apply_to: String = "") -
 		KEY_ASCIITILDE: apply_to += "~"
 		KEY_SLASH: apply_to += "/"
 		KEY_BACKSLASH: apply_to += "\\"
-		KEY_COLON: apply_to += ";"
+		KEY_COLON: apply_to += ":"
 		KEY_COMMA: apply_to += ","
 		KEY_PERIOD: apply_to += "."
 		KEY_MINUS: apply_to += "-"
