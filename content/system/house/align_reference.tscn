@@ -4,7 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://brf6mm2gxj7y2" path="res://content/system/house/room/wall_corner.tscn" id="2_ppkie"]
 [ext_resource type="PackedScene" uid="uid://dlj5chj7ndgua" path="res://content/system/house/room/wall_edge.tscn" id="3_6o3xn"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="3_7ktdq"]
-[ext_resource type="Material" uid="uid://dxyuncqxagt28" path="res://content/system/house/room/walls_mini.tres" id="4_jkpj4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_64dod"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_k2m3v"]
 top_radius = 0.001
@@ -26,7 +27,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
 
 [node name="MeshInstance3D" parent="Corner1/Corner2" index="1"]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-material_override = ExtResource("4_jkpj4")
+material_override = SubResource("StandardMaterial3D_64dod")
 mesh = SubResource("CylinderMesh_k2m3v")
 
 [node name="Movable" type="Node" parent="Corner1/Corner2"]

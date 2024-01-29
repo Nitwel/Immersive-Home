@@ -41,9 +41,12 @@ var edit_room = false:
 			room_button.label = "edit"
 
 func _ready():
-	Store.house.on_loaded.connect(func():
+	if Store.house.is_loaded():
 		_generate_room_map()
-	)
+	else:
+		Store.house.on_loaded.connect(func():
+			_generate_room_map()
+		)
 
 	room_button.on_button_down.connect(func():
 		if selected_room == null:

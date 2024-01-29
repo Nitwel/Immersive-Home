@@ -27,6 +27,9 @@ func _ready():
 
 	corner2.get_node("Movable").on_move.connect(func(position, rotation):
 		edge.align_to_corners(corner1.global_position, corner2.global_position)
+
+		corner2.look_at(corner1.global_position, Vector3.UP)
+		corner2.rotate(Vector3.UP, deg_to_rad(-90))
 	)
 
 	corner2.get_node("Movable").restrict_movement = func(new_position):
@@ -40,13 +43,16 @@ func update_initial_positions():
 	edge.align_to_corners(corner1.global_position, corner2.global_position)
 	marker.global_transform = House.body.transform
 
-func get_new_transform(old_transform: Transform3D):
+func get_new_transform():
 	marker.scale = Vector3(1, 1, 1)
 	return marker.global_transform
 
 func update_align_reference():
 	corner1.global_position = Store.house.align_position1
 	corner2.global_position = Store.house.align_position2
+
+	corner2.look_at(corner1.global_position, Vector3.UP)
+	corner2.rotate(Vector3.UP, deg_to_rad(-90))
 
 	edge.align_to_corners(corner1.global_position, corner2.global_position)
 

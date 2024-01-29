@@ -21,7 +21,8 @@ func _init():
 	_save_path = "user://house.json"
 
 func clear():
-	pass
+	rooms = []
+	entities = []
 
 func get_room(name):
 	for room in rooms:

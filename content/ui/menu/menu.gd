@@ -1,15 +1,9 @@
 extends Node3D
 
-const Proxy = preload("res://lib/utils/proxy.gd")
 const Notification = preload("res://content/ui/components/notification/notification.tscn")
 
-@onready var menu_root = $AnimationContainer
-@onready var content = $AnimationContainer/Content
-@onready var nav = $AnimationContainer/Navigation
 @onready var animation_player = $AnimationPlayer
 @onready var notify_place = $AnimationContainer/NotifyPlace
-
-var selected_nav = null
 
 var show_menu := false:
 	set(value):

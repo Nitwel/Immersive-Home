@@ -33,10 +33,14 @@ func _ready():
 		credits_instance.global_position =  + label.to_global(label.position + Vector3(0.1, 0, -0.15))
 	)
 
-	Store.settings.on_loaded.connect(func():
+	if Store.settings.is_loaded():
 		input_url.text = Store.settings.url
 		input_token.text = Store.settings.token
-	)
+	else:
+		Store.settings.on_loaded.connect(func():
+			input_url.text = Store.settings.url
+			input_token.text = Store.settings.token
+		)
 
 	button_connect.on_button_down.connect(func():
 		var url = input_url.text

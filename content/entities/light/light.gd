@@ -26,7 +26,8 @@ func _ready():
 	set_state(stateInfo["state"] == "on")
 
 	if stateInfo.has("attributes") && stateInfo["attributes"].has("effect_list") && stateInfo["attributes"]["effect_list"].size() > 0:
-		mode_label.text = stateInfo["attributes"]["effect"]
+		if stateInfo["attributes"].has("effect") && stateInfo["attributes"]["effect"] != null:
+			mode_label.text = stateInfo["attributes"]["effect"]
 
 		mode_next.on_button_down.connect(func():
 			var index = stateInfo["attributes"]["effect_list"].find(stateInfo["attributes"]["effect"])

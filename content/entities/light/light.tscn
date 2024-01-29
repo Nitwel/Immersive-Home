@@ -70,8 +70,6 @@ height = 0.005
 [node name="Light" type="StaticBody3D" groups=["entity"]]
 collision_mask = 0
 script = ExtResource("1_ykxy3")
-color_off = null
-color_on = null
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_ukj14")
