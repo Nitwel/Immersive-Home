@@ -9,7 +9,9 @@ func _ready():
 	ray.set_collision_mask_value(5, true)
 	get_parent().add_child.call_deferred(ray)
 
-func _process(_delta):
+	EventSystem.on_slow_tick.connect(_slow_tick)
+
+func _slow_tick(_delta):
 	ray.target_position = get_parent().to_local(player_camera.global_position)
 
 	get_parent().visible = ray.is_colliding() == false

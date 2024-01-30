@@ -9,8 +9,8 @@ func _on_enter():
 	if room_store == null || room_store.corners.size() < 3:
 		return
 
-	room.wall_mesh.visible = true
-	room.ceiling_mesh.visible = true
+	room.wall_mesh.visible = false
+	room.ceiling_mesh.visible = false
 
 	room.wall_mesh.mesh = Room.generate_wall_mesh(room_store)
 
@@ -37,13 +37,8 @@ func _on_enter():
 		static_body.collision_mask = 0
 		static_body.add_child(collision)
 		room.wall_collisions.add_child(static_body)
-	
-	room.wall_mesh.visible = true
 
 func _on_leave():
-	room.wall_mesh.visible = false
-	room.ceiling_mesh.visible = false
-
 	room.room_ceiling.get_node("CollisionShape3D").disabled = true
 	room.room_floor.get_node("CollisionShape3D").disabled = true
 

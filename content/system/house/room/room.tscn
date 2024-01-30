@@ -1,8 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://bswgmclohuqui"]
+[gd_scene load_steps=9 format=3 uid="uid://bswgmclohuqui"]
 
 [ext_resource type="Script" path="res://content/system/house/room/room.gd" id="1_fccq0"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="1_ugebq"]
-[ext_resource type="Material" uid="uid://bbx6fv7jq50tr" path="res://content/system/house/room/walls.tres" id="3_al1ev"]
 [ext_resource type="Script" path="res://lib/utils/state_machine/state_machine.gd" id="4_nbbo6"]
 [ext_resource type="Script" path="res://content/system/house/room/states/mini.gd" id="6_g4qca"]
 [ext_resource type="Script" path="res://content/system/house/room/states/view.gd" id="6_g066t"]
@@ -27,10 +26,8 @@ shape = SubResource("WorldBoundaryShape3D_08sv0")
 script = ExtResource("1_ugebq")
 
 [node name="WallMesh" type="MeshInstance3D" parent="."]
-material_override = ExtResource("3_al1ev")
 
 [node name="CeilingMesh" type="MeshInstance3D" parent="."]
-material_override = ExtResource("3_al1ev")
 
 [node name="WallCollisions" type="Node3D" parent="."]
 

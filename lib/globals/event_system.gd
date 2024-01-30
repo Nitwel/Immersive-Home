@@ -2,6 +2,7 @@ extends Node
 
 const FN_PREFIX = "_on_"
 const SIGNAL_PREFIX = "on_"
+const SLOW_TICK = 0.1
 
 # Interaction Events
 signal on_click(event: EventPointer)
@@ -29,6 +30,15 @@ signal on_touch_move(event: EventTouch)
 signal on_touch_leave(event: EventTouch)
 
 signal on_notify(event: EventNotify)
+
+signal on_slow_tick(delta: float)
+
+var _slow_tick: float = 0.0
+func _physics_process(delta):
+	_slow_tick += delta
+	if _slow_tick >= SLOW_TICK:
+		on_slow_tick.emit(_slow_tick)
+		_slow_tick -= SLOW_TICK
 
 var _active_node: Node = null
 

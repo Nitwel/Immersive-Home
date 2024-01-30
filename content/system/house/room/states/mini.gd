@@ -6,7 +6,7 @@ const walls_material = preload("../walls.tres")
 
 func _on_enter():
 	room.wall_mesh.visible = true
-	room.ceiling_mesh.visible = true
+	room.ceiling_mesh.visible = false
 	room.wall_mesh.material_override = walls_mini_material
 	room.room_ceiling.get_node("CollisionShape3D").disabled = true
 	room.room_floor.get_node("CollisionShape3D").disabled = true

@@ -6,6 +6,7 @@ const RoomType = preload("./room/room.gd")
 @onready var levels = $Levels
 @onready var collision_shape = $Levels/CollisionShape3D
 @onready var align_reference = $AlignReference
+@onready var animate_timer = $AnimateTimer
 
 var fixing_reference: bool = false
 var editing_room: RoomType = null
@@ -22,9 +23,11 @@ func _ready():
 	)
 
 func _physics_process(delta):
-	levels.scale.x = lerp(levels.scale.x, target_size, 10.0 * delta)
-	levels.scale.y = lerp(levels.scale.y, target_size, 10.0 * delta)
-	levels.scale.z = lerp(levels.scale.z, target_size, 10.0 * delta)
+
+	if animate_timer.is_stopped() == false:
+		levels.scale.x = lerp(levels.scale.x, target_size, 10.0 * delta)
+		levels.scale.y = lerp(levels.scale.y, target_size, 10.0 * delta)
+		levels.scale.z = lerp(levels.scale.z, target_size, 10.0 * delta)
 
 func update_house():
 	for old_room in get_rooms(0):
@@ -210,6 +213,7 @@ func update_mini_view():
 		levels.position = Vector3(0, 0, 0)
 
 	target_size = 0.1 if mini_view else 1.0
+	animate_timer.start()
 
 	for room in get_rooms(0):
 		room.state_machine.change_to("Mini" if mini_view else "View")
