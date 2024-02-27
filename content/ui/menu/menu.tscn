@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=21 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="Material" uid="uid://bnwimm214q67g" path="res://assets/materials/sec-500.material" id="2_0x5at"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_8coxu"]
+[ext_resource type="Script" path="res://content/system/hands/touch_area.gd" id="2_fxtnc"]
 [ext_resource type="Script" path="res://content/ui/components/tabs/tabs.gd" id="4_eavfx"]
 [ext_resource type="PackedScene" uid="uid://crrb0l3ekuotj" path="res://content/ui/menu/edit/edit_menu.tscn" id="4_r2raj"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_w4i01"]
@@ -11,6 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://ddpxthb414unp" path="res://content/ui/menu/view/view_menu.tscn" id="8_71pkg"]
 [ext_resource type="PackedScene" uid="uid://c01gkeldvjwtr" path="res://content/ui/menu/room/room_menu.tscn" id="10_u4i1x"]
 [ext_resource type="PackedScene" uid="uid://c6r4higceibif" path="res://content/ui/menu/settings/settings_menu.tscn" id="11_7wm6b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fgcdq"]
+size = Vector3(1, 0.51, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_e1esh"]
 size = Vector3(0.38, 0.01, 0.32)
@@ -163,6 +167,15 @@ _data = {
 
 [node name="Menu" type="StaticBody3D"]
 script = ExtResource("1_ng4u3")
+
+[node name="TouchBody3D" type="Area3D" parent="."]
+collision_layer = 13311
+collision_mask = 0
+script = ExtResource("2_fxtnc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TouchBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.245, 0)
+shape = SubResource("BoxShape3D_fgcdq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.00426685, 1.49012e-08)
