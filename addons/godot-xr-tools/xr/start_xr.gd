@@ -186,6 +186,10 @@ func _set_enable_passthrough(p_new_value : bool) -> void:
 		else:
 			xr_interface.stop_passthrough()
 
+		var modes = xr_interface.get_supported_environment_blend_modes()
+		if xr_interface.XR_ENV_BLEND_MODE_ALPHA_BLEND in modes:
+			xr_interface.set_environment_blend_mode(xr_interface.XR_ENV_BLEND_MODE_ALPHA_BLEND)
+
 
 # Perform WebXR setup
 func _setup_for_webxr() -> bool:

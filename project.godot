@@ -25,6 +25,10 @@ EventSystem="*res://lib/globals/event_system.gd"
 Store="*res://lib/globals/main_store.gd"
 House="*res://lib/globals/house_body.gd"
 
+[display]
+
+window/vsync/vsync_mode=0
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg", "res://addons/godotopenxrvendors/plugin.cfg")
@@ -53,15 +57,23 @@ theme/custom_font="res://assets/fonts/ui_font_500.tres"
 3d_physics/layer_4="physics"
 3d_physics/layer_5="room"
 
+[physics]
+
+common/physics_ticks_per_second=30
+
 [rendering]
 
-renderer/rendering_method="mobile"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality=4
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality.mobile=4
+viewport/transparent_background=true
 
 [xr]
 
 openxr/enabled=true
+openxr/foveation_level=1
+openxr/foveation_dynamic=true
 openxr/startup_alert=false
 shaders/enabled=true
