@@ -113,15 +113,17 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.15,
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ColorWheel"]
 shape = SubResource("ConvexPolygonShape3D_k3ob2")
 
+[node name="Sprite3D" type="Sprite3D" parent="ColorWheel"]
+transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, -0.15, 0, 0.15, -6.55671e-09, 0, 0.004, 0)
+flip_v = true
+pixel_size = 0.001
+texture = ExtResource("7_ximu1")
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ColorWheel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.002, 0)
 material_override = SubResource("StandardMaterial3D_7p762")
 mesh = SubResource("CylinderMesh_c10un")
 skeleton = NodePath("../..")
-
-[node name="Decal" type="Decal" parent="ColorWheel/MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.005, 0)
-size = Vector3(0.15, 0.001, 0.15)
-texture_albedo = ExtResource("7_ximu1")
 
 [node name="Clickable" type="Node" parent="ColorWheel"]
 script = ExtResource("8_1sfll")

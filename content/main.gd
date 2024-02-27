@@ -16,6 +16,7 @@ func _ready():
 	if OS.get_name() == "Android":
 		# OS.request_permissions()
 		environment.environment.sky.set_material(sky_passthrough)
+		get_viewport().transparent_bg = true
 	else:
 		RenderingServer.set_debug_generate_wireframes(true)
 
