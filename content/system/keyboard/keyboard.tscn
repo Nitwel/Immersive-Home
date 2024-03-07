@@ -33,14 +33,12 @@ focusable = false
 label = "keyboard_capslock"
 icon = true
 toggleable = true
-echo = false
 
 [node name="Paste" parent="." instance=ExtResource("1_xdpwr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.349964, 0, 0.089964)
 focusable = false
 label = "assignment"
 icon = true
-echo = false
 
 [node name="Keys" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.310036, 0, -0.090036)
