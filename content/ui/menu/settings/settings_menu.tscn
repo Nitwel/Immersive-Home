@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://c6r4higceibif"]
+[gd_scene load_steps=9 format=3 uid="uid://c6r4higceibif"]
 
 [ext_resource type="Script" path="res://content/ui/menu/settings/settings_menu.gd" id="1_0lte6"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_faxng"]
+[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_6lhhi"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="3_qmg6q"]
 [ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="4_q3x6k"]
 [ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="5_eiwd4"]
@@ -17,6 +18,7 @@ script = ExtResource("1_0lte6")
 
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.15)
+material_override = ExtResource("2_6lhhi")
 mesh = SubResource("BoxMesh_e51x8")
 
 [node name="Content" type="Node3D" parent="."]
@@ -64,7 +66,7 @@ horizontal_alignment = 0
 
 [node name="Connect" parent="Content" instance=ExtResource("1_faxng")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0.12)
-label = "wifi"
+label = "login"
 icon = true
 
 [node name="Credits" type="StaticBody3D" parent="Content"]
@@ -93,12 +95,39 @@ outline_size = 0
 [node name="Clickable" type="Node" parent="Content/Credits"]
 script = ExtResource("3_qmg6q")
 
+[node name="SaveLabel" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.21)
+pixel_size = 0.001
+text = "Manual Save:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
 [node name="Save" parent="Content" instance=ExtResource("1_faxng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0.12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 0, 0.21)
 label = "save"
 icon = true
 
+[node name="clearSaveLabel" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.26)
+pixel_size = 0.001
+text = "Clear Save:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
 [node name="ClearSave" parent="Content" instance=ExtResource("1_faxng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, 0.12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 0, 0.27)
 label = "close"
 icon = true
+
+[node name="clearSaveWarning" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.28)
+pixel_size = 0.001
+modulate = Color(1, 0, 0, 1)
+text = "Caution! This will delete all your rooms and placed devices."
+font_size = 8
+outline_size = 0
+horizontal_alignment = 0
+autowrap_mode = 3
+width = 150.0
