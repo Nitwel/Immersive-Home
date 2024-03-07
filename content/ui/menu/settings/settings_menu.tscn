@@ -22,21 +22,6 @@ mesh = SubResource("BoxMesh_e51x8")
 [node name="Content" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.007, 0)
 
-[node name="Label3D" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.124377, 0, 0.263575)
-pixel_size = 0.001
-text = "Spawn Ball"
-font_size = 18
-outline_size = 0
-
-[node name="Button" parent="Content" instance=ExtResource("1_faxng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0358097, 0, 0.263575)
-label = "sports_basketball"
-icon = true
-
-[node name="Clickable" type="Node" parent="Content/Button"]
-script = ExtResource("3_qmg6q")
-
 [node name="ConnectionStatus" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.250698, 0, 0.151303)
 pixel_size = 0.001

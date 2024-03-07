@@ -1,6 +1,6 @@
 extends Entity
 
-const Entity = preload("../entity.gd")
+const Entity = preload ("../entity.gd")
 
 @export var image_width = 0.15
 
@@ -15,7 +15,6 @@ const Entity = preload("../entity.gd")
 
 var playing = false
 var volume = 50
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -45,12 +44,14 @@ func _ready():
 
 	slider.on_value_changed.connect(set_volume)
 
-
 func set_volume(value):
 	volume = value
 	HomeApi.set_state(entity_id, "volume", {"volume_level": value / 100})
 
 func set_state(stateInfo):
+	if stateInfo == null:
+		return
+
 	var state = stateInfo["state"]
 
 	if state == "playing":

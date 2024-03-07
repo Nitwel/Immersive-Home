@@ -6,7 +6,7 @@ class_name Button3D
 signal on_button_down()
 signal on_button_up()
 
-const IconFont = preload("res://assets/icons/icons.tres")
+const IconFont = preload ("res://assets/icons/icons.tres")
 
 @onready var label_node: Label3D = $Body/Label
 @onready var finger_area: Area3D = $FingerArea
@@ -73,6 +73,7 @@ var active: bool = false:
 		update_animation()
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var console = get_node("/root/Main/Console")
 
 func _ready():
 	if initial_active:
@@ -81,9 +82,9 @@ func _ready():
 func update_animation():
 	var length = animation_player.get_animation("down").length
 
-	if active && animation_player.current_animation_position != length:
+	if active&&animation_player.current_animation_position != length:
 		animation_player.play("down")
-	elif !active && animation_player.current_animation_position != 0:
+	elif !active&&animation_player.current_animation_position != 0:
 		animation_player.play_backwards("down")
 		
 func _on_press_down(event):
@@ -116,6 +117,9 @@ func _on_press_up(event):
 		on_button_up.emit()
 
 func _on_touch_enter(event: EventTouch):
+	if event.target != finger_area:
+		return
+
 	animation_player.stop()
 	animation_player.speed_scale = 0
 	animation_player.current_animation = "down"
@@ -132,10 +136,9 @@ func _on_touch_leave(_event: EventTouch):
 	if toggleable:
 		active = !active
 		if active:
-			on_button_up.emit() 
+			on_button_up.emit()
 		else:
 			on_button_down.emit()
-	
 
 func _touch_change(event: EventTouch):
 	if disabled:
@@ -148,14 +151,14 @@ func _touch_change(event: EventTouch):
 		if pos.y > finger_pos.y:
 			pos = finger_pos
 
-	var button_height = finger_area.get_node("CollisionShape3D").shape.size.y
-	var button_center = finger_area.position.y
+	var button_height = 0.2
+	var button_center = 0.1
 
 	var percent = clamp((button_center + button_height / 2 - pos.y) / (button_height / 2), 0, 1)
 
-	if !active && percent < 1:
+	if !active&&percent < 1:
 		on_button_down.emit()
-	elif active && percent >= 1:
+	elif active&&percent >= 1:
 		on_button_up.emit()
 		
 	animation_player.seek(percent * animation_player.current_animation_length, true)
@@ -164,4 +167,3 @@ func _touch_change(event: EventTouch):
 		return
 	
 	active = percent < 1
-	

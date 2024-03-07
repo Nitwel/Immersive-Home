@@ -1,12 +1,11 @@
 extends RoomState
 
-const RoomState = preload("./room_state.gd")
-
+const RoomState = preload ("./room_state.gd")
 
 func _on_enter():
 	var room_store = Store.house.get_room(room.name)
 
-	if room_store == null || room_store.corners.size() < 3:
+	if room_store == null||room_store.corners.size() < 3:
 		return
 
 	room.wall_mesh.visible = false
@@ -16,6 +15,8 @@ func _on_enter():
 
 	if room.wall_mesh.mesh == null:
 		return
+
+	room.room_ceiling.position.y = room_store.height
 
 	var ceiling_shape = room.room_ceiling.get_node("CollisionShape3D")
 	var floor_shape = room.room_floor.get_node("CollisionShape3D")
@@ -64,7 +65,7 @@ func generate_collision():
 		var transform = Transform3D()
 		var back_vector = (corner - next_corner).cross(Vector3.UP).normalized() * shape.size.z / 2
 
-		transform.basis = Basis((next_corner - corner).normalized(), Vector3.UP,  back_vector.normalized())
+		transform.basis = Basis((next_corner - corner).normalized(), Vector3.UP, back_vector.normalized())
 		transform.origin = corner + (next_corner - corner) / 2 + back_vector + Vector3.UP * shape.size.y / 2
 
 		var collision_shape = CollisionShape3D.new()

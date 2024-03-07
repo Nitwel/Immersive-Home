@@ -4,6 +4,9 @@ class_name TouchBody3D
 @export var plane = Plane.PLANE_XZ
 
 func _ready():
+	set_collision_layer_value(1, false)
+	set_collision_layer_value(3, true)
+
 	var collisionShape = null
 
 	for child in get_children():
