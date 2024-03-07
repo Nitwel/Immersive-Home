@@ -76,7 +76,6 @@ var active: bool = false:
 		update_animation()
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
-@onready var console = get_node("/root/Main/Console")
 var echo_timer: Timer = null
 
 func _ready():
