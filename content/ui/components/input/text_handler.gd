@@ -14,7 +14,7 @@ var caret_position: int = 3:
 func set_width(value: float):
 	width = value
 
-func set_text(value: String, insert: bool = false):
+func set_text(value: String, insert: bool=false):
 	var old_text = text
 	text = value
 
@@ -23,34 +23,39 @@ func set_text(value: String, insert: bool = false):
 
 	gap_offsets = _calculate_text_gaps()
 	if insert == false:
-		caret_position += text.length() - old_text.length()
+		var text_diff = text.length() - old_text.length()
+		caret_position += text_diff
+		if text_diff < 0:
+			char_offset = max(0, char_offset + text_diff)
 	else:
 		caret_position = 0
 
 	overflow_index = _calculate_overflow_index()
 	focus_caret()
 
+	print(overflow_index, " ", char_offset, " ", caret_position)
+
 func get_display_text():
 	# In case all chars fit, return the whole text.
-	if overflow_index == -1:
+	if overflow_index == - 1:
 		return text.substr(char_offset)
 	return text.substr(char_offset, overflow_index - char_offset)
 
 func focus_caret():
-	if overflow_index == -1:
+	if overflow_index == - 1:
 		char_offset = 0
 		return
 
 	while caret_position > overflow_index:
 		char_offset += caret_position - overflow_index
 		overflow_index = _calculate_overflow_index()
-		if overflow_index == -1:
+		if overflow_index == - 1:
 			break
 
 	while caret_position < char_offset:
 		char_offset = caret_position
 		overflow_index = _calculate_overflow_index()
-		if overflow_index == -1:
+		if overflow_index == - 1:
 			break
 
 func get_caret_position():
@@ -65,7 +70,7 @@ func _calculate_caret_position(click_pos_x: float):
 		var left = gap_offsets[i] - gap_offsets[char_offset]
 		
 		if click_pos_x < left:
-			return  i - 1
+			return i - 1
 
 	return gap_offsets.size() - 1
 

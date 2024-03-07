@@ -7,6 +7,8 @@ signal on_button_down()
 signal on_button_up()
 
 const IconFont = preload ("res://assets/icons/icons.tres")
+const ECHO_WAIT_INITIAL = 0.5
+const ECHO_WAIT_REPEAT = 0.1
 
 @onready var label_node: Label3D = $Body/Label
 @onready var finger_area: Area3D = $FingerArea
@@ -47,6 +49,7 @@ const IconFont = preload ("res://assets/icons/icons.tres")
 		
 @export var toggleable: bool = false
 @export var disabled: bool = false
+@export var echo: bool = false
 @export var initial_active: bool = false
 var external_value: Proxy = null:
 	set(value):
@@ -74,10 +77,25 @@ var active: bool = false:
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var console = get_node("/root/Main/Console")
+var echo_timer: Timer = null
 
 func _ready():
 	if initial_active:
 		active = true
+
+	if echo:
+		echo_timer = Timer.new()
+		echo_timer.wait_time = ECHO_WAIT_INITIAL
+		echo_timer.one_shot = false
+
+		echo_timer.timeout.connect(func():
+			echo_timer.stop()
+			echo_timer.wait_time=ECHO_WAIT_REPEAT
+			echo_timer.start()
+			on_button_down.emit()
+		)
+
+		add_child(echo_timer)
 
 func update_animation():
 	var length = animation_player.get_animation("down").length
@@ -97,6 +115,9 @@ func _on_press_down(event):
 	if toggleable:
 		return
 
+	if echo:
+		echo_timer.start()
+
 	active = true
 	on_button_down.emit()
 	
@@ -113,6 +134,10 @@ func _on_press_up(event):
 		else:
 			on_button_up.emit()
 	else:
+		if echo:
+			echo_timer.stop()
+			echo_timer.wait_time = ECHO_WAIT_INITIAL
+
 		active = false
 		on_button_up.emit()
 

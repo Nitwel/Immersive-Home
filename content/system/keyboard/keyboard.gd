@@ -1,7 +1,7 @@
 @tool
 extends StaticBody3D
 
-const button_scene = preload("res://content/ui/components/button/button.tscn")
+const button_scene = preload ("res://content/ui/components/button/button.tscn")
 
 @onready var keys = $Keys
 @onready var caps_button = $Caps
@@ -11,10 +11,10 @@ var key_list = [
 	[KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, KEY_ASCIITILDE],
 	[KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I, KEY_O, KEY_P, KEY_SLASH],
 	[KEY_A, KEY_S, KEY_D, KEY_F, KEY_G, KEY_H, KEY_J, KEY_K, KEY_L, KEY_COLON, KEY_BACKSLASH],
-	[KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_N, KEY_M, KEY_COMMA , KEY_PERIOD, KEY_MINUS]
+	[KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_N, KEY_M, KEY_COMMA, KEY_PERIOD, KEY_MINUS]
 ]
 
-var caps = false :
+var caps = false:
 	set(value):
 		caps = value
 		update_labels()
@@ -49,12 +49,12 @@ func _ready():
 	)
 
 	caps_button.on_button_down.connect(func():
-		caps = true
+		caps=true
 		_emit_event("key_down", KEY_CAPSLOCK)
 	)
 
 	caps_button.on_button_up.connect(func():
-		caps = false
+		caps=false
 		_emit_event("key_up", KEY_CAPSLOCK)
 	)
 
@@ -73,6 +73,7 @@ func create_key(key: Key):
 	key_node.label = EventKey.key_to_string(key, caps)
 	key_node.focusable = false
 	key_node.font_size = 32
+	key_node.echo = true
 	key_node.set_meta("key", key)
 
 	return key_node
@@ -90,4 +91,3 @@ func _emit_event(type: String, key: Key):
 	event.shift_pressed = caps
 	
 	EventSystem.emit(type, event)
-
