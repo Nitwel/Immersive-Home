@@ -1,7 +1,7 @@
 extends Node3D
 
-var sky = preload("res://assets/materials/sky.material")
-var sky_passthrough = preload("res://assets/materials/sky_passthrough.material")
+var sky = preload ("res://assets/materials/sky.material")
+var sky_passthrough = preload ("res://assets/materials/sky_passthrough.material")
 
 @onready var environment: WorldEnvironment = $WorldEnvironment
 @onready var camera: XRCamera3D = $XROrigin3D/XRCamera3D
@@ -10,6 +10,8 @@ var sky_passthrough = preload("res://assets/materials/sky_passthrough.material")
 @onready var house = $House
 @onready var menu = $Menu
 @onready var keyboard = $Keyboard
+
+var last_room = null
 
 func _ready():
 	# In case we're running on the headset, use the passthrough sky
@@ -43,7 +45,7 @@ func _ready():
 		if action.name == "menu_button":
 			toggle_menu()
 		elif action.name == "by_button":
-			House.body.mini_view = !House.body.mini_view
+			House.body.mini_view=!House.body.mini_view
 	)
 
 	EventSystem.on_focus_in.connect(func(event):
@@ -51,7 +53,7 @@ func _ready():
 			return
 
 		add_child(keyboard)
-		keyboard.global_transform = menu.get_node("AnimationContainer/KeyboardPlace").global_transform
+		keyboard.global_transform=menu.get_node("AnimationContainer/KeyboardPlace").global_transform
 	)
 
 	EventSystem.on_focus_out.connect(func(event):
@@ -70,7 +72,7 @@ func toggle_menu():
 	if menu.show_menu == false:
 		remove_child(menu)
 
-func _emit_action(name: String, value, right_controller: bool = true):
+func _emit_action(name: String, value, right_controller: bool=true):
 	var event = EventAction.new()
 	event.name = name
 	event.value = value
@@ -81,6 +83,19 @@ func _emit_action(name: String, value, right_controller: bool = true):
 			EventSystem.emit("action_down" if value else "action_up", event)
 		TYPE_FLOAT, TYPE_VECTOR2:
 			EventSystem.emit("action_value", event)
+
+func _physics_process(delta):
+	var room = House.body.find_room_at(camera.global_position)
+
+	if room != last_room:
+		if room:
+			print("Room changed to: ", room.name)
+			HomeApi.api.update_room(room.name)
+			last_room = room
+		else:
+			print("Room changed to: ", "outside")
+			HomeApi.api.update_room("outside")
+			last_room = null
 
 func _process(delta):
 	if OS.get_name() != "Android":
@@ -128,7 +143,7 @@ func vector_key_mapping(key_positive_x: int, key_negative_x: int, key_positive_y
 	elif Input.is_physical_key_pressed(key_negative_x):
 		x = -1
 	
-	var vec = Vector3(x, 0 , y)
+	var vec = Vector3(x, 0, y)
 	
 	if vec:
 		vec = vec.normalized()

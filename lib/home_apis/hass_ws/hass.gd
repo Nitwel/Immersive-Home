@@ -1,5 +1,8 @@
 extends Node
 
+const AuthHandler = preload ("./handlers/auth.gd")
+const IntegrationHandler = preload ("./handlers/integration.gd")
+
 signal on_connect()
 signal on_disconnect()
 var connected := false
@@ -13,25 +16,32 @@ var request_timeout := 10.0
 var url := ""
 var token := ""
 
-
 var LOG_MESSAGES := false
-
-var authenticated := false
 
 var id := 1
 var entities: Dictionary = {}
 var entitiy_callbacks := CallbackMap.new()
 var packet_callbacks := CallbackMap.new()
 
-func _init(url := self.url, token := self.token):
+var auth_handler: AuthHandler
+var integration_handler: IntegrationHandler
+
+func _init(url:=self.url, token:=self.token):
 	self.url = url
 	self.token = token
+
+	auth_handler = AuthHandler.new(self, url, token)
+	integration_handler = IntegrationHandler.new(self)
 
 	devices_template = devices_template.replace("\n", " ").replace("\t", "").replace("\r", " ")
 	connect_ws()
 
+	auth_handler.on_authenticated.connect(func():
+		start_subscriptions()
+	)
+
 func connect_ws():
-	if url == "" || token == "":
+	if url == ""||token == "":
 		return
 
 	print("Connecting to %s" % url + "/api/websocket")
@@ -71,38 +81,12 @@ func _process(delta):
 func handle_packet(packet: Dictionary):
 	if LOG_MESSAGES: print("Received packet: %s" % str(packet).substr(0, 1000))
 
-	if packet.type == "auth_required":
-		send_packet({
-			"type": "auth",
-			"access_token": self.token
-		})
+	auth_handler.handle_message(packet)
 
-	elif packet.type == "auth_ok":
-		authenticated = true
-		start_subscriptions()
-		
-	elif packet.type == "auth_invalid":
-		EventSystem.notify("Failed to authenticate, invalid auth token", EventNotify.Type.DANGER)
-		print("Failed to authenticate, invalid auth token")
-		handle_disconnect()
-	else:
+	if packet.has("id"):
 		packet_callbacks.call_key(int(packet.id), [packet])
 
 func start_subscriptions():
-	assert(authenticated, "Not authenticated")
-
-	# await send_request_packet({
-	# 	"type": "supported_features",
-	# 	"features": {
-	# 		"coalesce_messages": 1
-	# 	}
-	# })
-
-	# await send_request_packet({
-	# 	"type": "subscribe_events",
-	# 	"event_type": "state_changed"
-	# })
-
 	send_subscribe_packet({
 		"type": "subscribe_entities"
 	}, func(packet: Dictionary):
@@ -111,13 +95,12 @@ func start_subscriptions():
 
 		if packet.event.has("a"):
 			for entity in packet.event.a.keys():
-				entities[entity] = {
+				entities[entity]={
 					"state": packet.event.a[entity]["s"],
 					"attributes": packet.event.a[entity]["a"]
 				}
 				entitiy_callbacks.call_key(entity, [entities[entity]])
-			connected = true
-			on_connect.emit()
+			handle_connect()
 
 		if packet.event.has("c"):
 			for entity in packet.event.c.keys():
@@ -126,14 +109,19 @@ func start_subscriptions():
 
 				if packet.event.c[entity].has("+"):
 					if packet.event.c[entity]["+"].has("s"):
-						entities[entity]["state"] = packet.event.c[entity]["+"]["s"]
+						entities[entity]["state"]=packet.event.c[entity]["+"]["s"]
 					if packet.event.c[entity]["+"].has("a"):
 						entities[entity]["attributes"].merge(packet.event.c[entity]["+"]["a"], true)
 					entitiy_callbacks.call_key(entity, [entities[entity]])
 	)
 
+func handle_connect():
+	integration_handler.on_connect()
+	connected = true
+	on_connect.emit()
+
 func handle_disconnect():
-	authenticated = false
+	auth_handler.on_disconnect()
 	set_process(false)
 	on_disconnect.emit()
 
@@ -153,18 +141,15 @@ func send_subscribe_packet(packet: Dictionary, callback: Callable):
 		})
 		id += 1
 
-
-func send_request_packet(packet: Dictionary, ignore_initial := false):
+func send_request_packet(packet: Dictionary, ignore_initial:=false):
 	packet.id = id
 	id += 1
-
-	send_packet(packet)
 
 	var promise = Promise.new(func(resolve: Callable, reject: Callable):
 		var fn: Callable
 
 		if ignore_initial:
-			fn = func(packet: Dictionary):
+			fn=func(packet: Dictionary):
 				if packet.type == "event":
 					resolve.call(packet)
 					packet_callbacks.remove(packet.id, fn)
@@ -173,7 +158,7 @@ func send_request_packet(packet: Dictionary, ignore_initial := false):
 		else:
 			packet_callbacks.add_once(packet.id, resolve)
 		
-		var timeout = Timer.new()
+		var timeout=Timer.new()
 		timeout.set_wait_time(request_timeout)
 		timeout.set_one_shot(true)
 		timeout.timeout.connect(func():
@@ -187,8 +172,9 @@ func send_request_packet(packet: Dictionary, ignore_initial := false):
 		timeout.start()
 	)
 
-	return await promise.settled
+	send_packet(packet)
 
+	return await promise.settled
 
 func send_packet(packet: Dictionary):
 	if LOG_MESSAGES: print("Sending packet: %s" % encode_packet(packet))
@@ -221,15 +207,13 @@ func get_state(entity: String):
 		return entities[entity]
 	return null
 
-
 func watch_state(entity: String, callback: Callable):
 	entitiy_callbacks.add(entity, callback)
 
 	return func():
 		entitiy_callbacks.remove(entity, callback)
 
-
-func set_state(entity: String, state: String, attributes: Dictionary = {}):
+func set_state(entity: String, state: String, attributes: Dictionary={}):
 	var domain = entity.split(".")[0]
 	var service: String
 
@@ -271,4 +255,12 @@ func set_state(entity: String, state: String, attributes: Dictionary = {}):
 		}
 	})
 
-	
+func update_room(room: String):
+	var response = await send_request_packet({
+		"type": "immersive_home/update",
+		"device_id": OS.get_unique_id(),
+		"room": room
+	})
+
+	if response.status == Promise.Status.RESOLVED:
+		print("Room updated")

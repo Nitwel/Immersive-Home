@@ -47,7 +47,7 @@ shadow_enabled = true
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
-transform = Transform3D(1, 1.8976e-10, 4.07454e-10, 6.76872e-11, 1, 2.08734e-08, -5.82077e-11, 1.09139e-11, 1, 0.0356618, 0.71033, 0.00564247)
+transform = Transform3D(0.999992, 0.00357422, -0.00141238, -0.00357241, 0.999993, 0.00127761, 0.00141693, -0.00127253, 0.999998, 0.0356617, 0.71033, 0.00564247)
 cull_mask = 524287
 current = true
 
