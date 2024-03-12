@@ -213,7 +213,7 @@ func watch_state(entity: String, callback: Callable):
 	return func():
 		entitiy_callbacks.remove(entity, callback)
 
-func set_state(entity: String, state: String, attributes: Dictionary={}):
+func set_state(entity: String, state: Variant, attributes: Dictionary={}):
 	var domain = entity.split(".")[0]
 	var service: String
 
@@ -241,6 +241,9 @@ func set_state(entity: String, state: String, attributes: Dictionary={}):
 	elif domain == 'button':
 		if state == 'pressed':
 			service = 'press'
+	elif domain == 'number':
+		service = 'set_value'
+		attributes["value"] = state
 
 	if service == null:
 		return null
