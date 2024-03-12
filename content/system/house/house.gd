@@ -137,6 +137,7 @@ func rename_room(old_room: String, new_name: String):
 	if store_room != null:
 		store_room.name = new_name
 
+	save_all_entities()
 	Store.house.save_local()
 
 func get_level(level: int):
