@@ -83,7 +83,6 @@ func _ready():
 				right_controller = child
 				right_tracker.set_pose(pose, child.transform, Vector3.ZERO, Vector3.ZERO, XRPose.XR_TRACKING_CONFIDENCE_HIGH)
 				XRServer.add_tracker(right_tracker)
-	
 
 func _process(_delta):
 	if enabled and disable_xr_in_editor and OS.has_feature("editor") and viewport.use_xr:
@@ -95,7 +94,7 @@ func _input(event):
 	if Input.is_key_pressed(KEY_ESCAPE):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	elif Input.mouse_mode != Input.MOUSE_MODE_CAPTURED and event is InputEventMouseButton:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED	
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		return
@@ -154,10 +153,10 @@ func camera_height(event: InputEventMouseButton):
 		return
 	
 	var pos = camera.transform.origin
-	var camera_y = pos.y + (scroll_sensitivity * direction)/20
+	var camera_y = pos.y + (scroll_sensitivity * direction) / 20
 	if (camera_y >= max_camera_height or camera_y <= min_camera_height) and is_camera_height_limited:
 		camera_y = pos.y
-	camera.transform.origin = Vector3(pos.x, camera_y , pos.z)
+	camera.transform.origin = Vector3(pos.x, camera_y, pos.z)
 
 func simulate_joysticks():
 	var vec_left = vector_key_mapping(KEY_D, KEY_A, KEY_W, KEY_S)
@@ -195,8 +194,8 @@ func simulate_buttons(event: InputEventKey, controller: XRController3D):
 
 func move_controller(event: InputEventMouseMotion, controller: XRController3D):
 	var movement = Vector3()
-	movement += camera.global_transform.basis.x * event.relative.x * device_x_sensitivity/1000
-	movement += camera.global_transform.basis.y * event.relative.y * -device_y_sensitivity/1000
+	movement += camera.global_transform.basis.x * event.relative.x * device_x_sensitivity / 1000
+	movement += camera.global_transform.basis.y * event.relative.y * - device_y_sensitivity / 1000
 	controller.global_translate(movement)
 	
 func attract_controller(event: InputEventMouseButton, controller: XRController3D):
@@ -212,26 +211,26 @@ func attract_controller(event: InputEventMouseButton, controller: XRController3D
 	
 	var distance_vector = controller.global_transform.origin - camera.global_transform.origin
 	var forward = distance_vector.normalized() * direction
-	var movement = distance_vector + forward * (scroll_sensitivity/20)
+	var movement = distance_vector + forward * (scroll_sensitivity / 20)
 	if distance_vector.length() > 0.1 and movement.length() > 0.1:
-		controller.global_translate(forward * (scroll_sensitivity/20))
+		controller.global_translate(forward * (scroll_sensitivity / 20))
 
 func rotate_device(event: InputEventMouseMotion, device: Node3D):
 	var motion = event.relative
-	device.rotate_y(motion.x * -device_x_sensitivity/1000)
-	device.rotate(device.transform.basis.x, motion.y * -device_y_sensitivity/1000)
+	device.rotate_y(motion.x * - device_x_sensitivity / 1000)
+	device.rotate(device.transform.basis.x.normalized(), motion.y * - device_y_sensitivity / 1000)
 	
 func vector_key_mapping(key_positive_x: int, key_negative_x: int, key_positive_y: int, key_negative_y: int):
 	var x = 0
 	var y = 0
-	if Input.is_physical_key_pressed (key_positive_y):
+	if Input.is_physical_key_pressed(key_positive_y):
 		y = 1
-	elif Input.is_physical_key_pressed (key_negative_y):
+	elif Input.is_physical_key_pressed(key_negative_y):
 		y = -1
 	
-	if Input.is_physical_key_pressed (key_positive_x):
+	if Input.is_physical_key_pressed(key_positive_x):
 		x = 1
-	elif Input.is_physical_key_pressed (key_negative_x):
+	elif Input.is_physical_key_pressed(key_negative_x):
 		x = -1
 	
 	var vec = Vector2(x, y)
