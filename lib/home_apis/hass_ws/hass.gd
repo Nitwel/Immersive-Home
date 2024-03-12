@@ -255,6 +255,9 @@ func set_state(entity: String, state: String, attributes: Dictionary={}):
 		}
 	})
 
+func has_integration():
+	return integration_handler.integration_exists
+
 func update_room(room: String):
 	var response = await send_request_packet({
 		"type": "immersive_home/update",

@@ -11,8 +11,6 @@ var sky_passthrough = preload ("res://assets/materials/sky_passthrough.material"
 @onready var menu = $Menu
 @onready var keyboard = $Keyboard
 
-var last_room = null
-
 func _ready():
 	# In case we're running on the headset, use the passthrough sky
 	if OS.get_name() == "Android":
@@ -83,17 +81,6 @@ func _emit_action(name: String, value, right_controller: bool=true):
 			EventSystem.emit("action_down" if value else "action_up", event)
 		TYPE_FLOAT, TYPE_VECTOR2:
 			EventSystem.emit("action_value", event)
-
-func _physics_process(delta):
-	var room = House.body.find_room_at(camera.global_position)
-
-	if room != last_room:
-		if room:
-			HomeApi.api.update_room(room.name)
-			last_room = room
-		else:
-			HomeApi.api.update_room("outside")
-			last_room = null
 
 func _process(delta):
 	if OS.get_name() != "Android":
