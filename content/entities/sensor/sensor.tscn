@@ -1,24 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://xsiy71rsqulj"]
+[gd_scene load_steps=6 format=3 uid="uid://xsiy71rsqulj"]
 
 [ext_resource type="Script" path="res://content/entities/sensor/sensor.gd" id="1_57ac8"]
+[ext_resource type="FontVariation" uid="uid://d2ofyimg5s65q" path="res://assets/fonts/ui_font_500.tres" id="2_4np3x"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_fpq5q"]
 [ext_resource type="Script" path="res://content/functions/occludable.gd" id="3_l3sp5"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_r20gc"]
-radius = 0.1
+[sub_resource type="BoxShape3D" id="BoxShape3D_phuot"]
+resource_local_to_scene = true
+size = Vector3(0.18, 0.03, 0.02)
 
 [node name="Sensor" type="StaticBody3D" groups=["entity"]]
 collision_mask = 0
 script = ExtResource("1_57ac8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_r20gc")
+shape = SubResource("BoxShape3D_phuot")
 
 [node name="Label" type="Label3D" parent="."]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 pixel_size = 0.001
 text = "some text
 "
+font = ExtResource("2_4np3x")
 font_size = 80
 
 [node name="Movable" type="Node" parent="."]
