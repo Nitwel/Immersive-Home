@@ -1,8 +1,7 @@
 extends Node
 
-const Hass = preload("res://lib/home_apis/hass/hass.gd")
-const HassWebSocket = preload("res://lib/home_apis/hass_ws/hass.gd")
-
+const Hass = preload ("res://lib/home_apis/hass/hass.gd")
+const HassWebSocket = preload ("res://lib/home_apis/hass_ws/hass.gd")
 
 const apis = {
 	"hass": Hass,
@@ -28,7 +27,6 @@ func _ready():
 
 	if success:
 		start_adapter(Store.settings.type.to_lower(), Store.settings.url, Store.settings.token)
-	
 
 func start_adapter(type: String, url: String, token: String):
 	print("Starting adapter: %s" % type)
@@ -81,7 +79,7 @@ func get_state(entity: String):
 	return await api.get_state(entity)
 
 ## Updates the state of the entity and returns the resulting state
-func set_state(entity: String, state: String, attributes: Dictionary = {}):
+func set_state(entity: String, state: Variant, attributes: Dictionary={}):
 	assert(has_connected(), "Not connected")
 	return await api.set_state(entity, state, attributes)
 
@@ -91,6 +89,6 @@ func watch_state(entity: String, callback: Callable):
 	return api.watch_state(entity, callback)
 
 func _notification(what):
-	if what == NOTIFICATION_WM_CLOSE_REQUEST || what == NOTIFICATION_WM_GO_BACK_REQUEST:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST||what == NOTIFICATION_WM_GO_BACK_REQUEST:
 		# Store.house.save_local()
 		pass
