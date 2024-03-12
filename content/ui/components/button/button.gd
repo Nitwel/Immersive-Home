@@ -99,6 +99,9 @@ func _ready():
 func update_animation():
 	var length = animation_player.get_animation("down").length
 
+	if animation_player.current_animation == "":
+		return
+
 	if active&&animation_player.current_animation_position != length:
 		animation_player.play("down")
 	elif !active&&animation_player.current_animation_position != 0:

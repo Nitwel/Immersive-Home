@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b2kjh1fpjptdr"]
+
+[node name="XRCamera3D" type="XRCamera3D"]
+transform = Transform3D(0.999999, 0.00106283, -0.000420545, -0.00106267, 0.999999, 0.000379457, 0.000420948, -0.000378989, 1, 0.0356617, 0.71033, 0.00564247)
+cull_mask = 524287
+current = true

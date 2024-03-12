@@ -26,6 +26,9 @@ func has_point(point: Vector3) -> bool:
 func get_aabb():
 	var room_store = Store.house.get_room(name)
 
+	if room_store == null:
+		return AABB()
+
 	var corners = room_store.corners
 
 	if corners.size() == 0:
@@ -119,4 +122,3 @@ static func generate_ceiling_mesh(room_store: Dictionary):
 	var mesh = st.commit()
 
 	return mesh
-

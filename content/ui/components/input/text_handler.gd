@@ -33,8 +33,6 @@ func set_text(value: String, insert: bool=false):
 	overflow_index = _calculate_overflow_index()
 	focus_caret()
 
-	print(overflow_index, " ", char_offset, " ", caret_position)
-
 func get_display_text():
 	# In case all chars fit, return the whole text.
 	if overflow_index == - 1:
