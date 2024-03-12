@@ -1,7 +1,7 @@
 extends Node3D
 
-const Room = preload("./room/room.tscn")
-const RoomType = preload("./room/room.gd")
+const Room = preload ("./room/room.tscn")
+const RoomType = preload ("./room/room.gd")
 
 @onready var levels = $Levels
 @onready var collision_shape = $Levels/CollisionShape3D
@@ -89,7 +89,6 @@ func is_valid_room(room_name):
 		return
 
 	return room.wall_corners.get_child_count() >= 3
-			
 
 func delete_room(room_name):
 	var room = find_room(room_name)
@@ -111,7 +110,7 @@ func delete_room(room_name):
 	Store.house.save_local()
 
 func is_editiong(room_name):
-	return editing_room != null && editing_room.name == room_name
+	return editing_room != null&&editing_room.name == room_name
 
 func find_room(room_name):
 	for room in get_rooms(0):
@@ -124,6 +123,21 @@ func find_room_at(entity_position: Vector3):
 		if room.has_point(entity_position):
 			return room
 	return null
+
+func rename_room(old_room: String, new_name: String):
+	var room = find_room(old_room)
+
+	if room == null:
+		return
+
+	room.name = new_name
+
+	var store_room = Store.house.get_room(old_room)
+
+	if store_room != null:
+		store_room.name = new_name
+
+	Store.house.save_local()
 
 func get_level(level: int):
 	return levels.get_child(level)
@@ -205,7 +219,6 @@ func update_mini_view():
 
 		camera_position.y *= 0.5
 		camera_direction.y = 0.0
-
 
 		var target_position = camera_position + camera_direction.normalized() * 0.2
 		levels.global_position = target_position - center * 0.1
