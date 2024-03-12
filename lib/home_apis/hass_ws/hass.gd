@@ -263,4 +263,4 @@ func update_room(room: String):
 	})
 
 	if response.status == Promise.Status.RESOLVED:
-		print("Room updated")
+		pass

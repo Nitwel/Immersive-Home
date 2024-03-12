@@ -89,11 +89,9 @@ func _physics_process(delta):
 
 	if room != last_room:
 		if room:
-			print("Room changed to: ", room.name)
 			HomeApi.api.update_room(room.name)
 			last_room = room
 		else:
-			print("Room changed to: ", "outside")
 			HomeApi.api.update_room("outside")
 			last_room = null
 

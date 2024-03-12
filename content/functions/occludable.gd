@@ -12,11 +12,9 @@ func _ready():
 	EventSystem.on_slow_tick.connect(_slow_tick)
 
 func _slow_tick(_delta):
-	if player_camera.is_inside_tree() == false:
-		printerr("Player camera is not inside the tree")
+	if player_camera.is_inside_tree() == false||ray.is_inside_tree() == false:
 		return
 
 	ray.target_position = get_parent().to_local(player_camera.global_position)
 
 	get_parent().visible = ray.is_colliding() == false
-
