@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://oydbwnek6xb4"]
+
+[ext_resource type="Script" path="res://content/system/assist/assist.gd" id="1_5obhy"]
+
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_6tv2x"]
+
+[node name="Assist" type="Node3D"]
+script = ExtResource("1_5obhy")
+
+[node name="AudioStreamRecord" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamMicrophone_6tv2x")
+autoplay = true
+bus = &"Record"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true

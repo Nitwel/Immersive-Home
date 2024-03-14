@@ -2,6 +2,7 @@ extends Node
 
 const AuthHandler = preload ("./handlers/auth.gd")
 const IntegrationHandler = preload ("./handlers/integration.gd")
+const AssistHandler = preload ("./handlers/assist.gd")
 
 signal on_connect()
 signal on_disconnect()
@@ -25,6 +26,7 @@ var packet_callbacks := CallbackMap.new()
 
 var auth_handler: AuthHandler
 var integration_handler: IntegrationHandler
+var assist_handler: AssistHandler
 
 func _init(url:=self.url, token:=self.token):
 	self.url = url
@@ -32,6 +34,7 @@ func _init(url:=self.url, token:=self.token):
 
 	auth_handler = AuthHandler.new(self, url, token)
 	integration_handler = IntegrationHandler.new(self)
+	assist_handler = AssistHandler.new(self)
 
 	devices_template = devices_template.replace("\n", " ").replace("\t", "").replace("\r", " ")
 	connect_ws()
@@ -82,6 +85,7 @@ func handle_packet(packet: Dictionary):
 	if LOG_MESSAGES: print("Received packet: %s" % str(packet).substr(0, 1000))
 
 	auth_handler.handle_message(packet)
+	assist_handler.handle_message(packet)
 
 	if packet.has("id"):
 		packet_callbacks.call_key(int(packet.id), [packet])
@@ -117,6 +121,7 @@ func start_subscriptions():
 
 func handle_connect():
 	integration_handler.on_connect()
+	assist_handler.on_connect()
 	connected = true
 	on_connect.emit()
 
@@ -176,7 +181,15 @@ func send_request_packet(packet: Dictionary, ignore_initial:=false):
 
 	return await promise.settled
 
-func send_packet(packet: Dictionary):
+func send_raw(packet: PackedByteArray):
+	if LOG_MESSAGES: print("Sending binary: %s" % packet.hex_encode())
+	socket.send(packet)
+
+func send_packet(packet: Dictionary, with_id:=false):
+	if with_id:
+		packet.id = id
+		id += 1
+
 	if LOG_MESSAGES: print("Sending packet: %s" % encode_packet(packet))
 	socket.send_text(encode_packet(packet))
 
