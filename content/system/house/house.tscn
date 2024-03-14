@@ -25,6 +25,3 @@ lock_rotation = true
 [node name="AlignReference" parent="." instance=ExtResource("3_e1tcn")]
 visible = false
 disabled = true
-
-[node name="AnimateTimer" type="Timer" parent="."]
-one_shot = true

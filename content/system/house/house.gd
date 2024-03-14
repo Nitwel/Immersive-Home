@@ -6,7 +6,6 @@ const RoomType = preload ("./room/room.gd")
 @onready var levels = $Levels
 @onready var collision_shape = $Levels/CollisionShape3D
 @onready var align_reference = $AlignReference
-@onready var animate_timer = $AnimateTimer
 
 var fixing_reference: bool = false
 var editing_room: RoomType = null
@@ -15,19 +14,10 @@ var mini_view: bool = false:
 		mini_view = value
 		update_mini_view()
 
-var target_size: float = 1.0
-
 func _ready():
 	Store.house.on_loaded.connect(func():
 		update_house()
 	)
-
-func _physics_process(delta):
-
-	if animate_timer.is_stopped() == false:
-		levels.scale.x = lerp(levels.scale.x, target_size, 10.0 * delta)
-		levels.scale.y = lerp(levels.scale.y, target_size, 10.0 * delta)
-		levels.scale.z = lerp(levels.scale.z, target_size, 10.0 * delta)
 
 func update_house():
 	for old_room in get_rooms(0):
@@ -205,6 +195,10 @@ func create_entity_in(entity_id: String, room_name: String):
 func update_mini_view():
 	collision_shape.disabled = !mini_view
 
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.set_trans(Tween.TRANS_CUBIC)
+
 	if mini_view:
 		var aabb = get_level_aabb(0)
 		aabb.position.y = -0.03
@@ -222,15 +216,19 @@ func update_mini_view():
 		camera_direction.y = 0.0
 
 		var target_position = camera_position + camera_direction.normalized() * 0.2
-		levels.global_position = target_position - center * 0.1
+		var new_position = target_position - center * 0.1
+		tween.tween_property(levels, "global_position", new_position, 0.5)
+		tween.tween_property(levels, "scale", Vector3(0.1, 0.1, 0.1), 0.5)
+
+		for room in get_rooms(0):
+			room.state_machine.change_to("Mini")
 	else:
-		levels.position = Vector3(0, 0, 0)
+		tween.tween_property(levels, "global_position", Vector3(0, 0, 0), 0.5)
+		tween.tween_property(levels, "scale", Vector3(1.0, 1.0, 1.0), 0.5)
+		await tween.finished
 
-	target_size = 0.1 if mini_view else 1.0
-	animate_timer.start()
-
-	for room in get_rooms(0):
-		room.state_machine.change_to("Mini" if mini_view else "View")
+		for room in get_rooms(0):
+			room.state_machine.change_to("View")
 
 func edit_reference():
 	fixing_reference = false
