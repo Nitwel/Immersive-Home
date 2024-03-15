@@ -2,6 +2,7 @@ extends Node3D
 
 var sky = preload ("res://assets/materials/sky.material")
 var sky_passthrough = preload ("res://assets/materials/sky_passthrough.material")
+const VoiceAssistant = preload ("res://content/system/assist/assist.tscn")
 
 @onready var environment: WorldEnvironment = $WorldEnvironment
 @onready var camera: XRCamera3D = $XROrigin3D/XRCamera3D
@@ -10,6 +11,7 @@ var sky_passthrough = preload ("res://assets/materials/sky_passthrough.material"
 @onready var house = $House
 @onready var menu = $Menu
 @onready var keyboard = $Keyboard
+var voice_assistant = null
 
 func _ready():
 	# In case we're running on the headset, use the passthrough sky
@@ -19,6 +21,8 @@ func _ready():
 		get_viewport().transparent_bg = true
 	else:
 		RenderingServer.set_debug_generate_wireframes(true)
+
+	update_voice_assistant()
 
 	controller_left.button_pressed.connect(func(name):
 		_emit_action(name, true, false)
@@ -60,6 +64,17 @@ func _ready():
 
 		remove_child(keyboard)
 	)
+
+func update_voice_assistant():
+	if Store.settings.is_loaded() == false:
+		await Store.settings.on_loaded
+
+	if Store.settings.voice_assistant&&voice_assistant == null:
+		voice_assistant = VoiceAssistant.instantiate()
+		add_child(voice_assistant)
+	elif !Store.settings.voice_assistant&&voice_assistant != null:
+		remove_child(voice_assistant)
+		voice_assistant.queue_free()
 
 func toggle_menu():
 	if menu.show_menu == false:

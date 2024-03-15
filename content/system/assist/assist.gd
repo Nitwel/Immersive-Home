@@ -8,7 +8,7 @@ const target_freq = 16000
 const sample_rate_ratio: float = audio_freq / target_freq * 1.5
 
 var effect: AudioEffectCapture
-@export var input_threshold: float = 0.1
+@export var input_threshold: float = 0.05
 @onready var audio_recorder: AudioStreamPlayer = $AudioStreamRecord
 @onready var audio_timer: Timer = $AudioTimer
 @onready var visual_timer: Timer = $VisualTimer
@@ -18,7 +18,7 @@ var effect: AudioEffectCapture
 @onready var loader: Node3D = $Loader
 @onready var camera = $"/root/Main/XROrigin3D/XRCamera3D"
 
-var running := true
+var running := false
 
 func _ready():
 	var index = AudioServer.get_bus_index("Record")
@@ -51,11 +51,15 @@ func _ready():
 	)
 
 	HomeApi.api.assist_handler.on_tts_sound.connect(func(audio):
-		print("Playing TTS ", audio.data.size())
 		audio_player_3d.stream=audio
 		audio_player_3d.play()
 		visual_timer.start()
 		running=false
+	)
+
+	HomeApi.api.assist_handler.on_error.connect(func():
+		running=false
+		finish()
 	)
 
 	visual_timer.timeout.connect(func():

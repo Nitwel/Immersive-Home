@@ -4,6 +4,7 @@ signal on_wake_word(wake_word: String)
 signal on_stt_message(message: String)
 signal on_tts_message(message: String)
 signal on_tts_sound(sound: AudioStreamMP3)
+signal on_error()
 
 var api: HASS_API
 var pipe_running := false
@@ -127,7 +128,9 @@ func handle_message(message: Dictionary):
 			sound.data = response[3]
 
 			tts_sound = sound
-		
+		"error":
+			if event["data"]["code"] == "stt-no-text-recognized":
+				on_error.emit()
 		"run-end":
 			pipe_running = false
 			wake_word = null
