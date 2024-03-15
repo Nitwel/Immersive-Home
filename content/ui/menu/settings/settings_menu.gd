@@ -3,6 +3,7 @@ extends Node3D
 const credits_scene = preload ("./credits.tscn")
 
 @onready var connection_status = $Content/ConnectionStatus
+@onready var main = $"/root/Main"
 
 @onready var input_url = $Content/InputURL
 @onready var input_token = $Content/InputToken
@@ -11,6 +12,7 @@ const credits_scene = preload ("./credits.tscn")
 @onready var save = $Content/Save
 @onready var clear_save = $Content/ClearSave
 @onready var background = $Background
+@onready var voice_assist = $Content/VoiceAssist
 
 func _ready():
 	background.visible = false
@@ -53,6 +55,31 @@ func _ready():
 		House.body.update_house()
 	)
 
+	voice_assist.on_button_down.connect(func():
+		if Store.settings.is_loaded() == false:
+			await Store.settings.on_loaded
+
+		OS.request_permissions()
+
+		voice_assist.label="mic"
+
+		Store.settings.voice_assistant=true
+		main.update_voice_assistant()
+		Store.settings.save_local()
+	)
+
+	voice_assist.on_button_up.connect(func():
+		if Store.settings.is_loaded() == false:
+			await Store.settings.on_loaded
+
+		voice_assist.label="mic_off"
+
+		Store.settings.voice_assistant=false
+		main.update_voice_assistant()
+		Store.settings.save_local()
+
+	)
+
 	HomeApi.on_connect.connect(func():
 		connection_status.text="Connected"
 	)
@@ -60,3 +87,9 @@ func _ready():
 	HomeApi.on_disconnect.connect(func():
 		connection_status.text="Disconnected"
 	)
+
+	if Store.settings.is_loaded() == false:
+		await Store.settings.on_loaded
+
+	voice_assist.label = "mic_off" if Store.settings.voice_assistant == false else "mic"
+	voice_assist.active = Store.settings.voice_assistant

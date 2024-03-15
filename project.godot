@@ -15,6 +15,10 @@ run/main_scene="res://content/main.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://assets/logo.png"
 
+[audio]
+
+driver/enable_input=true
+
 [autoload]
 
 XRToolsUserSettings="*res://addons/godot-xr-tools/user_settings/user_settings.gd"

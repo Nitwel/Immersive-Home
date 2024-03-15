@@ -1,6 +1,6 @@
 extends RefCounted
 
-const VariantSerializer = preload("res://lib/utils/variant_serializer.gd")
+const VariantSerializer = preload ("res://lib/utils/variant_serializer.gd")
 
 signal on_loaded
 signal on_saved
@@ -18,7 +18,7 @@ func create_dict():
 	var data: Dictionary = {}
 
 	for prop_info in get_property_list():
-		if prop_info.name.begins_with("_") || prop_info.hint_string != "":
+		if prop_info.name.begins_with("_")||prop_info.hint_string != "":
 			continue
 
 		var prop = get(prop_info.name)
@@ -32,10 +32,14 @@ func create_dict():
 
 func use_dict(dict: Dictionary):
 	for prop_info in get_property_list():
-		if prop_info.name.begins_with("_") || prop_info.hint_string != "":
+		if prop_info.name.begins_with("_")||prop_info.hint_string != "":
 			continue
 
 		var prop = get(prop_info.name)
+
+		if dict.has(prop_info.name) == false:
+			continue
+
 		var prop_value = dict[prop_info.name]
 
 		if prop is Store:
@@ -43,7 +47,7 @@ func use_dict(dict: Dictionary):
 		else:
 			set(prop_info.name, prop_value)
 
-func save_local(path = _save_path):
+func save_local(path=_save_path):
 	if path == null:
 		return false
 
@@ -61,7 +65,7 @@ func save_local(path = _save_path):
 
 	return true
 
-func load_local(path = _save_path):
+func load_local(path=_save_path):
 	if path == null:
 		return false
 

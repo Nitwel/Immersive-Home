@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://oydbwnek6xb4"]
+
+[ext_resource type="Script" path="res://content/system/assist/assist.gd" id="1_5obhy"]
+[ext_resource type="PackedScene" uid="uid://cy6jklyde3pgo" path="res://content/system/assist/chat.tscn" id="2_laew1"]
+[ext_resource type="PackedScene" uid="uid://b0d1582vpkr8m" path="res://content/system/assist/loader.tscn" id="3_25iy1"]
+
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_6tv2x"]
+
+[node name="Assist" type="Node3D"]
+script = ExtResource("1_5obhy")
+
+[node name="AudioStreamRecord" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamMicrophone_6tv2x")
+autoplay = true
+bus = &"Record"
+
+[node name="AudioTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+
+[node name="VisualTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="ChatUser" parent="." instance=ExtResource("2_laew1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.109997, 0.025, 0)
+flip = false
+
+[node name="ChatAssistant" parent="." instance=ExtResource("2_laew1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0499932, -0.025, 0)
+text = "Hello, World!"
+
+[node name="Loader" parent="." instance=ExtResource("3_25iy1")]
