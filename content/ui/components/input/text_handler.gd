@@ -1,5 +1,7 @@
 extends RefCounted
 
+const FontTools = preload ("res://lib/utils/font_tools.gd")
+
 var label: Label3D
 
 var text: String = ""
@@ -73,14 +75,13 @@ func _calculate_caret_position(click_pos_x: float):
 	return gap_offsets.size() - 1
 
 func _calculate_text_gaps():
-	var font = label.get_font()
 	var offsets = [0.0]
 
 	for i in range(text.length()):
 		var chars = text.substr(0, i + 1) # Can't use single chars because of kerning.
-		var size = font.get_string_size(chars, HORIZONTAL_ALIGNMENT_CENTER, -1, label.font_size)
+		var size = FontTools.get_font_size(label, chars)
 		
-		offsets.append(size.x * label.pixel_size)
+		offsets.append(size.x)
 
 	return offsets
 

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0d1582vpkr8m"]
+
+[ext_resource type="Script" path="res://content/system/assist/loader.gd" id="1_3bi3s"]
+
+[node name="Loader" type="Node3D"]
+script = ExtResource("1_3bi3s")

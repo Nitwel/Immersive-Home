@@ -1,23 +1,78 @@
 extends Node3D
 
 const sample_hold = preload ("res://lib/utils/sample_hold.gd")
+const Chat = preload ("./chat.gd")
 
 const audio_freq = 44100
 const target_freq = 16000
 const sample_rate_ratio: float = audio_freq / target_freq * 1.5
 
 var effect: AudioEffectCapture
-@export var input_threshold: float = 0.05
+@export var input_threshold: float = 0.1
 @onready var audio_recorder: AudioStreamPlayer = $AudioStreamRecord
-@onready var timer: Timer = $Timer
+@onready var audio_timer: Timer = $AudioTimer
+@onready var visual_timer: Timer = $VisualTimer
+@onready var audio_player_3d: AudioStreamPlayer3D = $AudioStreamPlayer3D
+@onready var chat_user: Chat = $ChatUser
+@onready var chat_assistant: Chat = $ChatAssistant
+@onready var loader: Node3D = $Loader
+@onready var camera = $"/root/Main/XROrigin3D/XRCamera3D"
+
+var running := true
 
 func _ready():
 	var index = AudioServer.get_bus_index("Record")
 	effect = AudioServer.get_bus_effect(index, 0)
 
-	timer.timeout.connect(func():
+	finish()
+
+	audio_timer.timeout.connect(func():
 		HomeApi.api.assist_handler.send_data(PackedByteArray())
 	)
+
+	HomeApi.api.assist_handler.on_wake_word.connect(func(text):
+		loader.visible=true
+		chat_user.visible=false
+		chat_assistant.visible=false
+		global_position=camera.global_position + camera.global_transform.basis.z * - 0.5
+		global_position.y *= 0.7
+		global_transform.basis=Basis.looking_at((camera.global_position - global_position) * - 1)
+		running=true
+	)
+
+	HomeApi.api.assist_handler.on_stt_message.connect(func(text):
+		loader.visible=false
+		chat_user.visible=true
+		chat_user.text=text
+	)
+	HomeApi.api.assist_handler.on_tts_message.connect(func(text):
+		chat_assistant.visible=true
+		chat_assistant.text=text
+	)
+
+	HomeApi.api.assist_handler.on_tts_sound.connect(func(audio):
+		print("Playing TTS ", audio.data.size())
+		audio_player_3d.stream=audio
+		audio_player_3d.play()
+		visual_timer.start()
+		running=false
+	)
+
+	visual_timer.timeout.connect(func():
+		if audio_player_3d.playing == false:
+			finish()
+		else:
+			await audio_player_3d.finished
+			finish()
+	)
+
+func finish():
+	if running:
+		return
+
+	chat_user.visible = false
+	chat_assistant.visible = false
+	loader.visible = false
 
 func _process(_delta):
 	var sterioData: PackedVector2Array = effect.get_buffer(effect.get_frames_available())
@@ -41,10 +96,10 @@ func _process(_delta):
 		data.encode_s16(i * 2, int(value * 32767))
 
 	if max_amplitude > input_threshold:
-		if timer.is_stopped():
+		if audio_timer.is_stopped():
 			HomeApi.api.assist_handler.start_wakeword()
 
-		timer.start()
+		audio_timer.start()
 
-	if timer.is_stopped() == false:
+	if audio_timer.is_stopped() == false:
 		HomeApi.api.assist_handler.send_data(data)
