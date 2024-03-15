@@ -7,7 +7,6 @@ var data = PackedVector2Array()
 var result: PackedFloat32Array
 
 func _ready():
-	print("test")
 	for i in range(0, 44100):
 		var value = sin(i * 2 * PI / 44100.0)
 		data.push_back(Vector2(value, value))

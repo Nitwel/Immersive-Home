@@ -43,8 +43,6 @@ func start_wakeword():
 	if pipe_running:
 		return
 
-	print("wake start")
-
 	api.send_packet({
 		"type": "assist_pipeline/run",
 		"start_stage": "wake_word",
@@ -66,8 +64,6 @@ func send_data(data: PackedByteArray):
 		stream.encode_s8(0, handler_id)
 		stream.append_array(data)
 
-		print("sending data")
-
 		api.send_raw(stream)
 
 func handle_message(message: Dictionary):
@@ -79,11 +75,8 @@ func handle_message(message: Dictionary):
 	if event.has("type") == false:
 		return
 
-	print(message)
-
 	match event["type"]:
 		"run-start":
-			print("Pipeline started")
 			pipe_running = true
 			handler_id = event["data"]["runner_data"]["stt_binary_handler_id"]
 		"wake_word-end":
