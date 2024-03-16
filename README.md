@@ -1,31 +1,31 @@
-![logo](assets/banner.png)
+![logo](app/assets/banner.png)
 
 #  🏠 Introduction
 
 Immersive Home is project to bring Smart Home and Mixed Reality technologies together for an intuitive and immersive experience. [Demo Video](https://youtu.be/aOd7JX6bfQI)
 
 <a href="https://immersive-home.org" target="_blank" style="text-decoration: none !important">
-	<img height="32" src="assets/badges/website.png" alt="Badge linking to our website" />
+	<img height="32" src="app/assets/badges/website.png" alt="Badge linking to our website" />
 </a>
 
 <a href="https://discord.gg/DWWtDfVeus" target="_blank" style="text-decoration: none !important">
-	<img height="32" src="assets/badges/discord.png" alt="Badge linking to our discord" />
+	<img height="32" src="app/assets/badges/discord.png" alt="Badge linking to our discord" />
 </a>
 
 <a href="https://www.oculus.com/experiences/quest/7533875049973382/" target="_blank" style="text-decoration: none !important">
-	<img height="32" src="assets/badges/meta.png" alt="Badge linking to Meta App Lab" />
+	<img height="32" src="app/assets/badges/meta.png" alt="Badge linking to Meta App Lab" />
 </a>
 
 <a href="https://github.com/Nitwel/Immersive-Home/releases/latest/download/Android.zip" target="_blank" style="text-decoration: none !important">
-	<img height="32" src="assets/badges/github.png" alt="Badge linking to GitHub" />
+	<img height="32" src="app/assets/badges/github.png" alt="Badge linking to GitHub" />
 </a>
 
 <a href="https://nitwel.itch.io/immersive-home" target="_blank" style="text-decoration: none !important">
-	<img height="32" src="assets/badges/itch.png" alt="Badge linking to itch.io" />
+	<img height="32" src="app/assets/badges/itch.png" alt="Badge linking to itch.io" />
 </a>
 
 <a href="https://sidequestvr.com/app/26827/immersive-home" target="_blank" style="text-decoration: none !important">
-	<img height="32" src="assets/badges/sidequest.png" alt="Badge linking to sidequest" />
+	<img height="32" src="app/assets/badges/sidequest.png" alt="Badge linking to sidequest" />
 </a>
 
 [Setup Guide](http://immersive-home.org/news/7)
