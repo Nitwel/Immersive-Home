@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:fb9d247646174775b00db7902c224ac62f734b3a6467af32919d12d2a6861c38
-size 555
+[gd_resource type="AudioBusLayout" load_steps=2 format=3 uid="uid://b0kqovxor03ip"]
+
+[sub_resource type="AudioEffectCapture" id="AudioEffectCapture_74ixq"]
+resource_name = "Capture"
+
+[resource]
+bus/1/name = &"Mute Bus 2"
+bus/1/solo = false
+bus/1/mute = true
+bus/1/bypass_fx = false
+bus/1/volume_db = 0.0
+bus/1/send = &"Master"
+bus/2/name = &"Record"
+bus/2/solo = false
+bus/2/mute = false
+bus/2/bypass_fx = false
+bus/2/volume_db = 0.0
+bus/2/send = &"Mute Bus 2"
+bus/2/effect/0/effect = SubResource("AudioEffectCapture_74ixq")
+bus/2/effect/0/enabled = true
