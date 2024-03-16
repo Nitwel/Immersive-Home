@@ -7,3 +7,6 @@ Full reference can be found in the [Event System](/reference/lib--globals--event
 ## Focus handling
 
 By default, every Node that has the `ui_focus` group is able to receive focus. When a node receives focus, the **_on_focus_in(event: [EventFocus](/reference/EventFocus.html))** method is called. When a node loses focus, the **_on_focus_out(event: [EventFocus](/reference/EventFocus.html))** method is called.
+
+The `ui_focus_skip` group can be added to a node to skip focus when clicking on it.
+The `ui_focus_stop` group prevents focus entirely on itself and its children. Useful for the Virtual Keyboard.

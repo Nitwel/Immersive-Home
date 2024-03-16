@@ -69,6 +69,10 @@ export default {
                         {
                             text: 'Event System',
                             link: '/development/event-system'
+                        },
+                        {
+                            text: 'Node Functions',
+                            link: '/development/functions'
                         }
                     ]
                 }

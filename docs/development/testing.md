@@ -6,6 +6,6 @@ In order to test without a headset, press the run project (F5) button in Godot a
 
 ## With a VR Headset
 
-To test the app with a VR headset, make sure you are able to export the project to Android. Follow the [Building](development/building.md) guide to setup the project for Android.
+To test the app with a VR headset, make sure you are able to export the project to Android. Follow the [Building](/development/building) guide to setup the project for Android.
 
 When everything is setup correctly, you can connect your Headset to your computer and press the `Export with Remote Debug` button in Godot. This will start the app on your headset and connect the Godot Editor to the app. You can now see the logs and errors in the Godot Editor while the app is running on the headset.

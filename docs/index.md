@@ -59,7 +59,7 @@ The bottom right button on the keyboard will paste the copied text into the inpu
 
 ## What's next?
 
-You successfully connected the app to Home Assistant. Next up you have to configure the rooms, read more about it in the [Room Setup](/room-setup) section.
+You successfully connected the app to Home Assistant. Next up you have to configure the rooms, read more about it in the [Room Setup](/getting-started/room-setup) section.
 
 ::: warning
 Rooms have to be configured first, before you can add entities to them.
