@@ -1,7 +1,9 @@
 extends Node
 
+## A simple class to manage callbacks for different keys
 class_name CallbackMap
 
+## Map of callbacks
 var callbacks := {}
 var single_callbacks: Array = []
 

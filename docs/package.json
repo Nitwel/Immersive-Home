@@ -1,0 +1,26 @@
+{
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "generate": "tsx reference/generator/index.ts",
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^20.11.28",
+    "endent": "^2.1.0",
+    "fast-xml-parser": "^4.3.6",
+    "lodash-es": "^4.17.21",
+    "markdown-table": "^3.0.3",
+    "tsx": "^4.7.1",
+    "vitepress": "1.0.0-rc.45",
+    "vue": "^3.4.21"
+  }
+}

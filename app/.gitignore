@@ -2,6 +2,7 @@
 .godot/
 android/build/
 builds/
+reference/
 
 # Godot-specific ignores
 .import/
