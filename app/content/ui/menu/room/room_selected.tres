@@ -1,0 +1,5 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ctx6nf6oi5l8f"]
+
+[resource]
+cull_mode = 2
+albedo_color = Color(0, 1, 1, 1)

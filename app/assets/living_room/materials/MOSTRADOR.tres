@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dl1mjn4883ggy"]
+
+[resource]
+resource_name = "MOSTRADOR"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.650259, 0.783642, 0.908293, 1)
+roughness = 0.6

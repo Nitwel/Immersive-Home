@@ -1,0 +1,10 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://sshfnckriqxn"]
+
+[ext_resource type="FontFile" uid="uid://b4ofmfdr5o002" path="res://assets/icons/base_icons.woff2" id="1_y242b"]
+
+[resource]
+base_font = ExtResource("1_y242b")
+variation_opentype = {
+1179208780: null,
+1196572996: null
+}

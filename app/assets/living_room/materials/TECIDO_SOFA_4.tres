@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cwn7larycpro2"]
+
+[resource]
+resource_name = "TECIDO_SOFA_4"
+vertex_color_use_as_albedo = true
+roughness = 0.6

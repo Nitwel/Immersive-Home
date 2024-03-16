@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://b62ix2tt0qtxx"]
+
+[ext_resource type="Texture2D" uid="uid://ufh8jhikxwh5" path="res://assets/living_room/textures/PARQUET_baseColor.jpeg" id="1_4f6ly"]
+[ext_resource type="Texture2D" uid="uid://cu063jar47pof" path="res://assets/living_room/textures/PARQUET_metallicRoughness.png" id="2_p8me3"]
+
+[resource]
+resource_name = "PARQUET"
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_4f6ly")
+metallic_texture = ExtResource("2_p8me3")
+metallic_texture_channel = 2
+roughness_texture = ExtResource("2_p8me3")
+roughness_texture_channel = 1

@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://chj2csemlqyfw"]
+
+[resource]
+resource_name = "BRO3"
+vertex_color_use_as_albedo = true
+roughness = 0.6

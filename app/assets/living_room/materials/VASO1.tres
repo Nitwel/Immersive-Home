@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://dhfg01mwwwb3a"]
+
+[resource]
+resource_name = "VASO1"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.746862, 0.625414, 0.286361, 1)
+roughness = 0.6

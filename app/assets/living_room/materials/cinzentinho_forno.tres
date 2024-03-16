@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://by45egnad36he"]
+
+[resource]
+resource_name = "cinzentinho_forno"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.925693, 0.925693, 0.925693, 1)
+roughness = 0.6

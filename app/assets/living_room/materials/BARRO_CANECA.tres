@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cjfyl5v6s3pnv"]
+
+[resource]
+resource_name = "BARRO_CANECA"
+vertex_color_use_as_albedo = true
+roughness = 0.6

@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://r4u6kivig0ow"]
+
+[resource]
+resource_name = "LOGO_CANECA_3"
+vertex_color_use_as_albedo = true
+roughness = 0.6

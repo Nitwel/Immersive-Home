@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://d2s31truf3uxt"]
+
+[resource]
+resource_name = "MOLDURA"
+vertex_color_use_as_albedo = true
+roughness = 0.6

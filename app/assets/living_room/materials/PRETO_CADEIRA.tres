@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://btk7bmreh30ol"]
+
+[resource]
+resource_name = "PRETO_CADEIRA"
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.432588, 0.358931, 0.310278, 1)
+roughness = 0.6

@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://r5dtgehasq2j"]
+
+[resource]
+resource_name = "0128_White"
+vertex_color_use_as_albedo = true
+roughness = 0.6
