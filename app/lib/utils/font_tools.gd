@@ -1,3 +1,4 @@
+## Returns the size of a Label3D in standard units
 static func get_font_size(label: Label3D, chars=null):
 	var font = label.font
 

@@ -1,4 +1,5 @@
 extends Node
+## Manages the connection to the home automation system and provides a unified interface to the different home automation systems.
 
 const Hass = preload ("res://lib/home_apis/hass/hass.gd")
 const HassWebSocket = preload ("res://lib/home_apis/hass_ws/hass.gd")
@@ -16,8 +17,13 @@ const methods = [
 	"watch_state"
 ]
 
+## Emitted when the connection to the home automation system is established
 signal on_connect()
+
+## Emitted when the connection to the home automation system is lost
 signal on_disconnect()
+
+## The current home automation system adapter
 var api: Node
 
 func _ready():
@@ -28,6 +34,7 @@ func _ready():
 	if success:
 		start_adapter(Store.settings.type.to_lower(), Store.settings.url, Store.settings.token)
 
+## Starts the adapter for the given type and url
 func start_adapter(type: String, url: String, token: String):
 	print("Starting adapter: %s" % type)
 	if api != null:
@@ -58,6 +65,7 @@ func _on_connect():
 func _on_disconnect():
 	on_disconnect.emit()
 
+## Returns true if the adapter is connected to the home automation system
 func has_connected():
 	if api == null:
 		return false

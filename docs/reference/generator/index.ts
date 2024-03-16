@@ -9,7 +9,7 @@ import endent from "endent";
 const REFERENCE_PATH = './reference/raw'
 let custom_types: string[] = []
 
-// export_from_godot()
+export_from_godot()
 translate()
 
 async function export_from_godot() {
@@ -102,21 +102,52 @@ function translate_reference(contents: string): string {
     }
 
 
+    let enum_descriptions = ''
+    let enum_list = to_array(json.class.constants?.constant).filter(constant => ('_enum' in constant) === true)
+
+    if (enum_list.length > 0) {
+        const enums = enum_list.reduce((acc, constant) => {
+            endent
+            if ('_enum' in constant) {
+                if (acc[constant._enum] === undefined) {
+                    acc[constant._enum] = []
+                }
+
+                acc[constant._enum].push(constant)
+            }
+            return acc
+        }, {})
+
+        enum_descriptions = '## Enums\n\n' + Object.keys(enums).map(enum_name => {
+            return endent`
+                ### enum ${enum_name}
+
+                ${enums[enum_name].map(constant => {
+                const name = constant._name
+
+                return endent`
+                    #### ${enum_name}.${name} = \`${constant._value}\` ${'{#const-' + name_to_anchor(name) + '}'}
+
+                    ${constant['#text'] || 'No description provided yet.'}
+                    `
+            }).join('\n\n')}
+            `
+        }).join('\n\n')
+    }
+
     let constant_descriptions = ''
-    let constants_list = to_array(json.class.constants?.constant)
+    let constants_list = to_array(json.class.constants?.constant).filter(constant => ('_enum' in constant) === false)
 
     if (constants_list.length > 0) {
         constant_descriptions = '## Constants\n\n' +
             constants_list.map(constant => {
                 const name = constant._name
 
-                console.log('constant', constant._value)
+                return endent`
+                ### ${name} = \`${constant._value}\` ${'{#const-' + name_to_anchor(name) + '}'}
 
-                return `
-### ${name} = \`${constant._value}\` ${'{#const-' + name_to_anchor(name) + '}'}
-
-${constant.description || 'No description provided yet.'}
-                `
+                ${constant['#text'] || 'No description provided yet.'}
+            `
             }).join('\n\n')
     }
 
@@ -134,7 +165,7 @@ ${constant.description || 'No description provided yet.'}
                 const name = member._name
 
                 return [
-                    `[${name}](#${name_to_anchor(name)})`,
+                    `[${name}](#prop-${name_to_anchor(name)})`,
                     link_godot_type(member._type),
                     handle_default(member._default)
                 ]
@@ -148,9 +179,9 @@ ${constant.description || 'No description provided yet.'}
                 const name = member._name
 
                 return endent`
-                ### ${name}: ${link_godot_type(member._type)} ${'{#' + name_to_anchor(name) + '}'}
+                ### ${name}: ${link_godot_type(member._type)} ${'{#prop-' + name_to_anchor(name) + '}'}
 
-                ${member.description || 'No description provided yet.'}
+                ${member['#text'] || 'No description provided yet.'}
     `
             }).join('\n\n')
     }
@@ -191,8 +222,10 @@ ${constant.description || 'No description provided yet.'}
                     return `${param._name}: ${link_godot_type(param._type)} `
                 }).join(', ')
 
+                let qualifiers = to_array(method?._qualifiers).join(', ')
+
                 return endent`
-                ### ${name} (${params} ) -> ${link_godot_type(method.return._type)} ${'{#' + name_to_anchor(name) + '}'}
+                ### ${qualifiers} ${name} (${params} ) -> ${link_godot_type(method.return._type)} ${'{#' + name_to_anchor(name) + '}'}
 
                 ${method.description || 'No description provided yet.'}
     `
@@ -210,6 +243,8 @@ ${constant.description || 'No description provided yet.'}
         ${methods}
 
         ${signal_descriptions}
+
+        ${enum_descriptions}
 
         ${constant_descriptions}
 

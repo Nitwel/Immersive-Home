@@ -1,14 +1,16 @@
 # EventKey
 **Inherits:** [EventWithModifiers](/reference/EventWithModifiers.html)
     
+## Description
 
+Events emitted by the Virtual Keyboard
 
 ## Properties
 
-| Name          | Type                                                                | Default |
-| ------------- | ------------------------------------------------------------------- | ------- |
-| [echo](#echo) | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) |         |
-| [key](#key)   | [int](https://docs.godotengine.org/de/4.x/classes/class_int.html)   |         |
+| Name               | Type                                                                | Default |
+| ------------------ | ------------------------------------------------------------------- | ------- |
+| [echo](#prop-echo) | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) |         |
+| [key](#prop-key)   | [int](https://docs.godotengine.org/de/4.x/classes/class_int.html)   |         |
 
 ## Methods
 
@@ -20,18 +22,20 @@
 
 
 
+
+
 ## Property Descriptions
 
-### echo: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) {#echo}
+### echo: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) {#prop-echo}
 
-No description provided yet.
+true if the event is repeated due to a key being held down for a while
 
-### key: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html) {#key}
+### key: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html) {#prop-key}
 
-No description provided yet.
+The key that was pressed or released
 
 ## Method Descriptions
 
-### key_to_string (key: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html) , caps: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) , apply_to: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) {#key-to-string}
+### static key_to_string (key: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html) , caps: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) , apply_to: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) {#key-to-string}
 
-No description provided yet.
+Modifies a string based on the key pressed

@@ -1,5 +1,6 @@
 extends Object
 
+## Convert a dictionary to be able to be serialized to JSON.
 static func stringify_value(value):
 	match typeof(value):
 		TYPE_DICTIONARY:
@@ -50,6 +51,7 @@ static func stringify_value(value):
 		_:
 			assert(false, "Unsupported type: %s" % typeof(value))
 
+## Restore a dictionary from a JSON-serialized dictionary.
 static func parse_value(value):
 	if typeof(value) == TYPE_ARRAY:
 		return value.map(func(item):

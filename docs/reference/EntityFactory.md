@@ -1,7 +1,9 @@
 # EntityFactory
 **Inherits:** [RefCounted](https://docs.godotengine.org/de/4.x/classes/class_refcounted.html)
     
+## Description
 
+This class is used to create entities based on their type
 
 
 
@@ -13,54 +15,42 @@
 
 
 
-## Constants
 
+
+## Constants
 
 ### Switch = `<Object>` {#const-Switch}
 
 No description provided yet.
-                
-
 
 ### Light = `<Object>` {#const-Light}
 
 No description provided yet.
-                
-
 
 ### Sensor = `<Object>` {#const-Sensor}
 
 No description provided yet.
-                
-
 
 ### MediaPlayer = `<Object>` {#const-MediaPlayer}
 
 No description provided yet.
-                
-
 
 ### Camera = `<Object>` {#const-Camera}
 
 No description provided yet.
-                
-
 
 ### ButtonEntity = `<Object>` {#const-ButtonEntity}
 
 No description provided yet.
-                
-
 
 ### NumberEntity = `<Object>` {#const-NumberEntity}
 
 No description provided yet.
-                
 
 
 
 ## Method Descriptions
 
-### create_entity (id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#create-entity}
+### static create_entity (id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#create-entity}
 
 No description provided yet.

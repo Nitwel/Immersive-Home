@@ -1,10 +1,14 @@
 extends EventWithModifiers
+## Events emitted by the Virtual Keyboard
 class_name EventKey
 
+## The key that was pressed or released
 var key: Key
+## true if the event is repeated due to a key being held down for a while
 var echo: bool
 
-static func key_to_string(key: Key, caps: bool = false, apply_to: String = "") -> String:
+## Modifies a string based on the key pressed
+static func key_to_string(key: Key, caps: bool=false, apply_to: String="") -> String:
 	match key:
 		KEY_INSERT: apply_to += DisplayServer.clipboard_get()
 		KEY_BACKSPACE: apply_to = apply_to.substr(0, apply_to.length() - 1)

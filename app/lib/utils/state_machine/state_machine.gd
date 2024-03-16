@@ -1,5 +1,6 @@
-class_name StateMachine
 extends Node
+## Abstract class for a state machine
+class_name StateMachine
 
 signal changed(state_name: String, old_state: String)
 
@@ -18,6 +19,7 @@ func _ready() -> void:
 		
 	current_state._on_enter()
 
+## Change the current state to the new state
 func change_to(new_state: String) -> void:
 	if states.has(new_state) == false:
 		return
@@ -31,6 +33,7 @@ func change_to(new_state: String) -> void:
 	current_state._on_enter()
 	changed.emit(new_state, old_state)
 
+## Get the state with the given name
 func get_state(state_name: String) -> Node:
 	if states.has(state_name) == false:
 		return null

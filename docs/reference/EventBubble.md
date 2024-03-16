@@ -1,14 +1,18 @@
 # EventBubble
 **Inherits:** [Event](/reference/Event.html)
     
+## Description
 
+Abstract Event to represent events that move "bubble" up the Node tree.
 
 ## Properties
 
-| Name                  | Type                                                                | Default |
-| --------------------- | ------------------------------------------------------------------- | ------- |
-| [bubbling](#bubbling) | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) | `true`  |
-| [target](#target)     | [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) |         |
+| Name                       | Type                                                                | Default |
+| -------------------------- | ------------------------------------------------------------------- | ------- |
+| [bubbling](#prop-bubbling) | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) | `true`  |
+| [target](#prop-target)     | [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) |         |
+
+
 
 
 
@@ -18,10 +22,10 @@
 
 ## Property Descriptions
 
-### bubbling: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) {#bubbling}
+### bubbling: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) {#prop-bubbling}
 
-No description provided yet.
+If set to false, the event will stop bubbling up the Node tree.
 
-### target: [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) {#target}
+### target: [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) {#prop-target}
 
-No description provided yet.
+The Node that caused the event to start.

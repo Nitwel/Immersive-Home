@@ -1,16 +1,22 @@
 extends RefCounted
+## Abstract class for saving and loading data to and from a file.
 
 const VariantSerializer = preload ("res://lib/utils/variant_serializer.gd")
 
+## Signal emitted when the data is loaded.
 signal on_loaded
+
+## Signal emitted when the data is saved.
 signal on_saved
 
 var _loaded = false
 var _save_path = null
 
+## Returns true if the data has been loaded.
 func is_loaded():
 	return _loaded
 
+## Resets the data to its default state.
 func clear():
 	pass
 

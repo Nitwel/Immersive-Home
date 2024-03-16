@@ -1,4 +1,5 @@
 extends Node
+## Base Class for all states
 class_name State
 
 var state_machine: StateMachine

@@ -18,12 +18,14 @@
 
 
 
+
+
 ## Method Descriptions
 
-### parse_value (value: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#parse-value}
+### static parse_value (value: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#parse-value}
 
-No description provided yet.
+Restore a dictionary from a JSON-serialized dictionary.
 
-### stringify_value (value: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#stringify-value}
+### static stringify_value (value: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#stringify-value}
 
-No description provided yet.
+Convert a dictionary to be able to be serialized to JSON.

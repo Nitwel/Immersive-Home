@@ -1,4 +1,5 @@
 extends Event
+## Base for Events using a Keyboard
 class_name EventWithModifiers
 
 var alt_pressed := false

@@ -1,4 +1,5 @@
 extends Node3D
+## Calculates collision for fingers and FingerAreas
 
 const Finger = preload ("res://lib/utils/touch/finger.gd")
 

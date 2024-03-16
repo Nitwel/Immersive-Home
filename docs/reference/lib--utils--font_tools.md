@@ -17,8 +17,10 @@
 
 
 
+
+
 ## Method Descriptions
 
-### get_font_size (label: [Label3D](https://docs.godotengine.org/de/4.x/classes/class_label3d.html) , chars: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-font-size}
+### static get_font_size (label: [Label3D](https://docs.godotengine.org/de/4.x/classes/class_label3d.html) , chars: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-font-size}
 
-No description provided yet.
+Returns the size of a Label3D in standard units

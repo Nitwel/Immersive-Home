@@ -1,4 +1,5 @@
 extends RefCounted
+## A group of proxies that will be updated when one of them is updated
 class_name ProxyGroup
 
 var proxies = []

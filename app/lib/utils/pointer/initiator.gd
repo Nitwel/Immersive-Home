@@ -1,4 +1,5 @@
 extends RefCounted
+## Defines what triggered a EventPointer
 
 enum Type {
 	CONTROLLER_LEFT,
@@ -19,4 +20,4 @@ var node: Node3D
 var type: Type
 
 func is_right() -> bool:
-	return type == Type.CONTROLLER_RIGHT || type == Type.HAND_RIGHT
+	return type == Type.CONTROLLER_RIGHT||type == Type.HAND_RIGHT

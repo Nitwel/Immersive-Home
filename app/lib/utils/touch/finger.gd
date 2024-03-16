@@ -1,4 +1,5 @@
 extends RefCounted
+## Description of a finger area.
 
 enum Type {
 	THUMB_RIGHT,

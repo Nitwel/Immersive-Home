@@ -1,5 +1,6 @@
 extends RefCounted
 class_name EntityFactory
+## This class is used to create entities based on their type
 
 const Switch = preload ("res://content/entities/switch/switch.tscn")
 const Light = preload ("res://content/entities/light/light.tscn")
