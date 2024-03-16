@@ -1,4 +1,5 @@
 # EventFocus
+**Inherits:** [Event](/reference/Event.html)
     
 
 
@@ -8,6 +9,10 @@
 | ----------------------------------- | ------------------------------------------------------------------- | ------- |
 | [previous_target](#previous-target) | [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) |         |
 | [target](#target)                   | [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) |         |
+
+
+
+
 
 
 

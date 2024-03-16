@@ -7,6 +7,7 @@ import { markdownTable } from 'markdown-table'
 import endent from "endent";
 
 const REFERENCE_PATH = './reference/raw'
+let custom_types: string[] = []
 
 // export_from_godot()
 translate()
@@ -25,6 +26,17 @@ async function export_from_godot() {
 }
 
 async function translate() {
+    custom_types = (await readdir(REFERENCE_PATH)).map(file => {
+        file = file.replace('.xml', '').replace(/--/g, '/')
+
+        if (file.includes('--')) {
+            return `"${file}.gd"`
+        }
+
+        return file
+    })
+
+
     for (const file of await readdir(REFERENCE_PATH)) {
         const contents = await parse_reference(join(REFERENCE_PATH, file))
         const markdown = translate_reference(contents)
@@ -52,7 +64,7 @@ function translate_reference(contents: string): string {
             ## Description
             
             ${json.class.brief_description}
-        `
+            `
     }
 
     if (json.class.description) {
@@ -60,7 +72,52 @@ function translate_reference(contents: string): string {
             ## Description
 
             ${json.class.description}
-        `
+            `
+    }
+
+    let inherits = ''
+
+    if (json.class._inherits) {
+        inherits = endent`**Inherits:** ${link_godot_type(json.class._inherits)}`
+    }
+
+    let signal_descriptions = ''
+    let signals_list = to_array(json.class.signals?.signal)
+
+    if (signals_list.length > 0) {
+        signal_descriptions = '## Signals\n\n' +
+            signals_list.map(signal => {
+                const name = signal._name
+
+                let params = to_array(signal?.param).map(param => {
+                    return `${param._name}: ${link_godot_type(param._type)} `
+                }).join(', ')
+
+                return endent`
+                    ### ${name} (${params} ) ${'{#' + name_to_anchor(name) + '}'}
+
+                    ${signal.description || 'No description provided yet.'}
+                `
+            }).join('\n\n')
+    }
+
+
+    let constant_descriptions = ''
+    let constants_list = to_array(json.class.constants?.constant)
+
+    if (constants_list.length > 0) {
+        constant_descriptions = '## Constants\n\n' +
+            constants_list.map(constant => {
+                const name = constant._name
+
+                console.log('constant', constant._value)
+
+                return `
+### ${name} = \`${constant._value}\` ${'{#const-' + name_to_anchor(name) + '}'}
+
+${constant.description || 'No description provided yet.'}
+                `
+            }).join('\n\n')
     }
 
     let members = ''
@@ -82,8 +139,9 @@ function translate_reference(contents: string): string {
                     handle_default(member._default)
                 ]
             })
-        ])}
-        `
+        ])
+            }
+    `
 
         member_descriptions = '## Property Descriptions\n\n' +
             members_list.map(member => {
@@ -93,7 +151,7 @@ function translate_reference(contents: string): string {
                 ### ${name}: ${link_godot_type(member._type)} ${'{#' + name_to_anchor(name) + '}'}
 
                 ${member.description || 'No description provided yet.'}
-            `
+    `
             }).join('\n\n')
     }
 
@@ -121,33 +179,39 @@ function translate_reference(contents: string): string {
                     `[${name}](#${name_to_anchor(name)}) ( ${params} )`
                 ]
             })
-        ])}
-        `
+        ])
+            }
+    `
 
         method_descriptions = '## Method Descriptions\n\n' +
             methods_list.map(method => {
                 const name = method._name
 
                 let params = to_array(method?.param).map(param => {
-                    return `${param._name}: ${link_godot_type(param._type)}`
+                    return `${param._name}: ${link_godot_type(param._type)} `
                 }).join(', ')
 
                 return endent`
-                ### ${name} ( ${params} ) -> ${link_godot_type(method.return._type)} ${'{#' + name_to_anchor(name) + '}'}
+                ### ${name} (${params} ) -> ${link_godot_type(method.return._type)} ${'{#' + name_to_anchor(name) + '}'}
 
                 ${method.description || 'No description provided yet.'}
-            `
+    `
             }).join('\n\n')
     }
 
     let markdown = endent`
         # ${getTitle(json.class._name)}
+        ${inherits}
             
         ${description}
 
         ${members}
 
         ${methods}
+
+        ${signal_descriptions}
+
+        ${constant_descriptions}
 
         ${member_descriptions}
 
@@ -189,6 +253,10 @@ function link_godot_type(type: string): string {
             const link = match.replace('.gd', '').replace(/\//g, '--')
             return `[${getTitle(match)}](/reference/${link}.html)`
         })
+    }
+
+    if (custom_types.includes(type)) {
+        return `[${getTitle(type)}](/reference/${type}.html)`
     }
 
     return `[${type}](https://docs.godotengine.org/de/4.x/classes/class_${type.toLowerCase()}.html)`

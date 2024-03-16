@@ -1,4 +1,5 @@
 # Integration
+**Inherits:** [RefCounted](https://docs.godotengine.org/de/4.x/classes/class_refcounted.html)
     
 
 
@@ -16,6 +17,16 @@
 | void    | [_init](#-init) ( hass: [Hass](/reference/lib--home_apis--hass_ws--hass.html) ) |
 | void    | [on_connect](#on-connect) (  )                                                  |
 
+
+
+## Constants
+
+
+### HASS_API = `<Object>` {#const-HASS-API}
+
+No description provided yet.
+                
+
 ## Property Descriptions
 
 ### api: [Hass](/reference/lib--home_apis--hass_ws--hass.html) {#api}
@@ -28,10 +39,10 @@ No description provided yet.
 
 ## Method Descriptions
 
-### _init ( hass: [Hass](/reference/lib--home_apis--hass_ws--hass.html) ) -> void {#-init}
+### _init (hass: [Hass](/reference/lib--home_apis--hass_ws--hass.html)  ) -> void {#-init}
 
 No description provided yet.
 
-### on_connect (  ) -> void {#on-connect}
+### on_connect ( ) -> void {#on-connect}
 
 No description provided yet.

@@ -1,4 +1,5 @@
 # StateMachine
+**Inherits:** [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html)
     
 
 
@@ -17,6 +18,14 @@
 | void                                                                | [change_to](#change-to) ( new_state: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )  |
 | [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) | [get_state](#get-state) ( state_name: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) ) |
 
+## Signals
+
+### changed (state_name: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , old_state: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) {#changed}
+
+No description provided yet.
+
+
+
 ## Property Descriptions
 
 ### current_state: [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) {#current-state}
@@ -29,14 +38,14 @@ No description provided yet.
 
 ## Method Descriptions
 
-### _ready (  ) -> void {#-ready}
+### _ready ( ) -> void {#-ready}
 
 No description provided yet.
 
-### change_to ( new_state: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) ) -> void {#change-to}
+### change_to (new_state: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> void {#change-to}
 
 No description provided yet.
 
-### get_state ( state_name: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) ) -> [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) {#get-state}
+### get_state (state_name: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) {#get-state}
 
 No description provided yet.

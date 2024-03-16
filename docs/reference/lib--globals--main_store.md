@@ -1,4 +1,5 @@
 # MainStore
+**Inherits:** [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html)
     
 
 
@@ -11,6 +12,28 @@
 | [settings](#settings) | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) |         |
 
 
+
+
+
+## Constants
+
+
+### SettingsStore = `<Object>` {#const-SettingsStore}
+
+No description provided yet.
+                
+
+
+### HouseStore = `<Object>` {#const-HouseStore}
+
+No description provided yet.
+                
+
+
+### DevicesStore = `<Object>` {#const-DevicesStore}
+
+No description provided yet.
+                
 
 ## Property Descriptions
 

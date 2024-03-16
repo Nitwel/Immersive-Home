@@ -1,4 +1,5 @@
 # Assist
+**Inherits:** [RefCounted](https://docs.godotengine.org/de/4.x/classes/class_refcounted.html)
     
 
 
@@ -23,6 +24,36 @@
 | void    | [on_connect](#on-connect) (  )                                                                                                 |
 | void    | [send_data](#send-data) ( data: [PackedByteArray](https://docs.godotengine.org/de/4.x/classes/class_packedbytearray.html) )    |
 | void    | [start_wakeword](#start-wakeword) (  )                                                                                         |
+
+## Signals
+
+### on_error ( ) {#on-error}
+
+No description provided yet.
+
+### on_stt_message (message: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) {#on-stt-message}
+
+No description provided yet.
+
+### on_tts_message (message: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) {#on-tts-message}
+
+No description provided yet.
+
+### on_tts_sound (sound: [AudioStreamMP3](https://docs.godotengine.org/de/4.x/classes/class_audiostreammp3.html)  ) {#on-tts-sound}
+
+No description provided yet.
+
+### on_wake_word (wake_word: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) {#on-wake-word}
+
+No description provided yet.
+
+## Constants
+
+
+### HASS_API = `<Object>` {#const-HASS-API}
+
+No description provided yet.
+                
 
 ## Property Descriptions
 
@@ -56,22 +87,22 @@ No description provided yet.
 
 ## Method Descriptions
 
-### _init ( hass: [Hass](/reference/lib--home_apis--hass_ws--hass.html) ) -> void {#-init}
+### _init (hass: [Hass](/reference/lib--home_apis--hass_ws--hass.html)  ) -> void {#-init}
 
 No description provided yet.
 
-### handle_message ( message: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) ) -> void {#handle-message}
+### handle_message (message: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html)  ) -> void {#handle-message}
 
 No description provided yet.
 
-### on_connect (  ) -> void {#on-connect}
+### on_connect ( ) -> void {#on-connect}
 
 No description provided yet.
 
-### send_data ( data: [PackedByteArray](https://docs.godotengine.org/de/4.x/classes/class_packedbytearray.html) ) -> void {#send-data}
+### send_data (data: [PackedByteArray](https://docs.godotengine.org/de/4.x/classes/class_packedbytearray.html)  ) -> void {#send-data}
 
 No description provided yet.
 
-### start_wakeword (  ) -> void {#start-wakeword}
+### start_wakeword ( ) -> void {#start-wakeword}
 
 No description provided yet.

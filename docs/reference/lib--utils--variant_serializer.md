@@ -1,4 +1,5 @@
 # VariantSerializer
+**Inherits:** [Object](https://docs.godotengine.org/de/4.x/classes/class_object.html)
     
 
 
@@ -13,12 +14,16 @@
 
 
 
+
+
+
+
 ## Method Descriptions
 
-### parse_value ( value: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) -> void {#parse-value}
+### parse_value (value: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#parse-value}
 
 No description provided yet.
 
-### stringify_value ( value: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) -> void {#stringify-value}
+### stringify_value (value: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#stringify-value}
 
 No description provided yet.

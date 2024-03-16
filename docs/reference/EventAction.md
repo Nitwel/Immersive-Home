@@ -1,4 +1,5 @@
 # EventAction
+**Inherits:** [Event](/reference/Event.html)
     
 
 
@@ -9,6 +10,10 @@
 | [name](#name)                         | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)   |         |
 | [right_controller](#right-controller) | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html)       |         |
 | [value](#value)                       | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) |         |
+
+
+
+
 
 
 

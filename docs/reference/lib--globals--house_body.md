@@ -1,4 +1,5 @@
 # HouseBody
+**Inherits:** [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html)
     
 
 
@@ -7,6 +8,10 @@
 | Name          | Type                                                                      | Default |
 | ------------- | ------------------------------------------------------------------------- | ------- |
 | [body](#body) | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) |         |
+
+
+
+
 
 
 

@@ -11,13 +11,35 @@ export default {
                     link: '/'
                 },
                 {
-                    text: 'Introduction',
-                    link: '/getting-started/introduction'
+                    text: 'Room Setup',
+                    link: '/getting-started/room-setup'
+                },
+            ]
+        },
+        {
+            text: 'General',
+            items: [
+                {
+                    text: 'Hand Tracking',
+                    link: '/getting-started/hand-tracking'
                 },
                 {
-                    text: 'Installation',
-                    link: '/getting-started/installation'
+                    text: 'Miniature View',
+                    link: '/getting-started/mini-view'
+                },
+                {
+                    text: 'Voice Assistant',
+                    link: '/getting-started/voice-assistant'
                 }
+            ]
+        },
+        {
+            text: 'Smart Home Integration',
+            items: [
+                {
+                    text: 'Home Assistant',
+                    link: '/vendor-integration/home-assistant'
+                },
             ]
         }
     ],
@@ -26,8 +48,29 @@ export default {
             text: 'Development',
             items: [
                 {
-                    text: 'General',
+                    text: 'Getting Started',
                     link: '/development/'
+                },
+                {
+                    text: 'Testing',
+                    link: '/development/testing'
+                },
+                {
+                    text: 'Building',
+                    link: '/development/building'
+                },
+                {
+                    text: 'Systems',
+                    items: [
+                        {
+                            text: 'Home API',
+                            link: '/development/home-api'
+                        },
+                        {
+                            text: 'Event System',
+                            link: '/development/event-system'
+                        }
+                    ]
                 }
             ]
         }

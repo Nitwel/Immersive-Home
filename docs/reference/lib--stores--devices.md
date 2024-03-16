@@ -1,4 +1,5 @@
 # Devices
+**Inherits:** [Store](/reference/lib--stores--store.html)
     
 
 
@@ -12,8 +13,18 @@
 
 
 
+## Constants
+
+
+### StoreClass = `<Object>` {#const-StoreClass}
+
+No description provided yet.
+                
+
+
+
 ## Method Descriptions
 
-### clear (  ) -> void {#clear}
+### clear ( ) -> void {#clear}
 
 No description provided yet.

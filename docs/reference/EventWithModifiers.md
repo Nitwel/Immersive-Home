@@ -1,4 +1,5 @@
 # EventWithModifiers
+**Inherits:** [Event](/reference/Event.html)
     
 
 
@@ -10,6 +11,10 @@
 | [control_pressed](#control-pressed) | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) | `false` |
 | [meta_pressed](#meta-pressed)       | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) | `false` |
 | [shift_pressed](#shift-pressed)     | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) | `false` |
+
+
+
+
 
 
 

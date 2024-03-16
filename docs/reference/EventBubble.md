@@ -1,4 +1,5 @@
 # EventBubble
+**Inherits:** [Event](/reference/Event.html)
     
 
 
@@ -8,6 +9,10 @@
 | --------------------- | ------------------------------------------------------------------- | ------- |
 | [bubbling](#bubbling) | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) | `true`  |
 | [target](#target)     | [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) |         |
+
+
+
+
 
 
 

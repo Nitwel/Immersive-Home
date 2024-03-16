@@ -1,4 +1,5 @@
 # Collide
+**Inherits:** [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html)
     
 
 
@@ -21,6 +22,16 @@
 | void    | [_physics_process](#-physics-process) ( _delta: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )                                                                                                                                                                                |
 | void    | [_ready](#-ready) (  )                                                                                                                                                                                                                                                                                     |
 
+
+
+## Constants
+
+
+### Finger = `<Object>` {#const-Finger}
+
+No description provided yet.
+                
+
 ## Property Descriptions
 
 ### bodies_entered: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#bodies-entered}
@@ -41,22 +52,22 @@ No description provided yet.
 
 ## Method Descriptions
 
-### _init ( hand_left: [OpenXRHand](https://docs.godotengine.org/de/4.x/classes/class_openxrhand.html), hand_right: [OpenXRHand](https://docs.godotengine.org/de/4.x/classes/class_openxrhand.html), finger_areas: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) ) -> void {#-init}
+### _init (hand_left: [OpenXRHand](https://docs.godotengine.org/de/4.x/classes/class_openxrhand.html) , hand_right: [OpenXRHand](https://docs.godotengine.org/de/4.x/classes/class_openxrhand.html) , finger_areas: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html)  ) -> void {#-init}
 
 No description provided yet.
 
-### _on_body_entered ( finger_type: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), body: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) -> void {#-on-body-entered}
+### _on_body_entered (finger_type: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , body: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#-on-body-entered}
 
 No description provided yet.
 
-### _on_body_exited ( finger_type: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), body: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) -> void {#-on-body-exited}
+### _on_body_exited (finger_type: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , body: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#-on-body-exited}
 
 No description provided yet.
 
-### _physics_process ( _delta: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) -> void {#-physics-process}
+### _physics_process (_delta: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#-physics-process}
 
 No description provided yet.
 
-### _ready (  ) -> void {#-ready}
+### _ready ( ) -> void {#-ready}
 
 No description provided yet.

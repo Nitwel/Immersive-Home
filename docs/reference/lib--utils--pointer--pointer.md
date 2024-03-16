@@ -1,4 +1,5 @@
 # Pointer
+**Inherits:** [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html)
     
 
 
@@ -28,6 +29,16 @@
 | void    | [_on_released](#-on-released) ( type: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html) )                                                                                        |
 | void    | [_physics_process](#-physics-process) ( _delta: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )                                                                      |
 | void    | [_ready](#-ready) (  )                                                                                                                                                                           |
+
+
+
+## Constants
+
+
+### Initiator = `<Object>` {#const-Initiator}
+
+No description provided yet.
+                
 
 ## Property Descriptions
 
@@ -69,34 +80,34 @@ No description provided yet.
 
 ## Method Descriptions
 
-### _emit_event ( type: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), target: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) -> void {#-emit-event}
+### _emit_event (type: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , target: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#-emit-event}
 
 No description provided yet.
 
-### _handle_enter_leave (  ) -> void {#-handle-enter-leave}
+### _handle_enter_leave ( ) -> void {#-handle-enter-leave}
 
 No description provided yet.
 
-### _handle_move (  ) -> void {#-handle-move}
+### _handle_move ( ) -> void {#-handle-move}
 
 No description provided yet.
 
-### _init ( initiator: [Initiator](/reference/lib--utils--pointer--initiator.html), ray: [RayCast3D](https://docs.godotengine.org/de/4.x/classes/class_raycast3d.html) ) -> void {#-init}
+### _init (initiator: [Initiator](/reference/lib--utils--pointer--initiator.html) , ray: [RayCast3D](https://docs.godotengine.org/de/4.x/classes/class_raycast3d.html)  ) -> void {#-init}
 
 No description provided yet.
 
-### _on_pressed ( type: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html) ) -> void {#-on-pressed}
+### _on_pressed (type: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html)  ) -> void {#-on-pressed}
 
 No description provided yet.
 
-### _on_released ( type: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html) ) -> void {#-on-released}
+### _on_released (type: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html)  ) -> void {#-on-released}
 
 No description provided yet.
 
-### _physics_process ( _delta: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) -> void {#-physics-process}
+### _physics_process (_delta: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#-physics-process}
 
 No description provided yet.
 
-### _ready (  ) -> void {#-ready}
+### _ready ( ) -> void {#-ready}
 
 No description provided yet.

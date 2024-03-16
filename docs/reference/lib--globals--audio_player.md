@@ -1,4 +1,5 @@
 # AudioPlayer
+**Inherits:** [AudioStreamPlayer](https://docs.godotengine.org/de/4.x/classes/class_audiostreamplayer.html)
     
 
 
@@ -17,6 +18,10 @@
 | ------- | ---------------------------------------------------------------------------------------------------------------- |
 | void    | [_ready](#-ready) (  )                                                                                           |
 | void    | [play_effect](#play-effect) ( sound: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) |
+
+
+
+
 
 ## Property Descriptions
 
@@ -38,10 +43,10 @@ No description provided yet.
 
 ## Method Descriptions
 
-### _ready (  ) -> void {#-ready}
+### _ready ( ) -> void {#-ready}
 
 No description provided yet.
 
-### play_effect ( sound: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) -> void {#play-effect}
+### play_effect (sound: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#play-effect}
 
 No description provided yet.

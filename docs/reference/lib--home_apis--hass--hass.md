@@ -1,4 +1,5 @@
 # Hass
+**Inherits:** [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html)
     
 
 
@@ -20,6 +21,10 @@
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_state](#get-state) ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )                                                                                                                                                                              |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [set_state](#set-state) ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), state: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), attributes: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) ) |
 
+
+
+
+
 ## Property Descriptions
 
 ### devices_template: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#devices-template}
@@ -40,18 +45,18 @@ No description provided yet.
 
 ## Method Descriptions
 
-### _init ( url: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), token: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) ) -> void {#-init}
+### _init (url: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , token: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> void {#-init}
 
 No description provided yet.
 
-### get_devices (  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-devices}
+### get_devices ( ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-devices}
 
 No description provided yet.
 
-### get_state ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-state}
+### get_state (entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-state}
 
 No description provided yet.
 
-### set_state ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), state: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), attributes: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#set-state}
+### set_state (entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , state: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , attributes: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#set-state}
 
 No description provided yet.

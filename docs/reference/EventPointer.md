@@ -1,4 +1,5 @@
 # EventPointer
+**Inherits:** [EventBubble](/reference/EventBubble.html)
     
 
 
@@ -10,6 +11,16 @@
 | [ray](#ray)             | [RayCast3D](https://docs.godotengine.org/de/4.x/classes/class_raycast3d.html) |         |
 
 
+
+
+
+## Constants
+
+
+### Initiator = `<Object>` {#const-Initiator}
+
+No description provided yet.
+                
 
 ## Property Descriptions
 

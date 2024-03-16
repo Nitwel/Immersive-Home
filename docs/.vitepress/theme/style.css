@@ -138,3 +138,7 @@
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
+iframe {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}

@@ -1,4 +1,5 @@
 # Hass
+**Inherits:** [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html)
     
 
 
@@ -12,10 +13,10 @@
 | [connected](#connected)                     | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html)                   | `false` |
 | [devices_template](#devices-template)       | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)               |         |
 | [entities](#entities)                       | [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html)       |         |
-| [entitiy_callbacks](#entitiy-callbacks)     | [CallbackMap](https://docs.godotengine.org/de/4.x/classes/class_callbackmap.html)     |         |
+| [entitiy_callbacks](#entitiy-callbacks)     | [CallbackMap](/reference/CallbackMap.html)                                            |         |
 | [id](#id)                                   | [int](https://docs.godotengine.org/de/4.x/classes/class_int.html)                     | `1`     |
 | [integration_handler](#integration-handler) | [Integration](/reference/lib--home_apis--hass_ws--handlers--integration.html)         |         |
-| [packet_callbacks](#packet-callbacks)       | [CallbackMap](https://docs.godotengine.org/de/4.x/classes/class_callbackmap.html)     |         |
+| [packet_callbacks](#packet-callbacks)       | [CallbackMap](/reference/CallbackMap.html)                                            |         |
 | [request_timeout](#request-timeout)         | [float](https://docs.godotengine.org/de/4.x/classes/class_float.html)                 | `10.0`  |
 | [socket](#socket)                           | [WebSocketPeer](https://docs.godotengine.org/de/4.x/classes/class_websocketpeer.html) |         |
 | [token](#token)                             | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)               | `""`    |
@@ -47,6 +48,36 @@
 | void                                                                      | [update_room](#update-room) ( room: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )                                                                                                                                                                              |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [watch_state](#watch-state) ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html) )                                                                                     |
 
+## Signals
+
+### on_connect ( ) {#on-connect}
+
+No description provided yet.
+
+### on_disconnect ( ) {#on-disconnect}
+
+No description provided yet.
+
+## Constants
+
+
+### AuthHandler = `<Object>` {#const-AuthHandler}
+
+No description provided yet.
+                
+
+
+### IntegrationHandler = `<Object>` {#const-IntegrationHandler}
+
+No description provided yet.
+                
+
+
+### AssistHandler = `<Object>` {#const-AssistHandler}
+
+No description provided yet.
+                
+
 ## Property Descriptions
 
 ### LOG_MESSAGES: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) {#LOG-MESSAGES}
@@ -73,7 +104,7 @@ No description provided yet.
 
 No description provided yet.
 
-### entitiy_callbacks: [CallbackMap](https://docs.godotengine.org/de/4.x/classes/class_callbackmap.html) {#entitiy-callbacks}
+### entitiy_callbacks: [CallbackMap](/reference/CallbackMap.html) {#entitiy-callbacks}
 
 No description provided yet.
 
@@ -85,7 +116,7 @@ No description provided yet.
 
 No description provided yet.
 
-### packet_callbacks: [CallbackMap](https://docs.godotengine.org/de/4.x/classes/class_callbackmap.html) {#packet-callbacks}
+### packet_callbacks: [CallbackMap](/reference/CallbackMap.html) {#packet-callbacks}
 
 No description provided yet.
 
@@ -107,86 +138,86 @@ No description provided yet.
 
 ## Method Descriptions
 
-### _init ( url: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), token: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) ) -> void {#-init}
+### _init (url: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , token: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> void {#-init}
 
 No description provided yet.
 
-### _process ( delta: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) -> void {#-process}
+### _process (delta: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#-process}
 
 No description provided yet.
 
-### connect_ws (  ) -> void {#connect-ws}
+### connect_ws ( ) -> void {#connect-ws}
 
 No description provided yet.
 
-### decode_packet ( packet: [PackedByteArray](https://docs.godotengine.org/de/4.x/classes/class_packedbytearray.html) ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#decode-packet}
+### decode_packet (packet: [PackedByteArray](https://docs.godotengine.org/de/4.x/classes/class_packedbytearray.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#decode-packet}
 
 No description provided yet.
 
-### encode_packet ( packet: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#encode-packet}
+### encode_packet (packet: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#encode-packet}
 
 No description provided yet.
 
-### get_device ( id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) ) -> void {#get-device}
+### get_device (id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> void {#get-device}
 
 No description provided yet.
 
-### get_devices (  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-devices}
+### get_devices ( ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-devices}
 
 No description provided yet.
 
-### get_state ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-state}
+### get_state (entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-state}
 
 No description provided yet.
 
-### handle_connect (  ) -> void {#handle-connect}
+### handle_connect ( ) -> void {#handle-connect}
 
 No description provided yet.
 
-### handle_disconnect (  ) -> void {#handle-disconnect}
+### handle_disconnect ( ) -> void {#handle-disconnect}
 
 No description provided yet.
 
-### handle_packet ( packet: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) ) -> void {#handle-packet}
+### handle_packet (packet: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html)  ) -> void {#handle-packet}
 
 No description provided yet.
 
-### has_connected (  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#has-connected}
+### has_connected ( ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#has-connected}
 
 No description provided yet.
 
-### has_integration (  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#has-integration}
+### has_integration ( ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#has-integration}
 
 No description provided yet.
 
-### send_packet ( packet: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html), with_id: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) ) -> void {#send-packet}
+### send_packet (packet: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) , with_id: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html)  ) -> void {#send-packet}
 
 No description provided yet.
 
-### send_raw ( packet: [PackedByteArray](https://docs.godotengine.org/de/4.x/classes/class_packedbytearray.html) ) -> void {#send-raw}
+### send_raw (packet: [PackedByteArray](https://docs.godotengine.org/de/4.x/classes/class_packedbytearray.html)  ) -> void {#send-raw}
 
 No description provided yet.
 
-### send_request_packet ( packet: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html), ignore_initial: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#send-request-packet}
+### send_request_packet (packet: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) , ignore_initial: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#send-request-packet}
 
 No description provided yet.
 
-### send_subscribe_packet ( packet: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html), callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html) ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#send-subscribe-packet}
+### send_subscribe_packet (packet: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) , callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#send-subscribe-packet}
 
 No description provided yet.
 
-### set_state ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), state: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), attributes: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#set-state}
+### set_state (entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , state: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , attributes: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#set-state}
 
 No description provided yet.
 
-### start_subscriptions (  ) -> void {#start-subscriptions}
+### start_subscriptions ( ) -> void {#start-subscriptions}
 
 No description provided yet.
 
-### update_room ( room: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) ) -> void {#update-room}
+### update_room (room: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> void {#update-room}
 
 No description provided yet.
 
-### watch_state ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html) ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#watch-state}
+### watch_state (entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#watch-state}
 
 No description provided yet.

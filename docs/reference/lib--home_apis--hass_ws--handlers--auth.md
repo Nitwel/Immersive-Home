@@ -1,4 +1,5 @@
 # Auth
+**Inherits:** [RefCounted](https://docs.godotengine.org/de/4.x/classes/class_refcounted.html)
     
 
 
@@ -18,6 +19,20 @@
 | void    | [_init](#-init) ( hass: [Hass](/reference/lib--home_apis--hass_ws--hass.html), url: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), token: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) ) |
 | void    | [handle_message](#handle-message) ( message: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )                                                                                                                      |
 | void    | [on_disconnect](#on-disconnect) (  )                                                                                                                                                                                                          |
+
+## Signals
+
+### on_authenticated ( ) {#on-authenticated}
+
+No description provided yet.
+
+## Constants
+
+
+### HASS_API = `<Object>` {#const-HASS-API}
+
+No description provided yet.
+                
 
 ## Property Descriptions
 
@@ -39,14 +54,14 @@ No description provided yet.
 
 ## Method Descriptions
 
-### _init ( hass: [Hass](/reference/lib--home_apis--hass_ws--hass.html), url: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), token: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) ) -> void {#-init}
+### _init (hass: [Hass](/reference/lib--home_apis--hass_ws--hass.html) , url: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , token: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> void {#-init}
 
 No description provided yet.
 
-### handle_message ( message: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) -> void {#handle-message}
+### handle_message (message: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#handle-message}
 
 No description provided yet.
 
-### on_disconnect (  ) -> void {#on-disconnect}
+### on_disconnect ( ) -> void {#on-disconnect}
 
 No description provided yet.
