@@ -121,7 +121,6 @@ func start_subscriptions():
 
 func handle_connect():
 	integration_handler.on_connect()
-	assist_handler.on_connect()
 	connected = true
 	on_connect.emit()
 
@@ -283,3 +282,6 @@ func update_room(room: String):
 
 	if response.status == Promise.Status.RESOLVED:
 		pass
+
+func get_voice_assistant():
+	return assist_handler

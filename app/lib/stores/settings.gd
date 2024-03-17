@@ -11,6 +11,9 @@ var token: String = ""
 ## If the voice assistant should be enabled
 var voice_assistant: bool = false
 
+## If the onboarding process has been completed
+var onboarding_complete: bool = false
+
 func _init():
 	_save_path = "user://settings.json"
 
@@ -19,3 +22,4 @@ func clear():
 	url = ""
 	token = ""
 	voice_assistant = false
+	onboarding_complete = false

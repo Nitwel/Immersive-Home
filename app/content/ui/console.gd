@@ -5,8 +5,8 @@ extends StaticBody3D
 var max_message = 30
 var messages: Array = ["aaa", "bbb"]
 
-func log(text: String) -> void:
-	messages.push_front(text)
+func log(text: Variant) -> void:
+	messages.push_front(str(text))
 
 	if messages.size() > max_message:
 		messages.pop_back()
