@@ -3,6 +3,7 @@ extends Node
 
 const Hass = preload ("res://lib/home_apis/hass/hass.gd")
 const HassWebSocket = preload ("res://lib/home_apis/hass_ws/hass.gd")
+const VoiceAssistant = preload ("res://lib/home_apis/voice_handler.gd")
 
 const apis = {
 	"hass": Hass,
@@ -96,7 +97,26 @@ func watch_state(entity: String, callback: Callable):
 	assert(has_connected(), "Not connected")
 	return api.watch_state(entity, callback)
 
-func _notification(what):
-	if what == NOTIFICATION_WM_CLOSE_REQUEST||what == NOTIFICATION_WM_GO_BACK_REQUEST:
-		# Store.house.save_local()
-		pass
+## Returns true if the adapter has an integration in the home automation system
+## allowing to send the room position of the headset.
+func has_integration() -> bool:
+	if has_connected() == false||api.has_method("has_integration") == false:
+		return false
+
+	return api.has_integration()
+
+## Updates the room position of the headset in the home automation system
+func update_room(room: String) -> void:
+	if has_connected() == false||api.has_method("update_room") == false:
+		return
+
+	api.update_room(room)
+
+## Returns the VoiceHandler if the adapter has a voice assistant
+func get_voice_assistant() -> VoiceAssistant:
+	assert(has_connected(), "Not connected")
+
+	if api.has_method("get_voice_assistant") == false:
+		return null
+
+	return api.get_voice_assistant()

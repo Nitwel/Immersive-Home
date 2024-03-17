@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=3 uid="uid://bhyddd1f0ry1x"]
+
+[ext_resource type="Script" path="res://content/ui/onboarding/onboarding.gd" id="1_k4yvw"]
+[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_aleti"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_hlpow"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nfwtf"]
+size = Vector3(0.5, 0.3, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yknqs"]
+size = Vector3(0.5, 0.3, 0.01)
+
+[node name="Onboarding" type="StaticBody3D"]
+script = ExtResource("1_k4yvw")
+
+[node name="Label3D2" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, -0.1, 0.006)
+pixel_size = 0.001
+text = "Getting Started"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+vertical_alignment = 0
+autowrap_mode = 3
+width = 470.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_nfwtf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = ExtResource("2_aleti")
+mesh = SubResource("BoxMesh_yknqs")
+
+[node name="GettingStartedLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, 0.14, 0.006)
+pixel_size = 0.001
+text = "Hey!
+
+This app is still early in development and still has a lot of rough edges. Things might break or are sometimes difficult to use, this will improve the more the app ages.
+
+If this is the first time you try the app, please first read through the \"Getting Started\" Guide below."
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+vertical_alignment = 0
+autowrap_mode = 3
+width = 470.0
+
+[node name="GettingStartedButton" parent="." instance=ExtResource("3_hlpow")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.05, -0.11, 0)
+label = "open_in_new"
+icon = true
+
+[node name="CloseButton" parent="." instance=ExtResource("3_hlpow")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.21, -0.11, 0)
+label = "done"
+icon = true
+
+[node name="CloseLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, -0.1, 0.006)
+pixel_size = 0.001
+text = "Understood"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+vertical_alignment = 0
+autowrap_mode = 3
+width = 470.0

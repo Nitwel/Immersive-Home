@@ -1,5 +1,6 @@
 extends Node3D
 
+const VoiceAssistant = preload ("res://lib/home_apis/voice_handler.gd")
 const sample_hold = preload ("res://lib/utils/sample_hold.gd")
 const Chat = preload ("./chat.gd")
 
@@ -19,18 +20,27 @@ var effect: AudioEffectCapture
 @onready var camera = $"/root/Main/XROrigin3D/XRCamera3D"
 
 var running := false
+var voice_assistant: VoiceAssistant
 
 func _ready():
 	var index = AudioServer.get_bus_index("Record")
 	effect = AudioServer.get_bus_effect(index, 0)
 
+	if !HomeApi.has_connected():
+		await HomeApi.on_connect
+
+	voice_assistant = HomeApi.get_voice_assistant()
+
+	if voice_assistant == null:
+		return
+
 	finish()
 
 	audio_timer.timeout.connect(func():
-		HomeApi.api.assist_handler.send_data(PackedByteArray())
+		voice_assistant.send_data(PackedByteArray())
 	)
 
-	HomeApi.api.assist_handler.on_wake_word.connect(func(text):
+	voice_assistant.on_wake_word.connect(func(_text):
 		loader.visible=true
 		chat_user.visible=false
 		chat_assistant.visible=false
@@ -40,24 +50,24 @@ func _ready():
 		running=true
 	)
 
-	HomeApi.api.assist_handler.on_stt_message.connect(func(text):
+	voice_assistant.on_stt_message.connect(func(text):
 		loader.visible=false
 		chat_user.visible=true
 		chat_user.text=text
 	)
-	HomeApi.api.assist_handler.on_tts_message.connect(func(text):
+	voice_assistant.on_tts_message.connect(func(text):
 		chat_assistant.visible=true
 		chat_assistant.text=text
 	)
 
-	HomeApi.api.assist_handler.on_tts_sound.connect(func(audio):
+	voice_assistant.on_tts_sound.connect(func(audio):
 		audio_player_3d.stream=audio
 		audio_player_3d.play()
 		visual_timer.start()
 		running=false
 	)
 
-	HomeApi.api.assist_handler.on_error.connect(func():
+	voice_assistant.on_error.connect(func():
 		running=false
 		finish()
 	)
@@ -101,9 +111,9 @@ func _process(_delta):
 
 	if max_amplitude > input_threshold:
 		if audio_timer.is_stopped():
-			HomeApi.api.assist_handler.start_wakeword()
+			voice_assistant.start_wakeword()
 
 		audio_timer.start()
 
 	if audio_timer.is_stopped() == false:
-		HomeApi.api.assist_handler.send_data(data)
+		voice_assistant.send_data(data)

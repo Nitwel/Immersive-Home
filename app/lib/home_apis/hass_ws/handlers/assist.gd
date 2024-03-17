@@ -1,10 +1,7 @@
-const HASS_API = preload ("../hass.gd")
+extends VoiceHandler
 
-signal on_wake_word(wake_word: String)
-signal on_stt_message(message: String)
-signal on_tts_message(message: String)
-signal on_tts_sound(sound: AudioStreamMP3)
-signal on_error()
+const HASS_API = preload ("../hass.gd")
+const VoiceHandler = preload ("res://lib/home_apis/voice_handler.gd")
 
 var api: HASS_API
 var pipe_running := false
@@ -35,9 +32,6 @@ var tts_sound = null:
 
 func _init(hass: HASS_API):
 	self.api = hass
-
-func on_connect():
-	pass
 
 func start_wakeword():
 	if pipe_running:

@@ -3,7 +3,7 @@ extends XRCamera3D
 var last_room = null
 
 func _physics_process(_delta):
-	if HomeApi.api.has_integration():
+	if HomeApi.has_integration():
 		update_room()
 
 func update_room():
@@ -11,8 +11,8 @@ func update_room():
 
 	if room != last_room:
 		if room:
-			HomeApi.api.update_room(room.name)
+			HomeApi.update_room(room.name)
 			last_room = room
 		else:
-			HomeApi.api.update_room("outside")
+			HomeApi.update_room("outside")
 			last_room = null

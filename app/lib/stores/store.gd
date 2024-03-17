@@ -77,8 +77,11 @@ func load_local(path=_save_path):
 
 	var save_file = FileAccess.open(path, FileAccess.READ)
 
+	# In case that there is no store file yet
 	if save_file == null:
-		return false
+		_loaded = true
+		on_loaded.emit()
+		return true
 
 	var json_text = save_file.get_as_text()
 	var save_data = VariantSerializer.parse_value(JSON.parse_string(json_text))
