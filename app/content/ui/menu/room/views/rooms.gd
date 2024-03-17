@@ -72,6 +72,7 @@ func _ready():
 				edit_room=false
 
 				if !House.body.is_valid_room(selected_room):
+					EventSystem.notify("Room was deleted as it had less than 3 corners.", EventNotify.Type.WARNING)
 					House.body.delete_room(selected_room)
 					selected_room=null
 				else:
