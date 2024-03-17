@@ -36,7 +36,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, 0.14, 0.006)
 pixel_size = 0.001
 text = "Hey!
 
-This app is still early in development and still has a lot of rough edges. Things might break or are sometimes difficult to use, this will improve the more the app ages.
+This app is still early in development and still has a lot of rough edges. Things might break or are sometimes difficult to use, this will improve the more polished the app becomes.
 
 If this is the first time you try the app, please first read through the \"Getting Started\" Guide below."
 font_size = 18
