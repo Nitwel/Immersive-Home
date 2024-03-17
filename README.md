@@ -34,12 +34,13 @@ For users: [https://docs.immersive-home.org/](https://docs.immersive-home.org/)
 For developers: [https://docs.immersive-home.org/development/](https://docs.immersive-home.org/development/)
 
 
-## Planned Features
+## Features
 
 - **Fast and Intuitive control over IoT devices**
 - **Live overview over your smart home**
-- **Simple way for creating automations**
-- **Comfortable way of consuming virtual media unobstructed**
+- **Build in Voice Assistant for more control**
+- **Miniature view to manage your whole house**
+- **Natural interactions with hands**
 - **Advanced automations based on position in room**
 
 ## Support the Project
