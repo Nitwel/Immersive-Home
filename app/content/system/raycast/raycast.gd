@@ -1,7 +1,7 @@
 extends RayCast3D
 
-const Pointer = preload("res://lib/utils/pointer/pointer.gd")
-const Initiator = preload("res://lib/utils/pointer/initiator.gd")
+const Pointer = preload ("res://lib/utils/pointer/pointer.gd")
+const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
 
 @onready var cursor: Node3D = $Cursor
 @onready var decal: Decal = $Decal
@@ -10,6 +10,7 @@ const Initiator = preload("res://lib/utils/pointer/initiator.gd")
 @export var with_decal: bool = false
 
 @onready var pointer: Pointer
+@onready var visual_ray: MeshInstance3D = $Ray
 
 var _event_type_map = {
 	"trigger_click": Initiator.EventType.TRIGGER,
@@ -39,11 +40,20 @@ func _physics_process(_delta):
 
 func _handle_cursor():
 	var collider = get_collider()
+	var distance = get_collision_point().distance_to(global_position)
 
 	if collider == null:
 		cursor.visible = false
+		visual_ray.visible = true
+		visual_ray.scale.y = 1
 		if with_decal: decal.visible = true
 		return
+
+	if distance < 0.15:
+		visual_ray.visible = false
+	else:
+		visual_ray.visible = true
+		visual_ray.scale.y = clamp(distance * 2 - 0.1, 0.15, 1)
 
 	cursor.visible = true
 	decal.visible = false
