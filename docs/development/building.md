@@ -10,7 +10,7 @@ You now should be able to export the app to Android.
 
 ::: tip
 ```xml
-<uses-feature android:name="com.oculus.feature.CONTEXTUAL_BOUNDARYLESS_APP" android:required="true" />
+<uses-feature android:name="com.oculus.feature.BOUNDARYLESS_APP" android:required="false" />
 ```
 This can be added to the `AndroidManifest.xml` to disable the boundary system when the app is running.
 :::
