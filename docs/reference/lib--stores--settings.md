@@ -7,12 +7,13 @@ Stores general settings for the app
 
 ## Properties
 
-| Name                                     | Type                                                                    | Default     |
-| ---------------------------------------- | ----------------------------------------------------------------------- | ----------- |
-| [token](#prop-token)                     | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) | `""`        |
-| [type](#prop-type)                       | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) | `"HASS_WS"` |
-| [url](#prop-url)                         | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) | `""`        |
-| [voice_assistant](#prop-voice-assistant) | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html)     | `false`     |
+| Name                                             | Type                                                                    | Default     |
+| ------------------------------------------------ | ----------------------------------------------------------------------- | ----------- |
+| [onboarding_complete](#prop-onboarding-complete) | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html)     | `false`     |
+| [token](#prop-token)                             | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) | `""`        |
+| [type](#prop-type)                               | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) | `"HASS_WS"` |
+| [url](#prop-url)                                 | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) | `""`        |
+| [voice_assistant](#prop-voice-assistant)         | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html)     | `false`     |
 
 ## Methods
 
@@ -32,6 +33,10 @@ Stores general settings for the app
 No description provided yet.
 
 ## Property Descriptions
+
+### onboarding_complete: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) {#prop-onboarding-complete}
+
+If the onboarding process has been completed
 
 ### token: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) {#prop-token}
 

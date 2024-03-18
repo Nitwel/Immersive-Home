@@ -34,6 +34,7 @@
 | void                                                                      | [get_device](#get-device) ( id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )                                                                                                                                                                                  |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_devices](#get-devices) (  )                                                                                                                                                                                                                                                           |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_state](#get-state) ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )                                                                                                                                                                                |
+| [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_voice_assistant](#get-voice-assistant) (  )                                                                                                                                                                                                                                           |
 | void                                                                      | [handle_connect](#handle-connect) (  )                                                                                                                                                                                                                                                     |
 | void                                                                      | [handle_disconnect](#handle-disconnect) (  )                                                                                                                                                                                                                                               |
 | void                                                                      | [handle_packet](#handle-packet) ( packet: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) )                                                                                                                                                                |
@@ -163,6 +164,10 @@ No description provided yet.
 No description provided yet.
 
 ###  get_state (entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-state}
+
+No description provided yet.
+
+###  get_voice_assistant ( ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-voice-assistant}
 
 No description provided yet.
 

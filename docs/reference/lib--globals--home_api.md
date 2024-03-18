@@ -15,16 +15,18 @@ Manages the connection to the home automation system and provides a unified inte
 
 | Returns                                                                   | Name                                                                                                                                                                                                                                                                                       |
 | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| void                                                                      | [_notification](#-notification) ( what: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )                                                                                                                                                                        |
 | void                                                                      | [_on_connect](#-on-connect) (  )                                                                                                                                                                                                                                                           |
 | void                                                                      | [_on_disconnect](#-on-disconnect) (  )                                                                                                                                                                                                                                                     |
 | void                                                                      | [_ready](#-ready) (  )                                                                                                                                                                                                                                                                     |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_device](#get-device) ( id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )                                                                                                                                                                                  |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_devices](#get-devices) (  )                                                                                                                                                                                                                                                           |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_state](#get-state) ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )                                                                                                                                                                                |
+| [VoiceHandler](/reference/lib--home_apis--voice_handler.html)             | [get_voice_assistant](#get-voice-assistant) (  )                                                                                                                                                                                                                                           |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [has_connected](#has-connected) (  )                                                                                                                                                                                                                                                       |
+| [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html)       | [has_integration](#has-integration) (  )                                                                                                                                                                                                                                                   |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [set_state](#set-state) ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), state: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), attributes: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) ) |
 | void                                                                      | [start_adapter](#start-adapter) ( type: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), url: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), token: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )            |
+| void                                                                      | [update_room](#update-room) ( room: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )                                                                                                                                                                              |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [watch_state](#watch-state) ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html) )                                                                                     |
 
 ## Signals
@@ -46,6 +48,10 @@ Emitted when the connection to the home automation system is lost
 No description provided yet.
 
 ### HassWebSocket = `<Object>` {#const-HassWebSocket}
+
+No description provided yet.
+
+### VoiceAssistant = `<Object>` {#const-VoiceAssistant}
 
 No description provided yet.
 
@@ -71,10 +77,6 @@ The current home automation system adapter
 
 ## Method Descriptions
 
-###  _notification (what: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#-notification}
-
-No description provided yet.
-
 ###  _on_connect ( ) -> void {#-on-connect}
 
 No description provided yet.
@@ -99,9 +101,17 @@ Get a list of all devices
 
 Returns the current state of an entity
 
+###  get_voice_assistant ( ) -> [VoiceHandler](/reference/lib--home_apis--voice_handler.html) {#get-voice-assistant}
+
+Returns the VoiceHandler if the adapter has a voice assistant
+
 ###  has_connected ( ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#has-connected}
 
 Returns true if the adapter is connected to the home automation system
+
+###  has_integration ( ) -> [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) {#has-integration}
+
+Returns true if the adapter has an integration in the home automation system allowing to send the room position of the headset.
 
 ###  set_state (entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , state: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , attributes: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#set-state}
 
@@ -110,6 +120,10 @@ Updates the state of the entity and returns the resulting state
 ###  start_adapter (type: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , url: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , token: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> void {#start-adapter}
 
 Starts the adapter for the given type and url
+
+###  update_room (room: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> void {#update-room}
+
+Updates the room position of the headset in the home automation system
 
 ###  watch_state (entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#watch-state}
 

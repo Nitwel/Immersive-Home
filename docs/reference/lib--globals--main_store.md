@@ -7,11 +7,11 @@ Collection of all the stores to save the state persistently
 
 ## Properties
 
-| Name                       | Type                                                                      | Default |
-| -------------------------- | ------------------------------------------------------------------------- | ------- |
-| [devices](#prop-devices)   | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) |         |
-| [house](#prop-house)       | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) |         |
-| [settings](#prop-settings) | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) |         |
+| Name                       | Type                                              | Default |
+| -------------------------- | ------------------------------------------------- | ------- |
+| [devices](#prop-devices)   | [Devices](/reference/lib--stores--devices.html)   |         |
+| [house](#prop-house)       | [House](/reference/lib--stores--house.html)       |         |
+| [settings](#prop-settings) | [Settings](/reference/lib--stores--settings.html) |         |
 
 
 
@@ -35,14 +35,14 @@ No description provided yet.
 
 ## Property Descriptions
 
-### devices: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#prop-devices}
+### devices: [Devices](/reference/lib--stores--devices.html) {#prop-devices}
 
 No description provided yet.
 
-### house: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#prop-house}
+### house: [House](/reference/lib--stores--house.html) {#prop-house}
 
 No description provided yet.
 
-### settings: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#prop-settings}
+### settings: [Settings](/reference/lib--stores--settings.html) {#prop-settings}
 
 No description provided yet.
