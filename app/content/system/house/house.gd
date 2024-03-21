@@ -26,8 +26,14 @@ func update_house():
 
 	align_reference.update_align_reference()
 
-	for index in range(Store.house.rooms.size()):
+	for index in range(Store.house.rooms.size() - 1, -1, -1):
 		var new_room = Store.house.rooms[index]
+
+		if new_room.corners.size() == 0:
+			Store.house.rooms.remove_at(index)
+			Store.house.save_local()
+			continue
+
 		create_room(new_room.name, 0)
 
 	for entity_index in range(Store.house.entities.size()):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://d3f8glx1xgm5w"]
+[gd_scene load_steps=7 format=3 uid="uid://dscp8x0ari57n"]
 
 [ext_resource type="Texture2D" uid="uid://bl33klueufwja" path="res://assets/materials/pointer.png" id="1_2f2iv"]
 [ext_resource type="Script" path="res://content/system/raycast/raycast.gd" id="1_gp8nv"]

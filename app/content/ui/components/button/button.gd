@@ -53,9 +53,9 @@ const ECHO_WAIT_REPEAT = 0.1
 @export var initial_active: bool = false
 var external_value: Proxy = null:
 	set(value):
+		external_value = value
 		if !is_node_ready(): await ready
 
-		external_value = value
 		if value != null:
 			value.on_set.connect(func(_value):
 				update_animation()

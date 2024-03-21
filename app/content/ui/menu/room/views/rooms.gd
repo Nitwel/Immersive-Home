@@ -49,12 +49,11 @@ var edit_room = false:
 				selected_room = input.text
 
 func _ready():
-	if Store.house.is_loaded():
-		_generate_room_map()
-	else:
-		Store.house.on_loaded.connect(func():
-			_generate_room_map()
-		)
+	if !Store.house.is_loaded(): await Store.house.on_loaded
+
+	_generate_room_map()
+
+	input.text = "Room %s" % (rooms_map.get_child_count() + 1)
 
 	room_button.on_button_down.connect(func():
 		if selected_room == null:
@@ -112,6 +111,9 @@ func _generate_room_map():
 		await old_room.tree_exited
 
 	if rooms.size() == 0:
+		return
+
+	if rooms[0].corners.size() == 0:
 		return
 
 	var current_min = Vector2(rooms[0].corners[0].x, rooms[0].corners[0].y)

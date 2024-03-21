@@ -1,24 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://cy6jklyde3pgo"]
+[gd_scene load_steps=6 format=3 uid="uid://cy6jklyde3pgo"]
 
 [ext_resource type="PackedScene" uid="uid://b12raorbby1xd" path="res://assets/models/chat_bubble/chat_bubble.glb" id="1_lsdcs"]
 [ext_resource type="Script" path="res://content/system/assist/chat.gd" id="1_rbrak"]
 [ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_ps3pl"]
 [ext_resource type="FontVariation" uid="uid://d2ofyimg5s65q" path="res://assets/fonts/ui_font_500.tres" id="4_gxfp3"]
+[ext_resource type="PackedScene" uid="uid://bbximrhpqx18o" path="res://assets/models/chat_bubble/chat_bubble-flipped.glb" id="5_q44mc"]
 
 [node name="Chat" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.41237e-06, 0, 0)
 script = ExtResource("1_rbrak")
 text = "Hello World"
-flip = true
 
 [node name="chat_bubble" parent="." instance=ExtResource("1_lsdcs")]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -0.0154175, 0, 0.0710473)
 
 [node name="Armature" parent="chat_bubble" index="0"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.5, 0, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 0, 0)
 
 [node name="Cube" parent="chat_bubble/Armature/Skeleton3D" index="0"]
-transform = Transform3D(-4.37114e-08, -1, -4.37114e-08, 0, -4.37114e-08, 1, -1, 4.37114e-08, 1.91069e-15, 0, 0.35, 0)
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 0.35, 0)
 material_override = ExtResource("2_ps3pl")
 
 [node name="Label3D" type="Label3D" parent="."]
@@ -30,4 +30,16 @@ font_size = 20
 outline_size = 0
 horizontal_alignment = 0
 
+[node name="chat_bubble-flipped" parent="." instance=ExtResource("5_q44mc")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.0843144, 0, 0.000967294)
+visible = false
+
+[node name="Armature" parent="chat_bubble-flipped" index="0"]
+transform = Transform3D(-1, 0, 0, 0, 4.37114e-08, 1, 0, -1, 4.37114e-08, 0, 0, 0)
+
+[node name="Cube" parent="chat_bubble-flipped/Armature/Skeleton3D" index="0"]
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 0, 0)
+material_override = ExtResource("2_ps3pl")
+
 [editable path="chat_bubble"]
+[editable path="chat_bubble-flipped"]

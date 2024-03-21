@@ -13,6 +13,7 @@ extends Node3D
 
 var editable: bool = false:
 	set(value):
+		editable = value
 		if !is_node_ready(): await ready
 
 		if value:

@@ -11,9 +11,8 @@ var text_handler = preload ("res://content/ui/components/input/text_handler.gd")
 @onready var label: Label3D = $Label
 
 @export_range(0.1, 2, 0.01, "suffix:m") var width: float = 0.15:
-	get:
-		return text_handler.width
 	set(value):
+		width = value
 		text_handler.width = value
 
 		if !is_node_ready(): await ready
@@ -23,11 +22,9 @@ var text_handler = preload ("res://content/ui/components/input/text_handler.gd")
 		label.position.x = -value / 2 + 0.002
 		
 @export var text: String:
-	get:
-		return text_handler.text
 	set(value):
+		text = value
 		var focused = Engine.is_editor_hint() == false&&EventSystem.is_focused(self) == false
-		
 		if !is_node_ready(): await ready
 
 		text_handler.set_text(value, focused)
@@ -35,9 +32,9 @@ var text_handler = preload ("res://content/ui/components/input/text_handler.gd")
 
 @export var disabled: bool = false:
 	set(value):
+		disabled = value
 		if !is_node_ready(): await ready
 
-		disabled = value
 		if disabled:
 			label.modulate = Color(0.7, 0.7, 0.7)
 			add_to_group("ui_focus_skip")

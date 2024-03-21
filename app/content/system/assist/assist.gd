@@ -36,6 +36,8 @@ func _ready():
 
 	finish()
 
+	chat_assistant.flip = true
+
 	audio_timer.timeout.connect(func():
 		voice_assistant.send_data(PackedByteArray())
 	)
