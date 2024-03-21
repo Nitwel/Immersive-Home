@@ -15,15 +15,16 @@ cull_mode = 2
 script = ExtResource("1_ullcc")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 shape = SubResource("BoxShape3D_6xl4b")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.01, 0, 0)
 material_override = SubResource("StandardMaterial3D_087gr")
 mesh = SubResource("QuadMesh_chf50")
 
 [node name="Label3D" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.477142, 0.00806178, -0.495248)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.477979, 0.492319, 0.001)
 pixel_size = 0.001
 text = "Texst
 aaa"
