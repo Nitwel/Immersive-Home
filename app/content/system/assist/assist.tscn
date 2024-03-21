@@ -26,10 +26,10 @@ one_shot = true
 
 [node name="ChatUser" parent="." instance=ExtResource("2_laew1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.109997, 0.025, 0)
-flip = false
 
 [node name="ChatAssistant" parent="." instance=ExtResource("2_laew1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0499932, -0.025, 0)
 text = "Hello, World!"
+flip = true
 
 [node name="Loader" parent="." instance=ExtResource("3_25iy1")]

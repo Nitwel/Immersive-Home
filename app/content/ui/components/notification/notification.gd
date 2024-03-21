@@ -12,15 +12,18 @@ extends Node3D
 @export var type: EventNotify.Type = EventNotify.Type.INFO:
 	set(value):
 		type = value
-		if !is_node_ready(): await ready
-		icon_label.text = _type_to_string(value)
+		if !is_inside_tree(): return
+		icon_label.text = _type_to_string(type)
+
 @export var text: String = "":
 	set(value):
 		text = value
-		if !is_node_ready(): await ready
-		label.text = value
+		if !is_inside_tree(): return
+		label.text = text
 
 func _ready():
+	Update.props(self, ["type", "text"])
+
 	button.on_button_down.connect(fade_out)
 	fade_in()
 
@@ -29,7 +32,7 @@ func _ready():
 	)
 
 func fade_in():
-	if !is_node_ready(): await ready
+	if !is_inside_tree(): await ready
 	
 	animation_player.play("fade_in")
 

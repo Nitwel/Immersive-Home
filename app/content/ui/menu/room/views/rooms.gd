@@ -49,12 +49,11 @@ var edit_room = false:
 				selected_room = input.text
 
 func _ready():
-	if Store.house.is_loaded():
-		_generate_room_map()
-	else:
-		Store.house.on_loaded.connect(func():
-			_generate_room_map()
-		)
+	if !Store.house.is_loaded(): await Store.house.on_loaded
+
+	_generate_room_map()
+
+	input.text = "Room %s" % (rooms_map.get_child_count() + 1)
 
 	room_button.on_button_down.connect(func():
 		if selected_room == null:
@@ -105,13 +104,17 @@ func _on_click(event: EventPointer):
 func _generate_room_map():
 	var rooms = Store.house.rooms
 
-	var target_size = Vector2(0.3, 0.24)
+	var target_size = Vector2(0.2, 0.24)
+	var target_offset = Vector2(0, 0.05)
 
 	for old_room in rooms_map.get_children():
 		old_room.queue_free()
 		await old_room.tree_exited
 
 	if rooms.size() == 0:
+		return
+
+	if rooms[0].corners.size() == 0:
 		return
 
 	var current_min = Vector2(rooms[0].corners[0].x, rooms[0].corners[0].y)
@@ -152,7 +155,7 @@ func _generate_room_map():
 	var target_scale = target_size / current_size
 	var scale_value = min(target_scale.x, target_scale.y)
 
-	rooms_map.position.x = -current_min.x * scale_value
-	rooms_map.position.z = -current_min.y * scale_value
+	rooms_map.position.x = -current_min.x * scale_value + target_offset.x
+	rooms_map.position.z = -current_min.y * scale_value + target_offset.y
 
 	rooms_map.scale = Vector3(scale_value, scale_value, scale_value)

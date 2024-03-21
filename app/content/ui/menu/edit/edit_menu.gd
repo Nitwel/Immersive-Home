@@ -1,6 +1,6 @@
 extends Node3D
 
-const ButtonScene = preload("res://content/ui/components/button/button.tscn")
+const ButtonScene = preload ("res://content/ui/components/button/button.tscn")
 
 @onready var devices_node: GridContainer3D = $Devices
 @onready var next_page_button = $Buttons/NextPageButton
@@ -24,13 +24,10 @@ func _ready():
 	)
 
 func _enter_tree():
-	if HomeApi.has_connected():
+	if !HomeApi.has_connected(): await HomeApi.on_connect
+
+	if is_node_ready():
 		load_devices()
-	else:
-		HomeApi.on_connect.connect(func():
-			if is_node_ready():
-				load_devices()
-		)
 
 func load_devices():
 	if devices.size() == 0:
@@ -38,7 +35,7 @@ func load_devices():
 		render()
 
 		HomeApi.on_disconnect.connect(func():
-			devices = []
+			devices=[]
 			if is_node_ready():
 				render()
 		)

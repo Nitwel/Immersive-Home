@@ -28,6 +28,7 @@ AudioPlayer="*res://lib/globals/audio_player.gd"
 EventSystem="*res://lib/globals/event_system.gd"
 Store="*res://lib/globals/main_store.gd"
 House="*res://lib/globals/house_body.gd"
+console="*res://lib/globals/console.gd"
 
 [display]
 
@@ -72,6 +73,7 @@ renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality=4
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality.mobile=4
+anti_aliasing/quality/msaa_3d=1
 viewport/transparent_background=true
 
 [xr]

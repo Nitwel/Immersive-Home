@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_i4c04"]
 [ext_resource type="Script" path="res://content/main.gd" id="1_uvrd4"]
 [ext_resource type="PackedScene" uid="uid://b30w6tywfj4fp" path="res://content/system/controller_left/controller_left.tscn" id="2_2lraw"]
-[ext_resource type="PackedScene" uid="uid://d3f8glx1xgm5w" path="res://content/system/raycast/raycast.tscn" id="3_67lii"]
+[ext_resource type="PackedScene" uid="uid://dscp8x0ari57n" path="res://content/system/raycast/raycast.tscn" id="3_67lii"]
 [ext_resource type="PackedScene" uid="uid://b2kjh1fpjptdr" path="res://content/system/camera/camera.tscn" id="3_rj4ac"]
 [ext_resource type="PackedScene" uid="uid://bsx12q23v8apy" path="res://content/system/hands/hands.tscn" id="4_v8xu6"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="5_3qc8g"]

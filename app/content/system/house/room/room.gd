@@ -13,12 +13,17 @@ extends Node3D
 
 var editable: bool = false:
 	set(value):
-		if !is_node_ready(): await ready
-
-		if value:
+		editable = value
+		
+		if !is_inside_tree(): return
+		
+		if editable:
 			state_machine.change_to("Edit")
 		else:
 			state_machine.change_to("View")
+
+func _ready():
+	Update.props(self, ["editable"])
 
 func has_point(point: Vector3) -> bool:
 	return get_aabb().has_point(point)
