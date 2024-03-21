@@ -1,5 +1,12 @@
 # Change history for the Godot OpenXR loaders asset
 
+## 2.0.3
+- Migrate the export scripts from gdscript to C++ via gdextension
+- Manually request eye tracking permission if it's included in the app manifest
+- Change how singletons are accessed
+- Fix the plugin version for the export plugins
+- Add OpenXR extension wrappers for fb_scene, fb_spatial_entity, fb_spatial_entity_query, fb_spatial_entity_container
+
 ## 2.0.0
 - Update to the new Godot 4.2 Android plugin packaging format
 - Update the plugin to Godot v2 Android plugin
