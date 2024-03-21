@@ -11,10 +11,9 @@ func proxy(_get: Callable, _set: Callable):
 		
 		for p in proxies:
 			if p != _proxy:
-				p.on_set.emit(value)
+				p.on_set.emit(p.value)
 	)
 
 	proxies.append(_proxy)
 
 	return _proxy
-	

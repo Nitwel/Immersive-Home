@@ -6,22 +6,26 @@ class_name Slider3D
 	set(new_value):
 		min = new_value
 		if value < min: value = min
-		if !is_node_ready(): await ready
+		if !is_inside_tree(): return
+		
 		_update_slider()
 
 @export var max: float = 1.0:
 	set(new_value):
 		max = new_value
 		if value > max: value = max
-		if !is_node_ready(): await ready
+		if !is_inside_tree(): return
+
 		_update_slider()
+			
 @export var value: float = 0.2:
 	set(new_value):
 		value = roundi(clamp(new_value, min, max) / step) * step
 
-		if !is_node_ready(): await ready
+		if !is_inside_tree(): return
+
 		label.text = str(value) + " " + label_unit
-		on_value_changed.emit(value)
+		if new_value != value: on_value_changed.emit(value)
 		_update_slider()
 
 @export var step: float = 0.01
@@ -29,29 +33,29 @@ class_name Slider3D
 @export var show_label: bool = false:
 	set(value):
 		show_label = value
-		if !is_node_ready(): await ready
+		if !is_inside_tree(): return
 		label.visible = show_label
 
 @export var label_unit: String = "":
 	set(new_value):
 		label_unit = new_value
-		if !is_node_ready(): await ready
+		if !is_inside_tree(): return
 		label.text = str(value) + " " + label_unit
 
 @export var size: Vector3 = Vector3(0.2, 0.01, 0.02): # Warning, units are in cm
 	set(value):
 		size = value
-		if !is_node_ready(): await ready
+		if !is_inside_tree(): return
 		_update_shape()
 @export var cutout_border: float = 0.02:
 	set(value):
 		cutout_border = value
-		if !is_node_ready(): await ready
+		if !is_inside_tree(): return
 		_update_shape()
 @export var cutout_depth: float = 0.05:
 	set(value):
 		cutout_depth = value
-		if !is_node_ready(): await ready
+		if !is_inside_tree(): return
 		_update_shape()
 
 @onready var outside_rod: CSGBox3D = $Rod/Outside
@@ -68,6 +72,9 @@ signal on_value_changed(value: float)
 var move_plane: Plane
 
 func _ready():
+	Update.props(self, ["value", "show_label", "label_unit"])
+
+	_update_slider()
 	_update_shape()
 	move_plane = Plane(Vector3.UP, Vector3(0, size.y / 200, 0))
 
@@ -80,7 +87,7 @@ func _on_press_move(event: EventPointer):
 func _get_slider_min_max():
 	var cutout_radius = (size.z - cutout_border * 2) / 2
 
-	return Vector2(-size.x / 2 + cutout_border + cutout_radius, size.x / 2 - cutout_border - cutout_radius) / 100
+	return Vector2( - size.x / 2 + cutout_border + cutout_radius, size.x / 2 - cutout_border - cutout_radius) / 100
 
 func _handle_press(event: EventPointer):
 	var ray_pos = event.ray.global_position
@@ -101,7 +108,6 @@ func _handle_press(event: EventPointer):
 	var click_percent = inverse_lerp(min_max.x, min_max.y, pos_x)
 
 	value = lerp(min, max, click_percent)
-	_update_slider()
 
 func _update_slider():
 	var min_max = _get_slider_min_max()
@@ -133,7 +139,7 @@ func _update_shape():
 	cutout_end_right.height = cutout_depth
 
 	cutout_end_left.position = Vector3(
-		-cutout_box.size.x / 2,
+		- cutout_box.size.x / 2,
 		0,
 		0
 	)

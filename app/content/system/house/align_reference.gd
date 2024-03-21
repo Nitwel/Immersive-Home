@@ -9,14 +9,14 @@ extends Node3D
 	set(value):
 		disabled = value
 
-		if !is_node_ready(): await ready
-
-		corner1.get_node("CollisionShape3D").disabled = value
-		corner2.get_node("CollisionShape3D").disabled = value
-		edge.get_node("CollisionShape3D").disabled = value
-		corner1.visible = !value
-		corner2.visible = !value
-		edge.visible = !value
+		if !is_inside_tree(): return
+		
+		corner1.get_node("CollisionShape3D").disabled = disabled
+		corner2.get_node("CollisionShape3D").disabled = disabled
+		edge.get_node("CollisionShape3D").disabled = disabled
+		corner1.visible = !disabled
+		corner2.visible = !disabled
+		edge.visible = !disabled
 
 func _ready():
 	update_initial_positions()
@@ -29,7 +29,7 @@ func _ready():
 		edge.align_to_corners(corner1.global_position, corner2.global_position)
 
 		corner2.look_at(corner1.global_position, Vector3.UP)
-		corner2.rotate(Vector3.UP, deg_to_rad(-90))
+		corner2.rotate(Vector3.UP, deg_to_rad( - 90))
 	)
 
 	corner2.get_node("Movable").restrict_movement = func(new_position):
@@ -52,7 +52,7 @@ func update_align_reference():
 	corner2.global_position = Store.house.align_position2
 
 	corner2.look_at(corner1.global_position, Vector3.UP)
-	corner2.rotate(Vector3.UP, deg_to_rad(-90))
+	corner2.rotate(Vector3.UP, deg_to_rad( - 90))
 
 	edge.align_to_corners(corner1.global_position, corner2.global_position)
 

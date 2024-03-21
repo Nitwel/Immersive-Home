@@ -12,27 +12,27 @@ const FontTools = preload ("res://lib/utils/font_tools.gd")
 @export var text := "Hello, World!":
 	set(value):
 		text = value
-		if !is_node_ready(): await ready
+		if !is_inside_tree(): return
+		
+		label.text = text
+		var text_width = FontTools.get_font_size(label).x
 
-		label.text = value
-		update()
+		var offset = (text_width - base_width) / 0.2
+
+		offset = max(0.0, offset)
+		
+		chat.set_bone_pose_position(0, Vector3(0, offset, 0))
+		chat_flipped.set_bone_pose_position(1, Vector3(0, -offset, 0))
 
 @export var flip: bool = false:
 	set(value):
 		flip = value
-		if !is_node_ready(): await ready
-
-		model.visible = !value
-		model_flipped.visible = value
+		if !is_inside_tree(): return
+		
+		model.visible = !flip
+		model_flipped.visible = flip
 
 const base_width = 0.8 * 0.2
 
-func update():
-	var text_width = FontTools.get_font_size(label).x
-
-	var offset = (text_width - base_width) / 0.2
-
-	offset = max(0.0, offset)
-	
-	chat.set_bone_pose_position(0, Vector3(0, offset, 0))
-	chat_flipped.set_bone_pose_position(1, Vector3(0, -offset, 0))
+func _ready():
+	Update.props(self, ["text", "flip"])

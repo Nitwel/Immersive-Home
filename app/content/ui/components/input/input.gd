@@ -14,27 +14,26 @@ var text_handler = preload ("res://content/ui/components/input/text_handler.gd")
 	set(value):
 		width = value
 		text_handler.width = value
+		if !is_inside_tree(): return
 
-		if !is_node_ready(): await ready
-
-		mesh_box.mesh.size.x = value
-		collision.shape.size.x = value
-		label.position.x = -value / 2 + 0.002
-		
+		mesh_box.mesh.size.x = width
+		collision.shape.size.x = width
+		label.position.x = -width / 2 + 0.002
+	
 @export var text: String:
 	set(value):
 		text = value
-		var focused = Engine.is_editor_hint() == false&&EventSystem.is_focused(self) == false
-		if !is_node_ready(): await ready
+		if !is_inside_tree(): return
 
-		text_handler.set_text(value, focused)
+		var focused = Engine.is_editor_hint() == false&&EventSystem.is_focused(self) == false
+		text_handler.set_text(text, focused)
 		label.text = text_handler.get_display_text()
 
 @export var disabled: bool = false:
 	set(value):
 		disabled = value
-		if !is_node_ready(): await ready
-
+		if !is_inside_tree(): return
+			
 		if disabled:
 			label.modulate = Color(0.7, 0.7, 0.7)
 			add_to_group("ui_focus_skip")
@@ -49,6 +48,8 @@ var keyboard_input: bool = false
 var input_plane = Plane(Vector3.UP, Vector3.ZERO)
 
 func _ready():
+	Update.props(self, ["text", "disabled", "width"])
+
 	text_handler.label = label
 
 	if Engine.is_editor_hint():

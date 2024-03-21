@@ -10,6 +10,7 @@ const IconFont = preload ("res://assets/icons/icons.tres")
 const ECHO_WAIT_INITIAL = 0.5
 const ECHO_WAIT_REPEAT = 0.1
 
+@onready var body: StaticBody3D = $Body
 @onready var label_node: Label3D = $Body/Label
 @onready var finger_area: Area3D = $FingerArea
 
@@ -24,19 +25,21 @@ const ECHO_WAIT_REPEAT = 0.1
 @export var font_size: int = 10:
 	set(value):
 		font_size = value
-		if !is_node_ready(): await ready
-		label_node.font_size = value
+		if !is_inside_tree()||icon: return
+		label_node.font_size = font_size
+
 @export var label: String = "":
 	set(value):
 		label = value
-		if !is_node_ready(): await ready
-		label_node.text = value
+		if !is_inside_tree(): return
+		label_node.text = label
+
 @export var icon: bool = false:
 	set(value):
 		icon = value
-		if !is_node_ready(): await ready
-
-		if value:
+		if !is_inside_tree(): return
+		
+		if icon:
 			label_node.font = IconFont
 			label_node.font_size = 36
 			label_node.width = 1000
@@ -46,41 +49,25 @@ const ECHO_WAIT_REPEAT = 0.1
 			label_node.font_size = font_size
 			label_node.width = 50
 			label_node.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		
+
 @export var toggleable: bool = false
 @export var disabled: bool = false
 @export var echo: bool = false
 @export var initial_active: bool = false
-var external_value: Proxy = null:
-	set(value):
-		external_value = value
-		if !is_node_ready(): await ready
-
-		if value != null:
-			value.on_set.connect(func(_value):
-				update_animation()
-			)
 
 var active: bool = false:
-	get:
-		if external_value != null:
-			return external_value.value
-		return active
 	set(value):
-		if !is_node_ready(): await ready
-
-		if external_value != null:
-			external_value.value = value
-		else:
-			active = value
-		update_animation()
-
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
+		active = value
+		if !is_inside_tree(): return
+		update_animation(1.0 if active else 0.0)
+	
 var echo_timer: Timer = null
 
 func _ready():
 	if initial_active:
 		active = true
+
+	Update.props(self, ["active", "external_value", "icon", "label", "font_size"])
 
 	if echo:
 		echo_timer = Timer.new()
@@ -96,16 +83,12 @@ func _ready():
 
 		add_child(echo_timer)
 
-func update_animation():
-	var length = animation_player.get_animation("down").length
+func update_animation(value: float):
+	var tween = create_tween()
+	tween.set_parallel(true)
 
-	if animation_player.current_animation == "":
-		return
-
-	if active&&animation_player.current_animation_position != length:
-		animation_player.play("down")
-	elif !active&&animation_player.current_animation_position != 0:
-		animation_player.play_backwards("down")
+	tween.tween_property(body, "scale:y", lerpf(1.0, 0.5, value), 0.2)
+	tween.tween_property(body, "position:y", lerpf(0.01, 0.005, value), 0.2)
 		
 func _on_press_down(event):
 	if disabled:
@@ -146,10 +129,7 @@ func _on_press_up(event):
 func _on_touch_enter(event: EventTouch):
 	if event.target != finger_area:
 		return
-
-	animation_player.stop()
-	animation_player.speed_scale = 0
-	animation_player.current_animation = "down"
+	
 	AudioPlayer.play_effect("click")
 	_touch_change(event)
 
@@ -157,9 +137,6 @@ func _on_touch_move(event: EventTouch):
 	_touch_change(event)
 
 func _on_touch_leave(_event: EventTouch):
-	animation_player.stop()
-	animation_player.speed_scale = 1
-
 	if toggleable:
 		active = !active
 		if active:
@@ -188,7 +165,7 @@ func _touch_change(event: EventTouch):
 	elif active&&percent >= 1:
 		on_button_up.emit()
 		
-	animation_player.seek(percent * animation_player.current_animation_length, true)
+	update_animation(percent)
 
 	if toggleable:
 		return
