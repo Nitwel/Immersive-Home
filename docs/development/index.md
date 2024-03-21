@@ -70,3 +70,11 @@ root
 Static code reference can be found in the Reference section of the documentation at the top right. It is exported from Godot and contains all available scripts from the `/lib` folder.
 
 The documentation is written in Markdown and can be found in the `docs` folder of the repository.
+
+### Physics layers
+
+1. **Entitites**: Used for interaction with entities in the room.
+2. **Interface**: Used for interaction with the UI.
+3. **Touch**: Used for touch based interactions.
+4. **Physics**: Used for physics interactions.
+5. **Room**: Used for interaction with the room.

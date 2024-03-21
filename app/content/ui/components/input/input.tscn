@@ -6,11 +6,11 @@
 
 [sub_resource type="BoxMesh" id="BoxMesh_kjbca"]
 resource_local_to_scene = true
-size = Vector3(0.2, 0.006, 0.03)
+size = Vector3(0.15, 0.006, 0.03)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x4yp8"]
 resource_local_to_scene = true
-size = Vector3(0.2, 0.006, 0.03)
+size = Vector3(0.15, 0.006, 0.03)
 
 [sub_resource type="BoxMesh" id="BoxMesh_2736g"]
 size = Vector3(0.001, 0.02, 0.001)
@@ -53,7 +53,7 @@ _data = {
 }
 
 [node name="Input" type="StaticBody3D" groups=["ui_focus"]]
-collision_layer = 2
+collision_layer = 6
 collision_mask = 0
 script = ExtResource("1_uml3t")
 text = "Example"
@@ -68,7 +68,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.003, 0)
 shape = SubResource("BoxShape3D_x4yp8")
 
 [node name="Label" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.098, 0.00618291, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.073, 0.00618291, 0)
 pixel_size = 0.001
 text = "Example"
 font = ExtResource("3_ij5fh")

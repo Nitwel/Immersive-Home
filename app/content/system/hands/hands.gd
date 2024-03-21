@@ -32,7 +32,7 @@ func _ready():
 	}
 
 	touch = Touch.new(fingers)
-	collide = Collide.new(hand_left, hand_right, fingers)
+	collide = Collide.new(hand_left, hand_right, $XRHandLeft/IndexTip/TouchArea, $XRHandRight/IndexTip/TouchArea)
 	add_child(touch)
 	add_child(collide)
 

@@ -65,6 +65,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00353538, 0)
 mesh = SubResource("CylinderMesh_v34nn")
 
 [node name="CollisionBody" type="StaticBody3D" parent="."]
+collision_layer = 6
+collision_mask = 6
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionBody"]
 shape = SubResource("BoxShape3D_h1mn1")
@@ -73,7 +75,7 @@ shape = SubResource("BoxShape3D_h1mn1")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.105, 0, 0)
 visible = false
 pixel_size = 0.001
-text = "0.2"
+text = "0.2 "
 font_size = 10
 outline_size = 4
 horizontal_alignment = 0

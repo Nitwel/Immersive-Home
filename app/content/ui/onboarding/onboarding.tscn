@@ -11,6 +11,8 @@ size = Vector3(0.5, 0.3, 0.01)
 size = Vector3(0.5, 0.3, 0.01)
 
 [node name="Onboarding" type="StaticBody3D"]
+collision_layer = 6
+collision_mask = 6
 script = ExtResource("1_k4yvw")
 
 [node name="Label3D2" type="Label3D" parent="."]
