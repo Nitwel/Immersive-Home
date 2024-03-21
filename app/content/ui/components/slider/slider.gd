@@ -65,6 +65,9 @@ class_name Slider3D
 @onready var cutout_end_right: CSGCylinder3D = $Rod/Cutout/EndRight
 @onready var label: Label3D = $Label
 
+@onready var body_collision_shape: CollisionShape3D = $CollisionBody/CollisionShape3D
+@onready var area_collision_shape: CollisionShape3D = $Area3D/CollisionShape3D
+
 @onready var slider_knob: MeshInstance3D = $Knob
 
 signal on_value_changed(value: float)
@@ -83,6 +86,9 @@ func _on_press_down(event: EventPointer):
 
 func _on_press_move(event: EventPointer):
 	_handle_press(event)
+
+func _on_touch_enter(event: EventTouch):
+	_handle_touch(event)
 
 func _get_slider_min_max():
 	var cutout_radius = (size.z - cutout_border * 2) / 2
@@ -109,6 +115,18 @@ func _handle_press(event: EventPointer):
 
 	value = lerp(min, max, click_percent)
 
+func _handle_touch(event: EventTouch):
+
+	var click_pos = to_local(event.fingers[0].area.global_position)
+
+	var min_max = _get_slider_min_max()
+
+	var pos_x = clamp(click_pos.x, min_max.x, min_max.y)
+
+	var click_percent = inverse_lerp(min_max.x, min_max.y, pos_x)
+
+	value = lerp(min, max, click_percent)
+
 func _update_slider():
 	var min_max = _get_slider_min_max()
 
@@ -118,6 +136,10 @@ func _update_slider():
 
 func _update_shape():
 	outside_rod.size = size
+
+	body_collision_shape.shape.size = size * 0.01
+	area_collision_shape.shape.size = Vector3(size.x, size.y * 2, size.z) * 0.01
+	area_collision_shape.position = Vector3(0, size.y, 0) * 0.01
 
 	var cutout_width = size.z - cutout_border * 2
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://pk5k1q8bx0rj"]
+[gd_scene load_steps=7 format=3 uid="uid://pk5k1q8bx0rj"]
 
 [ext_resource type="Script" path="res://content/ui/components/slider/slider.gd" id="1_ylune"]
 
@@ -18,6 +18,9 @@ height = 0.005
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h1mn1"]
 size = Vector3(0.2, 0.004, 0.01)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s64dk"]
+size = Vector3(0.2, 0.008, 0.01)
 
 [node name="Slider" type="Node3D"]
 script = ExtResource("1_ylune")
@@ -79,3 +82,11 @@ text = "0.2 "
 font_size = 10
 outline_size = 4
 horizontal_alignment = 0
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.004, 0)
+shape = SubResource("BoxShape3D_s64dk")
