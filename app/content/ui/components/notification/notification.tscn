@@ -161,6 +161,8 @@ _data = {
 script = ExtResource("1_yw3yb")
 
 [node name="AnimationNode" type="StaticBody3D" parent="."]
+collision_layer = 6
+collision_mask = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="AnimationNode"]
 material_override = ExtResource("2_5b8oo")
@@ -172,7 +174,6 @@ shape = SubResource("BoxShape3D_m4d21")
 [node name="Text" type="Label3D" parent="AnimationNode"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.08, 0.006, 0)
 pixel_size = 0.001
-text = "Example Text"
 font_size = 10
 outline_size = 0
 horizontal_alignment = 0
@@ -182,7 +183,7 @@ width = 190.0
 [node name="Icon" type="Label3D" parent="AnimationNode"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.1, 0.006, 0)
 pixel_size = 0.001
-text = "check_circle"
+text = "info"
 font = ExtResource("3_1ljpc")
 font_size = 24
 outline_size = 0

@@ -129,25 +129,49 @@ func _on_press_up(event):
 func _on_touch_enter(event: EventTouch):
 	if event.target != finger_area:
 		return
-	
-	AudioPlayer.play_effect("click")
-	_touch_change(event)
 
-func _on_touch_move(event: EventTouch):
-	_touch_change(event)
-
-func _on_touch_leave(_event: EventTouch):
-	if toggleable:
-		active = !active
-		if active:
-			on_button_up.emit()
-		else:
-			on_button_down.emit()
-
-func _touch_change(event: EventTouch):
 	if disabled:
 		event.bubbling = false
 		return
+
+	AudioPlayer.play_effect("click")
+
+	if toggleable:
+		active = !active
+		if active:
+			on_button_down.emit()
+		else:
+			on_button_up.emit()
+
+		return
+
+	active = true
+	on_button_down.emit()
+
+	_touch_change(event)
+
+func _on_touch_move(event: EventTouch):
+	if disabled:
+		event.bubbling = false
+		return
+
+	if toggleable:
+		return
+
+	_touch_change(event)
+
+func _on_touch_leave(event: EventTouch):
+	if disabled:
+		event.bubbling = false
+		return
+
+	if toggleable:
+		return
+
+	active = false
+	on_button_up.emit()
+
+func _touch_change(event: EventTouch):
 
 	var pos = Vector3(0, 1, 0)
 	for finger in event.fingers:
@@ -159,15 +183,5 @@ func _touch_change(event: EventTouch):
 	var button_center = 0.1
 
 	var percent = clamp((button_center + button_height / 2 - pos.y) / (button_height / 2), 0, 1)
-
-	if !active&&percent < 1:
-		on_button_down.emit()
-	elif active&&percent >= 1:
-		on_button_up.emit()
 		
 	update_animation(percent)
-
-	if toggleable:
-		return
-	
-	active = percent < 1
