@@ -5,6 +5,8 @@ const Entity = preload ("../entity.gd")
 @onready var label: Label3D = $Label
 @onready var collision_shape = $CollisionShape3D
 
+var sensor_data = {}
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	super()
@@ -17,6 +19,9 @@ func _ready():
 	)
 
 func set_text(stateInfo):
+	if stateInfo == null:
+		return
+
 	var text = stateInfo["state"]
 
 	if stateInfo["attributes"]["friendly_name"] != null:
@@ -24,6 +29,9 @@ func set_text(stateInfo):
 
 	if stateInfo["attributes"].has("unit_of_measurement")&&stateInfo["attributes"]["unit_of_measurement"] != null:
 		text += " " + stateInfo["attributes"]["unit_of_measurement"]
+
+	if stateInfo["attributes"].has("device_class"):
+		sensor_data[stateInfo["attributes"]["device_class"]] = stateInfo["state"]
 
 	label.text = text
 
@@ -35,3 +43,9 @@ func set_text(stateInfo):
 
 	collision_shape.shape.size.x = size.x * label.pixel_size * 0.5
 	collision_shape.shape.size.y = size.y * label.pixel_size * 0.25
+
+func get_sensor_data(type: String):
+	if sensor_data.has(type) == false:
+		return null
+
+	return sensor_data[type]

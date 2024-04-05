@@ -7,6 +7,5 @@ func _ready():
 	background.visible = false
 
 	mini_view.on_button_down.connect(func():
-		House.body.mini_view = !House.body.mini_view
+		House.body.mini_view.enabled=!House.body.mini_view.enabled
 	)
-	

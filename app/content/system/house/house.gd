@@ -6,13 +6,10 @@ const RoomType = preload ("./room/room.gd")
 @onready var levels = $Levels
 @onready var collision_shape = $Levels/CollisionShape3D
 @onready var align_reference = $AlignReference
+@onready var mini_view = $Miniature
 
 var fixing_reference: bool = false
 var editing_room: RoomType = null
-var mini_view: bool = false:
-	set(value):
-		mini_view = value
-		update_mini_view()
 
 func _ready():
 	Store.house.on_loaded.connect(func():
@@ -197,44 +194,6 @@ func create_entity_in(entity_id: String, room_name: String):
 	entity.global_position = room.get_aabb().position + room.get_aabb().size / 2.0
 
 	return entity
-
-func update_mini_view():
-	collision_shape.disabled = !mini_view
-
-	var tween = create_tween()
-	tween.set_parallel(true)
-	tween.set_trans(Tween.TRANS_CUBIC)
-
-	if mini_view:
-		var aabb = get_level_aabb(0)
-		aabb.position.y = -0.03
-		aabb.size.y = 0.06
-		var center = aabb.position + aabb.size / 2.0
-
-		collision_shape.global_position = center
-		collision_shape.shape.size = aabb.size
-
-		var camera = get_node("/root/Main/XROrigin3D/XRCamera3D")
-		var camera_position = camera.global_position
-		var camera_direction = -camera.global_transform.basis.z
-
-		camera_position.y *= 0.5
-		camera_direction.y = 0.0
-
-		var target_position = camera_position + camera_direction.normalized() * 0.2
-		var new_position = target_position - center * 0.1
-		tween.tween_property(levels, "global_position", new_position, 0.5)
-		tween.tween_property(levels, "scale", Vector3(0.1, 0.1, 0.1), 0.5)
-
-		for room in get_rooms(0):
-			room.state_machine.change_to("Mini")
-	else:
-		tween.tween_property(levels, "global_position", Vector3(0, 0, 0), 0.5)
-		tween.tween_property(levels, "scale", Vector3(1.0, 1.0, 1.0), 0.5)
-		await tween.finished
-
-		for room in get_rooms(0):
-			room.state_machine.change_to("View")
 
 func edit_reference():
 	fixing_reference = false

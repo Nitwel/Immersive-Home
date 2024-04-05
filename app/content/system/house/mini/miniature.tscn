@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://ds60i5n211hi3"]
+
+[ext_resource type="Script" path="res://content/system/house/mini/miniature.gd" id="1_b53yn"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="2_x7oed"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_tgdcf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bckw3"]
+
+[node name="Miniature" type="StaticBody3D"]
+script = ExtResource("1_b53yn")
+
+[node name="WallsMesh" type="MeshInstance3D" parent="."]
+
+[node name="FloorMesh" type="MeshInstance3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_bckw3")
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("2_x7oed")
+
+[node name="HeatmapButton" parent="." instance=ExtResource("3_tgdcf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.5, 0.48)
+toggleable = true
