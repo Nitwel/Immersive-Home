@@ -6,19 +6,24 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bckw3"]
 
-[node name="Miniature" type="StaticBody3D"]
+[node name="Miniature" type="Node3D"]
 script = ExtResource("1_b53yn")
 
-[node name="WallsMesh" type="MeshInstance3D" parent="."]
+[node name="HeatmapButton" parent="." instance=ExtResource("3_tgdcf")]
+toggleable = true
 
-[node name="FloorMesh" type="MeshInstance3D" parent="."]
+[node name="Body" type="StaticBody3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
 shape = SubResource("BoxShape3D_bckw3")
 
-[node name="Movable" type="Node" parent="."]
+[node name="Movable" type="Node" parent="Body"]
 script = ExtResource("2_x7oed")
 
-[node name="HeatmapButton" parent="." instance=ExtResource("3_tgdcf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.5, 0.48)
-toggleable = true
+[node name="Model" type="Node3D" parent="Body"]
+
+[node name="WallsMesh" type="MeshInstance3D" parent="Body/Model"]
+skeleton = NodePath("../../..")
+
+[node name="FloorMesh" type="MeshInstance3D" parent="Body/Model"]
+skeleton = NodePath("../../..")

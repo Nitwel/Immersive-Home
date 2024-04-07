@@ -3,10 +3,13 @@ extends Node3D
 const ConstructRoomMesh = preload ("res://lib/utils/mesh/construct_room_mesh.gd")
 const wall_material = preload ("./mini_wall.tres")
 
-@onready var walls_mesh = $WallsMesh
-@onready var floor_mesh = $FloorMesh
-@onready var collision_shape = $CollisionShape3D
+@onready var walls_mesh = $Body/Model/WallsMesh
+@onready var floor_mesh = $Body/Model/FloorMesh
+@onready var collision_shape = $Body/CollisionShape3D
 @onready var toggle_heatmap = $HeatmapButton
+
+# var temperature_scale := Vector2( - 20.0, 60.0)
+var temperature_scale := Vector2(22.0, 25.0)
 
 var enabled = true:
 	set(value):
@@ -18,6 +21,9 @@ func _ready():
 
 	if Store.house.is_loaded() == false:
 		await Store.house.on_loaded
+
+	if Store.house.rooms.size() == 0:
+		return
 
 	var room = Store.house.rooms[0]
 
@@ -31,7 +37,7 @@ func _ready():
 	floor_mesh.material_override = wall_material
 
 	active = true
-	update_data(0.0)
+	EventSystem.on_slow_tick.connect(update_data)
 
 	toggle_heatmap.on_button_down.connect(func():
 		active=true
@@ -56,7 +62,6 @@ var active: bool = false
 
 func update_data(delta: float) -> void:
 	var data_list = []
-	var min_max_data
 
 	for room in House.body.get_rooms(0):
 		for entity in room.get_node("Entities").get_children():
@@ -68,17 +73,14 @@ func update_data(delta: float) -> void:
 
 				var sensor_pos = sensor.global_position
 
-				if min_max_data == null:
-					min_max_data = Vector2(float(data), float(data))
-				else:
-					min_max_data.x = min(min_max_data.x, float(data))
-					min_max_data.y = max(min_max_data.y, float(data))
-
 				data_list.append(Vector4(sensor_pos.x, sensor_pos.y, sensor_pos.z, float(data)))
 
-	for data in data_list:
-		data.w = (data.w - min_max_data.x) / (min_max_data.y - min_max_data.x)
+	data_list = data_list.map(func(data: Vector4) -> Vector4:
+		data.w=(data.w - temperature_scale.x) / (temperature_scale.y - temperature_scale.x)
+		return data
+	)
+
+	print(data_list)
 
 	wall_material.set_shader_parameter("data", data_list)
-	wall_material.set_shader_parameter("min_max_data", min_max_data)
 	wall_material.set_shader_parameter("data_size", data_list.size())

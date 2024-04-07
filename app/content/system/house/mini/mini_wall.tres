@@ -4,8 +4,10 @@
 
 [sub_resource type="Gradient" id="Gradient_2jwis"]
 interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00280112, 1)
-colors = PackedColorArray(0, 0.558935, 0.886772, 1, 0.999396, 0, 0.058647, 1)
+offsets = PackedFloat32Array(0.00840336, 0.1, 0.4375, 0.5625, 1)
+colors = PackedColorArray(0.533333, 0, 1, 1, 0, 0.45, 1, 1, 0, 0.95, 1, 1, 0.983333, 1, 0, 1, 0.999396, 0, 0.058647, 1)
+metadata/_snap_enabled = true
+metadata/_snap_count = 16
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_rrsal"]
 gradient = SubResource("Gradient_2jwis")
@@ -15,5 +17,5 @@ render_priority = 0
 shader = ExtResource("1_sbr3e")
 shader_parameter/data = PackedFloat32Array()
 shader_parameter/data_size = 0
-shader_parameter/min_max_data = null
+shader_parameter/alpha = 0.3
 shader_parameter/color_gradient = SubResource("GradientTexture1D_rrsal")

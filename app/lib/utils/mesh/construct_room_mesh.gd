@@ -127,6 +127,21 @@ static func generate_ceiling_mesh_grid(corners, grid: Vector2=Vector2(0.1, 0.1))
 
 	var size = max_val - min_val
 
+	# Subdivide edges to grid
+	for i in range(corners.size()):
+		var corner = corners[i]
+		var next_index = (i + 1) % corners.size()
+		var next_corner = corners[next_index]
+
+		var steps = ceil(Vector2((next_corner - corner).length() / grid.x, size.y / grid.y))
+
+		var forward_dir = (next_corner - corner).normalized() * grid.x
+
+		for x in range(1, steps.x):
+			var point = corner + forward_dir * x
+
+			points.append(Vector2(point.x, point.y))
+
 	## Fill points insde the polygon
 	for y in range(1, int(size.y / grid.y)):
 		var x_intersections: Array[float] = []
