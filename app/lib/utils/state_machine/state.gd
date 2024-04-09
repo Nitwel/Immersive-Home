@@ -1,6 +1,6 @@
 extends Node
 ## Base Class for all states
-class_name State
+class_name MachineState
 
 var state_machine: StateMachine
 

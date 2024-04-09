@@ -1,5 +1,5 @@
-extends State
-const Room = preload("res://content/system/house/room/room.gd")
+extends MachineState
+const Room = preload ("res://content/system/house/room/room.gd")
 
 var room: Room
 
