@@ -60,7 +60,7 @@ const SensorEntity = preload ("res://content/entities/sensor/sensor.gd")
 
 var active: bool = false
 
-func update_data(delta: float) -> void:
+func update_data(_delta: float) -> void:
 	var data_list = []
 
 	for room in House.body.get_rooms(0):
@@ -79,8 +79,6 @@ func update_data(delta: float) -> void:
 		data.w=(data.w - temperature_scale.x) / (temperature_scale.y - temperature_scale.x)
 		return data
 	)
-
-	print(data_list)
 
 	wall_material.set_shader_parameter("data", data_list)
 	wall_material.set_shader_parameter("data_size", data_list.size())

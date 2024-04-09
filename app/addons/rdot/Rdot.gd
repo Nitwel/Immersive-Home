@@ -4,13 +4,13 @@ static func state(value: Variant, options: Dictionary={}):
 	if value is Dictionary:
 		return store(value)
 
-	return State.new(value, options)
+	return RdotState.new(value, options)
 
 static func store(value: Dictionary):
 	return RdotStore.new(value)
 
 static func computed(computation: Callable, options: Dictionary={}):
-	return Computed.new(computation, options)
+	return RdotComputed.new(computation, options)
 
 ## DIY overloading of
 ## bind(target, prop, value)
@@ -20,7 +20,7 @@ static func bind(target, prop, value, arg1=null, arg2=null):
 	if value is RdotStore:
 		return _bind_store(target, prop, value, arg1, arg2)
 
-	if value is State or value is Computed:
+	if value is RdotState or value is RdotComputed:
 		return _bind_state(target, prop, value, arg1)
 
 	assert(false, "Invalid arguments to bind, value must be a R.State or a RdotStore")
@@ -77,8 +77,8 @@ static func effect(callback: Callable):
 		
 		graph.watcher.unwatch([c])
 
-class State:
-	var node: RdotState
+class RdotState:
+	var node: RdotStateInternal
 	var value = null:
 		get:
 			return do_get()
@@ -86,7 +86,7 @@ class State:
 			do_set(value)
 	
 	func _init(value: Variant, options: Dictionary={}):
-		var ref = RdotState.createSignal(value)
+		var ref = RdotStateInternal.createSignal(value)
 		var node = ref[1]
 		self.node = node
 		node.wrapper = self
@@ -98,7 +98,7 @@ class State:
 				node.equals = equals
 
 	func do_get():
-		return RdotState.signalGetFn.call(self.node)
+		return RdotStateInternal.signalGetFn.call(self.node)
 
 	func do_set(value: Variant):
 		var graph = RdotGraph.getInstance()
@@ -107,10 +107,10 @@ class State:
 
 		var ref = self.node
 
-		RdotState.signalSetFn.call(ref, value)
+		RdotStateInternal.signalSetFn.call(ref, value)
 
-class Computed:
-	var node: RdotComputed
+class RdotComputed:
+	var node: RdotComputedInternal
 	var value = null:
 		get:
 			return do_get()
@@ -118,7 +118,7 @@ class Computed:
 			pass
 	
 	func _init(computation: Callable, options: Dictionary={}):
-		var ref = RdotComputed.createdComputed(computation)
+		var ref = RdotComputedInternal.createdComputed(computation)
 		var node = ref[1]
 		node.consumerAllowSignalWrites = true
 		self.node = node
@@ -131,7 +131,7 @@ class Computed:
 				node.equals = equals
 
 	func do_get():
-		return RdotComputed.computedGet(node)
+		return RdotComputedInternal.computedGet(node)
 
 class Watcher:
 	var node: RdotNode
@@ -145,10 +145,10 @@ class Watcher:
 		node.producerNode = []
 		self.node = node
 	
-	## signals: Array[RState | RComputed]
+	## signals: Array[RdotState | RComputed]
 	func _assertSignals(signals: Array):
 		for s in signals:
-			assert(s is State or s is Computed, "Watcher expects signals to be RState or RComputed")
+			assert(s is RdotState or s is RdotComputed, "Watcher expects signals to be RdotState or RdotComputed")
 
 	func watch(signals:=[]):
 		_assertSignals(signals)

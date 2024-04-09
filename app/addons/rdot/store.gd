@@ -30,7 +30,7 @@ func _set(property, value):
 	return true
 
 func _access_property(property):
-	if (_proxied_value[property] is R.State) == false:
+	if (_proxied_value[property] is R.RdotState) == false:
 		_proxied_value[property] = R.state(_proxied_value[property])
 
 func _get_property_list():

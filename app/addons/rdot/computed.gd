@@ -1,5 +1,5 @@
 extends RdotNode
-class_name RdotComputed
+class_name RdotComputedInternal
 
 enum State {
 	SET = 0,
@@ -14,7 +14,7 @@ var error = null
 var computation := Callable()
 var equal := func(this, a, b): return a == b
 
-static func computedGet(node: RdotComputed) -> Variant:
+static func computedGet(node: RdotComputedInternal) -> Variant:
 	var graph := RdotGraph.getInstance()
 
 	graph.producerUpdateValueVersion(node)
@@ -25,7 +25,7 @@ static func computedGet(node: RdotComputed) -> Variant:
 	return node.value
 
 static func createdComputed(computation: Callable):
-	var node = RdotComputed.new()
+	var node = RdotComputedInternal.new()
 	node.computation = computation
 	
 	var computed = func():

@@ -79,7 +79,6 @@ static func generate_wall_mesh_grid(corners, height, grid: Vector2=Vector2(0.1, 
 
 			if y == steps.y - 1:
 					close_distance.y = fmod(height, grid.y) / grid.y
-					print(close_distance.y)
 
 			for x in range(0, steps.x):
 				var point = corner + forward_dir * x + Vector3.UP * grid.y * y

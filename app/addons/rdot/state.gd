@@ -1,11 +1,11 @@
 extends RdotNode
-class_name RdotState
+class_name RdotStateInternal
 
 var equal: Callable = func(this, a, b): a == b
 var value: Variant = null
 
 static func createSignal(initialValue: Variant):
-	var node = RdotState.new()
+	var node = RdotStateInternal.new()
 	node.value = initialValue
 
 	var getter = func():
@@ -20,11 +20,11 @@ static func setPostSignalSetFn(fn: Callable) -> Callable:
 	graph.postSignalSetFn = fn
 	return prev
 
-static func signalGetFn(this: RdotState):
+static func signalGetFn(this: RdotStateInternal):
 	RdotGraph.getInstance().producerAccessed(this)
 	return this.value
 
-static func signalSetFn(node: RdotState, newValue: Variant):
+static func signalSetFn(node: RdotStateInternal, newValue: Variant):
 	var graph := RdotGraph.getInstance()
 
 	assert(graph.producerUpdatesAllowed())
@@ -33,14 +33,14 @@ static func signalSetFn(node: RdotState, newValue: Variant):
 		node.value = newValue
 		signalValueChanged(node)
 
-static func signalUpdateFn(node: RdotState, updater: Callable):
+static func signalUpdateFn(node: RdotStateInternal, updater: Callable):
 	var graph := RdotGraph.getInstance()
 
 	assert(graph.producerUpdatesAllowed())
 
 	signalSetFn(node, updater.call(node.value))
 
-static func signalValueChanged(node: RdotState):
+static func signalValueChanged(node: RdotStateInternal):
 	var graph := RdotGraph.getInstance()
 	
 	node.version += 1
