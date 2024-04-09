@@ -22,10 +22,10 @@ func _ready():
 	if Store.house.is_loaded() == false:
 		await Store.house.on_loaded
 
-	if Store.house.rooms.size() == 0:
+	if Store.house.state.rooms.size() == 0:
 		return
 
-	var room = Store.house.rooms[0]
+	var room = Store.house.state.rooms[0]
 
 	var corners = room.corners
 	var height = room.height

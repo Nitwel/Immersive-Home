@@ -24,7 +24,7 @@ func clear():
 func sanitizeState(dict=state):
 	var data = {}
 
-	for prop_info in get_property_list():
+	for prop_info in state.get_property_list():
 		var key = prop_info.name
 
 		if key.begins_with("_")||(prop_info.has("hint_string")&&prop_info.hint_string != ""):
@@ -38,12 +38,12 @@ func sanitizeState(dict=state):
 	return data
 
 func use_dict(dict: Dictionary, target=state):
-	for prop_info in get_property_list():
+	for prop_info in state.get_property_list():
 		var key = prop_info.name
 
 		if key.begins_with("_")||(prop_info.has("hint_string")&&prop_info.hint_string != ""):
 			continue
-			
+
 		if dict.has(key) == false:
 			continue
 

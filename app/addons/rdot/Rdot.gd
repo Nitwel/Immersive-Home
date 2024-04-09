@@ -23,7 +23,7 @@ static func bind(target, prop, value, arg1=null, arg2=null):
 	if value is RdotState or value is RdotComputed:
 		return _bind_state(target, prop, value, arg1)
 
-	assert(false, "Invalid arguments to bind, value must be a R.State or a RdotStore")
+	assert(false, "Invalid arguments to bind, value must be a RdotState, a RdotComputed or a RdotStore")
 
 static func _bind_store(target, prop, store: RdotStore, key, watch_signal=null):
 	store._access_property(key)

@@ -102,7 +102,7 @@ func _on_click(event: EventPointer):
 		selected_room = room_name
 
 func _generate_room_map():
-	var rooms = Store.house.rooms
+	var rooms = Store.house.state.rooms
 
 	var target_size = Vector2(0.2, 0.24)
 	var target_offset = Vector2(0, 0.05)

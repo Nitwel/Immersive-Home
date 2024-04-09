@@ -23,18 +23,18 @@ func update_house():
 
 	align_reference.update_align_reference()
 
-	for index in range(Store.house.rooms.size() - 1, -1, -1):
-		var new_room = Store.house.rooms[index]
+	for index in range(Store.house.state.rooms.size() - 1, -1, -1):
+		var new_room = Store.house.state.rooms[index]
 
 		if new_room.corners.size() == 0:
-			Store.house.rooms.remove_at(index)
+			Store.house.state.rooms.remove_at(index)
 			Store.house.save_local()
 			continue
 
 		create_room(new_room.name, 0)
 
-	for entity_index in range(Store.house.entities.size()):
-		var entity = Store.house.entities[entity_index]
+	for entity_index in range(Store.house.state.entities.size()):
+		var entity = Store.house.state.entities[entity_index]
 
 		var entity_instance = create_entity_in(entity.id, entity.room)
 
@@ -48,7 +48,7 @@ func create_room(room_name: String, level: int) -> RoomType:
 	var existing_room = Store.house.get_room(room_name)
 
 	if existing_room == null:
-		Store.house.rooms.append({
+		Store.house.state.rooms.append({
 			"name": room_name,
 			"height": 2.0,
 			"corners": [],
@@ -98,7 +98,7 @@ func delete_room(room_name):
 	var store_room = Store.house.get_room(room_name)
 
 	if store_room != null:
-		Store.house.rooms.erase(store_room)
+		Store.house.state.rooms.erase(store_room)
 
 	Store.house.save_local()
 
@@ -229,7 +229,7 @@ func save_reference():
 	Store.house.save_local()
 
 func save_all_entities():
-	Store.house.entities.clear()
+	Store.house.state.entities.clear()
 
 	for room in get_rooms(0):
 		for entity in room.get_node("Entities").get_children():
@@ -240,6 +240,6 @@ func save_all_entities():
 				"room": String(room.name)
 			}
 
-			Store.house.entities.append(entity_data)
+			Store.house.state.entities.append(entity_data)
 					
 	Store.house.save_local()

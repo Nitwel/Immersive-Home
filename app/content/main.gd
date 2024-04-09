@@ -22,7 +22,7 @@ func _ready():
 	else:
 		RenderingServer.set_debug_generate_wireframes(true)
 
-	update_voice_assistant()
+	create_voice_assistant()
 
 	controller_left.button_pressed.connect(func(name):
 		_emit_action(name, true, false)
@@ -65,16 +65,20 @@ func _ready():
 		remove_child(keyboard)
 	)
 
-func update_voice_assistant():
+func create_voice_assistant():
 	if Store.settings.is_loaded() == false:
 		await Store.settings.on_loaded
 
-	if Store.settings.voice_assistant&&voice_assistant == null:
-		voice_assistant = VoiceAssistant.instantiate()
-		add_child(voice_assistant)
-	elif !Store.settings.voice_assistant&&voice_assistant != null:
-		remove_child(voice_assistant)
-		voice_assistant.queue_free()
+	var settings_store = Store.settings.state
+
+	R.effect(func(_arg):
+		if settings_store.voice_assistant == true&&voice_assistant == null:
+			voice_assistant=VoiceAssistant.instantiate()
+			add_child(voice_assistant)
+		elif settings_store.voice_assistant == false&&voice_assistant != null:
+			remove_child(voice_assistant)
+			voice_assistant.queue_free()
+	)
 
 func toggle_menu():
 	if menu.show_menu == false:

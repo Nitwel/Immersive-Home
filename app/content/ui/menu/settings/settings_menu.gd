@@ -3,7 +3,6 @@ extends Node3D
 const credits_scene = preload ("./credits.tscn")
 
 @onready var connection_status = $Content/ConnectionStatus
-@onready var main = $"/root/Main"
 
 @onready var input_url = $Content/InputURL
 @onready var input_token = $Content/InputToken
@@ -15,6 +14,8 @@ const credits_scene = preload ("./credits.tscn")
 @onready var voice_assist = $Content/VoiceAssist
 
 func _ready():
+	var settings_store = Store.settings.state
+	
 	background.visible = false
 
 	credits.on_click.connect(func(_event):
@@ -25,12 +26,12 @@ func _ready():
 	)
 
 	if Store.settings.is_loaded():
-		input_url.text = Store.settings.url
-		input_token.text = Store.settings.token
+		input_url.text = settings_store.url
+		input_token.text = settings_store.token
 	else:
 		Store.settings.on_loaded.connect(func():
-			input_url.text=Store.settings.url
-			input_token.text=Store.settings.token
+			input_url.text=settings_store.url
+			input_token.text=settings_store.token
 		)
 
 	button_connect.on_button_down.connect(func():
@@ -39,8 +40,8 @@ func _ready():
 
 		HomeApi.start_adapter("hass_ws", url, token)
 
-		Store.settings.url=url
-		Store.settings.token=token
+		settings_store.url=url
+		settings_store.token=token
 
 		Store.settings.save_local()
 	)
@@ -63,8 +64,7 @@ func _ready():
 
 		voice_assist.label="mic"
 
-		Store.settings.voice_assistant=true
-		main.update_voice_assistant()
+		settings_store.voice_assistant=true
 		Store.settings.save_local()
 	)
 
@@ -74,8 +74,7 @@ func _ready():
 
 		voice_assist.label="mic_off"
 
-		Store.settings.voice_assistant=false
-		main.update_voice_assistant()
+		settings_store.voice_assistant=false
 		Store.settings.save_local()
 
 	)
@@ -91,5 +90,9 @@ func _ready():
 	if Store.settings.is_loaded() == false:
 		await Store.settings.on_loaded
 
-	voice_assist.label = "mic_off" if Store.settings.voice_assistant == false else "mic"
-	voice_assist.active = Store.settings.voice_assistant
+	var button_label = R.computed(func(_arg):
+		return "mic_off" if settings_store.voice_assistant == false else "mic"
+	)
+
+	R.bind(voice_assist, "label", button_label)
+	R.bind(voice_assist, "active", settings_store, "voice_assistant")
