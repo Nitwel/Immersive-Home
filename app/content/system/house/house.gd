@@ -6,7 +6,7 @@ const RoomType = preload ("./room/room.gd")
 @onready var levels = $Levels
 @onready var collision_shape = $Levels/CollisionShape3D
 @onready var align_reference = $AlignReference
-@onready var mini_view = $Miniature
+@onready var mini_view = $Levels/Miniature
 
 var fixing_reference: bool = false
 var editing_room: RoomType = null
@@ -23,7 +23,7 @@ func update_house():
 
 	align_reference.update_align_reference()
 
-	for index in range(Store.house.state.rooms.size() - 1, -1, -1):
+	for index in range(Store.house.state.rooms.size()):
 		var new_room = Store.house.state.rooms[index]
 
 		if new_room.corners.size() == 0:

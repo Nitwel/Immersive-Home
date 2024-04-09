@@ -23,8 +23,8 @@ script = ExtResource("2_w1auk")
 restricted = true
 lock_rotation = true
 
+[node name="Miniature" parent="Levels" instance=ExtResource("4_qjbly")]
+
 [node name="AlignReference" parent="." instance=ExtResource("3_e1tcn")]
 visible = false
 disabled = true
-
-[node name="Miniature" parent="." instance=ExtResource("4_qjbly")]

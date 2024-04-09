@@ -9,9 +9,6 @@
 [node name="Miniature" type="Node3D"]
 script = ExtResource("1_b53yn")
 
-[node name="HeatmapButton" parent="." instance=ExtResource("3_tgdcf")]
-toggleable = true
-
 [node name="Body" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
@@ -27,3 +24,8 @@ skeleton = NodePath("../../..")
 
 [node name="FloorMesh" type="MeshInstance3D" parent="Body/Model"]
 skeleton = NodePath("../../..")
+
+[node name="HeatmapButton" parent="Body" instance=ExtResource("3_tgdcf")]
+label = "heat"
+icon = true
+toggleable = true

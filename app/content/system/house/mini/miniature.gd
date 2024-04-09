@@ -3,62 +3,87 @@ extends Node3D
 const ConstructRoomMesh = preload ("res://lib/utils/mesh/construct_room_mesh.gd")
 const wall_material = preload ("./mini_wall.tres")
 
+@onready var body = $Body
+@onready var model = $Body/Model
 @onready var walls_mesh = $Body/Model/WallsMesh
 @onready var floor_mesh = $Body/Model/FloorMesh
 @onready var collision_shape = $Body/CollisionShape3D
-@onready var toggle_heatmap = $HeatmapButton
+@onready var toggle_heatmap = $Body/HeatmapButton
 
 # var temperature_scale := Vector2( - 20.0, 60.0)
-var temperature_scale := Vector2(22.0, 25.0)
+var temperature_scale := Vector2(22.0, 26.0)
 
-var enabled = true:
-	set(value):
-		enabled = value
-		update()
+var heatmap = R.state(false)
+var small = R.state(false)
 
 func _ready():
-	update()
-
 	if Store.house.is_loaded() == false:
 		await Store.house.on_loaded
 
-	if Store.house.state.rooms.size() == 0:
-		return
+	R.effect(func(_arg):
+		if Store.house.state.rooms.size() == 0:
+			return
 
-	var room = Store.house.state.rooms[0]
+		if heatmap.value == false:
+			return
 
-	var corners = room.corners
-	var height = room.height
+		for room in Store.house.state.rooms:
+			var corners=room.corners
+			var height=room.height
 
-	walls_mesh.mesh = ConstructRoomMesh.generate_wall_mesh_grid(corners, height)
-	floor_mesh.mesh = ConstructRoomMesh.generate_ceiling_mesh_grid(corners)
+			walls_mesh.mesh=ConstructRoomMesh.generate_wall_mesh_grid(corners, height)
+			floor_mesh.mesh=ConstructRoomMesh.generate_ceiling_mesh_grid(corners)
 
-	walls_mesh.material_override = wall_material
-	floor_mesh.material_override = wall_material
-
-	active = true
-	EventSystem.on_slow_tick.connect(update_data)
-
-	toggle_heatmap.on_button_down.connect(func():
-		active=true
-		EventSystem.on_slow_tick.connect(update_data)
+			walls_mesh.material_override=wall_material
+			floor_mesh.material_override=wall_material
 	)
 
-	toggle_heatmap.on_button_up.connect(func():
-		wall_material.set_shader_parameter("data", [])
-		wall_material.set_shader_parameter("data_size", 0)
-		active=false
-		EventSystem.on_slow_tick.disconnect(update_data)
+	R.bind(toggle_heatmap, "active", heatmap, toggle_heatmap.on_toggled)
+
+	R.effect(func(_arg):
+		var tween:=create_tween()
+		tween.set_parallel(true)
+		if small.value:
+
+			var aabb=House.body.get_level_aabb(0)
+			aabb.position.y=- 0.03
+			aabb.size.y=0.06
+
+			var center=aabb.position + aabb.size / 2
+
+			collision_shape.shape.size=aabb.size * 0.1
+
+			var camera=$"/root/Main/XROrigin3D/XRCamera3D"
+			var camera_position=camera.global_position
+			var camera_direction=- camera.global_transform.basis.z
+
+			camera_position.y *= 0.5
+			camera_direction.y=0
+
+			var target_position=camera_position + camera_direction.normalized() * 0.2
+			var new_position=target_position - center * 0.1
+
+			tween.tween_property(model, "scale", Vector3(0.1, 0.1, 0.1), 0.5)
+			tween.tween_property(body, "position", new_position, 0.5)
+		else:
+			tween.tween_property(model, "scale", Vector3(1, 1, 1), 0.5)
+			tween.tween_property(body, "position", Vector3(0, 0, 0), 0.5)
 	)
 
-func update():
-	walls_mesh.visible = enabled
-	floor_mesh.visible = enabled
-	collision_shape.disabled = not enabled
+	R.effect(func(_arg):
+		walls_mesh.visible=heatmap.value
+		floor_mesh.visible=heatmap.value
+		collision_shape.disabled=!heatmap.value
+
+		if heatmap.value:
+			EventSystem.on_slow_tick.connect(update_data)
+		else:
+			EventSystem.on_slow_tick.disconnect(update_data)
+			wall_material.set_shader_parameter("data", [])
+			wall_material.set_shader_parameter("data_size", 0)
+	)
 
 const SensorEntity = preload ("res://content/entities/sensor/sensor.gd")
-
-var active: bool = false
 
 func update_data(_delta: float) -> void:
 	var data_list = []
