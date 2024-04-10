@@ -29,20 +29,12 @@ func _on_enter():
 	floor_shape.shape = room.ceiling_mesh.mesh.create_trimesh_shape()
 	ceiling_shape.shape.backface_collision = true
 
-	var collision = CollisionShape3D.new()
-	collision.shape = room.wall_mesh.mesh.create_trimesh_shape()
-		
-	var static_body = StaticBody3D.new()
-	static_body.set_collision_layer_value(4, true)
-	static_body.set_collision_layer_value(5, true)
-	static_body.collision_mask = 0
-	static_body.add_child(collision)
-	room.wall_collisions.add_child(static_body)
+	var wall_collisions = room.wall_mesh.mesh.create_trimesh_shape()
+	wall_collisions.backface_collision = true
+	room.wall_collision.shape = wall_collisions
 
 func _on_leave():
 	room.room_ceiling.get_node("CollisionShape3D").disabled = true
 	room.room_floor.get_node("CollisionShape3D").disabled = true
 
-	for collision in room.wall_collisions.get_children():
-		collision.queue_free()
-		await collision.tree_exited
+	room.wall_collision.shape = null

@@ -10,13 +10,13 @@ static func generate_wall_mesh(corners, height):
 	for corner in corners:
 		var corner3D = Vector3(corner.x, 0, corner.y)
 
-		st.add_vertex(corner3D)
 		st.add_vertex(corner3D + wall_up)
+		st.add_vertex(corner3D)
 
 	var first_corner = Vector3(corners[0].x, 0, corners[0].y)
 
-	st.add_vertex(first_corner)
 	st.add_vertex(first_corner + wall_up)
+	st.add_vertex(first_corner)
 
 	st.index()
 	st.generate_normals()

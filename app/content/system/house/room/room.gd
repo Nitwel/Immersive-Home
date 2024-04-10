@@ -6,7 +6,7 @@ const ConstructRoomMesh = preload ("res://lib/utils/mesh/construct_room_mesh.gd"
 @onready var wall_edges = $Ceiling/WallEdges
 @onready var wall_mesh: MeshInstance3D = $WallMesh
 @onready var ceiling_mesh: MeshInstance3D = $CeilingMesh
-@onready var wall_collisions = $WallCollisions
+@onready var wall_collision = $WallCollision/CollisionShape3D
 
 @onready var room_floor = $Floor
 @onready var room_ceiling = $Ceiling
@@ -60,9 +60,9 @@ static func generate_wall_mesh(room_store: Dictionary):
 	var corners = room_store.corners
 	var height = room_store.height
 
-	return ConstructRoomMesh.generate_wall_mesh_grid(corners, height)
+	return ConstructRoomMesh.generate_wall_mesh(corners, height)
 
 static func generate_ceiling_mesh(room_store: Dictionary):
 	var corners = room_store.corners
 
-	return ConstructRoomMesh.generate_ceiling_mesh_grid(corners)
+	return ConstructRoomMesh.generate_ceiling_mesh(corners)

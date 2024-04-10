@@ -28,7 +28,11 @@ script = ExtResource("1_ugebq")
 
 [node name="CeilingMesh" type="MeshInstance3D" parent="."]
 
-[node name="WallCollisions" type="Node3D" parent="."]
+[node name="WallCollision" type="StaticBody3D" parent="."]
+collision_layer = 24
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallCollision"]
 
 [node name="Ceiling" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)

@@ -1,7 +1,7 @@
 extends Node3D
 
 const Room = preload ("res://content/system/house/room/room.tscn")
-const RoomType = preload ("res://content/system/house/room/room.gd")
+const ConstructRoomMesh = preload ("res://lib/utils/mesh/construct_room_mesh.gd")
 
 const material_selected = preload ("../room_selected.tres")
 const material_unselected = preload ("../room_unselected.tres")
@@ -128,7 +128,7 @@ func _generate_room_map():
 			current_max.y = max(current_max.y, corner.y)
 
 	for room in rooms:
-		var mesh = RoomType.generate_ceiling_mesh(room)
+		var mesh = ConstructRoomMesh.generate_ceiling_mesh(room.corners)
 		
 		if mesh == null:
 			continue
