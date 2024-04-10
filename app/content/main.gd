@@ -47,7 +47,7 @@ func _ready():
 		if action.name == "menu_button":
 			toggle_menu()
 		elif action.name == "by_button":
-			House.body.mini_view=!House.body.mini_view
+			House.body.mini_view.small.value=!House.body.mini_view.small.value
 	)
 
 	EventSystem.on_focus_in.connect(func(event):

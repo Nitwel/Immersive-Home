@@ -18,27 +18,28 @@ float sphere_weight(int index, vec3 world_pos, float r) {
 }
 
 void vertex() {
-	// Calculate Global Coordinates
-	vec3 world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	
 	color = vec3(1.0, 1.0, 1.0);
-	float distances[100];
-	float dist_sum = 0.0;
-	float data_sum = 0.0;
-	
-	float closest_dist = -1.0;
-	int closest_index = 0;
 	
 	if(data_size > 0) {
-		closest_dist = distance(data[0].xyz, world_position);
+		float distances[100];
+		float dist_sum = 0.0;
+		float data_sum = 0.0;
+		
+		float closest_dist = -1.0;
+		int closest_index = 0;
+		
+		// Calculate Global Coordinates
+		//vec3 world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+		
+		closest_dist = distance(data[0].xyz, VERTEX);
 		
 		// Inverse distance weighting using Shepard's method
 		for(int i = 0; i < data_size; i++) {
-			distances[i] = sphere_weight(i, world_position, 5.0);
+			distances[i] = sphere_weight(i, VERTEX, 5.0);
 			dist_sum += distances[i];
 			data_sum += distances[i] * data[i].w;
 			
-			float dist = distance(data[i].xyz, world_position);
+			float dist = distance(data[i].xyz, VERTEX);
 			
 			if(dist < closest_dist) {
 				closest_dist = dist;

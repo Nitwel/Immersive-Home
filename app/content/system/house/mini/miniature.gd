@@ -5,42 +5,58 @@ const wall_material = preload ("./mini_wall.tres")
 
 @onready var body = $Body
 @onready var model = $Body/Model
-@onready var walls_mesh = $Body/Model/WallsMesh
-@onready var floor_mesh = $Body/Model/FloorMesh
 @onready var collision_shape = $Body/CollisionShape3D
 @onready var toggle_heatmap = $Body/HeatmapButton
+
+enum HeatmapType {
+	NONE = 0,
+	TEMPERATURE = 1,
+	HUMIDITY = 2
+}
 
 # var temperature_scale := Vector2( - 20.0, 60.0)
 var temperature_scale := Vector2(22.0, 26.0)
 
-var heatmap = R.state(false)
+var heatmap_type = R.state(HeatmapType.NONE)
 var small = R.state(false)
 
 func _ready():
+	wall_material.set_shader_parameter("data", [])
+	wall_material.set_shader_parameter("data_size", 0)
+
 	if Store.house.is_loaded() == false:
 		await Store.house.on_loaded
 
+	# Update Room Mesh
 	R.effect(func(_arg):
 		if Store.house.state.rooms.size() == 0:
 			return
 
-		if heatmap.value == false:
+		if heatmap_type.value == HeatmapType.NONE&&small.value == false:
 			return
 
-		for room in Store.house.state.rooms:
-			var corners=room.corners
-			var height=room.height
+		for child in model.get_children():
+			model.remove_child(child)
+			child.free()
 
-			walls_mesh.mesh=ConstructRoomMesh.generate_wall_mesh_grid(corners, height)
-			floor_mesh.mesh=ConstructRoomMesh.generate_ceiling_mesh_grid(corners)
+		for room in Store.house.state.rooms:
+			var walls_mesh=MeshInstance3D.new()
+			var floor_mesh=MeshInstance3D.new()
+
+			model.add_child(walls_mesh)
+			model.add_child(floor_mesh)
+
+			walls_mesh.mesh=ConstructRoomMesh.generate_wall_mesh_grid(room.corners, room.height)
+			floor_mesh.mesh=ConstructRoomMesh.generate_ceiling_mesh_grid(room.corners)
 
 			walls_mesh.material_override=wall_material
 			floor_mesh.material_override=wall_material
 	)
 
-	R.bind(toggle_heatmap, "active", heatmap, toggle_heatmap.on_toggled)
-
+	# Update Size
 	R.effect(func(_arg):
+		collision_shape.disabled=small.value == false
+
 		var tween:=create_tween()
 		tween.set_parallel(true)
 		if small.value:
@@ -66,16 +82,23 @@ func _ready():
 			tween.tween_property(model, "scale", Vector3(0.1, 0.1, 0.1), 0.5)
 			tween.tween_property(body, "position", new_position, 0.5)
 		else:
-			tween.tween_property(model, "scale", Vector3(1, 1, 1), 0.5)
-			tween.tween_property(body, "position", Vector3(0, 0, 0), 0.5)
+			tween.tween_property(model, "scale", Vector3.ONE, 0.5)
+			tween.tween_property(body, "position", Vector3.ZERO, 0.5)
+			tween.tween_property(body, "quaternion", Quaternion.IDENTITY, 0.5)
 	)
 
+	# Update Walls
 	R.effect(func(_arg):
-		walls_mesh.visible=heatmap.value
-		floor_mesh.visible=heatmap.value
-		collision_shape.disabled=!heatmap.value
+		var show_map=heatmap_type.value != HeatmapType.NONE
+		var show_small=small.value
 
-		if heatmap.value:
+		for child in model.get_children():
+			child.visible=show_map||show_small
+	)
+
+	# Update Heatmap
+	R.effect(func(_arg):
+		if heatmap_type.value != HeatmapType.NONE:
 			EventSystem.on_slow_tick.connect(update_data)
 		else:
 			EventSystem.on_slow_tick.disconnect(update_data)
@@ -84,6 +107,11 @@ func _ready():
 	)
 
 const SensorEntity = preload ("res://content/entities/sensor/sensor.gd")
+
+# func _process(delta):
+# 	for mesh in model.get_children():
+# 		if mesh is MeshInstance3D:
+# 			mesh.material_override.set_shader_parameter("mesh_pos", 
 
 func update_data(_delta: float) -> void:
 	var data_list = []
@@ -96,7 +124,7 @@ func update_data(_delta: float) -> void:
 				if data == null:
 					continue
 
-				var sensor_pos = sensor.global_position
+				var sensor_pos = House.body.to_local(sensor.global_position)
 
 				data_list.append(Vector4(sensor_pos.x, sensor_pos.y, sensor_pos.z, float(data)))
 

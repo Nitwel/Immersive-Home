@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://ds60i5n211hi3"]
+[gd_scene load_steps=4 format=3 uid="uid://ds60i5n211hi3"]
 
 [ext_resource type="Script" path="res://content/system/house/mini/miniature.gd" id="1_b53yn"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_x7oed"]
-[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_tgdcf"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bckw3"]
 
@@ -18,14 +17,3 @@ shape = SubResource("BoxShape3D_bckw3")
 script = ExtResource("2_x7oed")
 
 [node name="Model" type="Node3D" parent="Body"]
-
-[node name="WallsMesh" type="MeshInstance3D" parent="Body/Model"]
-skeleton = NodePath("../../..")
-
-[node name="FloorMesh" type="MeshInstance3D" parent="Body/Model"]
-skeleton = NodePath("../../..")
-
-[node name="HeatmapButton" parent="Body" instance=ExtResource("3_tgdcf")]
-label = "heat"
-icon = true
-toggleable = true

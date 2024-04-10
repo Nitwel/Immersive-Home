@@ -58,8 +58,10 @@ const ECHO_WAIT_REPEAT = 0.1
 
 var active: bool = false:
 	set(value):
-		if active != value:
-			on_toggled.emit(value)
+		if active == value:
+			return
+			
+		on_toggled.emit(value)
 		active = value
 		if !is_inside_tree(): return
 		update_animation(1.0 if active else 0.0)

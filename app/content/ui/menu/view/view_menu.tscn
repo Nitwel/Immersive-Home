@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://ddpxthb414unp"]
+[gd_scene load_steps=5 format=3 uid="uid://ddpxthb414unp"]
 
 [ext_resource type="Script" path="res://content/ui/menu/view/view_menu.gd" id="1_hxajx"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_qan1b"]
+[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_se6ic"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_qr3bi"]
 size = Vector3(0.3, 0.01, 0.3)
@@ -11,6 +12,7 @@ script = ExtResource("1_hxajx")
 
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.15)
+material_override = ExtResource("2_se6ic")
 mesh = SubResource("BoxMesh_qr3bi")
 
 [node name="Content" type="Node3D" parent="."]
@@ -19,3 +21,40 @@ mesh = SubResource("BoxMesh_qr3bi")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0.03)
 label = "view_comfy"
 icon = true
+toggleable = true
+
+[node name="MiniViewLabel" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.07, 0.01, 0.03)
+pixel_size = 0.001
+text = "Mini View"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="HeatMap" parent="Content" instance=ExtResource("2_qan1b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0.09)
+label = "device_thermostat"
+icon = true
+toggleable = true
+
+[node name="HeatMapLabel" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.07, 0.01, 0.09)
+pixel_size = 0.001
+text = "Heat Map"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="HumidityMap" parent="Content" instance=ExtResource("2_qan1b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0.15)
+label = "humidity_mid"
+icon = true
+toggleable = true
+
+[node name="HumidityMapLabel" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.07, 0.01, 0.15)
+pixel_size = 0.001
+text = "Humidity Map"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
