@@ -59,5 +59,5 @@ void vertex() {
 
 void fragment() {
 	ALBEDO = vec3(color.xyz);
-	ALPHA = 0.3;
+	ALPHA = alpha;
 }

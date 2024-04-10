@@ -3,6 +3,9 @@ extends Node3D
 const ConstructRoomMesh = preload ("res://lib/utils/mesh/construct_room_mesh.gd")
 const wall_material = preload ("./mini_wall.tres")
 
+const humidity_gradient = preload ("./humid_gradient.tres")
+const temperature_gradient = preload ("./temp_gradient.tres")
+
 @onready var body = $Body
 @onready var model = $Body/Model
 @onready var collision_shape = $Body/CollisionShape3D
@@ -14,9 +17,19 @@ enum HeatmapType {
 	HUMIDITY = 2
 }
 
-# var temperature_scale := Vector2( - 20.0, 60.0)
-var temperature_scale := Vector2(22.0, 26.0)
+var heatmap_type_strings = {
+	HeatmapType.NONE: "none",
+	HeatmapType.TEMPERATURE: "temperature",
+	HeatmapType.HUMIDITY: "humidity"
+}
 
+var base_scale = {
+	HeatmapType.NONE: Vector2(0.0, 1.0),
+	HeatmapType.TEMPERATURE: Vector2( - 20.0, 60.0),
+	HeatmapType.HUMIDITY: Vector2(0.0, 100.0)
+}
+var selected_scale = R.state(Vector2(0.0, 1.0))
+var opacity = R.state(30)
 var heatmap_type = R.state(HeatmapType.NONE)
 var small = R.state(false)
 
@@ -100,27 +113,33 @@ func _ready():
 	R.effect(func(_arg):
 		if heatmap_type.value != HeatmapType.NONE:
 			EventSystem.on_slow_tick.connect(update_data)
+			if heatmap_type.value == HeatmapType.TEMPERATURE:
+				wall_material.set_shader_parameter("color_gradient", temperature_gradient)
+			else:
+				wall_material.set_shader_parameter("color_gradient", humidity_gradient)
 		else:
 			EventSystem.on_slow_tick.disconnect(update_data)
 			wall_material.set_shader_parameter("data", [])
 			wall_material.set_shader_parameter("data_size", 0)
 	)
 
+	R.effect(func(_arg):
+		wall_material.set_shader_parameter("alpha", opacity.value / 100.0)
+	)
+
 const SensorEntity = preload ("res://content/entities/sensor/sensor.gd")
 
-# func _process(delta):
-# 	for mesh in model.get_children():
-# 		if mesh is MeshInstance3D:
-# 			mesh.material_override.set_shader_parameter("mesh_pos", 
+func get_base_scale() -> Vector2:
+	return base_scale[heatmap_type.value]
 
-func update_data(_delta: float) -> void:
+func get_sensor_data():
 	var data_list = []
 
 	for room in House.body.get_rooms(0):
 		for entity in room.get_node("Entities").get_children():
 			if entity is SensorEntity:
 				var sensor = entity as SensorEntity
-				var data = sensor.get_sensor_data("temperature")
+				var data = sensor.get_sensor_data(heatmap_type_strings[heatmap_type.value])
 				if data == null:
 					continue
 
@@ -128,8 +147,40 @@ func update_data(_delta: float) -> void:
 
 				data_list.append(Vector4(sensor_pos.x, sensor_pos.y, sensor_pos.z, float(data)))
 
+	return data_list
+
+func get_sensor_unit():
+	for room in House.body.get_rooms(0):
+		for entity in room.get_node("Entities").get_children():
+			if entity is SensorEntity:
+				var sensor = entity as SensorEntity
+				var sensor_unit = sensor.get_sensor_unit(heatmap_type_strings[heatmap_type.value])
+				if sensor_unit != null:
+					return sensor_unit
+
+	return ""
+
+func get_sensor_scale():
+	var data = get_sensor_data()
+	var minmax
+
+	for sensor in data:
+		if minmax == null:
+			minmax = Vector2(sensor.w, sensor.w)
+		else:
+			minmax.x = min(sensor.w, minmax.x)
+			minmax.y = max(sensor.w, minmax.y)
+
+	if minmax == null:
+		return Vector2(0.0, 1.0)
+
+	return minmax
+
+func update_data(_delta: float) -> void:
+	var data_list = get_sensor_data()
+
 	data_list = data_list.map(func(data: Vector4) -> Vector4:
-		data.w=(data.w - temperature_scale.x) / (temperature_scale.y - temperature_scale.x)
+		data.w=clamp((data.w - selected_scale.value.x) / (selected_scale.value.y - selected_scale.value.x), 0.0, 1.0)
 		return data
 	)
 

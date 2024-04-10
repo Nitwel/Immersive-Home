@@ -1,16 +1,7 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://bcfcough6ucvc"]
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bcfcough6ucvc"]
 
 [ext_resource type="Shader" path="res://content/system/house/mini/mini_wall_shader.gdshader" id="1_sbr3e"]
-
-[sub_resource type="Gradient" id="Gradient_2jwis"]
-interpolation_color_space = 2
-offsets = PackedFloat32Array(0.00840336, 0.1, 0.4375, 0.5625, 1)
-colors = PackedColorArray(0.533333, 0, 1, 1, 0, 0.45, 1, 1, 0, 0.95, 1, 1, 0.983333, 1, 0, 1, 0.999396, 0, 0.058647, 1)
-metadata/_snap_enabled = true
-metadata/_snap_count = 16
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_rrsal"]
-gradient = SubResource("Gradient_2jwis")
+[ext_resource type="Texture2D" uid="uid://bbuq4wn7e5o2q" path="res://content/system/house/mini/temp_gradient.tres" id="2_3lwi8"]
 
 [resource]
 render_priority = 0
@@ -18,4 +9,4 @@ shader = ExtResource("1_sbr3e")
 shader_parameter/data = PackedFloat32Array()
 shader_parameter/data_size = 0
 shader_parameter/alpha = 0.3
-shader_parameter/color_gradient = SubResource("GradientTexture1D_rrsal")
+shader_parameter/color_gradient = ExtResource("2_3lwi8")

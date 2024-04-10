@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://ddpxthb414unp"]
+[gd_scene load_steps=6 format=3 uid="uid://ddpxthb414unp"]
 
 [ext_resource type="Script" path="res://content/ui/menu/view/view_menu.gd" id="1_hxajx"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_qan1b"]
 [ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_se6ic"]
+[ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="4_d3xhb"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_qr3bi"]
 size = Vector3(0.3, 0.01, 0.3)
@@ -55,6 +56,51 @@ toggleable = true
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.07, 0.01, 0.15)
 pixel_size = 0.001
 text = "Humidity Map"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="MinSlider" parent="Content" instance=ExtResource("4_d3xhb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.01, 0.2)
+step = 1.0
+show_label = true
+size = Vector3(10, 0.4, 1)
+
+[node name="MinValue" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.15, 0.01, 0.2)
+pixel_size = 0.001
+text = "Min Value"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="MaxSlider" parent="Content" instance=ExtResource("4_d3xhb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.01, 0.24)
+step = 1.0
+show_label = true
+size = Vector3(10, 0.4, 1)
+
+[node name="MaxValue" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.15, 0.01, 0.24)
+pixel_size = 0.001
+text = "Max Value"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="OpacitySlider" parent="Content" instance=ExtResource("4_d3xhb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.01, 0.28)
+max = 100.0
+value = 30.0
+step = 10.0
+show_label = true
+label_unit = "%"
+size = Vector3(10, 0.4, 1)
+
+[node name="OpacityLabel" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.15, 0.01, 0.28)
+pixel_size = 0.001
+text = "Opacity"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0

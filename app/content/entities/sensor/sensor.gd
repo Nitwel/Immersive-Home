@@ -6,6 +6,7 @@ const Entity = preload ("../entity.gd")
 @onready var collision_shape = $CollisionShape3D
 
 var sensor_data = {}
+var unit = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -28,6 +29,7 @@ func set_text(stateInfo):
 		text = stateInfo["attributes"]["friendly_name"] + "\n" + text
 
 	if stateInfo["attributes"].has("unit_of_measurement")&&stateInfo["attributes"]["unit_of_measurement"] != null:
+		unit = stateInfo["attributes"]["unit_of_measurement"]
 		text += " " + stateInfo["attributes"]["unit_of_measurement"]
 
 	if stateInfo["attributes"].has("device_class"):
@@ -49,3 +51,9 @@ func get_sensor_data(type: String):
 		return null
 
 	return sensor_data[type]
+
+func get_sensor_unit(type: String):
+	if sensor_data.has(type) == false:
+		return null
+
+	return unit
