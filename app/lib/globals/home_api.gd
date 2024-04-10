@@ -33,7 +33,8 @@ func _ready():
 	var success = Store.settings.load_local()
 
 	if success:
-		start_adapter(Store.settings.type.to_lower(), Store.settings.url, Store.settings.token)
+		print(Store.settings)
+		start_adapter(Store.settings.state.type.to_lower(), Store.settings.state.url, Store.settings.state.token)
 
 ## Starts the adapter for the given type and url
 func start_adapter(type: String, url: String, token: String):

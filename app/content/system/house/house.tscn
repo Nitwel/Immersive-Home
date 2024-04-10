@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbemihbxkd4ll"]
+[gd_scene load_steps=6 format=3 uid="uid://cbemihbxkd4ll"]
 
 [ext_resource type="Script" path="res://content/system/house/house.gd" id="1_p8amj"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_w1auk"]
 [ext_resource type="PackedScene" uid="uid://jls16btb8nko" path="res://content/system/house/align_reference.tscn" id="3_e1tcn"]
+[ext_resource type="PackedScene" uid="uid://ds60i5n211hi3" path="res://content/system/house/mini/miniature.tscn" id="4_qjbly"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x81up"]
 
@@ -21,6 +22,8 @@ disabled = true
 script = ExtResource("2_w1auk")
 restricted = true
 lock_rotation = true
+
+[node name="Miniature" parent="Levels" instance=ExtResource("4_qjbly")]
 
 [node name="AlignReference" parent="." instance=ExtResource("3_e1tcn")]
 visible = false

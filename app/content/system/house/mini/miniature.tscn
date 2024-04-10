@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://ds60i5n211hi3"]
+
+[ext_resource type="Script" path="res://content/system/house/mini/miniature.gd" id="1_b53yn"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="2_x7oed"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bckw3"]
+
+[node name="Miniature" type="Node3D"]
+script = ExtResource("1_b53yn")
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+shape = SubResource("BoxShape3D_bckw3")
+
+[node name="Movable" type="Node" parent="Body"]
+script = ExtResource("2_x7oed")
+
+[node name="Model" type="Node3D" parent="Body"]

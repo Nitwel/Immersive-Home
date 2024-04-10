@@ -9,6 +9,7 @@ signal on_loaded
 ## Signal emitted when the data is saved.
 signal on_saved
 
+var state: RdotStore
 var _loaded = false
 var _save_path = null
 
@@ -20,44 +21,42 @@ func is_loaded():
 func clear():
 	pass
 
-func create_dict():
-	var data: Dictionary = {}
+func sanitizeState(dict=state):
+	var data = {}
 
-	for prop_info in get_property_list():
-		if prop_info.name.begins_with("_")||prop_info.hint_string != "":
+	for prop_info in state.get_property_list():
+		var key = prop_info.name
+
+		if key.begins_with("_")||(prop_info.has("hint_string")&&prop_info.hint_string != ""):
 			continue
 
-		var prop = get(prop_info.name)
-
-		if prop is Store:
-			data[prop_info.name] = prop.create_dict()
+		if dict[key] is Dictionary:
+			data[key] = sanitizeState(dict[key])
 		else:
-			data[prop_info.name] = VariantSerializer.stringify_value(prop)
+			data[key] = VariantSerializer.stringify_value(dict[key])
 
 	return data
 
-func use_dict(dict: Dictionary):
-	for prop_info in get_property_list():
-		if prop_info.name.begins_with("_")||prop_info.hint_string != "":
+func use_dict(dict: Dictionary, target=state):
+	for prop_info in state.get_property_list():
+		var key = prop_info.name
+
+		if key.begins_with("_")||(prop_info.has("hint_string")&&prop_info.hint_string != ""):
 			continue
 
-		var prop = get(prop_info.name)
-
-		if dict.has(prop_info.name) == false:
+		if dict.has(key) == false:
 			continue
 
-		var prop_value = dict[prop_info.name]
-
-		if prop is Store:
-			prop.use_dict(prop_value)
+		if target[key] is Dictionary:
+			use_dict(dict[key], target[key])
 		else:
-			set(prop_info.name, prop_value)
+			target[key] = dict[key]
 
 func save_local(path=_save_path):
 	if path == null:
 		return false
 
-	var data = create_dict()
+	var data = sanitizeState()
 
 	var save_file = FileAccess.open(path, FileAccess.WRITE)
 

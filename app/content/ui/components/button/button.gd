@@ -5,6 +5,7 @@ class_name Button3D
 
 signal on_button_down()
 signal on_button_up()
+signal on_toggled(active: bool)
 
 const IconFont = preload ("res://assets/icons/icons.tres")
 const ECHO_WAIT_INITIAL = 0.5
@@ -57,6 +58,10 @@ const ECHO_WAIT_REPEAT = 0.1
 
 var active: bool = false:
 	set(value):
+		if active == value:
+			return
+			
+		on_toggled.emit(value)
 		active = value
 		if !is_inside_tree(): return
 		update_animation(1.0 if active else 0.0)

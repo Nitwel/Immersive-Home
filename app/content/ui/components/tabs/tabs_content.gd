@@ -8,15 +8,14 @@ var children: Array = []
 func _ready():
 	children = get_children()
 
-	for child in children:
+	for i in range(children.size()):
+		var child = children[i]
 		child.visible = true
-		if tabs.selected != null && tabs.selected.get_index() == child.get_index():
-			continue
 		remove_child(child)
 
-	tabs.on_select.connect(func(index):
-		for child in get_children():
-			remove_child(child)
-
-		add_child(children[index])
-	)
+		R.effect(func(_arg):
+			if tabs.selected.value.get_index() == i:
+				add_child(child)
+			else:
+				remove_child(child)
+		)

@@ -1,0 +1,11 @@
+[gd_resource type="GradientTexture1D" load_steps=2 format=3 uid="uid://bbuq4wn7e5o2q"]
+
+[sub_resource type="Gradient" id="Gradient_2jwis"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0.00840336, 0.1, 0.4375, 0.5625, 1)
+colors = PackedColorArray(0.533333, 0, 1, 1, 0, 0.45, 1, 1, 0, 0.95, 1, 1, 0.983333, 1, 0, 1, 0.999396, 0, 0.058647, 1)
+metadata/_snap_enabled = true
+metadata/_snap_count = 16
+
+[resource]
+gradient = SubResource("Gradient_2jwis")

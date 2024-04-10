@@ -2,17 +2,16 @@ extends Node3D
 
 const Room = preload ("./room/room.tscn")
 const RoomType = preload ("./room/room.gd")
+const Miniature = preload ("./mini/miniature.gd")
+const AlignReference = preload ("./align_reference.gd")
 
 @onready var levels = $Levels
 @onready var collision_shape = $Levels/CollisionShape3D
-@onready var align_reference = $AlignReference
+@onready var align_reference: AlignReference = $AlignReference
+@onready var mini_view: Miniature = $Levels/Miniature
 
 var fixing_reference: bool = false
 var editing_room: RoomType = null
-var mini_view: bool = false:
-	set(value):
-		mini_view = value
-		update_mini_view()
 
 func _ready():
 	Store.house.on_loaded.connect(func():
@@ -26,18 +25,18 @@ func update_house():
 
 	align_reference.update_align_reference()
 
-	for index in range(Store.house.rooms.size() - 1, -1, -1):
-		var new_room = Store.house.rooms[index]
+	for index in range(Store.house.state.rooms.size()):
+		var new_room = Store.house.state.rooms[index]
 
 		if new_room.corners.size() == 0:
-			Store.house.rooms.remove_at(index)
+			Store.house.state.rooms.remove_at(index)
 			Store.house.save_local()
 			continue
 
 		create_room(new_room.name, 0)
 
-	for entity_index in range(Store.house.entities.size()):
-		var entity = Store.house.entities[entity_index]
+	for entity_index in range(Store.house.state.entities.size()):
+		var entity = Store.house.state.entities[entity_index]
 
 		var entity_instance = create_entity_in(entity.id, entity.room)
 
@@ -51,7 +50,7 @@ func create_room(room_name: String, level: int) -> RoomType:
 	var existing_room = Store.house.get_room(room_name)
 
 	if existing_room == null:
-		Store.house.rooms.append({
+		Store.house.state.rooms.append({
 			"name": room_name,
 			"height": 2.0,
 			"corners": [],
@@ -101,7 +100,7 @@ func delete_room(room_name):
 	var store_room = Store.house.get_room(room_name)
 
 	if store_room != null:
-		Store.house.rooms.erase(store_room)
+		Store.house.state.rooms.erase(store_room)
 
 	Store.house.save_local()
 
@@ -198,44 +197,6 @@ func create_entity_in(entity_id: String, room_name: String):
 
 	return entity
 
-func update_mini_view():
-	collision_shape.disabled = !mini_view
-
-	var tween = create_tween()
-	tween.set_parallel(true)
-	tween.set_trans(Tween.TRANS_CUBIC)
-
-	if mini_view:
-		var aabb = get_level_aabb(0)
-		aabb.position.y = -0.03
-		aabb.size.y = 0.06
-		var center = aabb.position + aabb.size / 2.0
-
-		collision_shape.global_position = center
-		collision_shape.shape.size = aabb.size
-
-		var camera = get_node("/root/Main/XROrigin3D/XRCamera3D")
-		var camera_position = camera.global_position
-		var camera_direction = -camera.global_transform.basis.z
-
-		camera_position.y *= 0.5
-		camera_direction.y = 0.0
-
-		var target_position = camera_position + camera_direction.normalized() * 0.2
-		var new_position = target_position - center * 0.1
-		tween.tween_property(levels, "global_position", new_position, 0.5)
-		tween.tween_property(levels, "scale", Vector3(0.1, 0.1, 0.1), 0.5)
-
-		for room in get_rooms(0):
-			room.state_machine.change_to("Mini")
-	else:
-		tween.tween_property(levels, "global_position", Vector3(0, 0, 0), 0.5)
-		tween.tween_property(levels, "scale", Vector3(1.0, 1.0, 1.0), 0.5)
-		await tween.finished
-
-		for room in get_rooms(0):
-			room.state_machine.change_to("View")
-
 func edit_reference():
 	fixing_reference = false
 	align_reference.visible = true
@@ -270,7 +231,7 @@ func save_reference():
 	Store.house.save_local()
 
 func save_all_entities():
-	Store.house.entities.clear()
+	Store.house.state.entities.clear()
 
 	for room in get_rooms(0):
 		for entity in room.get_node("Entities").get_children():
@@ -281,6 +242,6 @@ func save_all_entities():
 				"room": String(room.name)
 			}
 
-			Store.house.entities.append(entity_data)
+			Store.house.state.entities.append(entity_data)
 					
 	Store.house.save_local()

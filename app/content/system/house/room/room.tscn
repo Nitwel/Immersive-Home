@@ -1,9 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://bswgmclohuqui"]
+[gd_scene load_steps=8 format=3 uid="uid://bswgmclohuqui"]
 
 [ext_resource type="Script" path="res://content/system/house/room/room.gd" id="1_fccq0"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="1_ugebq"]
 [ext_resource type="Script" path="res://lib/utils/state_machine/state_machine.gd" id="4_nbbo6"]
-[ext_resource type="Script" path="res://content/system/house/room/states/mini.gd" id="6_g4qca"]
 [ext_resource type="Script" path="res://content/system/house/room/states/view.gd" id="6_g066t"]
 [ext_resource type="Script" path="res://content/system/house/room/states/edit.gd" id="7_ap14h"]
 
@@ -29,7 +28,11 @@ script = ExtResource("1_ugebq")
 
 [node name="CeilingMesh" type="MeshInstance3D" parent="."]
 
-[node name="WallCollisions" type="Node3D" parent="."]
+[node name="WallCollision" type="StaticBody3D" parent="."]
+collision_layer = 24
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallCollision"]
 
 [node name="Ceiling" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
@@ -56,8 +59,5 @@ script = ExtResource("6_g066t")
 
 [node name="Edit" type="Node" parent="StateMachine"]
 script = ExtResource("7_ap14h")
-
-[node name="Mini" type="Node" parent="StateMachine"]
-script = ExtResource("6_g4qca")
 
 [node name="Entities" type="Node3D" parent="."]

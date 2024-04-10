@@ -32,6 +32,15 @@ func _enter_tree():
 func load_devices():
 	if devices.size() == 0:
 		devices = await HomeApi.get_devices()
+		devices.sort_custom(func(a, b):
+			return a.values()[0]["name"].to_lower() < b.values()[0]["name"].to_lower()
+		)
+
+		for device in devices:
+			device.values()[0]["entities"].sort_custom(func(a, b):
+				return a.to_lower() < b.to_lower()
+			)
+		
 		render()
 
 		HomeApi.on_disconnect.connect(func():

@@ -3,23 +3,23 @@ extends StoreClass
 
 const StoreClass = preload ("./store.gd")
 
-## The adapter to use for connecting with a backend
-var type: String = "HASS_WS"
-var url: String = ""
-var token: String = ""
-
-## If the voice assistant should be enabled
-var voice_assistant: bool = false
-
-## If the onboarding process has been completed
-var onboarding_complete: bool = false
-
 func _init():
 	_save_path = "user://settings.json"
 
+	self.state = R.store({
+		## The adapter to use for connecting with a backend
+		"type": "HASS_WS",
+		"url": "",
+		"token": "",
+		## If the voice assistant should be enabled
+		"voice_assistant": false,
+		## If the onboarding process has been completed
+		"onboarding_complete": false
+	})
+
 func clear():
-	type = "HASS_WS"
-	url = ""
-	token = ""
-	voice_assistant = false
-	onboarding_complete = false
+	self.state.type = "HASS_WS"
+	self.state.url = ""
+	self.state.token = ""
+	self.state.voice_assistant = false
+	self.state.onboarding_complete = false
