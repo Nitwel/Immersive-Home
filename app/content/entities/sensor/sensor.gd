@@ -4,9 +4,11 @@ const Entity = preload ("../entity.gd")
 
 @onready var label: Label3D = $Label
 @onready var collision_shape = $CollisionShape3D
+@onready var chart_button = $Button
 
 var sensor_data = {}
 var unit = null
+var is_text = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -19,11 +21,29 @@ func _ready():
 		set_text(new_state)
 	)
 
+	remove_child(chart_button)
+
+	chart_button.on_button_down.connect(func():
+		House.body.create_entity(entity_id, global_position, "line_chart")
+		remove_child(chart_button)
+	)
+
+func _on_click(_event):
+	if is_text:
+		return
+
+	if chart_button.is_inside_tree() == false:
+		add_child(chart_button)
+	else:
+		remove_child(chart_button)
+
 func set_text(stateInfo):
 	if stateInfo == null:
 		return
 
 	var text = stateInfo["state"]
+
+	is_text = text.is_valid_float() == false&&text.is_valid_int() == false
 
 	if stateInfo["attributes"]["friendly_name"] != null:
 		text = stateInfo["attributes"]["friendly_name"] + "\n" + text

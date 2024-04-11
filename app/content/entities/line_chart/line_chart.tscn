@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://cltcs0gokeald"]
+
+[ext_resource type="Script" path="res://content/entities/line_chart/line_chart.gd" id="1_5dxim"]
+[ext_resource type="PackedScene" uid="uid://cwvykoymlrrel" path="res://content/ui/components/line_chart/line_chart.tscn" id="2_k4shm"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="3_lidml"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rmm5v"]
+size = Vector3(0.5, 0.3, 0.001)
+
+[node name="LineChart" type="StaticBody3D" groups=["entity"]]
+collision_layer = 5
+collision_mask = 0
+script = ExtResource("1_5dxim")
+
+[node name="LineChart" parent="." instance=ExtResource("2_k4shm")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.15, 0)
+shape = SubResource("BoxShape3D_rmm5v")
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("3_lidml")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 60.0
+autostart = true
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.03, 0)
+pixel_size = 0.001
+text = "sensor.tada"
+font_size = 18
+outline_size = 4

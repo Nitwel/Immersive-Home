@@ -72,7 +72,7 @@ func _ready():
 	if initial_active:
 		active = true
 
-	Update.props(self, ["active", "external_value", "icon", "label", "font_size"])
+	Update.props(self, ["active", "external_value", "icon", "label", "font_size", "disabled"])
 
 	if echo:
 		echo_timer = Timer.new()

@@ -8,15 +8,16 @@ func _init():
 
 	self.state = R.store({
 		## Type Room
-		## 	name: String
-		## 	corners: Vec2[]
-		## 	height: float
+		## 	 name: String
+		## 	 corners: Vec2[]
+		## 	 height: float
 		"rooms": [],
 		## Type Entity
 		##   id: String
-		## 	position: Vec3
-		## 	rotation: Vec3
-		## 	room: String
+		## 	 position: Vec3
+		## 	 rotation: Vec3
+		## 	 room: String
+		##   interface: String
 		"entities": [],
 		"align_position1": Vector3(),
 		"align_position2": Vector3()

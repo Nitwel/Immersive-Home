@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://xsiy71rsqulj"]
+[gd_scene load_steps=7 format=3 uid="uid://xsiy71rsqulj"]
 
 [ext_resource type="Script" path="res://content/entities/sensor/sensor.gd" id="1_57ac8"]
 [ext_resource type="FontVariation" uid="uid://d2ofyimg5s65q" path="res://assets/fonts/ui_font_500.tres" id="2_4np3x"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_fpq5q"]
 [ext_resource type="Script" path="res://content/functions/occludable.gd" id="3_l3sp5"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_bmtkc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_phuot"]
 resource_local_to_scene = true
@@ -29,3 +30,10 @@ script = ExtResource("2_fpq5q")
 
 [node name="Occludable" type="Node" parent="."]
 script = ExtResource("3_l3sp5")
+
+[node name="Button" parent="." instance=ExtResource("5_bmtkc")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.1, 0)
+label = "add_chart"
+icon = true
+
+[node name="HoverTimer" type="Timer" parent="."]

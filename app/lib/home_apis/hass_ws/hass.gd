@@ -3,6 +3,7 @@ extends Node
 const AuthHandler = preload ("./handlers/auth.gd")
 const IntegrationHandler = preload ("./handlers/integration.gd")
 const AssistHandler = preload ("./handlers/assist.gd")
+const HistoryHandler = preload ("./handlers/history.gd")
 
 signal on_connect()
 signal on_disconnect()
@@ -27,6 +28,7 @@ var packet_callbacks := CallbackMap.new()
 var auth_handler: AuthHandler
 var integration_handler: IntegrationHandler
 var assist_handler: AssistHandler
+var history_handler: HistoryHandler
 
 func _init(url:=self.url, token:=self.token):
 	self.url = url
@@ -35,6 +37,7 @@ func _init(url:=self.url, token:=self.token):
 	auth_handler = AuthHandler.new(self, url, token)
 	integration_handler = IntegrationHandler.new(self)
 	assist_handler = AssistHandler.new(self)
+	history_handler = HistoryHandler.new(self)
 
 	devices_template = devices_template.replace("\n", " ").replace("\t", "").replace("\r", " ")
 	connect_ws()
@@ -285,3 +288,6 @@ func update_room(room: String):
 
 func get_voice_assistant():
 	return assist_handler
+
+func get_history(entity_id, start, end=null):
+	return await history_handler.get_history(entity_id, start, end)

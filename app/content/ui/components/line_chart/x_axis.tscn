@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://bs5wjs1sf67il"]
+[gd_scene load_steps=3 format=3 uid="uid://bb3shmvedk1oh"]
 
 [ext_resource type="Script" path="res://content/ui/components/line_chart/x_axis.gd" id="1_5fiu5"]
+[ext_resource type="LabelSettings" uid="uid://bc8arfh1k2gd2" path="res://content/ui/components/line_chart/axis_label.tres" id="2_tapys"]
 
-[node name="Control" type="Control"]
+[node name="XAxis" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +14,15 @@ script = ExtResource("1_5fiu5")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 20.0
-theme_override_font_sizes/font_size = 50
+offset_left = 4.0
+offset_top = 43.0
+offset_right = 123.0
+offset_bottom = 93.0
 text = "X Axis"
+label_settings = ExtResource("2_tapys")
+horizontal_alignment = 1
+
+[node name="AxisLabels" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

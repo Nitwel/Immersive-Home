@@ -2,15 +2,19 @@ extends Node
 
 const console_scene = preload ("res://content/ui/console.tscn")
 var _console: Node3D = null
+@onready var main = get_node_or_null("/root/Main")
 
 func _ready():
-	get_node("/root/Main").tree_entered.connect(func():
+	if main == null:
+		return
+
+	main.tree_entered.connect(func():
 		init_console()
 	)
 
 func init_console():
 	_console = console_scene.instantiate()
-	get_node("/root/Main").add_child(_console)
+	main.add_child(_console)
 	var camera = get_node("/root/Main/XROrigin3D/XRCamera3D")
 
 	_console.global_position = camera.global_position + camera.global_transform.basis.z * - 1

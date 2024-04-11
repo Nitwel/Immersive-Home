@@ -77,33 +77,33 @@ Simple test:
 
 ```gdscript
 func _process(delta: float) -> void:
-    var _time = Time.get_ticks_msec() / 1000.0
-    var box_pos = Vector3(0, sin(_time * 4), 0)
-    var line_begin = Vector3(-1, sin(_time * 4), 0)
-    var line_end = Vector3(1, cos(_time * 4), 0)
+	var _time = Time.get_ticks_msec() / 1000.0
+	var box_pos = Vector3(0, sin(_time * 4), 0)
+	var line_begin = Vector3(-1, sin(_time * 4), 0)
+	var line_end = Vector3(1, cos(_time * 4), 0)
 
-    DebugDraw3D.draw_box(box_pos, Vector3(1, 2, 1), Color(0, 1, 0))
-    DebugDraw3D.draw_line(line_begin, line_end, Color(1, 1, 0))
-    DebugDraw2D.set_text("Time", _time)
-    DebugDraw2D.set_text("Frames drawn", Engine.get_frames_drawn())
-    DebugDraw2D.set_text("FPS", Engine.get_frames_per_second())
-    DebugDraw2D.set_text("delta", delta)
+	DebugDraw3D.draw_box(box_pos, Vector3(1, 2, 1), Color(0, 1, 0))
+	DebugDraw3D.draw_line(line_begin, line_end, Color(1, 1, 0))
+	DebugDraw2D.set_text("Time", _time)
+	DebugDraw2D.set_text("Frames drawn", Engine.get_frames_drawn())
+	DebugDraw2D.set_text("FPS", Engine.get_frames_per_second())
+	DebugDraw2D.set_text("delta", delta)
 ```
 
 ```csharp
 public override void _Process(float delta)
 {
-    var _time = Time.GetTicksMsec() / 1000.0f;
-    var box_pos = new Vector3(0, Mathf.Sin(_time * 4f), 0);
-    var line_begin = new Vector3(-1, Mathf.Sin(_time * 4f), 0);
-    var line_end = new Vector3(1, Mathf.Cos(_time * 4f), 0);
+	var _time = Time.GetTicksMsec() / 1000.0f;
+	var box_pos = new Vector3(0, Mathf.Sin(_time * 4f), 0);
+	var line_begin = new Vector3(-1, Mathf.Sin(_time * 4f), 0);
+	var line_end = new Vector3(1, Mathf.Cos(_time * 4f), 0);
 
-    DebugDraw3D.DrawBox(box_pos, new Vector3(1, 2, 1), new Color(0, 1, 0));
-    DebugDraw3D.DrawLine(line_begin, line_end, new Color(1, 1, 0));
-    DebugDraw2D.SetText("Time", _time);
-    DebugDraw2D.SetText("Frames drawn", Engine.GetFramesDrawn());
-    DebugDraw2D.SetText("FPS", Engine.GetFramesPerSecond());
-    DebugDraw2D.SetText("delta", delta);
+	DebugDraw3D.DrawBox(box_pos, new Vector3(1, 2, 1), new Color(0, 1, 0));
+	DebugDraw3D.DrawLine(line_begin, line_end, new Color(1, 1, 0));
+	DebugDraw2D.SetText("Time", _time);
+	DebugDraw2D.SetText("Frames drawn", Engine.GetFramesDrawn());
+	DebugDraw2D.SetText("FPS", Engine.GetFramesPerSecond());
+	DebugDraw2D.SetText("delta", delta);
 }
 ```
 
@@ -117,11 +117,11 @@ A list of all functions is available in the documentation inside the editor.
 Besides `DebugDraw2D/3D`, you can also use `Dbg2/3`.
 
 ```gdscript
-    DebugDraw3D.draw_box_xf(Transform3D(), Color.GREEN)
-    Dbg3.draw_box_xf(Transform3D(), Color.GREEN)
+	DebugDraw3D.draw_box_xf(Transform3D(), Color.GREEN)
+	Dbg3.draw_box_xf(Transform3D(), Color.GREEN)
 
-    DebugDraw2D.set_text("delta", delta)
-    Dbg2.set_text("delta", delta)
+	DebugDraw2D.set_text("delta", delta)
+	Dbg2.set_text("delta", delta)
 ```
 
 But unfortunately at the moment `GDExtension` does not support adding documentation.
