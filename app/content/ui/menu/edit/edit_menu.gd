@@ -90,8 +90,10 @@ func render():
 
 	previous_page_button.visible = has_prev_page
 	previous_page_button.disabled = !has_prev_page
+	previous_page_button.body.get_node("CollisionShape3D").disabled = !has_prev_page
 	next_page_button.visible = has_next_page
 	next_page_button.disabled = !has_next_page
+	next_page_button.body.get_node("CollisionShape3D").disabled = !has_next_page
 
 	clear_menu()
 	if selected_device == null:

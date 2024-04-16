@@ -38,7 +38,7 @@ func update_house():
 	for entity_index in range(Store.house.state.entities.size()):
 		var entity = Store.house.state.entities[entity_index]
 
-		var entity_instance = create_entity_in(entity.id, entity.room)
+		var entity_instance = create_entity_in(entity.id, entity.room, entity.get("interface", null))
 
 		if entity_instance == null:
 			continue
@@ -163,13 +163,13 @@ func get_level_aabb(level: int):
 func get_rooms(level: int):
 	return get_level(level).get_children()
 
-func create_entity(entity_id: String, entity_position: Vector3):
+func create_entity(entity_id: String, entity_position: Vector3, type=null):
 	var room = find_room_at(entity_position)
 
 	if room == null:
 		return null
 
-	var entity = EntityFactory.create_entity(entity_id)
+	var entity = EntityFactory.create_entity(entity_id, type)
 
 	if entity == null:
 		return null
@@ -181,13 +181,13 @@ func create_entity(entity_id: String, entity_position: Vector3):
 
 	return entity
 
-func create_entity_in(entity_id: String, room_name: String):
+func create_entity_in(entity_id: String, room_name: String, type=null):
 	var room = find_room(room_name)
 
 	if room == null:
 		return null
 
-	var entity = EntityFactory.create_entity(entity_id)
+	var entity = EntityFactory.create_entity(entity_id, type)
 
 	if entity == null:
 		return null
@@ -239,8 +239,11 @@ func save_all_entities():
 				"id": entity.entity_id,
 				"position": entity.global_position,
 				"rotation": entity.global_rotation,
-				"room": String(room.name)
+				"room": String(room.name),
 			}
+
+			if entity.has_method("get_interface"):
+				entity_data["interface"] = entity.get_interface()
 
 			Store.house.state.entities.append(entity_data)
 					

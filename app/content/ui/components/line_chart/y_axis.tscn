@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bs5wjs1sf67il"]
+
+[ext_resource type="Script" path="res://content/ui/components/line_chart/y_axis.gd" id="1_e83gd"]
+
+[node name="YAxis" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_e83gd")

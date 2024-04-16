@@ -9,10 +9,13 @@ const MediaPlayer = preload ("res://content/entities/media_player/media_player.t
 const Camera = preload ("res://content/entities/camera/camera.tscn")
 const ButtonEntity = preload ("res://content/entities/button/button.tscn")
 const NumberEntity = preload ("res://content/entities/number/number.tscn")
+const LineGraphEntity = preload ("res://content/entities/line_chart/line_chart.tscn")
 
-static func create_entity(id: String):
+static func create_entity(id: String, type=null):
 	var entity = null
-	var type = id.split(".")[0]
+
+	if type == null:
+		type = id.split(".")[0]
 
 	match type:
 		"switch":
@@ -29,6 +32,8 @@ static func create_entity(id: String):
 			entity = ButtonEntity.instantiate()
 		"number":
 			entity = NumberEntity.instantiate()
+		"line_chart":
+			entity = LineGraphEntity.instantiate()
 		_:
 			return null
 			

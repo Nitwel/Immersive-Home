@@ -121,3 +121,11 @@ func get_voice_assistant() -> VoiceAssistant:
 		return null
 
 	return api.get_voice_assistant()
+
+func get_history(entity_id, start, end=null):
+	assert(has_connected(), "Not connected")
+
+	if api.has_method("get_history") == false:
+		return null
+
+	return await api.get_history(entity_id, start, end)

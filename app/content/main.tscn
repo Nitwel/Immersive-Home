@@ -36,7 +36,7 @@ material = SubResource("StandardMaterial3D_m58yb")
 size = Vector3(0.01, 0.01, 0.01)
 
 [node name="Main" type="Node3D"]
-transform = Transform3D(1, -0.000296142, 0.000270963, 0.000296143, 1, -4.61078e-06, -0.000270962, 4.67014e-06, 1, 0, 0, 0)
+transform = Transform3D(1, -0.000296142, 0.000270963, 0.000296143, 1, -4.5899e-06, -0.000270962, 4.67014e-06, 1, 0, 0, 0)
 script = ExtResource("1_uvrd4")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
