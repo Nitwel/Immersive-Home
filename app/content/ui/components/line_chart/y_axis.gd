@@ -6,6 +6,7 @@ const HEIGHT = 3000
 
 var minmax = Vector2(0, 100)
 var axis_divisions = R.state(10.0)
+var label = ""
 var font_size = 80
 var border_size = 10
 
@@ -24,7 +25,7 @@ func _draw():
 		var font = get_theme_default_font()
 
 		var relative_i = inverse_lerp(HEIGHT, 0, i)
-		var text = str(round(lerp(minmax.x, minmax.y, relative_i) * 100) / 100)
+		var text = str(round(lerp(minmax.x, minmax.y, relative_i) * 100) / 100) + (" " + label) if label != "" else ""
 
 		var text_size = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size + border_size)
 

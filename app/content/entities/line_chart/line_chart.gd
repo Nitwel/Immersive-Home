@@ -13,6 +13,11 @@ func _ready():
 
 	if HomeApi.has_connected() == false:
 		await HomeApi.on_connect
+
+	var stateInfo = await HomeApi.get_state(entity_id)
+	if stateInfo["attributes"]["friendly_name"] != null:
+		label.text = stateInfo["attributes"]["friendly_name"]
+
 	request_history()
 
 	timer.timeout.connect(request_history)
@@ -35,6 +40,7 @@ func request_history():
 	)
 
 	line_chart.points.value = points
+	line_chart.y_axis_label.value = result.unit
 
 func get_interface():
 	return "line_chart"

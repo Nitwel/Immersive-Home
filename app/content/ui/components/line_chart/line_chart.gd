@@ -15,6 +15,8 @@ const STEPS = 5
 
 var points = R.state([])
 var show_dates = R.state(false)
+var x_axis_label = R.state("X")
+var y_axis_label = R.state("Y")
 
 var minmax = R.computed(func(_arg):
 	if points.value.size() == 0:
@@ -52,6 +54,7 @@ func _ready():
 	R.effect(func(_arg):
 		x_axis.minmax=Vector2(minmax.value[0].x, minmax.value[1].x)
 		y_axis.minmax=Vector2(minmax.value[0].y, minmax.value[1].y)
+		y_axis.label=y_axis_label.value
 		x_axis.queue_redraw()
 		y_axis.queue_redraw()
 	)
