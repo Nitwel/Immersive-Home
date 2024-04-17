@@ -41,8 +41,6 @@ func _ready():
 		if Store.house.state.entities.size() == 0:
 			return
 
-		print("Updating Dots")
-
 		for old_dot in dots.get_children():
 			dots.remove_child(old_dot)
 			old_dot.free()
