@@ -12,6 +12,7 @@ var active = R.state(false)
 var disabled = R.state(true)
 var touched_enter = 0.0
 var moved_ran = false
+var touch_ran = false
 
 var miniature = House.body.mini_view
 
@@ -48,9 +49,19 @@ func _on_press_up(_event: EventPointer):
 
 func _on_touch_enter(_event: EventTouch):
 	touched_enter = Time.get_ticks_msec()
+	touch_ran = false
+
+func _on_touch_move(_event: EventTouch):
+	if touch_ran||Time.get_ticks_msec() - touched_enter < TOUCH_LONG: return
+
+	miniature.entity_select.toggle(entity)
+
+	touch_ran = true
 
 func _on_touch_leave(_event: EventTouch):
-	if Time.get_ticks_msec() - touched_enter < TOUCH_LONG&&entity.has_method("quick_action"):
+	if touch_ran: return
+	
+	if entity.has_method("quick_action"):
 		entity.quick_action()
 	else:
 		miniature.entity_select.toggle(entity)
