@@ -8,7 +8,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_7mk8w"]
 size = Vector3(0.0390625, 0.114258, 0.0142822)
 
-[node name="Number" type="StaticBody3D" groups=["entity"]]
+[node name="Number" type="StaticBody3D" ]
 script = ExtResource("1_26xwp")
 
 [node name="Slider" parent="." instance=ExtResource("2_sninv")]

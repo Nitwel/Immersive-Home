@@ -10,7 +10,7 @@
 resource_local_to_scene = true
 size = Vector3(0.18, 0.03, 0.02)
 
-[node name="Sensor" type="StaticBody3D" groups=["entity"]]
+[node name="Sensor" type="StaticBody3D" ]
 collision_mask = 0
 script = ExtResource("1_57ac8")
 

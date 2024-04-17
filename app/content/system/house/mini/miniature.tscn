@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://ds60i5n211hi3"]
+[gd_scene load_steps=5 format=3 uid="uid://ds60i5n211hi3"]
 
 [ext_resource type="Script" path="res://content/system/house/mini/miniature.gd" id="1_b53yn"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_x7oed"]
+[ext_resource type="Script" path="res://content/system/house/mini/Entity.gd" id="3_tgpny"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bckw3"]
 
@@ -15,5 +16,15 @@ shape = SubResource("BoxShape3D_bckw3")
 
 [node name="Movable" type="Node" parent="Body"]
 script = ExtResource("2_x7oed")
+restricted = true
 
-[node name="Model" type="Node3D" parent="Body"]
+[node name="Small" type="Node3D" parent="Body"]
+
+[node name="Model" type="Node3D" parent="Body/Small"]
+
+[node name="Dots" type="Node3D" parent="Body/Small"]
+
+[node name="EntitySelect" type="Marker3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.757576, 0)
+gizmo_extents = 0.1
+script = ExtResource("3_tgpny")

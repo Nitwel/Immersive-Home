@@ -18,10 +18,10 @@ size = Vector3(0.38, 0.0128076, 0.32)
 [sub_resource type="BoxShape3D" id="BoxShape3D_6xn1i"]
 size = Vector3(0.3, 0.0264844, 0.3)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ti5t2"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_01s1g"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_08du6"]
-material = SubResource("StandardMaterial3D_ti5t2")
+material = SubResource("StandardMaterial3D_01s1g")
 size = Vector3(0.3, 0.01, 0.3)
 
 [sub_resource type="Animation" id="Animation_61md4"]

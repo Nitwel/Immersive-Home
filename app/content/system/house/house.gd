@@ -12,6 +12,7 @@ const AlignReference = preload ("./align_reference.gd")
 
 var fixing_reference: bool = false
 var editing_room: RoomType = null
+var loaded = R.state(false)
 
 func _ready():
 	Store.house.on_loaded.connect(func():
@@ -19,6 +20,7 @@ func _ready():
 	)
 
 func update_house():
+	loaded.value = false
 	for old_room in get_rooms(0):
 		old_room.queue_free()
 		await old_room.tree_exited
@@ -45,6 +47,8 @@ func update_house():
 
 		entity_instance.global_position = entity.position
 		entity_instance.global_rotation = entity.rotation
+
+	loaded.value = true
 
 func create_room(room_name: String, level: int) -> RoomType:
 	var existing_room = Store.house.get_room(room_name)
@@ -246,5 +250,6 @@ func save_all_entities():
 				entity_data["interface"] = entity.get_interface()
 
 			Store.house.state.entities.append(entity_data)
-					
+
+	Store.house.state.entities = Store.house.state.entities
 	Store.house.save_local()

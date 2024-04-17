@@ -8,7 +8,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_um5pa"]
 size = Vector3(0.0700684, 0.011734, 0.0703125)
 
-[node name="Button" type="StaticBody3D" groups=["entity"]]
+[node name="Button" type="StaticBody3D"]
 script = ExtResource("1_ja7lt")
 
 [node name="Button" parent="." instance=ExtResource("1_r4tef")]

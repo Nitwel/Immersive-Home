@@ -2,14 +2,15 @@ extends Node3D
 
 const ConstructRoomMesh = preload ("res://lib/utils/mesh/construct_room_mesh.gd")
 const wall_material = preload ("./mini_wall.tres")
-
 const humidity_gradient = preload ("./humid_gradient.tres")
 const temperature_gradient = preload ("./temp_gradient.tres")
 
 @onready var body = $Body
-@onready var model = $Body/Model
+@onready var small_node = $Body/Small
+@onready var model = $Body/Small/Model
 @onready var collision_shape = $Body/CollisionShape3D
 @onready var toggle_heatmap = $Body/HeatmapButton
+@onready var entity_select = $Body/EntitySelect
 
 enum HeatmapType {
 	NONE = 0,
@@ -75,12 +76,15 @@ func _ready():
 		if small.value:
 
 			var aabb=House.body.get_level_aabb(0)
+			var height=aabb.size.y
+
 			aabb.position.y=- 0.03
 			aabb.size.y=0.06
 
 			var center=aabb.position + aabb.size / 2
 
 			collision_shape.shape.size=aabb.size * 0.1
+			entity_select.position=Vector3(0, height * 0.1 + 0.1, 0)
 
 			var camera=$"/root/Main/XROrigin3D/XRCamera3D"
 			var camera_position=camera.global_position
@@ -92,10 +96,10 @@ func _ready():
 			var target_position=camera_position + camera_direction.normalized() * 0.2
 			var new_position=target_position - center * 0.1
 
-			tween.tween_property(model, "scale", Vector3(0.1, 0.1, 0.1), 0.5)
+			tween.tween_property(small_node, "scale", Vector3(0.1, 0.1, 0.1), 0.5)
 			tween.tween_property(body, "position", new_position, 0.5)
 		else:
-			tween.tween_property(model, "scale", Vector3.ONE, 0.5)
+			tween.tween_property(small_node, "scale", Vector3.ONE, 0.5)
 			tween.tween_property(body, "position", Vector3.ZERO, 0.5)
 			tween.tween_property(body, "quaternion", Quaternion.IDENTITY, 0.5)
 	)
@@ -104,9 +108,8 @@ func _ready():
 	R.effect(func(_arg):
 		var show_map=heatmap_type.value != HeatmapType.NONE
 		var show_small=small.value
-
-		for child in model.get_children():
-			child.visible=show_map||show_small
+		
+		model.visible=show_map||show_small
 	)
 
 	# Update Heatmap

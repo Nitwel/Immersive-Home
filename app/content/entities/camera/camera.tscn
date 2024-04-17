@@ -10,7 +10,7 @@ size = Vector2(0.15, 0.15)
 [sub_resource type="BoxShape3D" id="BoxShape3D_te0pn"]
 size = Vector3(0.15, 0.15, 0.01)
 
-[node name="Camera" type="StaticBody3D" groups=["entity"]]
+[node name="Camera" type="StaticBody3D" ]
 script = ExtResource("1_htxq3")
 
 [node name="View" type="Sprite3D" parent="."]
