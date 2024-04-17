@@ -27,7 +27,7 @@ func _ready():
 		icon.value="toggle_" + new_state["state"]
 	)
 
-func _on_click(event):
+func _on_click(_event):
 	HomeApi.set_state(entity_id, "off" if sprite.get_frame() == 0 else "on")
 	if sprite.get_frame() == 0:
 		sprite.set_frame(1)
@@ -36,3 +36,10 @@ func _on_click(event):
 
 func _on_request_completed():
 	pass
+
+func quick_action():
+	HomeApi.set_state(entity_id, "off" if sprite.get_frame() == 0 else "on")
+	if sprite.get_frame() == 0:
+		sprite.set_frame(1)
+	else:
+		sprite.set_frame(0)

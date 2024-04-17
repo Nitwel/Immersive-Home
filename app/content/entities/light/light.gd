@@ -132,3 +132,12 @@ func _on_click(event):
 
 		HomeApi.set_state(entity_id, "on" if !state else "off", attributes)
 		set_state(!state, attributes)
+
+func quick_action():
+	var attributes = {}
+
+	if !state&&brightness != null:
+		attributes["brightness"] = int(brightness)
+
+	HomeApi.set_state(entity_id, "on" if !state else "off", attributes)
+	set_state(!state, attributes)

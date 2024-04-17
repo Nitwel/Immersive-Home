@@ -34,3 +34,6 @@ func set_state(state):
 		else:
 			button.icon = false
 		button.label = name
+
+func quick_action():
+	HomeApi.set_state(entity_id, "pressed")
