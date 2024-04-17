@@ -19,9 +19,11 @@ func _ready():
 				group_entity.queue_free()
 				group_entity=null
 		elif group_entity == null:
-			print(editing.value.map(func(entity): return entity.entity_id))
 			var id=HomeApi.groups.create(editing.value.map(func(entity): return entity.entity_id))
 			group_entity=EntityFactory.create_entity(id, active_type)
+			for entity_node in group_entity.get_children():
+				if entity_node is Movable:
+					group_entity.remove_child(entity_node)
 			add_child(group_entity)
 		else:
 			HomeApi.groups.update_entities(group_entity.entity_id, editing.value.map(func(entity): return entity.entity_id))
@@ -38,6 +40,8 @@ func _ready():
 
 		if Store.house.state.entities.size() == 0:
 			return
+
+		print("Updating Dots")
 
 		for old_dot in dots.get_children():
 			dots.remove_child(old_dot)

@@ -250,5 +250,6 @@ func save_all_entities():
 				entity_data["interface"] = entity.get_interface()
 
 			Store.house.state.entities.append(entity_data)
-					
+
+	Store.house.state.entities = Store.house.state.entities
 	Store.house.save_local()
