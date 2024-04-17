@@ -19,7 +19,7 @@ func _ready():
 
 	# Update active
 	R.effect(func(_arg):
-		label.outline_modulate=Color(242, 90, 56, 1) if active.value else Color(0, 0, 0, 1)
+		label.outline_modulate=Color(242 / 255.0, 90 / 255.0, 56 / 255.0, 1) if active.value else Color(0, 0, 0, 1)
 	)
 
 	# Update disabled
