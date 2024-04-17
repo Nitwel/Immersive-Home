@@ -1,11 +1,13 @@
 extends Entity
 
-const Entity = preload("../entity.gd")
+const Entity = preload ("../entity.gd")
 
 @onready var button = $Button
 
 func _ready():
 	super()
+
+	icon.value = "radio_button_checked"
 
 	var stateInfo = await HomeApi.get_state(entity_id)
 

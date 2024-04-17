@@ -1,5 +1,7 @@
 extends XRController3D
 
+const Entity = preload ("res://content/entities/entity.gd")
+
 @onready var area = $trash_bin/Area3D
 @onready var trash_bin = $trash_bin
 @onready var animation = $AnimationPlayer
@@ -35,21 +37,21 @@ func _ready():
 	trash_bin_visible = false
 
 	EventSystem.on_grab_down.connect(func(event: EventPointer):
-		trash_bin_visible = event.target.is_in_group("entity")
+		trash_bin_visible=event.target is Entity
 	)
 
 	EventSystem.on_grab_move.connect(func(event):
 		if !trash_bin_visible:
 			return
 
-		if event.target.is_in_group("entity") && area.overlaps_body(event.target):
+		if event.target is Entity&&area.overlaps_body(event.target):
 			if !to_delete.has(event.target):
 				to_delete.append(event.target)
-			trash_bin_large = true
+			trash_bin_large=true
 			
 		else:
 			to_delete.erase(event.target)
-			trash_bin_large = false
+			trash_bin_large=false
 			
 	)
 
@@ -60,6 +62,6 @@ func _ready():
 		for entity in to_delete:
 			entity.queue_free()
 		to_delete.clear()
-		trash_bin_large = false
-		trash_bin_visible = false
+		trash_bin_large=false
+		trash_bin_visible=false
 	)

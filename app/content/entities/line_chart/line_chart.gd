@@ -9,6 +9,8 @@ const Entity = preload ("../entity.gd")
 func _ready():
 	super()
 
+	icon.value = "finance"
+
 	label.text = entity_id
 
 	if HomeApi.has_connected() == false:

@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://cmtp5kof0ah2b"]
+
+[ext_resource type="Material" uid="uid://bnwimm214q67g" path="res://assets/materials/sec-500.material" id="1_mxydb"]
+[ext_resource type="Script" path="res://content/ui/sub_menu/sub_menu.gd" id="1_xpjuw"]
+[ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="2_64uue"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ti5t2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_aisgf"]
+material = SubResource("StandardMaterial3D_ti5t2")
+size = Vector3(0.3, 0.01, 0.3)
+
+[node name="SubMenu" type="Node3D"]
+script = ExtResource("1_xpjuw")
+
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.15)
+material_override = ExtResource("1_mxydb")
+mesh = SubResource("BoxMesh_aisgf")
+skeleton = NodePath("../..")
+
+[node name="Content" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, 0)
+
+[node name="Label3D" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.02)
+pixel_size = 0.001
+text = "Entity Name"
+font_size = 24
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="Label3D2" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.06)
+pixel_size = 0.001
+text = "ID:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="Input" parent="Content" instance=ExtResource("2_64uue")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0, 0.06)

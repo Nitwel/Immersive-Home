@@ -14,6 +14,8 @@ var is_text = true
 func _ready():
 	super()
 
+	icon.value = "sensors"
+
 	var stateInfo = await HomeApi.get_state(entity_id)
 	set_text(stateInfo)
 

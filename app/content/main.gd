@@ -40,7 +40,6 @@ func _ready():
 		_emit_action(name, false, true)
 	)
 
-	remove_child(menu)
 	remove_child(keyboard)
 
 	EventSystem.on_action_down.connect(func(action):
@@ -81,13 +80,7 @@ func create_voice_assistant():
 	)
 
 func toggle_menu():
-	if menu.show_menu == false:
-		add_child(menu)
-		menu.global_transform = _get_menu_transform()
-	menu.show_menu = !menu.show_menu
-	await menu.get_node("AnimationPlayer").animation_finished
-	if menu.show_menu == false:
-		remove_child(menu)
+	menu.show_menu.value = !menu.show_menu.value
 
 func _emit_action(name: String, value, right_controller: bool=true):
 	var event = EventAction.new()
@@ -125,14 +118,6 @@ func _input(event):
 		
 	if event is InputEventKey and Input.is_key_pressed(KEY_M):
 		toggle_menu()
-
-func _get_menu_transform():
-	var transform = camera.get_global_transform()
-	transform.origin -= transform.basis.z * 0.5
-
-	transform.basis = transform.basis.rotated(transform.basis.x, deg_to_rad(90))
-
-	return transform
 
 func vector_key_mapping(key_positive_x: int, key_negative_x: int, key_positive_y: int, key_negative_y: int):
 	var x = 0

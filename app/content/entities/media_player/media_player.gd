@@ -20,6 +20,8 @@ var volume = 50
 func _ready():
 	super()
 
+	icon.value = "pause_circle"
+
 	var stateInfo = await HomeApi.get_state(entity_id)
 	set_state(stateInfo)
 
@@ -65,9 +67,11 @@ func set_state(stateInfo):
 		
 		playing = true
 		play.label = "pause"
+		icon.value = "play_circle"
 	else:
 		playing = false
 		play.label = "play_arrow"
+		icon.value = "pause_circle"
 
 func load_image(url: String):
 	http_request.request("http://192.168.33.33:8123" + url)

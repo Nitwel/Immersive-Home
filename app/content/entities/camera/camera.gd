@@ -1,6 +1,6 @@
 extends Entity
 
-const Entity = preload("../entity.gd")
+const Entity = preload ("../entity.gd")
 
 @export var view_width = 0.15
 
@@ -8,10 +8,11 @@ const Entity = preload("../entity.gd")
 @onready var http_request = $HTTPRequest
 @onready var mesh = $MeshInstance3D
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	super()
+
+	icon.value = "photo_camera"
 
 	var stateInfo = await HomeApi.get_state(entity_id)
 
@@ -36,7 +37,6 @@ func set_state(stateInfo):
 
 	if stateInfo["attributes"].has("entity_picture"):
 		load_image(stateInfo["attributes"]["entity_picture"])
-		
 
 func load_image(url: String):
 	http_request.request("http://192.168.33.33:8123" + url)

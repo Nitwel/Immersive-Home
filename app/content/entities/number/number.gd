@@ -8,6 +8,8 @@ const Entity = preload ("../entity.gd")
 func _ready():
 	super()
 
+	icon.value = "sliders"
+
 	var stateInfo = await HomeApi.get_state(entity_id)
 	if stateInfo == null:
 		return

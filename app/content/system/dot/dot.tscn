@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://b5buw1sas18n4"]
+
+[ext_resource type="Script" path="res://content/system/dot/dot.gd" id="1_vdpux"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="4_504vw"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3wgjq"]
+custom_solver_bias = 0.2
+radius = 0.1
+
+[node name="Dot" type="StaticBody3D"]
+script = ExtResource("1_vdpux")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_3wgjq")
+
+[node name="Label3D" type="Label3D" parent="."]
+pixel_size = 0.002
+billboard = 1
+text = "lightbulb"
+font = ExtResource("4_504vw")
+font_size = 100
+outline_size = 18

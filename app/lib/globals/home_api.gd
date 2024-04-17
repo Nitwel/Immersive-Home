@@ -2,6 +2,7 @@ extends Node
 ## Manages the connection to the home automation system and provides a unified interface to the different home automation systems.
 
 const Hass = preload ("res://lib/home_apis/hass/hass.gd")
+const EntityGroups = preload ("res://lib/utils/entity_group.gd")
 const HassWebSocket = preload ("res://lib/home_apis/hass_ws/hass.gd")
 const VoiceAssistant = preload ("res://lib/home_apis/voice_handler.gd")
 
@@ -17,6 +18,8 @@ const methods = [
 	"set_state",
 	"watch_state"
 ]
+
+var groups = EntityGroups.new()
 
 ## Emitted when the connection to the home automation system is established
 signal on_connect()
@@ -86,16 +89,37 @@ func get_device(id: String):
 ## Returns the current state of an entity
 func get_state(entity: String):
 	assert(has_connected(), "Not connected")
+
+	var group = groups.get_group(entity)
+
+	if group != null:
+		return await api.get_state(group[0])
+
 	return await api.get_state(entity)
 
 ## Updates the state of the entity and returns the resulting state
 func set_state(entity: String, state: Variant, attributes: Dictionary={}):
 	assert(has_connected(), "Not connected")
+
+	var group = groups.get_group(entity)
+
+	if group != null:
+		for group_entity in group:
+			api.set_state(group_entity, state, attributes)
+
+		return null
+
 	return await api.set_state(entity, state, attributes)
 
 ## Watches the state and each time it changes, calls the callback with the changed state, returns a function to stop watching the state
 func watch_state(entity: String, callback: Callable):
 	assert(has_connected(), "Not connected")
+
+	var group = groups.get_group(entity)
+
+	if group != null:
+		api.watch_state(group[0], callback)
+
 	return api.watch_state(entity, callback)
 
 ## Returns true if the adapter has an integration in the home automation system
@@ -126,6 +150,9 @@ func get_history(entity_id, start, end=null):
 	assert(has_connected(), "Not connected")
 
 	if api.has_method("get_history") == false:
+		return null
+
+	if groups.is_group(entity_id):
 		return null
 
 	return await api.get_history(entity_id, start, end)

@@ -10,7 +10,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_vi3eg"]
 size = Vector3(0.23, 0.142768, 0.01)
 
-[node name="MediaPlayer" type="StaticBody3D" groups=["entity"]]
+[node name="MediaPlayer" type="StaticBody3D" ]
 collision_mask = 0
 script = ExtResource("1_ame17")
 
