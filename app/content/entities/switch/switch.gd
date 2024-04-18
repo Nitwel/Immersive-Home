@@ -4,42 +4,35 @@ const Entity = preload ("../entity.gd")
 
 @onready var sprite: AnimatedSprite3D = $Icon
 
+var active = R.state(false)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	super()
 	var stateInfo = await HomeApi.get_state(entity_id)
+
+	set_state(stateInfo)
+
+	await HomeApi.watch_state(entity_id, func(new_state):
+		set_state(new_state)
+	)
+
+	R.effect(func(_arg):
+		sprite.set_frame(1 if active.value else 0)
+	)
+
+func set_state(stateInfo):
 	if stateInfo == null:
 		return
 
-	if stateInfo["state"] == "on":
-		sprite.set_frame(0)
-	else:
-		sprite.set_frame(1)
-
+	active.value = stateInfo["state"] == "on"
 	icon.value = "toggle_" + stateInfo["state"]
 
-	await HomeApi.watch_state(entity_id, func(new_state):
-		if new_state["state"] == "on":
-			sprite.set_frame(0)
-		else:
-			sprite.set_frame(1)
-
-		icon.value="toggle_" + new_state["state"]
-	)
-
 func _on_click(_event):
-	HomeApi.set_state(entity_id, "off" if sprite.get_frame() == 0 else "on")
-	if sprite.get_frame() == 0:
-		sprite.set_frame(1)
-	else:
-		sprite.set_frame(0)
-
-func _on_request_completed():
-	pass
+	_toggle()
 
 func quick_action():
-	HomeApi.set_state(entity_id, "off" if sprite.get_frame() == 0 else "on")
-	if sprite.get_frame() == 0:
-		sprite.set_frame(1)
-	else:
-		sprite.set_frame(0)
+	_toggle()
+
+func _toggle():
+	HomeApi.set_state(entity_id, "off" if active.value else "on")

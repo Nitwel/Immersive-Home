@@ -13,17 +13,17 @@ radius = 0.0482081
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_w68gw")
+"texture": ExtResource("2_86ba1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_86ba1")
+"texture": ExtResource("1_w68gw")
 }],
 "loop": true,
 "name": &"default",
 "speed": 5.0
 }]
 
-[node name="Switch" type="StaticBody3D" ]
+[node name="Switch" type="StaticBody3D"]
 collision_mask = 0
 script = ExtResource("1_8ffhi")
 
