@@ -34,7 +34,7 @@ func _ready():
 	)
 
 func _on_click(_event: EventPointer):
-	if entity.has_method("quick_action"):
+	if entity.has_method("quick_action")&&miniature.entity_select.selection_active() == false:
 		entity.quick_action()
 	else:
 		miniature.entity_select.toggle(entity)
@@ -61,7 +61,7 @@ func _on_touch_move(_event: EventTouch):
 func _on_touch_leave(_event: EventTouch):
 	if touch_ran: return
 	
-	if entity.has_method("quick_action"):
+	if entity.has_method("quick_action")&&miniature.entity_select.selection_active() == false:
 		entity.quick_action()
 	else:
 		miniature.entity_select.toggle(entity)

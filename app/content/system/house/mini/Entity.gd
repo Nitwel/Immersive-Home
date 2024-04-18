@@ -58,6 +58,9 @@ func _ready():
 				dots.add_child(dot)
 	)
 
+func selection_active():
+	return editing.value.size() > 0
+
 func toggle(entity: Entity):
 	if active_type == null:
 		active_type = entity.entity_id.split(".")[0]
