@@ -10,7 +10,7 @@ cull_mode = 2
 shading_mode = 0
 albedo_color = Color(0.109804, 0.721569, 0.262745, 1)
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_25da5"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_mec1l"]
 _surfaces = [{
 "aabb": AABB(-0.000587015, -0.000596339, 0.0005, 0.501171, 0.301189, 1e-05),
 "format": 34359742465,
@@ -43,7 +43,7 @@ script = ExtResource("1_n7fu8")
 
 [node name="Line" type="MeshInstance3D" parent="."]
 material_override = SubResource("StandardMaterial3D_20gpn")
-mesh = SubResource("ArrayMesh_25da5")
+mesh = SubResource("ArrayMesh_mec1l")
 
 [node name="Plane" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.15, -0.001)
