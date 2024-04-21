@@ -1,0 +1,72 @@
+[gd_scene load_steps=8 format=3 uid="uid://dclceqjqfxekx"]
+
+[ext_resource type="Script" path="res://content/ui/test.gd" id="1_jevji"]
+[ext_resource type="Shader" path="res://content/ui/glass.gdshader" id="1_p0dkh"]
+[ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="3_f40pk"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="4_qjv7o"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ptbst"]
+size = Vector3(2, 1, 0.1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xoqnh"]
+render_priority = 0
+shader = ExtResource("1_p0dkh")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/size = Vector2(2, 1)
+shader_parameter/border_size = 0.04
+shader_parameter/border_fade_in = 0.07
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 3.435
+
+[sub_resource type="QuadMesh" id="QuadMesh_4253w"]
+size = Vector2(2, 1)
+
+[node name="Test" type="Node3D"]
+script = ExtResource("1_jevji")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.07)
+shape = SubResource("BoxShape3D_ptbst")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+material_override = SubResource("ShaderMaterial_xoqnh")
+mesh = SubResource("QuadMesh_4253w")
+skeleton = NodePath("../..")
+
+[node name="Slider" parent="StaticBody3D" instance=ExtResource("3_f40pk")]
+transform = Transform3D(-4.37114e-08, 4.37114e-08, 1, 1, 1.91069e-15, 4.37114e-08, 0, 1, -4.37114e-08, 0, 0, 0)
+min = 0.1
+max = 2.0
+value = 1.0
+show_label = true
+label_unit = "w"
+
+[node name="Slider2" parent="StaticBody3D" instance=ExtResource("3_f40pk")]
+transform = Transform3D(-4.37114e-08, 4.37114e-08, 1, 1, 1.91069e-15, 4.37114e-08, 0, 1, -4.37114e-08, 0.0884458, 0, 0)
+min = 0.1
+max = 2.0
+value = 1.0
+show_label = true
+label_unit = "h"
+
+[node name="Slider3" parent="StaticBody3D" instance=ExtResource("3_f40pk")]
+transform = Transform3D(-4.37114e-08, 4.37114e-08, 1, 1, 1.91069e-15, 4.37114e-08, 0, 1, -4.37114e-08, 0.179572, 0, 0)
+show_label = true
+label_unit = "s"
+
+[node name="Slider4" parent="StaticBody3D" instance=ExtResource("3_f40pk")]
+transform = Transform3D(-4.37114e-08, 4.37114e-08, 1, 1, 1.91069e-15, 4.37114e-08, 0, 1, -4.37114e-08, 0.277398, 0, 0)
+max = 10.0
+show_label = true
+label_unit = "c"
+
+[node name="Slider5" parent="StaticBody3D" instance=ExtResource("3_f40pk")]
+transform = Transform3D(-4.37114e-08, 4.37114e-08, 1, 1, 1.91069e-15, 4.37114e-08, 0, 1, -4.37114e-08, 0.368523, 0, 0)
+
+[node name="Slider6" parent="StaticBody3D" instance=ExtResource("3_f40pk")]
+transform = Transform3D(-4.37114e-08, 4.37114e-08, 1, 1, 1.91069e-15, 4.37114e-08, 0, 1, -4.37114e-08, 0.458309, 0, 0)
+
+[node name="Movable" type="Node" parent="StaticBody3D"]
+script = ExtResource("4_qjv7o")
