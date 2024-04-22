@@ -1,10 +1,13 @@
 shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specular_schlick_ggx, shadows_disabled;
 
 uniform vec4 data[100];
 uniform int data_size: hint_range(0, 100, 1);
 uniform float alpha: hint_range(0.0, 1.0, 0.1) = 0.3;
 uniform sampler2D color_gradient;
+
+uniform float roughness : hint_range(0.0, 1.0) = 0.15;
+uniform vec4 edge_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
 
 varying vec3 color;
 
@@ -15,6 +18,12 @@ float simple_weight(int index, vec3 world_pos, float p) {
 float sphere_weight(int index, vec3 world_pos, float r) {
 	float dist = distance(data[index].xyz, world_pos);
 	return pow(max(0, r - dist) / (r * dist), 2);
+}
+
+float SchlickFresnel(float u) {
+	float m = 1.0 - u;
+	float m2 = m * m;
+	return m2 * m2 * m;
 }
 
 void vertex() {
@@ -60,4 +69,14 @@ void vertex() {
 void fragment() {
 	ALBEDO = vec3(color.xyz);
 	ALPHA = alpha;
+	
+	float VdotN = dot(VIEW, NORMAL);
+	float fresnel = clamp(SchlickFresnel(VdotN), 0.0, 1.0);
+	
+	// apply glass look
+	float a = mix(0.001, 1.0, ALPHA);
+	ALPHA = mix(fresnel * edge_color.a, 1.0, a);
+	ALBEDO = mix(edge_color.rgb * edge_color.a, ALBEDO, a);
+	ROUGHNESS = roughness;
+	SPECULAR = 0.5 * inversesqrt(ALPHA);
 }

@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dclceqjqfxekx"]
+[gd_scene load_steps=10 format=3 uid="uid://dclceqjqfxekx"]
 
 [ext_resource type="Script" path="res://content/ui/test.gd" id="1_jevji"]
 [ext_resource type="Material" uid="uid://dy5bbwaceset8" path="res://content/ui/test.material" id="2_fswvt"]
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="3_f40pk"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_qjv7o"]
+[ext_resource type="Shader" path="res://content/ui/glass2.gdshader" id="5_yedor"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ptbst"]
 size = Vector3(2, 1, 0.1)
@@ -11,8 +12,23 @@ size = Vector3(2, 1, 0.1)
 [sub_resource type="QuadMesh" id="QuadMesh_4253w"]
 size = Vector2(0.8, 0.5)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tiql8"]
+render_priority = 0
+shader = ExtResource("5_yedor")
+shader_parameter/albedo = Color(1, 1, 1, 0.388235)
+shader_parameter/roughness = 0.15
+shader_parameter/normal_strength = 1.0
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_g82c4"]
+size = Vector2(1, 0.5)
+
 [node name="Test" type="Node3D"]
 script = ExtResource("1_jevji")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0.470665, -0.53724, 0.699892, -0.168754, 0.723789, 0.669068, 0.677175, 0.464924, 0.836006)
+shadow_enabled = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 
@@ -64,3 +80,10 @@ value = 0.0
 
 [node name="Movable" type="Node" parent="StaticBody3D"]
 script = ExtResource("4_qjv7o")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0121959)
+visible = false
+material_override = SubResource("ShaderMaterial_tiql8")
+mesh = SubResource("QuadMesh_g82c4")
+skeleton = NodePath("../..")
