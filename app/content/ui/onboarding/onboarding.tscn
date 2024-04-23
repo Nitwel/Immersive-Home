@@ -63,12 +63,12 @@ autowrap_mode = 3
 width = 470.0
 
 [node name="GettingStartedButton" parent="." instance=ExtResource("3_hlpow")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.05, -0.11, 0.001)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, -0.11, 0.001)
 label = "open_in_new"
 icon = true
 
 [node name="CloseButton" parent="." instance=ExtResource("3_hlpow")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.21, -0.11, 0.001)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, -0.11, 0.001)
 label = "done"
 icon = true
 

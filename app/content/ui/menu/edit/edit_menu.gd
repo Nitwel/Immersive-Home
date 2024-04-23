@@ -6,8 +6,8 @@ const ButtonScene = preload ("res://content/ui/components/button/button.tscn")
 @onready var next_page_button = $Buttons/NextPageButton
 @onready var previous_page_button = $Buttons/PreviousPageButton
 @onready var page_number_label = $PageNumberLabel
-var devices = []
-var page = 0
+
+var page = R.state(0)
 var last_device_page = 0
 var page_size = 20
 var pages = 0

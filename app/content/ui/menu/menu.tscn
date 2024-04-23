@@ -258,7 +258,7 @@ icon = true
 toggleable = true
 
 [node name="TabsContent" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("tabs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 0.00999999, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 0.00999999, -0.01)
 script = ExtResource("6_7rntr")
 tabs = NodePath("../Tabs")
 

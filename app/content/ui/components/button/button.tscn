@@ -4,6 +4,7 @@
 [ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="4_2xlpt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_oqan0"]
+resource_local_to_scene = true
 render_priority = -1
 shader = ExtResource("4_2xlpt")
 shader_parameter/color = Color(1, 1, 1, 0.3)
@@ -18,12 +19,15 @@ shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
 [sub_resource type="QuadMesh" id="QuadMesh_bt05p"]
+resource_local_to_scene = true
 size = Vector2(0.05, 0.05)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xwopm"]
+resource_local_to_scene = true
 size = Vector3(0.05, 0.05, 0.01)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bqjii"]
+resource_local_to_scene = true
 size = Vector3(0.05, 0.05, 0.03)
 
 [node name="Button" type="Node3D" groups=["ui_focus"]]

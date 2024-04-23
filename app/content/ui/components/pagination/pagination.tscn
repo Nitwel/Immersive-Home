@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bef3gamrm6at2"]
+
+[ext_resource type="Script" path="res://content/ui/components/pagination/pagination.gd" id="1_3ylfj"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_lsc4w"]
+
+[node name="Pagination" type="Node3D"]
+script = ExtResource("1_3ylfj")
+gap = 0.01
+size = Vector3(10, 0.05, 0.01)
+
+[node name="Prev" parent="." instance=ExtResource("2_lsc4w")]
+label = "navigate_before"
+icon = true
+
+[node name="Next" parent="." instance=ExtResource("2_lsc4w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36, 0, 0)
+label = "navigate_next"
+icon = true
