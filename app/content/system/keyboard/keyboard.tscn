@@ -1,26 +1,40 @@
-[gd_scene load_steps=9 format=3 uid="uid://lrehk38exd5n"]
+[gd_scene load_steps=10 format=3 uid="uid://lrehk38exd5n"]
 
 [ext_resource type="Script" path="res://content/system/keyboard/keyboard.gd" id="1_maojw"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_xdpwr"]
 [ext_resource type="Script" path="res://content/ui/components/grid_container/grid_container.gd" id="3_mx544"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_86fct"]
-[ext_resource type="Material" uid="uid://bnwimm214q67g" path="res://assets/materials/sec-500.material" id="5_8c8rc"]
+[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="5_0dbg6"]
 [ext_resource type="Script" path="res://content/functions/occludable.gd" id="6_y4sdl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k5ib7"]
 size = Vector3(0.79, 0.01, 0.26)
 
-[sub_resource type="BoxMesh" id="BoxMesh_7rntc"]
-size = Vector3(0.79, 0.01, 0.26)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x72nd"]
+render_priority = 0
+shader = ExtResource("5_0dbg6")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.79, 0.26)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_88pdc"]
+size = Vector2(0.79, 0.26)
 
 [node name="Keyboard" type="StaticBody3D" groups=["ui_focus_stop"]]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-collision_layer = 2
-collision_mask = 2
+collision_layer = 6
+collision_mask = 0
 script = ExtResource("1_maojw")
 
 [node name="Backspace" parent="." instance=ExtResource("1_xdpwr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.349964, 0, -0.0700361)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 0, -0.07)
 focusable = false
 label = "backspace"
 icon = true
@@ -55,9 +69,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0093171, -0.009645, 0.0028
 shape = SubResource("BoxShape3D_k5ib7")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0093171, -0.009645, 0.00284005)
-material_override = ExtResource("5_8c8rc")
-mesh = SubResource("BoxMesh_7rntc")
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.0093171, -0.009645, 0.00284005)
+material_override = SubResource("ShaderMaterial_x72nd")
+mesh = SubResource("QuadMesh_88pdc")
 
 [node name="Occludable" type="Node" parent="."]
 script = ExtResource("6_y4sdl")

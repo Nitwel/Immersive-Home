@@ -1,8 +1,24 @@
-[gd_scene load_steps=7 format=3 uid="uid://bsjqdvkt0u87c"]
+[gd_scene load_steps=8 format=3 uid="uid://bsjqdvkt0u87c"]
 
 [ext_resource type="Script" path="res://content/ui/components/button/button.gd" id="1_74x7g"]
-[ext_resource type="ArrayMesh" uid="uid://iv4lk77axlk4" path="res://assets/immersive_home/button.obj" id="2_cve3l"]
-[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_wx7av"]
+[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="4_2xlpt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oqan0"]
+render_priority = 0
+shader = ExtResource("4_2xlpt")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.1, 0.1)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_bt05p"]
+size = Vector2(0.1, 0.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xwopm"]
 size = Vector3(0.05, 0.02, 0.05)
@@ -23,9 +39,9 @@ collision_layer = 2
 collision_mask = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.005, 0)
-material_override = ExtResource("2_wx7av")
-mesh = ExtResource("2_cve3l")
+transform = Transform3D(0.5, 0, 0, 0, -2.18557e-08, 0.5, 0, -0.5, -2.18557e-08, 0, 0.009, 0)
+material_override = SubResource("ShaderMaterial_oqan0")
+mesh = SubResource("QuadMesh_bt05p")
 skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]

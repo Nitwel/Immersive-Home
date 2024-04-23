@@ -1,8 +1,8 @@
 [gd_scene load_steps=19 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
-[ext_resource type="Material" uid="uid://bnwimm214q67g" path="res://assets/materials/sec-500.material" id="2_0x5at"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_8coxu"]
+[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="3_htaoi"]
 [ext_resource type="Script" path="res://content/ui/components/tabs/tabs.gd" id="4_eavfx"]
 [ext_resource type="PackedScene" uid="uid://crrb0l3ekuotj" path="res://content/ui/menu/edit/edit_menu.tscn" id="4_r2raj"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_w4i01"]
@@ -18,11 +18,22 @@ size = Vector3(0.38, 0.0128076, 0.32)
 [sub_resource type="BoxShape3D" id="BoxShape3D_6xn1i"]
 size = Vector3(0.3, 0.0264844, 0.3)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_01s1g"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mhqg4"]
+render_priority = 0
+shader = ExtResource("3_htaoi")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.3, 0.3)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
 
-[sub_resource type="BoxMesh" id="BoxMesh_08du6"]
-material = SubResource("StandardMaterial3D_01s1g")
-size = Vector3(0.3, 0.01, 0.3)
+[sub_resource type="QuadMesh" id="QuadMesh_4bh1v"]
+size = Vector2(0.3, 0.3)
 
 [sub_resource type="Animation" id="Animation_61md4"]
 length = 0.001
@@ -183,9 +194,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, -0.00824219, 0.15)
 shape = SubResource("BoxShape3D_6xn1i")
 
 [node name="Background" type="MeshInstance3D" parent="AnimationContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, 0, 0.15)
-material_override = ExtResource("2_0x5at")
-mesh = SubResource("BoxMesh_08du6")
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.21, 0.01, 0.15)
+material_override = SubResource("ShaderMaterial_mhqg4")
+mesh = SubResource("QuadMesh_4bh1v")
 skeleton = NodePath("../..")
 
 [node name="Tabs" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("initial_selected")]
