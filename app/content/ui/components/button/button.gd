@@ -1,6 +1,6 @@
 @tool
 
-extends Node3D
+extends Container3D
 class_name Button3D
 
 signal on_button_down()
@@ -12,8 +12,13 @@ const ECHO_WAIT_INITIAL = 0.5
 const ECHO_WAIT_REPEAT = 0.1
 
 @onready var body: StaticBody3D = $Body
+@onready var mesh: MeshInstance3D = $Body/MeshInstance3D
+@onready var collision: CollisionShape3D = $Body/CollisionShape3D
 @onready var label_node: Label3D = $Body/Label
 @onready var finger_area: Area3D = $FingerArea
+@onready var finger_area_collision: CollisionShape3D = $FingerArea/CollisionShape3D
+@onready var touch_collision: CollisionShape3D = $TouchBody/CollisionShape3D
+@onready var touch: StaticBody3D = $TouchBody
 
 @export var focusable: bool = true:
 	set(value):
@@ -72,6 +77,8 @@ func _ready():
 	if initial_active:
 		active = true
 
+	_update()
+
 	Update.props(self, ["active", "external_value", "icon", "label", "font_size", "disabled"])
 
 	if echo:
@@ -92,8 +99,8 @@ func update_animation(value: float):
 	var tween = create_tween()
 	tween.set_parallel(true)
 
-	tween.tween_property(body, "scale:y", lerpf(1.0, 0.5, value), 0.2)
-	tween.tween_property(body, "position:y", lerpf(0.01, 0.005, value), 0.2)
+	tween.tween_property(body, "scale:z", lerpf(1.0, 0.5, value), 0.2)
+	tween.tween_property(body, "position:z", lerpf(size.z / 2, size.z / 4, value), 0.2)
 		
 func _on_press_down(event):
 	if disabled:
@@ -181,12 +188,25 @@ func _touch_change(event: EventTouch):
 	var pos = Vector3(0, 1, 0)
 	for finger in event.fingers:
 		var finger_pos = to_local(finger.area.global_position)
-		if pos.y > finger_pos.y:
+		if pos.z > finger_pos.z:
 			pos = finger_pos
 
 	var button_height = 0.2
 	var button_center = 0.1
 
-	var percent = clamp((button_center + button_height / 2 - pos.y) / (button_height / 2), 0, 1)
+	var percent = clamp((button_center + button_height / 2 - pos.z) / (button_height / 2), 0, 1)
 		
 	update_animation(percent)
+
+func _update():
+	body.position = Vector3(0, 0, size.z / 2)
+	finger_area.position = Vector3(0, 0, -0.015)
+	touch.position = Vector3(0, 0, size.z / 2)
+
+	mesh.mesh.size = Vector2(size.x, size.y)
+	collision.shape.size = Vector3(size.x, size.y, size.z)
+	label_node.width = size.x / label_node.pixel_size
+	mesh.position = Vector3(0, 0, size.z / 2)
+	label_node.position = Vector3(0, 0, size.z / 2 + 0.001)
+
+	finger_area_collision.shape.size = Vector3(size.x, size.y, 0.03)

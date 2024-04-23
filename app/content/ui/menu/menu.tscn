@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=20 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_8coxu"]
@@ -13,18 +13,15 @@
 [ext_resource type="PackedScene" uid="uid://c6r4higceibif" path="res://content/ui/menu/settings/settings_menu.tscn" id="11_7wm6b"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_e1esh"]
-size = Vector3(0.38, 0.0128076, 0.32)
+size = Vector3(0.51, 0.32, 0.013)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_6xn1i"]
-size = Vector3(0.3, 0.0264844, 0.3)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mhqg4"]
-render_priority = 0
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_du6qr"]
+render_priority = -3
 shader = ExtResource("3_htaoi")
 shader_parameter/color = Color(1, 1, 1, 0.3)
 shader_parameter/border_color = Color(1, 1, 1, 1)
 shader_parameter/edge_color = Color(0, 0, 0, 1)
-shader_parameter/size = Vector2(0.3, 0.3)
+shader_parameter/size = Vector2(0.42, 0.32)
 shader_parameter/border_size = 0.001
 shader_parameter/border_fade_in = 0.005
 shader_parameter/border_fade_out = 0.0
@@ -33,7 +30,24 @@ shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
 [sub_resource type="QuadMesh" id="QuadMesh_4bh1v"]
-size = Vector2(0.3, 0.3)
+size = Vector2(0.42, 0.32)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mhqg4"]
+render_priority = -1
+shader = ExtResource("3_htaoi")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.07, 0.32)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_7q1en"]
+size = Vector2(0.07, 0.32)
 
 [sub_resource type="Animation" id="Animation_61md4"]
 length = 0.001
@@ -178,71 +192,81 @@ collision_mask = 2
 script = ExtResource("1_ng4u3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.00286309, 1.49012e-08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0)
 shape = SubResource("BoxShape3D_e1esh")
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("2_8coxu")
 
 [node name="AnimationContainer" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, -0.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, 0.15, 0)
 collision_layer = 6
 collision_mask = 6
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AnimationContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, -0.00824219, 0.15)
-shape = SubResource("BoxShape3D_6xn1i")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.15, 0)
+shape = SubResource("BoxShape3D_e1esh")
 
 [node name="Background" type="MeshInstance3D" parent="AnimationContainer"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.21, 0.01, 0.15)
-material_override = SubResource("ShaderMaterial_mhqg4")
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.23, -0.15, 0)
+material_override = SubResource("ShaderMaterial_du6qr")
 mesh = SubResource("QuadMesh_4bh1v")
 skeleton = NodePath("../..")
 
+[node name="Background2" type="MeshInstance3D" parent="AnimationContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, -0.02, -0.15, 0)
+material_override = SubResource("ShaderMaterial_mhqg4")
+mesh = SubResource("QuadMesh_7q1en")
+skeleton = NodePath("../..")
+
 [node name="Tabs" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("initial_selected")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.03, 0)
 script = ExtResource("4_eavfx")
 initial_selected = NodePath("View")
+vertical = true
+gap = 0.01
+size = Vector3(0.05, 0.4, 1)
 
 [node name="View" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.03)
 label = "visibility"
 icon = true
 toggleable = true
+disabled = true
 
 [node name="Edit" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.09)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0)
 label = "widgets"
 icon = true
 toggleable = true
 
 [node name="Room" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0)
 label = "view_in_ar"
 icon = true
 toggleable = true
 
 [node name="Automate" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.21)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
 label = "schema"
 icon = true
 toggleable = true
 
 [node name="Settings" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0.27)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.24, 0)
 label = "settings"
 icon = true
 toggleable = true
 
 [node name="TabsContent" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("tabs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 0.00999999, 0)
 script = ExtResource("6_7rntr")
 tabs = NodePath("../Tabs")
 
 [node name="ViewMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("8_71pkg")]
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 0, 0.01)
 
 [node name="EditMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("4_r2raj")]
+visible = false
 
 [node name="RoomMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("10_u4i1x")]
 visible = false
@@ -254,11 +278,11 @@ visible = false
 visible = false
 
 [node name="NotifyPlace" type="Marker3D" parent="AnimationContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0, -0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.06, 0)
 gizmo_extents = 0.02
 
 [node name="KeyboardPlace" type="Marker3D" parent="AnimationContainer"]
-transform = Transform3D(0.5, 0, 0, 0, 0.353553, 0.353553, 0, -0.353553, 0.353553, 0.2, 0.130848, 0.45)
+transform = Transform3D(0.5, 0, 0, 0, 0.353553, 0.353553, 0, -0.353553, 0.353553, 0.2, -0.38, 0.16)
 gizmo_extents = 0.02
 
 [node name="ImmersiveHomePanels" type="MeshInstance3D" parent="."]

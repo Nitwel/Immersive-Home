@@ -26,11 +26,10 @@ script = ExtResource("5_ddrep")
 initial_selected = NodePath("Overview")
 
 [node name="Overview" parent="Interface/Tabs3D" instance=ExtResource("4_cghmp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0.02)
 label = "Overview"
 
 [node name="Rooms" parent="Interface/Tabs3D" instance=ExtResource("4_cghmp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, 0.02)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0, 0)
 label = "Rooms"
 
 [node name="TabsContent3D" type="Node3D" parent="Interface" node_paths=PackedStringArray("tabs")]

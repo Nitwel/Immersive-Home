@@ -1,45 +1,43 @@
-[gd_scene load_steps=8 format=3 uid="uid://bsjqdvkt0u87c"]
+[gd_scene load_steps=7 format=3 uid="uid://bsjqdvkt0u87c"]
 
 [ext_resource type="Script" path="res://content/ui/components/button/button.gd" id="1_74x7g"]
 [ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="4_2xlpt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_oqan0"]
-render_priority = 0
+render_priority = -1
 shader = ExtResource("4_2xlpt")
 shader_parameter/color = Color(1, 1, 1, 0.3)
 shader_parameter/border_color = Color(1, 1, 1, 1)
 shader_parameter/edge_color = Color(0, 0, 0, 1)
-shader_parameter/size = Vector2(0.1, 0.1)
-shader_parameter/border_size = 0.001
-shader_parameter/border_fade_in = 0.005
+shader_parameter/size = Vector2(1, 1)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
 shader_parameter/border_fade_out = 0.0
-shader_parameter/corner_radius = 0.02
+shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
 [sub_resource type="QuadMesh" id="QuadMesh_bt05p"]
-size = Vector2(0.1, 0.1)
+size = Vector2(0.05, 0.05)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xwopm"]
-size = Vector3(0.05, 0.02, 0.05)
+size = Vector3(0.05, 0.05, 0.01)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bqjii"]
-size = Vector3(0.0501598, 0.0390937, 0.0501598)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_vkbuh"]
-size = Vector3(0.05, 0.03, 0.05)
+size = Vector3(0.05, 0.05, 0.03)
 
 [node name="Button" type="Node3D" groups=["ui_focus"]]
 script = ExtResource("1_74x7g")
 label = "Example Text"
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Body" type="StaticBody3D" parent="." groups=["ui_focus_skip"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
 collision_layer = 2
 collision_mask = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
-transform = Transform3D(0.5, 0, 0, 0, -2.18557e-08, 0.5, 0, -0.5, -2.18557e-08, 0, 0.009, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
 material_override = SubResource("ShaderMaterial_oqan0")
 mesh = SubResource("QuadMesh_bt05p")
 skeleton = NodePath("../..")
@@ -48,8 +46,9 @@ skeleton = NodePath("../..")
 shape = SubResource("BoxShape3D_xwopm")
 
 [node name="Label" type="Label3D" parent="Body"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.0107199, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.006)
 pixel_size = 0.001
+double_sided = false
 text = "Example Text"
 font_size = 10
 outline_size = 0
@@ -57,19 +56,18 @@ autowrap_mode = 3
 width = 50.0
 
 [node name="FingerArea" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0101447, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.015)
 collision_layer = 4
 collision_mask = 0
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="FingerArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00975001, 0)
 shape = SubResource("BoxShape3D_bqjii")
 
 [node name="TouchBody" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
 collision_layer = 4
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TouchBody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.005, 0)
-shape = SubResource("BoxShape3D_vkbuh")
+shape = SubResource("BoxShape3D_xwopm")

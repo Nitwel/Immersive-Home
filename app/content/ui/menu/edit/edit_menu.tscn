@@ -8,26 +8,26 @@
 script = ExtResource("1_34cbn")
 
 [node name="Devices" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0.01, 0.03)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.015, -0.015, 0.01)
 script = ExtResource("3_0xvyw")
-depth_gap = 0.06
+gaps = Vector2(0.01, 0.01)
 size = Vector3(0.24, 0.1, 0.1)
 
 [node name="PageNumberLabel" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.26, 0.01, 0.27)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.26, -0.27, 0.01)
 pixel_size = 0.001
 text = "0 / 0"
 font_size = 18
 outline_size = 0
 
 [node name="Buttons" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, 0.01, 0.27)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, -0.24, 0.01)
 
 [node name="NextPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
 label = "navigate_next"
 icon = true
 
 [node name="PreviousPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.07, 0, 0)
 label = "navigate_before"
 icon = true

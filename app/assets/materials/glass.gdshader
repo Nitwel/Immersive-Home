@@ -1,6 +1,6 @@
 shader_type spatial;
 
-render_mode diffuse_burley, specular_schlick_ggx, blend_mix, cull_disabled, shadows_disabled, depth_prepass_alpha;
+render_mode diffuse_burley, specular_schlick_ggx, blend_mix, cull_disabled, shadows_disabled;
 
 group_uniforms Color;
 uniform vec4 color : source_color = vec4(1.0, 1.0, 1.0, 0.3);
@@ -12,7 +12,7 @@ uniform vec2 size = vec2(1.0, 1.0);
 uniform float border_size: hint_range(0.0, 0.5) = 0.001;
 uniform float border_fade_in: hint_range(0.0, 0.5) = 0.005;
 uniform float border_fade_out: hint_range(0.0, 0.5) = 0.0;
-uniform float corner_radius: hint_range(0.0, 0.5) = 0.04;
+uniform float corner_radius = 0.04;
 
 group_uniforms Roughness;
 uniform float roughness : hint_range(0.0, 1.0) = 0.3;

@@ -113,8 +113,6 @@ func render_devices():
 			_on_device_click(device.keys()[0])
 		)
 		devices_node.add_child(button_instance)
-	
-	devices_node._update_container()
 		
 func render_entities():
 	var entities = get_page()
@@ -134,8 +132,6 @@ func render_entities():
 			_on_entity_click(entity)
 		)
 		devices_node.add_child(button_instance)
-
-	devices_node._update_container()
 	
 func _on_device_click(device_id):
 	selected_device = device_id

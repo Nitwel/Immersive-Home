@@ -1,15 +1,18 @@
+@tool
+
 extends Node3D
 class_name Container3D
 
-@export var size := Vector3(1.0, 1.0, 1.0) :
+@export var size := Vector3(1.0, 1.0, 1.0):
 	set(value):
-		size = value
-		_update_container()
+		size = Vector3(max(0, value.x), max(0, value.y), max(0, value.z))
 
-@export var padding: Vector4 = Vector4(0, 0, 0, 0) :
-	set(value):
-		padding = value
-		_update_container()
+		if !is_inside_tree(): return
 
-func _update_container():
+		_update()
+
+func _ready():
+	_update()
+
+func _update():
 	pass

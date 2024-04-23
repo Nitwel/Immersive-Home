@@ -44,6 +44,4 @@ func move_into_view():
 	var camera_transform = main.camera.global_transform
 	camera_transform.origin -= camera_transform.basis.z * 0.5
 
-	camera_transform.basis = camera_transform.basis.rotated(camera_transform.basis.x, deg_to_rad(90))
-
 	global_transform = camera_transform
