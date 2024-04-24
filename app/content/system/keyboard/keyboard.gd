@@ -71,6 +71,7 @@ func create_key(key: Key):
 	var key_node = button_scene.instantiate()
 	
 	key_node.label = EventKey.key_to_string(key, caps)
+	key_node.size = Vector3(0.05, 0.05, 0.01)
 	key_node.focusable = false
 	key_node.font_size = 32
 	key_node.echo = true

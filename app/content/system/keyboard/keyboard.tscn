@@ -11,7 +11,7 @@
 size = Vector3(0.86, 0.27, 0.02)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_x72nd"]
-render_priority = -1
+render_priority = 19
 shader = ExtResource("5_0dbg6")
 shader_parameter/color = Color(1, 1, 1, 0.3)
 shader_parameter/border_color = Color(1, 1, 1, 1)
@@ -39,6 +39,7 @@ focusable = false
 label = "backspace"
 icon = true
 echo = true
+size = Vector3(0.05, 0.05, 0.01)
 metadata/key = 4194308
 
 [node name="Caps" parent="." instance=ExtResource("1_xdpwr")]
@@ -47,12 +48,14 @@ focusable = false
 label = "keyboard_capslock"
 icon = true
 toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Paste" parent="." instance=ExtResource("1_xdpwr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, -0.09, 0)
 focusable = false
 label = "assignment"
 icon = true
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Keys" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.325, 0.09, 0)

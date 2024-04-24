@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://eecv28y6jxk4"]
+[gd_scene load_steps=18 format=3 uid="uid://eecv28y6jxk4"]
 
 [ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_i4c04"]
 [ext_resource type="Script" path="res://content/main.gd" id="1_uvrd4"]
@@ -34,6 +34,8 @@ ao_enabled = true
 [sub_resource type="BoxMesh" id="BoxMesh_ir3co"]
 material = SubResource("StandardMaterial3D_m58yb")
 size = Vector3(0.01, 0.01, 0.01)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_72c80"]
 
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, -0.000296142, 0.000270963, 0.000296143, 1, -4.5899e-06, -0.000270962, 4.67014e-06, 1, 0, 0, 0)
@@ -87,5 +89,9 @@ transform = Transform3D(0.5, 5.24309e-05, 0.000144384, -0.000139169, 0.353553, 0
 
 [node name="Onboarding" parent="." instance=ExtResource("12_uq2nj")]
 transform = Transform3D(1, -9.48098e-12, 0, 9.48098e-12, 1, 0, 0, 0, 1, -0.529594, 0.820154, -0.600147)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, -1.39635e-11, 0, 1.02449e-10, 1, 0, 0, 0, 1, 0.327865, -9.50548e-05, 0.44448)
+mesh = SubResource("CylinderMesh_72c80")
 
 [editable path="XROrigin3D/XRControllerLeft"]

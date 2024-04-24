@@ -8,9 +8,6 @@ func _on_enter():
 	if room_store == null||room_store.corners.size() < 3:
 		return
 
-	room.wall_mesh.visible = false
-	room.ceiling_mesh.visible = false
-
 	room.wall_mesh.mesh = Room.generate_wall_mesh(room_store)
 
 	if room.wall_mesh.mesh == null:
@@ -38,3 +35,5 @@ func _on_leave():
 	room.room_floor.get_node("CollisionShape3D").disabled = true
 
 	room.wall_collision.shape = null
+	room.wall_mesh.mesh = null
+	room.ceiling_mesh.mesh = null

@@ -5,7 +5,8 @@
 [ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="3_nl02b"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c5qdm"]
-render_priority = -1
+resource_local_to_scene = true
+render_priority = 20
 shader = ExtResource("3_nl02b")
 shader_parameter/color = Color(1, 1, 1, 0.3)
 shader_parameter/border_color = Color(1, 1, 1, 1)
@@ -19,6 +20,7 @@ shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
 [sub_resource type="QuadMesh" id="QuadMesh_5rrua"]
+resource_local_to_scene = true
 size = Vector2(0.15, 0.03)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x4yp8"]
@@ -88,10 +90,10 @@ shape = SubResource("BoxShape3D_x4yp8")
 
 [node name="Label" type="Label3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.073, 0, 0.005)
-sorting_offset = 0.1
 pixel_size = 0.001
 double_sided = false
-alpha_cut = 2
+render_priority = 30
+outline_render_priority = 29
 text = "Example Text"
 font = ExtResource("3_ij5fh")
 font_size = 18

@@ -1,21 +1,46 @@
-[gd_scene load_steps=4 format=3 uid="uid://bpta22fahai46"]
+[gd_scene load_steps=7 format=3 uid="uid://bpta22fahai46"]
 
 [ext_resource type="Script" path="res://content/ui/menu/room/views/rooms.gd" id="1_3a1oa"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_y3lty"]
 [ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="2_hstw7"]
+[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="4_jx6i3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dah0r"]
+render_priority = -3
+shader = ExtResource("4_jx6i3")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.42, 0.32)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_fq44b"]
+size = Vector2(0.42, 0.32)
 
 [node name="Rooms" type="Node3D"]
 script = ExtResource("1_3a1oa")
 
 [node name="Rooms" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.01, 0.17)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14, -0.13, 0)
 
 [node name="Button" parent="." instance=ExtResource("1_y3lty")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, 0, 0.27)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.28, 0)
 label = "add"
 icon = true
 
 [node name="Input" parent="." instance=ExtResource("2_hstw7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.005, 0.27)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, -0.28, 0)
 text = "Room 1"
 disabled = true
+
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
+visible = false
+material_override = SubResource("ShaderMaterial_dah0r")
+mesh = SubResource("QuadMesh_fq44b")
+skeleton = NodePath("../..")

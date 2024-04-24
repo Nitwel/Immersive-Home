@@ -9,7 +9,7 @@ size = Vector3(0.15, 0.02, 0.01)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vgpd3"]
 resource_local_to_scene = true
-render_priority = -2
+render_priority = 20
 shader = ExtResource("2_by0d8")
 shader_parameter/color = Color(1, 1, 1, 0.3)
 shader_parameter/border_color = Color(1, 1, 1, 1)
@@ -28,7 +28,7 @@ size = Vector2(0.15, 0.02)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mv0la"]
 resource_local_to_scene = true
-render_priority = -1
+render_priority = 30
 shader = ExtResource("2_by0d8")
 shader_parameter/color = Color(1, 1, 1, 0.3)
 shader_parameter/border_color = Color(1, 1, 1, 1)
@@ -70,6 +70,8 @@ mesh = SubResource("QuadMesh_k78f4")
 [node name="Label" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0, 0.01)
 pixel_size = 0.001
+render_priority = 30
+outline_render_priority = 29
 text = "0.2 "
 font_size = 10
 outline_size = 4

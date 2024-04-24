@@ -1,5 +1,8 @@
 @tool
 extends FlexContainer3D
+class_name Pagination3D
+
+signal on_page_changed(page: int)
 
 const ButtonScene = preload ("res://content/ui/components/button/button.tscn")
 const LabelScene = preload ("res://content/ui/components/label_container/label_container.tscn")
@@ -12,14 +15,20 @@ const ButtonActiveMaterial = preload ("button_active.material")
 
 @export var page: int = 0:
 	set(value):
+		if page == value: return
+
 		page = clamp(value, 0, pages - 1)
 		_update()
 @export var pages: int = 5:
 	set(value):
+		if pages == value: return
+
 		pages = max(1, value)
 		_update()
 @export var visible_pages: int = 5:
 	set(value):
+		if visible_pages == value: return
+
 		visible_pages = max(5, value)
 		_update()
 
@@ -27,12 +36,17 @@ func _ready():
 	_update()
 
 func _update():
-	if !is_inside_tree(): return
+	print("update %s %s %s %s" % [page, pages, visible_pages, get_parent()])
+	if !is_node_ready(): return
 
 	for child in get_children():
 		if child != prev_button&&child != next_button:
-			child.queue_free()
-			await child.tree_exited
+			remove_child(child)
+			child.free()
+			# child.queue_free()
+			# print("queue free", child)
+			# await child.tree_exited
+			# print("exited", child)
 
 	var display_pages = min(pages, visible_pages)
 	var center_pos = floor(display_pages / 2)
@@ -48,6 +62,9 @@ func _update():
 	next_button.mesh.visible = !at_end
 
 	prev_button.size = Vector3(size.y, size.y, size.z)
+	next_button.size = Vector3(size.y, size.y, size.z)
+
+	print("A %s %s %s %s" % [display_pages, center_pos, start_dots, end_dots])
 
 	for i in range(display_pages):
 		if (start_dots&&i == 1)||(end_dots&&i == display_pages - 2):
@@ -77,12 +94,13 @@ func _update():
 
 		button.on_button_up.connect(func(_arg):
 			page=int(button.label) - 1
+			on_page_changed.emit(page)
 		)
 
 		add_child(button)
 		move_child(button, -2)
 
-		button.mesh.material_override = ButtonActiveMaterial if (int(button.label) - 1) == page else ButtonMaterial
+		button.get_node("Body/MeshInstance3D").material_override = ButtonActiveMaterial if (int(button.label) - 1) == page else ButtonMaterial
 
 	super._update()
 	

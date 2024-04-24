@@ -16,7 +16,7 @@
 size = Vector3(0.51, 0.32, 0.013)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_du6qr"]
-render_priority = -3
+render_priority = 0
 shader = ExtResource("3_htaoi")
 shader_parameter/color = Color(1, 1, 1, 0.3)
 shader_parameter/border_color = Color(1, 1, 1, 1)
@@ -30,10 +30,11 @@ shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
 [sub_resource type="QuadMesh" id="QuadMesh_4bh1v"]
+lightmap_size_hint = Vector2i(4, 3)
 size = Vector2(0.42, 0.32)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mhqg4"]
-render_priority = -1
+render_priority = 0
 shader = ExtResource("3_htaoi")
 shader_parameter/color = Color(1, 1, 1, 0.3)
 shader_parameter/border_color = Color(1, 1, 1, 1)
@@ -192,7 +193,7 @@ collision_mask = 2
 script = ExtResource("1_ng4u3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, -0.005)
 shape = SubResource("BoxShape3D_e1esh")
 
 [node name="Movable" type="Node" parent="."]
@@ -204,7 +205,7 @@ collision_layer = 6
 collision_mask = 6
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AnimationContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.15, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.15, -0.005)
 shape = SubResource("BoxShape3D_e1esh")
 
 [node name="Background" type="MeshInstance3D" parent="AnimationContainer"]
@@ -232,41 +233,45 @@ label = "visibility"
 icon = true
 toggleable = true
 disabled = true
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Edit" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0)
 label = "widgets"
 icon = true
 toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Room" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, 0)
 label = "view_in_ar"
 icon = true
 toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Automate" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18, 0)
 label = "schema"
 icon = true
 toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Settings" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.24, 0)
 label = "settings"
 icon = true
 toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="TabsContent" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("tabs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 0.00999999, -0.01)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.00999999, 0)
 script = ExtResource("6_7rntr")
 tabs = NodePath("../Tabs")
 
 [node name="ViewMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("8_71pkg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, 0, 0.01)
+visible = false
 
 [node name="EditMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("4_r2raj")]
-visible = false
 
 [node name="RoomMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("10_u4i1x")]
 visible = false

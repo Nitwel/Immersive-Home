@@ -1,6 +1,8 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bbx6fv7jq50tr"]
 
 [resource]
-transparency = 1
+render_priority = -100
+blend_mode = 2
 cull_mode = 2
-albedo_color = Color(1, 1, 1, 0)
+depth_draw_mode = 1
+shading_mode = 0

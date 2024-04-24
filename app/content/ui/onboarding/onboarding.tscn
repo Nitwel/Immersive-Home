@@ -8,7 +8,7 @@
 size = Vector3(0.5, 0.3, 0.01)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d2ck8"]
-render_priority = -1
+render_priority = 10
 shader = ExtResource("2_87aan")
 shader_parameter/color = Color(1, 1, 1, 0.3)
 shader_parameter/border_color = Color(1, 1, 1, 1)
@@ -32,6 +32,8 @@ script = ExtResource("1_k4yvw")
 [node name="Label3D2" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, -0.1, 0.001)
 pixel_size = 0.001
+render_priority = 30
+outline_render_priority = 29
 text = "Getting Started"
 font_size = 18
 outline_size = 0
@@ -50,6 +52,8 @@ mesh = SubResource("QuadMesh_ij2lj")
 [node name="GettingStartedLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, 0.13, 0.001)
 pixel_size = 0.001
+render_priority = 30
+outline_render_priority = 29
 text = "Hey!
 
 This app is still early in development and still has a lot of rough edges. Things might break or are sometimes difficult to use, this will improve the more polished the app becomes.
@@ -75,6 +79,8 @@ icon = true
 [node name="CloseLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, -0.1, 0.001)
 pixel_size = 0.001
+render_priority = 30
+outline_render_priority = 29
 text = "Understood"
 font_size = 18
 outline_size = 0

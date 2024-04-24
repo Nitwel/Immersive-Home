@@ -31,6 +31,8 @@ static func _bind_store(target, prop, store: RdotStore, key, watch_signal=null):
 	return _bind_state(target, prop, store._proxied_value[key], watch_signal)
 
 static func _bind_state(target, prop, value, watch_signal=null):
+	assert(state != null, "target cannot be null")
+
 	var graph = RdotGraph.getInstance()
 
 	var watch_c = func(new_value):
