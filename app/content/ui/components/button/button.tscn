@@ -1,22 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bsjqdvkt0u87c"]
+[gd_scene load_steps=6 format=3 uid="uid://bsjqdvkt0u87c"]
 
 [ext_resource type="Script" path="res://content/ui/components/button/button.gd" id="1_74x7g"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="4_2xlpt"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oqan0"]
-resource_local_to_scene = true
-render_priority = -1
-shader = ExtResource("4_2xlpt")
-shader_parameter/color = Color(1, 1, 1, 0.3)
-shader_parameter/border_color = Color(1, 1, 1, 1)
-shader_parameter/edge_color = Color(0, 0, 0, 1)
-shader_parameter/size = Vector2(1, 1)
-shader_parameter/border_size = 0.01
-shader_parameter/border_fade_in = 0.05
-shader_parameter/border_fade_out = 0.0
-shader_parameter/corner_radius = 0.2
-shader_parameter/roughness = 0.3
-shader_parameter/grain_amount = 0.02
+[ext_resource type="Material" uid="uid://iercgso83b0a" path="res://content/ui/components/pagination/button.material" id="2_ebyeq"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_bt05p"]
 resource_local_to_scene = true
@@ -42,7 +27,7 @@ collision_mask = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
-material_override = SubResource("ShaderMaterial_oqan0")
+material_override = ExtResource("2_ebyeq")
 mesh = SubResource("QuadMesh_bt05p")
 skeleton = NodePath("../..")
 

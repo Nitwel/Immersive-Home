@@ -40,7 +40,6 @@ func _ready():
 	)
 
 func _update():
-	print("update")
 	var width = size.y if vertical else size.x
 	var child_size := Vector2(0, 0)
 	var child_count = 0
@@ -65,9 +64,6 @@ func _update():
 	child_size.clamp(Vector2(0, 0), Vector2(size.x, size.y))
 
 	child_scale = child_scale.clamp(Vector2(0.001, 0.001), Vector2(1, 1))
-
-	print(child_size)
-	print(child_scale)
 
 	var offset = 0.0
 
@@ -97,8 +93,6 @@ func _update():
 		else:
 			child.position = Vector3(offset, 0, 0)
 			offset += child.size.x * child_scale.x
-
-		print(offset)
 
 		match justification:
 			Justification.START, Justification.CENTER, Justification.END:
