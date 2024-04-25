@@ -45,7 +45,7 @@ outline_size = 0
 autowrap_mode = 3
 width = 40.0
 
-[node name="FingerArea" type="Area3D" parent="."]
+[node name="FingerArea" type="Area3D" parent="." groups=["ui_focus_skip"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.015)
 collision_layer = 4
 collision_mask = 0

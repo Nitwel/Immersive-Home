@@ -188,8 +188,8 @@ _data = {
 }
 
 [node name="Menu" type="StaticBody3D"]
-collision_layer = 2
-collision_mask = 2
+collision_layer = 6
+collision_mask = 6
 script = ExtResource("1_ng4u3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -199,14 +199,8 @@ shape = SubResource("BoxShape3D_e1esh")
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("2_8coxu")
 
-[node name="AnimationContainer" type="StaticBody3D" parent="."]
+[node name="AnimationContainer" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, 0.15, 0)
-collision_layer = 6
-collision_mask = 6
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="AnimationContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.15, -0.005)
-shape = SubResource("BoxShape3D_e1esh")
 
 [node name="Background" type="MeshInstance3D" parent="AnimationContainer"]
 transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.23, -0.15, 0)

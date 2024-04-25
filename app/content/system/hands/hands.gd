@@ -122,12 +122,12 @@ func _process_hand(hand: OpenXRHand):
 				initiator.on_release.emit(Initiator.EventType.GRIP)
 				grabbed_left = false
 		else:
-			if trigger_close&&!grabbed_right:
+			if trigger_close&&!grabbed_left:
 				initiator.on_press.emit(Initiator.EventType.GRIP)
-				grabbed_right = true
-			elif !trigger_close&&grabbed_right:
+				grabbed_left = true
+			elif !trigger_close&&grabbed_left:
 				initiator.on_release.emit(Initiator.EventType.GRIP)
-				grabbed_right = false
+				grabbed_left = false
 	else:
 		if !distance_close:
 			if trigger_close&&!pressed_right:
