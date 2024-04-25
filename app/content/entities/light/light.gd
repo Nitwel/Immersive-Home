@@ -126,9 +126,4 @@ func quick_action():
 	_toggle()
 
 func _toggle():
-	var attributes = {}
-
-	if !active.value&&brightness.value != null:
-		attributes["brightness"] = int(brightness.value)
-
-	HomeApi.set_state(entity_id, "off" if active.value else "on", attributes)
+	HomeApi.set_state(entity_id, "off" if active.value else "on")
