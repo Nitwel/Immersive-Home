@@ -119,3 +119,4 @@ libraries = {
 }
 
 [node name="Raycast" parent="." instance=ExtResource("4_n7lao")]
+is_right = false

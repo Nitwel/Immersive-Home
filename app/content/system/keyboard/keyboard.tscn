@@ -1,11 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://lrehk38exd5n"]
+[gd_scene load_steps=9 format=3 uid="uid://lrehk38exd5n"]
 
 [ext_resource type="Script" path="res://content/system/keyboard/keyboard.gd" id="1_maojw"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_xdpwr"]
 [ext_resource type="Script" path="res://content/ui/components/grid_container/grid_container.gd" id="3_mx544"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_86fct"]
 [ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="5_0dbg6"]
-[ext_resource type="Script" path="res://content/functions/occludable.gd" id="6_y4sdl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k5ib7"]
 size = Vector3(0.86, 0.27, 0.02)
@@ -73,6 +72,3 @@ shape = SubResource("BoxShape3D_k5ib7")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 material_override = SubResource("ShaderMaterial_x72nd")
 mesh = SubResource("QuadMesh_88pdc")
-
-[node name="Occludable" type="Node" parent="."]
-script = ExtResource("6_y4sdl")
