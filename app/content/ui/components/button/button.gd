@@ -47,13 +47,13 @@ const ECHO_WAIT_REPEAT = 0.1
 		
 		if icon:
 			label_node.font = IconFont
-			label_node.font_size = 36
+			label_node.font_size = size.x / 0.05 * 36
 			label_node.width = 1000
 			label_node.autowrap_mode = TextServer.AUTOWRAP_OFF
 		else:
 			label_node.font = null
 			label_node.font_size = font_size
-			label_node.width = 50
+			label_node.width = size.x / label_node.pixel_size
 			label_node.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
 @export var toggleable: bool = false
@@ -204,6 +204,7 @@ func _update():
 	touch.position = Vector3(0, 0, size.z / 2)
 
 	mesh.mesh.size = Vector2(size.x, size.y)
+	mesh.material_override.set_shader_parameter("size", Vector2(size.x, size.y) * 25)
 	collision.shape.size = Vector3(size.x, size.y, size.z)
 	label_node.width = size.x / label_node.pixel_size
 	mesh.position = Vector3(0, 0, size.z / 2)

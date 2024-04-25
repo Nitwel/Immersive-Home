@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://crrb0l3ekuotj"]
+[gd_scene load_steps=11 format=3 uid="uid://crrb0l3ekuotj"]
 
 [ext_resource type="Script" path="res://content/ui/menu/edit/edit_menu.gd" id="1_34cbn"]
 [ext_resource type="Script" path="res://content/ui/menu/edit/devices.gd" id="2_rkvf4"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_lpv7m"]
 [ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="4_xunmy"]
 [ext_resource type="Script" path="res://content/ui/menu/edit/entities.gd" id="5_t34xe"]
+[ext_resource type="Script" path="res://content/ui/components/flex_container/flex_container.gd" id="6_cr6p6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hstwo"]
 render_priority = -3
@@ -50,21 +51,23 @@ outline_size = 0
 horizontal_alignment = 0
 
 [node name="Pagination3D" parent="Devices" instance=ExtResource("4_4jiu6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, -0.29, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.29, 0)
+pages = 10
 size = Vector3(9.92, 0.03, 0.01)
 
 [node name="Entities" type="Node3D" parent="."]
 script = ExtResource("5_t34xe")
 
-[node name="GridContainer3D" type="Node3D" parent="Entities"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.08, 0)
-script = ExtResource("3_0xvyw")
-columns = 7
-gaps = Vector2(0.01, 0.01)
-size = Vector3(0.28, 0.1, 0.1)
+[node name="FlexContainer3D" type="Node3D" parent="Entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, -0.06, 0)
+script = ExtResource("6_cr6p6")
+vertical = true
+gap = 0.01
+size = Vector3(1, 0.2, 1)
 
 [node name="Pagination3D" parent="Entities" instance=ExtResource("4_4jiu6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, -0.29, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.29, 0)
+pages = 10
 size = Vector3(9.92, 0.03, 0.01)
 
 [node name="Label3D" type="Label3D" parent="Entities"]

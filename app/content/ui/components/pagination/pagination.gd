@@ -35,6 +35,16 @@ const ButtonActiveMaterial = preload ("button_active.material")
 func _ready():
 	_update()
 
+	prev_button.on_button_up.connect(func():
+		page -= 1
+		on_page_changed.emit(page)
+	)
+
+	next_button.on_button_up.connect(func():
+		page += 1
+		on_page_changed.emit(page)
+	)
+
 func _update():
 	print("update %s %s %s %s" % [page, pages, visible_pages, get_parent()])
 	if !is_node_ready(): return
@@ -42,11 +52,7 @@ func _update():
 	for child in get_children():
 		if child != prev_button&&child != next_button:
 			remove_child(child)
-			child.free()
-			# child.queue_free()
-			# print("queue free", child)
-			# await child.tree_exited
-			# print("exited", child)
+			child.queue_free()
 
 	var display_pages = min(pages, visible_pages)
 	var center_pos = floor(display_pages / 2)
@@ -55,11 +61,11 @@ func _update():
 
 	var at_start = page == 0
 	prev_button.disabled = at_start
-	prev_button.mesh.visible = !at_start
+	prev_button.visible = !at_start
 
 	var at_end = page == pages - 1
 	next_button.disabled = at_end
-	next_button.mesh.visible = !at_end
+	next_button.visible = !at_end
 
 	prev_button.size = Vector3(size.y, size.y, size.z)
 	next_button.size = Vector3(size.y, size.y, size.z)
@@ -92,7 +98,7 @@ func _update():
 		else:
 			button.label = str(clamp(page + 1, 3, pages - 3) - center_pos + i + 1)
 
-		button.on_button_up.connect(func(_arg):
+		button.on_button_up.connect(func():
 			page=int(button.label) - 1
 			on_page_changed.emit(page)
 		)

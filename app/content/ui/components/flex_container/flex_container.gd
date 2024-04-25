@@ -27,21 +27,9 @@ enum Justification {
 func _ready():
 	_update()
 
-	child_entered_tree.connect(func(_arg):
-		_update()
-	)
-
-	child_exiting_tree.connect(func(_arg):
-		_update()
-	)
-
-	child_order_changed.connect(func():
-		_update()
-	)
-
 func _update():
 	var width = size.y if vertical else size.x
-	var child_size := Vector2(0, 0)
+	var children_size := Vector2(0, 0)
 	var child_count = 0
 
 	for child in get_children():
@@ -49,58 +37,64 @@ func _update():
 			continue
 
 		if vertical:
-			child_size.x = max(child.size.x, child_size.x)
-			child_size.y += child.size.y + gap
+			children_size.x = max(child.size.x, children_size.x)
+			children_size.y += child.size.y + gap
 		else:
-			child_size.x += child.size.x + gap
-			child_size.y = max(child.size.y, child_size.y)
+			children_size.x += child.size.x + gap
+			children_size.y = max(child.size.y, children_size.y)
 
 		child_count += 1
 
 	if child_count == 0:
 		return
 
-	var child_scale = Vector2(size.x, size.y) / child_size
-	child_size.clamp(Vector2(0, 0), Vector2(size.x, size.y))
+	var children_scale = Vector2(size.x, size.y) / children_size
+	children_size.clamp(Vector2(0, 0), Vector2(size.x, size.y))
 
-	child_scale = child_scale.clamp(Vector2(0.001, 0.001), Vector2(1, 1))
+	children_scale = children_scale.clamp(Vector2(0.001, 0.001), Vector2(1, 1))
 
 	var offset = 0.0
+
+	var children_width = children_size.y if vertical else children_size.x
 
 	match justification:
 		Justification.START:
 			offset = 0.0
 		Justification.CENTER:
-			offset = (width - child_size) / 2
+			offset = (width - children_width) / 2.0
 		Justification.END:
-			offset = width - child_size
+			offset = width - children_width
 		Justification.SPACE_BETWEEN:
 			offset = 0.0
 		Justification.SPACE_AROUND:
-			offset = (width - child_size) / child_count / 2
+			offset = (width - children_width) / child_count / 2.0
 		Justification.SPACE_EVENLY:
-			offset = (width - child_size) / (child_count + 1)
+			offset = (width - children_width) / (child_count + 1)
 
 	for child in get_children():
 		if child is Container3D == false:
 			continue
 
-		child.scale = Vector3(child_scale.x, child_scale.y, 1)
+		child.scale = Vector3(children_scale.x, children_scale.y, 1)
 
 		if vertical:
-			child.position = Vector3(0, -offset, 0)
-			offset += child.size.y * child_scale.y
+			var child_width = child.size.y * children_scale.y
+			
+			child.position = Vector3(0, -offset - child_width / 2.0, 0)
+			offset += child.size.y * children_scale.y
 		else:
-			child.position = Vector3(offset, 0, 0)
-			offset += child.size.x * child_scale.x
+			var child_width = child.size.x * children_scale.x
+
+			child.position = Vector3(offset + child_width / 2.0, 0, 0)
+			offset += child.size.x * children_scale.x
 
 		match justification:
 			Justification.START, Justification.CENTER, Justification.END:
 				offset += gap
 			Justification.SPACE_BETWEEN:
-				offset += (width - child_size) / (child_count - 1)
+				offset += (width - children_width) / (child_count - 1)
 			Justification.SPACE_AROUND:
-				offset += (width - child_size) / child_count
+				offset += (width - children_width) / child_count
 			Justification.SPACE_EVENLY:
-				offset += (width - child_size) / (child_count + 1)
+				offset += (width - children_width) / (child_count + 1)
 			

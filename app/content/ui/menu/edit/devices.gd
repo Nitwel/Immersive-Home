@@ -39,6 +39,7 @@ func _ready():
 
 			var button_instance=ButtonScene.instantiate()
 			button_instance.label=info["name"]
+			button_instance.font_size=8
 			button_instance.on_button_down.connect(func():
 				on_select_device.emit(device.keys()[0])
 			)

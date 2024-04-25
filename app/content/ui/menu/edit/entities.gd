@@ -3,14 +3,14 @@ extends Node3D
 signal on_select_entity(entity_id)
 signal on_back()
 
-const ButtonScene = preload ("res://content/ui/components/button/button.tscn")
+const EntityScene = preload ("entity.tscn")
 
-@onready var grid_container = $GridContainer3D
+@onready var entity_container = $FlexContainer3D
 @onready var pagination = $Pagination3D
 @onready var back_button = $Button
 
 var page = R.state(0)
-var page_size = 28.0
+var page_size = 5.0
 var selected_device = R.state(null)
 
 func _ready():
@@ -40,16 +40,19 @@ func _ready():
 	)
 
 	R.effect(func(_arg):
-		for child in grid_container.get_children():
-			grid_container.remove_child(child)
-			child.free()
+		for child in entity_container.get_children():
+			entity_container.remove_child(child)
+			child.queue_free()
 
 		for entity in visible_entities.value:
-			var button_instance=ButtonScene.instantiate()
-			button_instance.label=entity
-			button_instance.on_button_down.connect(func():
+			var entity_node=EntityScene.instantiate()
+			entity_node.icon=EntityFactory.get_entity_icon(entity.split(".")[0])
+			entity_node.text=entity
+			entity_node.on_select.connect(func():
 				on_select_entity.emit(entity)
 			)
-			grid_container.add_child(button_instance)
+			entity_container.add_child(entity_node)
+
+		entity_container._update()
 
 	)

@@ -9,6 +9,8 @@ size = Vector3(0.08, 0.023, 0.1)
 
 [node name="Label3D" type="Label3D" parent="."]
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "Example"
 font = ExtResource("2_6y3jl")
 font_size = 18
