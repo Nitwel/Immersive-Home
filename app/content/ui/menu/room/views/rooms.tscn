@@ -40,6 +40,7 @@ disabled = true
 
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
+visible = false
 material_override = SubResource("ShaderMaterial_dah0r")
 mesh = SubResource("QuadMesh_fq44b")
 skeleton = NodePath("../..")

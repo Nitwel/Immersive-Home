@@ -14,8 +14,6 @@ func _ready():
 
 	var pages = R.computed(func(_arg):
 		var devices=Store.devices.state.devices
-
-		print("recalc pages ", ceil(devices.size() / page_size))
 		
 		return ceil(devices.size() / page_size)
 	)

@@ -35,7 +35,7 @@ func _ready():
 		notification_node.type=event.type
 
 		for child in notify_place.get_children():
-			child.position += Vector3(0, 0, -0.06)
+			child.position += Vector3(0, 0.06, 0)
 
 		notify_place.add_child(notification_node)
 	)

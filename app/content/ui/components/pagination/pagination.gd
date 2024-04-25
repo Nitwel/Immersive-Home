@@ -46,7 +46,6 @@ func _ready():
 	)
 
 func _update():
-	print("update %s %s %s %s" % [page, pages, visible_pages, get_parent()])
 	if !is_node_ready(): return
 
 	for child in get_children():
@@ -69,8 +68,6 @@ func _update():
 
 	prev_button.size = Vector3(size.y, size.y, size.z)
 	next_button.size = Vector3(size.y, size.y, size.z)
-
-	print("A %s %s %s %s" % [display_pages, center_pos, start_dots, end_dots])
 
 	for i in range(display_pages):
 		if (start_dots&&i == 1)||(end_dots&&i == display_pages - 2):

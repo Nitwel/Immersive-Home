@@ -90,10 +90,12 @@ icon = true
 
 [node name="Credits" type="StaticBody3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37, -0.300229, 0)
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Content/Credits"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.005, 0, 0)
 shape = SubResource("BoxShape3D_3qdps")
+disabled = true
 
 [node name="Label" type="Label3D" parent="Content/Credits"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.98023e-08, 0, 0)
