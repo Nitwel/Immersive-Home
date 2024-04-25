@@ -36,6 +36,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.007, 0)
 [node name="ConnectionStatus" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.251, -0.151, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "Disconnected"
 font_size = 8
 outline_size = 0
@@ -43,6 +45,8 @@ outline_size = 0
 [node name="LabelURL" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.03, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "url:
 "
 font_size = 18
@@ -57,6 +61,8 @@ size = Vector3(0.2, 0.03, 0.01)
 [node name="LabelToken" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.07, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "token:"
 font_size = 18
 outline_size = 0
@@ -70,6 +76,8 @@ size = Vector3(0.2, 0.03, 0.01)
 [node name="LabelConnect" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14, -0.12, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "Connect"
 font_size = 18
 outline_size = 0
@@ -90,6 +98,8 @@ shape = SubResource("BoxShape3D_3qdps")
 [node name="Label" type="Label3D" parent="Content/Credits"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.98023e-08, 0, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "credits"
 font_size = 12
 outline_size = 0
@@ -97,6 +107,8 @@ outline_size = 0
 [node name="Hearth" type="Label3D" parent="Content/Credits"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 modulate = Color(0.584314, 0, 0, 1)
 text = "favorite"
 font = ExtResource("5_eiwd4")
@@ -109,6 +121,8 @@ script = ExtResource("3_qmg6q")
 [node name="SaveLabel" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.21, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "Manual Save:"
 font_size = 18
 outline_size = 0
@@ -122,6 +136,8 @@ icon = true
 [node name="clearSaveLabel" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.26, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "Clear Save:"
 font_size = 18
 outline_size = 0
@@ -135,6 +151,8 @@ icon = true
 [node name="clearSaveWarning" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.28, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 modulate = Color(1, 0, 0, 1)
 text = "Caution! This will delete all your rooms and placed devices."
 font_size = 8
@@ -152,6 +170,8 @@ toggleable = true
 [node name="LabelVoiceAssist" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.12, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "Voice-
 Assist:"
 font_size = 18

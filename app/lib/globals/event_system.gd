@@ -96,8 +96,10 @@ func _handle_focus(target: Variant, event: EventBubble):
 	var event_focus = EventFocus.new()
 	event_focus.previous_target = _active_node
 	event_focus.target = target
+	event_focus.bubbling = false
 
 	if _active_node != null&&_active_node.has_method(FN_PREFIX + "focus_out"):
+		emit("focus_out", event_focus)
 		_active_node.call(FN_PREFIX + "focus_out", event_focus)
 		on_focus_out.emit(event_focus)
 

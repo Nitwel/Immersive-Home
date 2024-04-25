@@ -26,7 +26,7 @@ size = Vector2(0.42, 0.32)
 script = ExtResource("1_3a1oa")
 
 [node name="Rooms" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14, -0.13, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.14, -0.15, 0)
 
 [node name="Button" parent="." instance=ExtResource("1_y3lty")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.28, 0)
@@ -40,7 +40,6 @@ disabled = true
 
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
-visible = false
 material_override = SubResource("ShaderMaterial_dah0r")
 mesh = SubResource("QuadMesh_fq44b")
 skeleton = NodePath("../..")

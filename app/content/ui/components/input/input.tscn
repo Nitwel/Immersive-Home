@@ -70,15 +70,15 @@ _data = {
 "blink": SubResource("Animation_8ny1h")
 }
 
-[node name="Input" type="Node3D"]
+[node name="Input" type="Node3D" groups=["ui_focus"]]
 script = ExtResource("1_uml3t")
 text = "Example Text"
 size = Vector3(0.15, 0.03, 0.01)
 
-[node name="Body" type="StaticBody3D" parent="." groups=["ui_focus"]]
+[node name="Body" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
 collision_layer = 6
-collision_mask = 0
+collision_mask = 6
 
 [node name="Box" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)

@@ -31,6 +31,7 @@ lower_fade = 0.000919435
 [node name="CursorSprite" type="Sprite3D" parent="Cursor"]
 transform = Transform3D(0.03, 2.71051e-20, 0, -5.42101e-20, 0.03, -2.03288e-21, -2.46521e-33, 2.5411e-21, 0.03, 0, 0, 0)
 pixel_size = 0.001
+render_priority = 90
 texture = ExtResource("1_2f2iv")
 
 [node name="Ray" type="MeshInstance3D" parent="."]

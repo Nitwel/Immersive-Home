@@ -29,7 +29,7 @@ var text_handler = preload ("res://content/ui/components/input/text_handler.gd")
 			label.modulate = Color(0.7, 0.7, 0.7)
 			add_to_group("ui_focus_skip")
 			animation.stop()
-			caret.hide()
+			caret.visible = false
 		else:
 			label.modulate = Color(1, 1, 1)
 			remove_from_group("ui_focus_skip")
@@ -110,7 +110,7 @@ func _on_focus_in(_event):
 
 	caret.position.x = text_handler.get_caret_position()
 	label.text = text_handler.get_display_text()
-	caret.show()
+	caret.visible = true
 	animation.play("blink")
 
 func update_caret_position(event):
@@ -135,7 +135,7 @@ func _on_focus_out(_event):
 		return
 
 	animation.stop()
-	caret.hide()
+	caret.visible = false
 
 func _draw_debug_text_gaps():
 	if text_handler.gap_offsets == null:
