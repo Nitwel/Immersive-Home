@@ -51,7 +51,7 @@ transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 
 shape = SubResource("CapsuleShape3D_dopke")
 
 [node name="ThumbTip" type="BoneAttachment3D" parent="XRHandLeft"]
-transform = Transform3D(0.937246, 0.0284254, -0.347508, 0.0184905, 0.991216, 0.130949, 0.348178, -0.129157, 0.928487, 0.0498668, 0.0560917, -0.112777)
+transform = Transform3D(0.937246, 0.0284254, -0.347508, 0.0184905, 0.991216, 0.130949, 0.348178, -0.129157, 0.928488, 0.0498668, 0.0560917, -0.112777)
 bone_name = "Thumb_Tip_L"
 bone_idx = 4
 use_external_skeleton = true
@@ -61,7 +61,7 @@ external_skeleton = NodePath("../left_hand/Armature_001/Skeleton3D")
 gizmo_extents = 0.02
 
 [node name="MiddleTip" type="BoneAttachment3D" parent="XRHandLeft"]
-transform = Transform3D(0.0812012, -0.650531, -0.755125, 0.996576, 0.064817, 0.051326, 0.0155558, -0.756708, 0.653567, 0.032112, 0.00654224, -0.171612)
+transform = Transform3D(0.0812012, -0.650531, -0.755125, 0.996577, 0.064817, 0.051326, 0.0155558, -0.756708, 0.653568, 0.032112, 0.00654224, -0.171612)
 bone_name = "Middle_Tip_L"
 bone_idx = 14
 use_external_skeleton = true
@@ -84,7 +84,7 @@ shape = SubResource("CapsuleShape3D_dopke")
 transform = Transform3D(-0.707107, -8.74228e-08, -0.707107, 6.18173e-08, -1, 6.18173e-08, -0.707107, -8.29045e-24, 0.707107, 0.01, -0.04, -5.58794e-09)
 
 [node name="QuickActions" type="Node3D" parent="XRHandLeft/Palm"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+transform = Transform3D(0.5, -4.47035e-08, -4.37114e-08, 4.37114e-08, -2.18557e-08, 0.5, -4.47035e-08, -0.5, -2.18557e-08, 0.005, 0, 0.005)
 
 [node name="MiniView" parent="XRHandLeft/Palm/QuickActions" instance=ExtResource("3_te2p8")]
 transform = Transform3D(1, -3.55271e-15, -4.33681e-19, 3.55271e-15, 1, 3.5525e-15, -4.33681e-19, -3.55291e-15, 1, -0.0600001, 0, 0)
@@ -112,7 +112,7 @@ transform = Transform3D(1, 0, 4.7579e-13, 0, 1, 0, -1.34149e-12, 1.77636e-15, 1,
 material_override = SubResource("StandardMaterial3D_n27ki")
 
 [node name="IndexTip" type="BoneAttachment3D" parent="XRHandRight"]
-transform = Transform3D(0.19221, 0.669966, 0.717078, -0.091543, -0.715277, 0.69282, 0.977075, -0.19881, -0.0761527, -0.0345978, -0.164767, -0.0355401)
+transform = Transform3D(0.19221, 0.669966, 0.717079, -0.091543, -0.715277, 0.69282, 0.977075, -0.19881, -0.0761527, -0.0345977, -0.164767, -0.0355401)
 bone_name = "Index_Tip_R"
 bone_idx = 9
 use_external_skeleton = true
@@ -142,7 +142,7 @@ external_skeleton = NodePath("../right_hand/Armature/Skeleton3D")
 gizmo_extents = 0.02
 
 [node name="MiddleTip" type="BoneAttachment3D" parent="XRHandRight"]
-transform = Transform3D(0.0812011, 0.650531, 0.755126, -0.0155557, -0.756708, 0.653568, 0.996576, -0.0648169, -0.0513262, -0.032112, -0.171612, -0.00654216)
+transform = Transform3D(0.0812011, 0.650531, 0.755126, -0.0155557, -0.756709, 0.653568, 0.996576, -0.0648169, -0.0513262, -0.032112, -0.171612, -0.00654216)
 bone_name = "Middle_Tip_R"
 bone_idx = 14
 use_external_skeleton = true

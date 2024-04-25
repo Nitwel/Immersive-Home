@@ -18,13 +18,11 @@ sky_material = ExtResource("5_wgwf8")
 
 [sub_resource type="Environment" id="Environment_7ghp0"]
 background_mode = 1
-background_color = Color(1, 1, 1, 0)
+background_color = Color(0, 0, 0, 0)
 background_energy_multiplier = 0.0
 sky = SubResource("Sky_vhymk")
 ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
-ambient_light_energy = 0.5
-reflected_light_source = 1
 ssao_radius = 6.52
 ssao_intensity = 5.68
 
