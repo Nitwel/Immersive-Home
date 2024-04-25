@@ -84,6 +84,6 @@ transform = Transform3D(0.5, 5.24309e-05, 0.000144384, -0.000139169, 0.353553, 0
 [node name="House" parent="." instance=ExtResource("9_np6mw")]
 
 [node name="Onboarding" parent="." instance=ExtResource("12_uq2nj")]
-transform = Transform3D(1, -9.48098e-12, 0, 9.48098e-12, 1, 0, 0, 0, 1, -0.529594, 0.820154, -0.600147)
+transform = Transform3D(1, -1.39636e-11, 0, 4.42413e-11, 1, 0, 0, 0, 1, -0.576793, 0.820168, -0.60016)
 
 [editable path="XROrigin3D/XRControllerLeft"]

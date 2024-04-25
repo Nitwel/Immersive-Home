@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bbuq4wn7e5o2q" path="res://content/system/house/mini/temp_gradient.tres" id="2_3lwi8"]
 
 [resource]
-render_priority = 0
+render_priority = 10
 shader = ExtResource("1_sbr3e")
 shader_parameter/data = PackedFloat32Array()
 shader_parameter/data_size = 0
