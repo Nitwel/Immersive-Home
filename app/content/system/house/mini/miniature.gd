@@ -38,6 +38,8 @@ func _ready():
 	wall_material.set_shader_parameter("data", [])
 	wall_material.set_shader_parameter("data_size", 0)
 
+	entity_select.house_small = small
+
 	if Store.house.is_loaded() == false:
 		await Store.house.on_loaded
 

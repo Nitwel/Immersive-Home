@@ -8,10 +8,14 @@ signal on_moved()
 @export var restricted: bool = false
 @export var restrict_movement: Callable
 @export var lock_rotation: bool = false
+@export var disabled: bool = false
 var hit_node := Node3D.new()
 var initiator = null
 
 func _on_grab_down(event: EventPointer):
+	if disabled:
+		return
+
 	if restricted&&event.target != get_parent():
 		return
 
