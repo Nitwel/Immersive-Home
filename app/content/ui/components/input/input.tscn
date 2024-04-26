@@ -1,26 +1,26 @@
-[gd_scene load_steps=12 format=3 uid="uid://blrhy2uccrdn4"]
+[gd_scene load_steps=13 format=3 uid="uid://blrhy2uccrdn4"]
 
 [ext_resource type="Script" path="res://content/ui/components/input/input.gd" id="1_uml3t"]
+[ext_resource type="Script" path="res://content/ui/components/panel/panel.gd" id="3_3bvrj"]
 [ext_resource type="FontVariation" uid="uid://d2ofyimg5s65q" path="res://assets/fonts/ui_font_500.tres" id="3_ij5fh"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="3_nl02b"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_nl02b"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_c5qdm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ioqea"]
 resource_local_to_scene = true
-render_priority = 20
+render_priority = 10
 shader = ExtResource("3_nl02b")
 shader_parameter/color = Color(1, 1, 1, 0.3)
 shader_parameter/border_color = Color(1, 1, 1, 1)
 shader_parameter/edge_color = Color(0, 0, 0, 1)
-shader_parameter/size = Vector2(0.15, 0.03)
-shader_parameter/border_size = 0.001
-shader_parameter/border_fade_in = 0.005
+shader_parameter/size = Vector2(3.75, 0.75)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
 shader_parameter/border_fade_out = 0.0
-shader_parameter/corner_radius = 0.01
+shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_5rrua"]
-resource_local_to_scene = true
+[sub_resource type="QuadMesh" id="QuadMesh_qgsvu"]
 size = Vector2(0.15, 0.03)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x4yp8"]
@@ -80,10 +80,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
 collision_layer = 6
 collision_mask = 6
 
-[node name="Box" type="MeshInstance3D" parent="Body"]
+[node name="Panel3D" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
-material_override = SubResource("ShaderMaterial_c5qdm")
-mesh = SubResource("QuadMesh_5rrua")
+material_override = SubResource("ShaderMaterial_ioqea")
+mesh = SubResource("QuadMesh_qgsvu")
+script = ExtResource("3_3bvrj")
+size = Vector2(0.15, 0.03)
 
 [node name="Collision" type="CollisionShape3D" parent="Body"]
 shape = SubResource("BoxShape3D_x4yp8")

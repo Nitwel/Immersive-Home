@@ -12,7 +12,7 @@ const ECHO_WAIT_INITIAL = 0.5
 const ECHO_WAIT_REPEAT = 0.1
 
 @onready var body: StaticBody3D = $Body
-@onready var mesh: MeshInstance3D = $Body/MeshInstance3D
+@onready var panel: Panel3D = $Body/Panel3D
 @onready var collision: CollisionShape3D = $Body/CollisionShape3D
 @onready var label_node: Label3D = $Body/Label
 @onready var finger_area: Area3D = $FingerArea
@@ -59,7 +59,14 @@ const ECHO_WAIT_REPEAT = 0.1
 @export var toggleable: bool = false
 @export var disabled: bool = false
 @export var echo: bool = false
-@export var initial_active: bool = false
+@export var initial_active: bool = false:
+	set(value):
+		if initial_active == value:
+			return
+			
+		initial_active = value
+		if !is_inside_tree(): return
+		update_animation(1.0 if initial_active else 0.0)
 
 var active: bool = false:
 	set(value):
@@ -69,6 +76,7 @@ var active: bool = false:
 		on_toggled.emit(value)
 		active = value
 		if !is_inside_tree(): return
+		panel.active = active
 		update_animation(1.0 if active else 0.0)
 	
 var echo_timer: Timer = null
@@ -138,6 +146,15 @@ func _on_press_up(event):
 		active = false
 		on_button_up.emit()
 
+func _on_ray_enter(_event: EventPointer):
+	if disabled:
+		return
+
+	panel.hovering = true
+
+func _on_ray_leave(_event: EventPointer):
+	panel.hovering = false
+
 func _on_touch_enter(event: EventTouch):
 	if event.target != finger_area:
 		return
@@ -203,11 +220,10 @@ func _update():
 	finger_area.position = Vector3(0, 0, -0.015)
 	touch.position = Vector3(0, 0, size.z / 2)
 
-	mesh.mesh.size = Vector2(size.x, size.y)
-	mesh.material_override.set_shader_parameter("size", Vector2(size.x, size.y) * 25)
+	panel.size = Vector2(size.x, size.y)
+	panel.position = Vector3(0, 0, size.z / 2)
 	collision.shape.size = Vector3(size.x, size.y, size.z)
 	label_node.width = size.x / label_node.pixel_size
-	mesh.position = Vector3(0, 0, size.z / 2)
 	label_node.position = Vector3(0, 0, size.z / 2 + 0.001)
 
 	finger_area_collision.shape.size = Vector3(size.x, size.y, 0.03)

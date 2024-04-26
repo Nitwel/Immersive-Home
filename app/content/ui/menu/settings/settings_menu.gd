@@ -12,8 +12,10 @@ const credits_scene = preload ("./credits.tscn")
 @onready var clear_save = $Content/ClearSave
 @onready var background = $Background
 @onready var voice_assist = $Content/VoiceAssist
+@onready var version_label = $Content/LabelVersion
 
 func _ready():
+	_load_game_version()
 	var settings_store = Store.settings.state
 	
 	background.visible = false
@@ -96,3 +98,9 @@ func _ready():
 
 	R.bind(voice_assist, "label", button_label)
 	R.bind(voice_assist, "active", settings_store, "voice_assistant")
+
+func _load_game_version():
+	var presets = ConfigFile.new()
+	presets.load("res://export_presets.cfg")
+
+	version_label.text = "%s (%s)" % [presets.get_value("preset.1.options", "version/name", "v0.0.0"), presets.get_value("preset.1.options", "version/code", 0)]

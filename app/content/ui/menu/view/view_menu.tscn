@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://content/ui/menu/view/view_menu.gd" id="1_hxajx"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_qan1b"]
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="4_d3xhb"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="5_cjxo5"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="5_cjxo5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e5hvo"]
 render_priority = 10

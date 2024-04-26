@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_xdpwr"]
 [ext_resource type="Script" path="res://content/ui/components/grid_container/grid_container.gd" id="3_mx544"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_86fct"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="5_0dbg6"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="5_0dbg6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k5ib7"]
 size = Vector3(0.86, 0.27, 0.02)

@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://pk5k1q8bx0rj"]
 
 [ext_resource type="Script" path="res://content/ui/components/slider/slider.gd" id="1_ylune"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="2_by0d8"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_by0d8"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h1mn1"]
 resource_local_to_scene = true

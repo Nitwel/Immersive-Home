@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="3_qmg6q"]
 [ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="4_q3x6k"]
 [ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="5_eiwd4"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="6_mubnp"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="6_mubnp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3qdps"]
 size = Vector3(0.07, 0.02, 0.01)
@@ -179,6 +179,16 @@ Assist:"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
+
+[node name="LabelVersion" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.41, -0.31, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "v0.0.0"
+font_size = 10
+outline_size = 0
+horizontal_alignment = 2
 
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)

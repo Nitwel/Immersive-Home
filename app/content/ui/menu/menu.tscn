@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_8coxu"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="3_htaoi"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_htaoi"]
 [ext_resource type="Script" path="res://content/ui/components/tabs/tabs.gd" id="4_eavfx"]
 [ext_resource type="PackedScene" uid="uid://crrb0l3ekuotj" path="res://content/ui/menu/edit/edit_menu.tscn" id="4_r2raj"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_w4i01"]

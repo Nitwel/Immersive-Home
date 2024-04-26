@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://bqj7qwj5mgd30"]
 
 [ext_resource type="Script" path="res://content/ui/components/notification/notification.gd" id="1_yw3yb"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="2_b68od"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_b68od"]
 [ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="3_1ljpc"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_ocg5j"]
 
@@ -191,7 +191,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0, 0.001)
 pixel_size = 0.001
 render_priority = 15
 outline_render_priority = 14
-text = "Example"
 font_size = 10
 outline_size = 0
 horizontal_alignment = 0

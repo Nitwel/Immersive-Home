@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dd71loi64gnmp" path="res://content/ui/menu/room/views/overview.tscn" id="6_206ad"]
 [ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="6_ba00g"]
 [ext_resource type="PackedScene" uid="uid://bpta22fahai46" path="res://content/ui/menu/room/views/rooms.tscn" id="7_2f8e0"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="7_bxp1w"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="7_bxp1w"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2asng"]
 render_priority = -3

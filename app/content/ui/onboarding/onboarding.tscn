@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://bhyddd1f0ry1x"]
 
 [ext_resource type="Script" path="res://content/ui/onboarding/onboarding.gd" id="1_k4yvw"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="2_87aan"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_87aan"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_hlpow"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nfwtf"]

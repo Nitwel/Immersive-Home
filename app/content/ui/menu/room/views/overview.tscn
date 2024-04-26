@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_fteh8"]
 [ext_resource type="Script" path="res://content/ui/menu/room/views/overview.gd" id="1_jesad"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="3_2yl2s"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_2yl2s"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n3lbn"]
 render_priority = -3

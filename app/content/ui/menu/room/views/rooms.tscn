@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://content/ui/menu/room/views/rooms.gd" id="1_3a1oa"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_y3lty"]
 [ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="2_hstw7"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="4_jx6i3"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="4_jx6i3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dah0r"]
 render_priority = -3

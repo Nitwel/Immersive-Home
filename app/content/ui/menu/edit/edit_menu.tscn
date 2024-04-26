@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://content/ui/components/grid_container/grid_container.gd" id="3_0xvyw"]
 [ext_resource type="PackedScene" uid="uid://bef3gamrm6at2" path="res://content/ui/components/pagination/pagination.tscn" id="4_4jiu6"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_lpv7m"]
-[ext_resource type="Shader" path="res://assets/materials/glass.gdshader" id="4_xunmy"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="4_xunmy"]
 [ext_resource type="Script" path="res://content/ui/menu/edit/entities.gd" id="5_t34xe"]
 [ext_resource type="Script" path="res://content/ui/components/flex_container/flex_container.gd" id="6_cr6p6"]
 

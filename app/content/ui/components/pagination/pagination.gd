@@ -7,9 +7,6 @@ signal on_page_changed(page: int)
 const ButtonScene = preload ("res://content/ui/components/button/button.tscn")
 const LabelScene = preload ("res://content/ui/components/label_container/label_container.tscn")
 
-const ButtonMaterial = preload ("button.material")
-const ButtonActiveMaterial = preload ("button_active.material")
-
 @onready var prev_button = $Prev
 @onready var next_button = $Next
 
@@ -83,6 +80,7 @@ func _update():
 		
 		var button = ButtonScene.instantiate()
 		button.size = Vector3(size.y, size.y, size.z)
+		button.toggleable = true
 
 		if i == 0:
 			button.label = "1"
@@ -95,15 +93,17 @@ func _update():
 		else:
 			button.label = str(clamp(page + 1, 3, pages - 3) - center_pos + i + 1)
 
-		button.on_button_up.connect(func():
+		button.on_button_down.connect(func():
 			page=int(button.label) - 1
 			on_page_changed.emit(page)
 		)
 
+		if (int(button.label) - 1) == page:
+			button.initial_active = true
+			button.disabled = true
+
 		add_child(button)
 		move_child(button, -2)
-
-		button.get_node("Body/MeshInstance3D").material_override = ButtonActiveMaterial if (int(button.label) - 1) == page else ButtonMaterial
 
 	super._update()
 	

@@ -5,7 +5,7 @@ class_name Input3D
 var text_handler = preload ("res://content/ui/components/input/text_handler.gd").new()
 
 @onready var caret: MeshInstance3D = $Body/Label/Caret
-@onready var mesh_box: MeshInstance3D = $Body/Box
+@onready var panel: Panel3D = $Body/Panel3D
 @onready var body: StaticBody3D = $Body
 @onready var collision: CollisionShape3D = $Body/Collision
 @onready var animation: AnimationPlayer = $AnimationPlayer
@@ -104,6 +104,15 @@ func _on_press_move(event):
 	caret.position.x = text_handler.get_caret_position()
 	label.text = text_handler.get_display_text()
 
+func _on_ray_enter(_event: EventPointer):
+	if disabled:
+		return
+
+	panel.hovering = true
+
+func _on_ray_leave(_event: EventPointer):
+	panel.hovering = false
+
 func _on_focus_in(_event):
 	if disabled:
 		return
@@ -111,6 +120,7 @@ func _on_focus_in(_event):
 	caret.position.x = text_handler.get_caret_position()
 	label.text = text_handler.get_display_text()
 	caret.visible = true
+	panel.active = true
 	animation.play("blink")
 
 func update_caret_position(event):
@@ -136,6 +146,7 @@ func _on_focus_out(_event):
 
 	animation.stop()
 	caret.visible = false
+	panel.active = false
 
 func _draw_debug_text_gaps():
 	if text_handler.gap_offsets == null:
@@ -151,9 +162,8 @@ func _draw_debug_text_gaps():
 
 func _update():
 	text_handler.width = size.x
-	mesh_box.mesh.size = Vector2(size.x, size.y)
-	mesh_box.position.z = size.z / 2
-	mesh_box.material_override.set_shader_parameter("size", mesh_box.mesh.size)
+	panel.size = Vector2(size.x, size.y)
+	panel.position.z = size.z / 2
 	collision.shape.size = size
 	label.position = Vector3( - size.x / 2 + 0.002, 0, size.z / 2)
 	label.text = text_handler.get_display_text()

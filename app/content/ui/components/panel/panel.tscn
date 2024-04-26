@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://dnam3fe36gg62"]
+
+[ext_resource type="Script" path="res://content/ui/components/panel/panel.gd" id="1_2jq4a"]
+[ext_resource type="Material" uid="uid://crycqex1ucj04" path="res://content/ui/components/panel/panel.material" id="1_8jj0l"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_vflbj"]
+size = Vector2(0.04, 0.04)
+
+[node name="Panel" type="MeshInstance3D"]
+material_override = ExtResource("1_8jj0l")
+mesh = SubResource("QuadMesh_vflbj")
+script = ExtResource("1_2jq4a")
+size = Vector2(0.04, 0.04)
+corner_radius = null
+border = null
