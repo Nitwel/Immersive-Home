@@ -6,26 +6,40 @@ const ButtonScene = preload ("res://content/ui/components/button/button.tscn")
 
 @onready var grid_container = $GridContainer3D
 @onready var pagination = $Pagination3D
+@onready var search_input: Input3D = $Input
 
 var page = R.state(0)
 var page_size = 28.0
+var search = R.state("")
 
 func _ready():
+	var devices = R.computed(func(_arg):
+		var devices=Store.devices.state.devices
+
+		if search.value != "":
+			return devices.filter(func(device):
+				var info=device.values()[0]
+				return info["name"].to_lower().find(search.value.to_lower()) != - 1
+			)
+
+		return devices
+	)
 
 	var pages = R.computed(func(_arg):
-		var devices=Store.devices.state.devices
-		
-		return ceil(devices.size() / page_size)
+		return ceil(devices.value.size() / page_size)
 	)
 
 	var visible_devices = R.computed(func(_arg):
-		var devices=Store.devices.state.devices
-
-		return devices.slice(page.value * page_size, page.value * page_size + page_size)
+		return devices.value.slice(page.value * page_size, page.value * page_size + page_size)
 	)
 
 	R.bind(pagination, "pages", pages)
 	R.bind(pagination, "page", page, pagination.on_page_changed)
+	R.bind(search_input, "text", search, search_input.on_text_changed)
+
+	search_input.on_text_changed.connect(func(_arg):
+		page.value=0
+	)
 
 	R.effect(func(_arg):
 		for child in grid_container.get_children():

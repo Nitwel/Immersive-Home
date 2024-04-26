@@ -1,13 +1,15 @@
-[gd_scene load_steps=11 format=3 uid="uid://crrb0l3ekuotj"]
+[gd_scene load_steps=13 format=3 uid="uid://crrb0l3ekuotj"]
 
 [ext_resource type="Script" path="res://content/ui/menu/edit/edit_menu.gd" id="1_34cbn"]
 [ext_resource type="Script" path="res://content/ui/menu/edit/devices.gd" id="2_rkvf4"]
 [ext_resource type="Script" path="res://content/ui/components/grid_container/grid_container.gd" id="3_0xvyw"]
 [ext_resource type="PackedScene" uid="uid://bef3gamrm6at2" path="res://content/ui/components/pagination/pagination.tscn" id="4_4jiu6"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_lpv7m"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="4_t5uud"]
 [ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="4_xunmy"]
 [ext_resource type="Script" path="res://content/ui/menu/edit/entities.gd" id="5_t34xe"]
 [ext_resource type="Script" path="res://content/ui/components/flex_container/flex_container.gd" id="6_cr6p6"]
+[ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="6_evh58"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hstwo"]
 render_priority = -3
@@ -55,6 +57,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.29, 0)
 pages = 10
 size = Vector3(9.92, 0.03, 0.01)
 
+[node name="LabelSearch" type="Label3D" parent="Devices"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, -0.03, 0)
+pixel_size = 0.001
+double_sided = false
+render_priority = 15
+outline_render_priority = 14
+text = "search"
+font = ExtResource("4_t5uud")
+font_size = 24
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="Input" parent="Devices" instance=ExtResource("6_evh58")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.03, 0)
+placeholder = "Search..."
+text = ""
+size = Vector3(0.14, 0.03, 0.01)
+
 [node name="Entities" type="Node3D" parent="."]
 script = ExtResource("5_t34xe")
 
@@ -87,9 +107,26 @@ label = "arrow_back"
 icon = true
 size = Vector3(0.03, 0.03, 0.01)
 
+[node name="LabelSearch" type="Label3D" parent="Entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, -0.03, 0)
+pixel_size = 0.001
+double_sided = false
+render_priority = 15
+outline_render_priority = 14
+text = "search"
+font = ExtResource("4_t5uud")
+font_size = 24
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="Input" parent="Entities" instance=ExtResource("6_evh58")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.03, 0)
+placeholder = "Search..."
+text = ""
+size = Vector3(0.14, 0.03, 0.01)
+
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
-visible = false
 material_override = SubResource("ShaderMaterial_hstwo")
 mesh = SubResource("QuadMesh_4pj6f")
 skeleton = NodePath("../..")

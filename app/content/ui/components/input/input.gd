@@ -4,14 +4,24 @@ class_name Input3D
 
 var text_handler = preload ("res://content/ui/components/input/text_handler.gd").new()
 
+signal on_text_changed(text: String)
+
 @onready var caret: MeshInstance3D = $Body/Label/Caret
 @onready var panel: Panel3D = $Body/Panel3D
 @onready var body: StaticBody3D = $Body
 @onready var collision: CollisionShape3D = $Body/Collision
 @onready var animation: AnimationPlayer = $AnimationPlayer
 @onready var label: Label3D = $Body/Label
+@onready var placeholder_label: Label3D = $Body/Placeholder
+
+@export var placeholder: String = "":
+	set(value):
+		placeholder = value
+		if !is_inside_tree(): return
+
+		placeholder_label.text = placeholder
 	
-@export var text: String:
+@export var text: String = "":
 	set(value):
 		text = value
 		if !is_inside_tree(): return
@@ -19,6 +29,7 @@ var text_handler = preload ("res://content/ui/components/input/text_handler.gd")
 		var focused = Engine.is_editor_hint() == false&&EventSystem.is_focused(self) == false
 		text_handler.set_text(text, focused)
 		label.text = text_handler.get_display_text()
+		_update_placeholder()
 
 @export var disabled: bool = false:
 	set(value):
@@ -41,7 +52,7 @@ var input_plane = Plane(Vector3.UP, Vector3.ZERO)
 func _ready():
 	text_handler.label = label
 
-	Update.props(self, ["text", "disabled", "width"])
+	Update.props(self, ["text", "disabled", "width", "placeholder"])
 	_update()
 
 	if Engine.is_editor_hint():
@@ -54,6 +65,7 @@ func _ready():
 		text=EventKey.key_to_string(event.key, event.shift_pressed, text.substr(0, text_handler.caret_position)) + text.substr(text_handler.caret_position, text.length())
 		caret.position.x=text_handler.get_caret_position()
 		label.text=text_handler.get_display_text()
+		on_text_changed.emit(text)
 	)
 
 func _input(event):
@@ -68,6 +80,7 @@ func _input(event):
 		if keyboard_input:
 			text = EventKey.key_to_string(event.keycode, event.shift_pressed, text.substr(0, text_handler.caret_position)) + text.substr(text_handler.caret_position, text.length())
 			caret.position.x = text_handler.get_caret_position()
+			on_text_changed.emit(text)
 		
 func _process(_delta):
 	if Engine.is_editor_hint():
@@ -122,6 +135,7 @@ func _on_focus_in(_event):
 	caret.visible = true
 	panel.active = true
 	animation.play("blink")
+	_update_placeholder()
 
 func update_caret_position(event):
 	var ray_pos = event.ray.global_position
@@ -147,6 +161,7 @@ func _on_focus_out(_event):
 	animation.stop()
 	caret.visible = false
 	panel.active = false
+	_update_placeholder()
 
 func _draw_debug_text_gaps():
 	if text_handler.gap_offsets == null:
@@ -160,6 +175,12 @@ func _draw_debug_text_gaps():
 			Color(1, 0, 0) if i != text_handler.overflow_index else Color(0, 1, 0)
 		)
 
+func _update_placeholder():
+	var show_placeholder = text == ""&&panel.active == false
+
+	placeholder_label.visible = show_placeholder
+	label.visible = !show_placeholder
+
 func _update():
 	text_handler.width = size.x
 	panel.size = Vector2(size.x, size.y)
@@ -167,4 +188,5 @@ func _update():
 	collision.shape.size = size
 	label.position = Vector3( - size.x / 2 + 0.002, 0, size.z / 2)
 	label.text = text_handler.get_display_text()
+	placeholder_label.position = label.position
 	body.position = Vector3(0, 0, size.z / 2)
