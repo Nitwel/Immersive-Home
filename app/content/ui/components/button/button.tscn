@@ -1,10 +1,25 @@
-[gd_scene load_steps=7 format=3 uid="uid://bsjqdvkt0u87c"]
+[gd_scene load_steps=8 format=3 uid="uid://bsjqdvkt0u87c"]
 
 [ext_resource type="Script" path="res://content/ui/components/button/button.gd" id="1_74x7g"]
-[ext_resource type="Material" uid="uid://crycqex1ucj04" path="res://content/ui/components/panel/panel.material" id="2_28wsr"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_db5by"]
 [ext_resource type="Script" path="res://content/ui/components/panel/panel.gd" id="3_skm86"]
 
-[sub_resource type="QuadMesh" id="QuadMesh_bu2il"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tulmb"]
+resource_local_to_scene = true
+render_priority = 10
+shader = ExtResource("2_db5by")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(1, 1)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.2
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_hvywi"]
 size = Vector2(0.04, 0.04)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xwopm"]
@@ -27,8 +42,8 @@ collision_mask = 0
 
 [node name="Panel3D" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
-material_override = ExtResource("2_28wsr")
-mesh = SubResource("QuadMesh_bu2il")
+material_override = SubResource("ShaderMaterial_tulmb")
+mesh = SubResource("QuadMesh_hvywi")
 skeleton = NodePath("../..")
 script = ExtResource("3_skm86")
 size = Vector2(0.04, 0.04)

@@ -9,7 +9,6 @@ const temperature_gradient = preload ("./temp_gradient.tres")
 @onready var small_node = $Body/Small
 @onready var model = $Body/Small/Model
 @onready var collision_shape = $Body/CollisionShape3D
-@onready var toggle_heatmap = $Body/HeatmapButton
 @onready var entity_select = $Body/EntitySelect
 
 enum HeatmapType {

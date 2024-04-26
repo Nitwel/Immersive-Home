@@ -5,7 +5,7 @@
 [ext_resource type="FontVariation" uid="uid://d2ofyimg5s65q" path="res://assets/fonts/ui_font_500.tres" id="3_ij5fh"]
 [ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_nl02b"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ioqea"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_exbug"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("3_nl02b")
@@ -20,7 +20,7 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_qgsvu"]
+[sub_resource type="QuadMesh" id="QuadMesh_lemta"]
 size = Vector2(0.15, 0.03)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x4yp8"]
@@ -82,8 +82,8 @@ collision_mask = 6
 
 [node name="Panel3D" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
-material_override = SubResource("ShaderMaterial_ioqea")
-mesh = SubResource("QuadMesh_qgsvu")
+material_override = SubResource("ShaderMaterial_exbug")
+mesh = SubResource("QuadMesh_lemta")
 script = ExtResource("3_3bvrj")
 size = Vector2(0.15, 0.03)
 
