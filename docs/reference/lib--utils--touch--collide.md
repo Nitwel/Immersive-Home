@@ -7,22 +7,25 @@ Calculates collision for fingers and FingerAreas
 
 ## Properties
 
-| Name                                   | Type                                                                            | Default |
-| -------------------------------------- | ------------------------------------------------------------------------------- | ------- |
-| [bodies_entered](#prop-bodies-entered) | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)       |         |
-| [finger_areas](#prop-finger-areas)     | [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) |         |
-| [hand_left](#prop-hand-left)           | [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html)         |         |
-| [hand_right](#prop-hand-right)         | [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html)         |         |
+| Name                                     | Type                                                                                    | Default |
+| ---------------------------------------- | --------------------------------------------------------------------------------------- | ------- |
+| [hand_left](#prop-hand-left)             | [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html)                 |         |
+| [hand_left_mesh](#prop-hand-left-mesh)   | [MeshInstance3D](https://docs.godotengine.org/de/4.x/classes/class_meshinstance3d.html) |         |
+| [hand_right](#prop-hand-right)           | [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html)                 |         |
+| [hand_right_mesh](#prop-hand-right-mesh) | [MeshInstance3D](https://docs.godotengine.org/de/4.x/classes/class_meshinstance3d.html) |         |
+| [tip_left](#prop-tip-left)               | [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html)                 |         |
+| [tip_left_body](#prop-tip-left-body)     | [RigidBody3D](https://docs.godotengine.org/de/4.x/classes/class_rigidbody3d.html)       |         |
+| [tip_right](#prop-tip-right)             | [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html)                 |         |
+| [tip_right_body](#prop-tip-right-body)   | [RigidBody3D](https://docs.godotengine.org/de/4.x/classes/class_rigidbody3d.html)       |         |
 
 ## Methods
 
-| Returns | Name                                                                                                                                                                                                                                                                                                       |
-| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| void    | [_init](#-init) ( hand_left: [OpenXRHand](https://docs.godotengine.org/de/4.x/classes/class_openxrhand.html), hand_right: [OpenXRHand](https://docs.godotengine.org/de/4.x/classes/class_openxrhand.html), finger_areas: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) ) |
-| void    | [_on_body_entered](#-on-body-entered) ( finger_type: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), body: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )                                                                                          |
-| void    | [_on_body_exited](#-on-body-exited) ( finger_type: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), body: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )                                                                                            |
-| void    | [_physics_process](#-physics-process) ( _delta: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )                                                                                                                                                                                |
-| void    | [_ready](#-ready) (  )                                                                                                                                                                                                                                                                                     |
+| Returns | Name                                                                                                                                                                                                                                                                                                                                                                               |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| void    | [_init](#-init) ( hand_left: [OpenXRHand](https://docs.godotengine.org/de/4.x/classes/class_openxrhand.html), hand_right: [OpenXRHand](https://docs.godotengine.org/de/4.x/classes/class_openxrhand.html), tip_left: [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html), tip_right: [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html) ) |
+| void    | [_move_tip_rigidbody_to_bone](#-move-tip-rigidbody-to-bone) ( tip_rigidbody: [RigidBody3D](https://docs.godotengine.org/de/4.x/classes/class_rigidbody3d.html), tip_bone: [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html) )                                                                                                                                |
+| void    | [_physics_process](#-physics-process) ( _delta: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )                                                                                                                                                                                                                                                        |
+| void    | [_ready](#-ready) (  )                                                                                                                                                                                                                                                                                                                                                             |
 
 
 
@@ -34,17 +37,17 @@ Calculates collision for fingers and FingerAreas
 
 No description provided yet.
 
+### TipCollider = `<Object>` {#const-TipCollider}
+
+No description provided yet.
+
 ## Property Descriptions
 
-### bodies_entered: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#prop-bodies-entered}
-
-Record<TouchBody3D, Array<Finger.Type>>
-
-### finger_areas: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) {#prop-finger-areas}
-
-Record<Finger.Type, Area3D>
-
 ### hand_left: [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html) {#prop-hand-left}
+
+No description provided yet.
+
+### hand_left_mesh: [MeshInstance3D](https://docs.godotengine.org/de/4.x/classes/class_meshinstance3d.html) {#prop-hand-left-mesh}
 
 No description provided yet.
 
@@ -52,17 +55,33 @@ No description provided yet.
 
 No description provided yet.
 
+### hand_right_mesh: [MeshInstance3D](https://docs.godotengine.org/de/4.x/classes/class_meshinstance3d.html) {#prop-hand-right-mesh}
+
+No description provided yet.
+
+### tip_left: [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html) {#prop-tip-left}
+
+No description provided yet.
+
+### tip_left_body: [RigidBody3D](https://docs.godotengine.org/de/4.x/classes/class_rigidbody3d.html) {#prop-tip-left-body}
+
+No description provided yet.
+
+### tip_right: [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html) {#prop-tip-right}
+
+No description provided yet.
+
+### tip_right_body: [RigidBody3D](https://docs.godotengine.org/de/4.x/classes/class_rigidbody3d.html) {#prop-tip-right-body}
+
+No description provided yet.
+
 ## Method Descriptions
 
-###  _init (hand_left: [OpenXRHand](https://docs.godotengine.org/de/4.x/classes/class_openxrhand.html) , hand_right: [OpenXRHand](https://docs.godotengine.org/de/4.x/classes/class_openxrhand.html) , finger_areas: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html)  ) -> void {#-init}
+###  _init (hand_left: [OpenXRHand](https://docs.godotengine.org/de/4.x/classes/class_openxrhand.html) , hand_right: [OpenXRHand](https://docs.godotengine.org/de/4.x/classes/class_openxrhand.html) , tip_left: [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html) , tip_right: [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html)  ) -> void {#-init}
 
 No description provided yet.
 
-###  _on_body_entered (finger_type: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , body: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#-on-body-entered}
-
-No description provided yet.
-
-###  _on_body_exited (finger_type: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , body: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#-on-body-exited}
+###  _move_tip_rigidbody_to_bone (tip_rigidbody: [RigidBody3D](https://docs.godotengine.org/de/4.x/classes/class_rigidbody3d.html) , tip_bone: [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html)  ) -> void {#-move-tip-rigidbody-to-bone}
 
 No description provided yet.
 

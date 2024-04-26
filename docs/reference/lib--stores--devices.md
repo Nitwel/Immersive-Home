@@ -9,6 +9,7 @@
 
 | Returns | Name                 |
 | ------- | -------------------- |
+| void    | [_init](#-init) (  ) |
 | void    | [clear](#clear) (  ) |
 
 
@@ -24,6 +25,10 @@ No description provided yet.
 
 
 ## Method Descriptions
+
+###  _init ( ) -> void {#-init}
+
+No description provided yet.
 
 ###  clear ( ) -> void {#clear}
 

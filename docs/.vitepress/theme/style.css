@@ -142,3 +142,7 @@ iframe {
   aspect-ratio: 16 / 9;
   width: 100%;
 }
+
+img {
+  max-height: 400px;
+}

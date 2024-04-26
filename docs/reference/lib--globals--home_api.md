@@ -7,9 +7,10 @@ Manages the connection to the home automation system and provides a unified inte
 
 ## Properties
 
-| Name             | Type                                                                | Default |
-| ---------------- | ------------------------------------------------------------------- | ------- |
-| [api](#prop-api) | [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) |         |
+| Name                   | Type                                                                      | Default |
+| ---------------------- | ------------------------------------------------------------------------- | ------- |
+| [api](#prop-api)       | [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html)       |         |
+| [groups](#prop-groups) | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) |         |
 
 ## Methods
 
@@ -20,6 +21,7 @@ Manages the connection to the home automation system and provides a unified inte
 | void                                                                      | [_ready](#-ready) (  )                                                                                                                                                                                                                                                                     |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_device](#get-device) ( id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )                                                                                                                                                                                  |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_devices](#get-devices) (  )                                                                                                                                                                                                                                                           |
+| [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_history](#get-history) ( entity_id: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), start: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), end: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )     |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_state](#get-state) ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )                                                                                                                                                                                |
 | [VoiceHandler](/reference/lib--home_apis--voice_handler.html)             | [get_voice_assistant](#get-voice-assistant) (  )                                                                                                                                                                                                                                           |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [has_connected](#has-connected) (  )                                                                                                                                                                                                                                                       |
@@ -44,6 +46,10 @@ Emitted when the connection to the home automation system is lost
 ## Constants
 
 ### Hass = `<Object>` {#const-Hass}
+
+No description provided yet.
+
+### EntityGroups = `<Object>` {#const-EntityGroups}
 
 No description provided yet.
 
@@ -75,6 +81,10 @@ No description provided yet.
 
 The current home automation system adapter
 
+### groups: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#prop-groups}
+
+No description provided yet.
+
 ## Method Descriptions
 
 ###  _on_connect ( ) -> void {#-on-connect}
@@ -96,6 +106,10 @@ Get a single device by id
 ###  get_devices ( ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-devices}
 
 Get a list of all devices
+
+###  get_history (entity_id: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , start: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , end: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-history}
+
+No description provided yet.
 
 ###  get_state (entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-state}
 

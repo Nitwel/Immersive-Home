@@ -7,9 +7,9 @@ Shortcut to get the House node from the Main scene
 
 ## Properties
 
-| Name               | Type                                                                      | Default |
-| ------------------ | ------------------------------------------------------------------------- | ------- |
-| [body](#prop-body) | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) |         |
+| Name               | Type                                                                                                                      | Default |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------- |
+| [body](#prop-body) | ["content/system/house/house.gd"](https://docs.godotengine.org/de/4.x/classes/class_"content/system/house/house.gd".html) |         |
 
 
 
@@ -17,10 +17,14 @@ Shortcut to get the House node from the Main scene
 
 
 
+## Constants
 
+### HouseClass = `<Object>` {#const-HouseClass}
+
+No description provided yet.
 
 ## Property Descriptions
 
-### body: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#prop-body}
+### body: ["content/system/house/house.gd"](https://docs.godotengine.org/de/4.x/classes/class_"content/system/house/house.gd".html) {#prop-body}
 
 No description provided yet.
