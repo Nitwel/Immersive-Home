@@ -67,6 +67,7 @@ size = Vector3(0.6, 0.15, 1)
 script = ExtResource("4_86fct")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)
 shape = SubResource("BoxShape3D_k5ib7")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
