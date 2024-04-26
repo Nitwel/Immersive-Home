@@ -17,10 +17,12 @@ const Miniature = preload ("res://content/system/house/mini/miniature.gd")
 @onready var humidity_button = $XRHandLeft/Palm/QuickActions/Humidity
 @export var ray_left: RayCast3D
 @export var ray_right: RayCast3D
-var initiator: Initiator = Initiator.new()
+var left_initiator: Initiator = Initiator.new()
+var right_initiator: Initiator = Initiator.new()
 var touch: Touch
 var collide: Collide
-var pointer: Pointer
+var left_pointer: Pointer
+var right_pointer: Pointer
 var press_distance = 0.03
 var grip_distance = 0.03
 var close_distance = 0.1
@@ -43,7 +45,7 @@ func _ready():
 	add_child(touch)
 	add_child(collide)
 
-	_ready_hand(hand_right)
+	_ready_hand()
 
 	mini_view_button.on_button_up.connect(func():
 		House.body.mini_view.small.value=!House.body.mini_view.small.value
@@ -63,12 +65,18 @@ func _ready():
 			House.body.mini_view.heatmap_type.value=Miniature.HeatmapType.HUMIDITY
 	)
 
-func _ready_hand(hand: OpenXRHand):
-	initiator.type = Initiator.Type.HAND_RIGHT if hand == hand_right else Initiator.Type.HAND_LEFT
-	initiator.node = ray_left.get_parent() if hand == hand_left else ray_right.get_parent()
+func _ready_hand():
+	left_initiator.type = Initiator.Type.HAND_LEFT
+	left_initiator.node = ray_left.get_parent()
 
-	pointer = Pointer.new(initiator, ray_left if hand == hand_left else ray_right)
-	add_child(pointer)
+	left_pointer = Pointer.new(left_initiator, ray_left)
+	add_child(left_pointer)
+
+	right_initiator.type = Initiator.Type.HAND_RIGHT
+	right_initiator.node = ray_right.get_parent()
+
+	right_pointer = Pointer.new(right_initiator, ray_right)
+	add_child(right_pointer)
 
 func _process(_delta):
 	if main.camera.global_transform.basis.z.dot(palm.global_transform.basis.y) > 0.85:
@@ -86,6 +94,7 @@ func _process_hand(hand: OpenXRHand):
 	var middle_tip = hand.get_node("MiddleTip/Marker3D")
 
 	var _ray = ray_left if hand == hand_left else ray_right
+	var initiator = left_initiator if hand == hand_left else right_initiator
 
 	var distance_trigger = index_tip.global_position.distance_to(thumb_tip.global_position)
 	var distance_grab = middle_tip.global_position.distance_to(thumb_tip.global_position)
@@ -113,12 +122,12 @@ func _process_hand(hand: OpenXRHand):
 				initiator.on_release.emit(Initiator.EventType.GRIP)
 				grabbed_left = false
 		else:
-			if trigger_close&&!grabbed_right:
+			if trigger_close&&!grabbed_left:
 				initiator.on_press.emit(Initiator.EventType.GRIP)
-				grabbed_right = true
-			elif !trigger_close&&grabbed_right:
+				grabbed_left = true
+			elif !trigger_close&&grabbed_left:
 				initiator.on_release.emit(Initiator.EventType.GRIP)
-				grabbed_right = false
+				grabbed_left = false
 	else:
 		if !distance_close:
 			if trigger_close&&!pressed_right:

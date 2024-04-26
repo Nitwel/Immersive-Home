@@ -8,17 +8,30 @@ signal on_moved()
 @export var restricted: bool = false
 @export var restrict_movement: Callable
 @export var lock_rotation: bool = false
+@export var disabled: bool = false
 var hit_node := Node3D.new()
+var initiator = null
 
 func _on_grab_down(event: EventPointer):
-	if restricted && event.target != get_parent():
+	if disabled:
 		return
 
-	event.initiator.node.add_child(hit_node)
+	if restricted&&event.target != get_parent():
+		return
+
+	initiator = event.initiator
+
+	if hit_node.get_parent() != null:
+		hit_node.get_parent().remove_child(hit_node)
+
+	initiator.node.add_child(hit_node)
 	hit_node.global_transform = get_parent().global_transform
 
-func _on_grab_move(_event: EventPointer):
+func _on_grab_move(event: EventPointer):
 	if hit_node.get_parent() == null:
+		return
+
+	if event.initiator != initiator:
 		return
 	
 	if restrict_movement:
@@ -33,7 +46,14 @@ func _on_grab_move(_event: EventPointer):
 		on_move.emit(get_parent().global_position, Vector3(0, 0, 0))
 
 func _on_grab_up(event: EventPointer):
-	event.initiator.node.remove_child(hit_node)
+	if event.initiator != initiator:
+		return
+
+	if hit_node.get_parent() == null:
+		return
+
+	initiator = null
+	hit_node.get_parent().remove_child(hit_node)
 	on_moved.emit()
 
 func _get_configuration_warnings() -> PackedStringArray:
@@ -41,6 +61,5 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 	if get_parent() is StaticBody3D == false:
 		warnings.append("Movable requires a StaticBody3D as parent.")
-	
 
 	return warnings

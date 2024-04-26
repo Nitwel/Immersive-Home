@@ -35,7 +35,7 @@ func _ready():
 		notification_node.type=event.type
 
 		for child in notify_place.get_children():
-			child.position += Vector3(0, 0, -0.06)
+			child.position += Vector3(0, 0.06, 0)
 
 		notify_place.add_child(notification_node)
 	)
@@ -43,7 +43,5 @@ func _ready():
 func move_into_view():
 	var camera_transform = main.camera.global_transform
 	camera_transform.origin -= camera_transform.basis.z * 0.5
-
-	camera_transform.basis = camera_transform.basis.rotated(camera_transform.basis.x, deg_to_rad(90))
 
 	global_transform = camera_transform

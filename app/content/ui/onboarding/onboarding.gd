@@ -3,9 +3,10 @@ extends Node3D
 @onready var getting_started_button = $GettingStartedButton
 @onready var close_button = $CloseButton
 @onready var camera = $"/root/Main/XROrigin3D/XRCamera3D"
-var next_new_position = global_position
+var next_new_position = null
 
 func _ready():
+	next_new_position = global_position
 	if Store.settings.is_loaded() == false:
 		await Store.settings.on_loaded
 

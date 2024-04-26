@@ -104,7 +104,7 @@ func _on_click(event: EventPointer):
 func _generate_room_map():
 	var rooms = Store.house.state.rooms
 
-	var target_size = Vector2(0.2, 0.24)
+	var target_size = Vector2(0.2, 0.2)
 	var target_offset = Vector2(0, 0.05)
 
 	for old_room in rooms_map.get_children():
@@ -156,6 +156,7 @@ func _generate_room_map():
 	var scale_value = min(target_scale.x, target_scale.y)
 
 	rooms_map.position.x = -current_min.x * scale_value + target_offset.x
-	rooms_map.position.z = -current_min.y * scale_value + target_offset.y
+	rooms_map.position.y = current_min.y * scale_value - target_offset.y
+	rooms_map.position.z = 0.002
 
 	rooms_map.scale = Vector3(scale_value, scale_value, scale_value)

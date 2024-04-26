@@ -1,5 +1,5 @@
 @tool
-extends Node3D
+extends Container3D
 class_name Slider3D
 
 @export var min: float = 0.0:
@@ -42,32 +42,11 @@ class_name Slider3D
 		if !is_inside_tree(): return
 		label.text = str(value) + " " + label_unit
 
-@export var size: Vector3 = Vector3(0.2, 0.01, 0.02): # Warning, units are in cm
-	set(value):
-		size = value
-		if !is_inside_tree(): return
-		_update_shape()
-@export var cutout_border: float = 0.02:
-	set(value):
-		cutout_border = value
-		if !is_inside_tree(): return
-		_update_shape()
-@export var cutout_depth: float = 0.05:
-	set(value):
-		cutout_depth = value
-		if !is_inside_tree(): return
-		_update_shape()
-
-@onready var outside_rod: CSGBox3D = $Rod/Outside
-@onready var cutout: CSGCombiner3D = $Rod/Cutout
-@onready var cutout_box: CSGBox3D = $Rod/Cutout/Length
-@onready var cutout_end_left: CSGCylinder3D = $Rod/Cutout/EndLeft
-@onready var cutout_end_right: CSGCylinder3D = $Rod/Cutout/EndRight
 @onready var label: Label3D = $Label
 
-@onready var body_collision_shape: CollisionShape3D = $CollisionBody/CollisionShape3D
+@onready var mesh: MeshInstance3D = $Body/MeshInstance3D
+@onready var body_collision_shape: CollisionShape3D = $Body/CollisionShape3D
 @onready var area_collision_shape: CollisionShape3D = $Area3D/CollisionShape3D
-
 @onready var slider_knob: MeshInstance3D = $Knob
 
 signal on_value_changed(value: float)
@@ -78,7 +57,7 @@ func _ready():
 	Update.props(self, ["value", "show_label", "label_unit"])
 
 	_update_slider()
-	_update_shape()
+	_update()
 	move_plane = Plane(Vector3.UP, Vector3(0, size.y / 200, 0))
 
 func _on_press_down(event: EventPointer):
@@ -91,9 +70,7 @@ func _on_touch_enter(event: EventTouch):
 	_handle_touch(event)
 
 func _get_slider_min_max():
-	var cutout_radius = (size.z - cutout_border * 2) / 2
-
-	return Vector2( - size.x / 2 + cutout_border + cutout_radius, size.x / 2 - cutout_border - cutout_radius) / 100
+	return Vector2( - size.x / 2 + 0.01, size.x / 2 - 0.01)
 
 func _handle_press(event: EventPointer):
 	var ray_pos = event.ray.global_position
@@ -134,46 +111,20 @@ func _update_slider():
 
 	slider_knob.position.x = lerp(min_max.x, min_max.y, click_percent)
 
-func _update_shape():
-	outside_rod.size = size
+func _update():
+	_update_slider()
+	body_collision_shape.shape.size = size
+	body_collision_shape.position = Vector3(0, 0, size.z / 2)
 
-	body_collision_shape.shape.size = size * 0.01
-	area_collision_shape.shape.size = Vector3(size.x, size.y * 2, size.z) * 0.01
-	area_collision_shape.position = Vector3(0, size.y, 0) * 0.01
+	area_collision_shape.shape.size = Vector3(size.x, size.y, 0.01)
+	area_collision_shape.position = Vector3(0, 0, size.z + 0.005)
 
-	var cutout_width = size.z - cutout_border * 2
+	mesh.position = Vector3(0, 0, size.z)
+	mesh.mesh.size = Vector2(size.x, size.y)
+	mesh.material_override.set_shader_parameter("size", Vector2(size.x, size.y) * 10.0)
 
-	cutout_box.size = Vector3(
-		size.x - cutout_border * 2 - (cutout_width),
-		cutout_depth,
-		cutout_width
-	)
+	slider_knob.position.z = size.z + 0.002
+	slider_knob.mesh.size = Vector2(size.y * 0.75, size.y * 0.75)
+	slider_knob.material_override.set_shader_parameter("size", Vector2(size.y * 7.5, size.y * 7.5))
 
-	cutout.position = Vector3(
-		0,
-		size.y / 2 - cutout_depth / 2 + 0.001,
-		0
-	)
-
-	cutout_end_left.radius = cutout_box.size.z / 2
-	cutout_end_right.radius = cutout_box.size.z / 2
-	cutout_end_left.height = cutout_depth
-	cutout_end_right.height = cutout_depth
-
-	cutout_end_left.position = Vector3(
-		- cutout_box.size.x / 2,
-		0,
-		0
-	)
-
-	cutout_end_right.position = Vector3(
-		cutout_box.size.x / 2,
-		0,
-		0
-	)
-
-	label.position = Vector3(
-		size.x / 200 + 0.005,
-		0,
-		0
-	)
+	label.position = Vector3(size.x / 2 + 0.005, 0, size.z)

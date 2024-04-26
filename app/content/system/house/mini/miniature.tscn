@@ -13,6 +13,7 @@ script = ExtResource("1_b53yn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
 shape = SubResource("BoxShape3D_bckw3")
+disabled = true
 
 [node name="Movable" type="Node" parent="Body"]
 script = ExtResource("2_x7oed")

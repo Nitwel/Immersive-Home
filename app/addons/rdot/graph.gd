@@ -4,9 +4,9 @@ class_name RdotGraph
 static var instance: RdotGraph = null
 
 static func getInstance() -> RdotGraph:
-    if instance == null:
-        instance = RdotGraph.new()
-    return instance
+	if instance == null:
+		instance = RdotGraph.new()
+	return instance
 
 var activeConsumer: RdotNode = null
 var inNotificationPhase := false
@@ -17,209 +17,209 @@ var postSignalSetFn := Callable()
 var watcherPending := false
 
 var watcher = R.Watcher.new(func(_arg):
-    if watcherPending:
-        return
+	if watcherPending:
+		return
 
-    watcherPending=true
-    var endOfFrame=func():
+	watcherPending=true
+	var endOfFrame=func():
 
-        watcherPending=false
-        for s in watcher.getPending():
-            s.do_get()
+		watcherPending=false
+		for s in watcher.getPending():
+			s.do_get()
 
-        watcher.watch()
+		watcher.watch()
 
-    endOfFrame.call_deferred()
+	endOfFrame.call_deferred()
 )
 
 func setActiveConsumer(consumer: RdotNode) -> RdotNode:
-    var prev = activeConsumer
-    activeConsumer = consumer
-    return prev
+	var prev = activeConsumer
+	activeConsumer = consumer
+	return prev
 
 func getActiveConsumer() -> RdotNode:
-    return activeConsumer
+	return activeConsumer
 
 func isInNotificationPhase() -> bool:
-    return inNotificationPhase
+	return inNotificationPhase
 
 func producerAccessed(node: RdotNode):
-    assert(inNotificationPhase == false, "Signal read during notification phase")
+	assert(inNotificationPhase == false, "Signal read during notification phase")
 
-    if activeConsumer == null:
-        return
+	if activeConsumer == null:
+		return
 
-    if activeConsumer.consumerOnSignalRead.is_null() == false:
-        activeConsumer.consumerOnSignalRead.call(node)
+	if activeConsumer.consumerOnSignalRead.is_null() == false:
+		activeConsumer.consumerOnSignalRead.call(node)
 
-    var idx = activeConsumer.nextProducerIndex;
-    activeConsumer.nextProducerIndex += 1
+	var idx = activeConsumer.nextProducerIndex;
+	activeConsumer.nextProducerIndex += 1
 
-    assertConsumerNode(activeConsumer)
+	assertConsumerNode(activeConsumer)
 
-    if idx < activeConsumer.producerNode.size()&&activeConsumer.producerNode[idx] != node:
-        if consumerIsLive(activeConsumer):
-            var staleProducer = activeConsumer.producerNode[idx]
-            producerRemoveLiveConsumerAtIndex(staleProducer, activeConsumer.producerIndexOfThis[idx])
+	if idx < activeConsumer.producerNode.size()&&activeConsumer.producerNode[idx] != node:
+		if consumerIsLive(activeConsumer):
+			var staleProducer = activeConsumer.producerNode[idx]
+			producerRemoveLiveConsumerAtIndex(staleProducer, activeConsumer.producerIndexOfThis[idx])
 
-    if RdotArray.do_get(activeConsumer.producerNode, idx) != node:
-        RdotArray.do_set(activeConsumer.producerNode, idx, node)
-        RdotArray.do_set(activeConsumer.producerIndexOfThis, idx, producerAddLiveConsumer(node, activeConsumer, idx) if consumerIsLive(activeConsumer) else 0)
+	if RdotArray.do_get(activeConsumer.producerNode, idx) != node:
+		RdotArray.do_set(activeConsumer.producerNode, idx, node)
+		RdotArray.do_set(activeConsumer.producerIndexOfThis, idx, producerAddLiveConsumer(node, activeConsumer, idx) if consumerIsLive(activeConsumer) else 0)
 
-    RdotArray.do_set(activeConsumer.producerLastReadVersion, idx, node.version)
+	RdotArray.do_set(activeConsumer.producerLastReadVersion, idx, node.version)
 
 func producerIncrementEpoch():
-    epoch += 1
+	epoch += 1
 
 func producerUpdateValueVersion(node: RdotNode):
-    if consumerIsLive(node)&&!node.dirty:
-        return
+	if consumerIsLive(node)&&!node.dirty:
+		return
 
-    if !node.dirty&&node.lastCleanEpoch == epoch:
-        return
+	if !node.dirty&&node.lastCleanEpoch == epoch:
+		return
 
-    if !node.producerMustRecompute(node)&&!consumerPollProducersForChange(node):
-        node.dirty = false;
-        node.lastCleanEpoch = epoch
-        return
+	if !node.producerMustRecompute(node)&&!consumerPollProducersForChange(node):
+		node.dirty = false;
+		node.lastCleanEpoch = epoch
+		return
 
-    if node.producerRecomputeValue.is_null() == false:
-        node.producerRecomputeValue.call(node)
+	if node.producerRecomputeValue.is_null() == false:
+		node.producerRecomputeValue.call(node)
 
-    node.dirty = false
-    node.lastCleanEpoch = epoch
+	node.dirty = false
+	node.lastCleanEpoch = epoch
 
 func producerNotifyConsumers(node: RdotNode):
-    if node.liveConsumerNode == null:
-        return
+	if node.liveConsumerNode == null:
+		return
 
-    var prev = inNotificationPhase
-    inNotificationPhase = true
+	var prev = inNotificationPhase
+	inNotificationPhase = true
 
-    for consumer in node.liveConsumerNode:
-        if !consumer.dirty:
-            consumerMarkDirty(consumer)
+	for consumer in node.liveConsumerNode:
+		if !consumer.dirty:
+			consumerMarkDirty(consumer)
 
-    inNotificationPhase = prev
+	inNotificationPhase = prev
 
 func producerUpdatesAllowed() -> bool:
-    return activeConsumer == null||activeConsumer.consumerAllowSignalWrites != false
+	return activeConsumer == null||activeConsumer.consumerAllowSignalWrites != false
 
 func consumerMarkDirty(node: RdotNode):
-    node.dirty = true
-    producerNotifyConsumers(node)
+	node.dirty = true
+	producerNotifyConsumers(node)
 
-    if node.consumerMarkedDirty.is_null() == false:
-        node.consumerMarkedDirty.call(node)
+	if node.consumerMarkedDirty.is_null() == false:
+		node.consumerMarkedDirty.call(node)
 
 func consumerBeforeComputation(node: RdotNode) -> RdotNode:
-    if node:
-        node.nextProducerIndex = 0
+	if node:
+		node.nextProducerIndex = 0
 
-    return setActiveConsumer(node)
+	return setActiveConsumer(node)
 
 func consumerAfterComputation(node: RdotNode, prevConsumer: RdotNode):
-    setActiveConsumer(prevConsumer)
+	setActiveConsumer(prevConsumer)
 
-    if node == null||node.producerNode == null||node.producerIndexOfThis == null||node.producerLastReadVersion == null:
-        return
+	if node == null||node.producerNode == null||node.producerIndexOfThis == null||node.producerLastReadVersion == null:
+		return
 
-    if consumerIsLive(node):
-        for i in range(node.nextProducerIndex, node.producerNode.size()):
-            producerRemoveLiveConsumerAtIndex(node.producerNode[i], node.producerIndexOfThis[i])
+	if consumerIsLive(node):
+		for i in range(node.nextProducerIndex, node.producerNode.size()):
+			producerRemoveLiveConsumerAtIndex(node.producerNode[i], node.producerIndexOfThis[i])
 
-    while node.producerNode.size() > node.nextProducerIndex:
-        node.producerNode.pop_back()
-        node.producerLastReadVersion.pop_back()
-        node.producerIndexOfThis.pop_back()
+	while node.producerNode.size() > node.nextProducerIndex:
+		node.producerNode.pop_back()
+		node.producerLastReadVersion.pop_back()
+		node.producerIndexOfThis.pop_back()
 
 func consumerPollProducersForChange(node: RdotNode) -> bool:
-    assertConsumerNode(node)
+	assertConsumerNode(node)
 
-    for i in range(node.producerNode.size()):
-        var producer = node.producerNode[i]
-        var seenVersion = node.producerLastReadVersion[i]
+	for i in range(node.producerNode.size()):
+		var producer = node.producerNode[i]
+		var seenVersion = node.producerLastReadVersion[i]
 
-        if seenVersion != producer.version:
-            return true
+		if seenVersion != producer.version:
+			return true
 
-        producerUpdateValueVersion(producer)
+		producerUpdateValueVersion(producer)
 
-        if seenVersion != producer.version:
-            return true
+		if seenVersion != producer.version:
+			return true
 
-    return false
+	return false
 
 func consumerDestroy(node: RdotNode):
-    assertConsumerNode(node)
+	assertConsumerNode(node)
 
-    if consumerIsLive(node):
-        for i in range(node.producerNode.size()):
-            producerRemoveLiveConsumerAtIndex(node.producerNode[i], node.producerIndexOfThis[i])
+	if consumerIsLive(node):
+		for i in range(node.producerNode.size()):
+			producerRemoveLiveConsumerAtIndex(node.producerNode[i], node.producerIndexOfThis[i])
 
-    node.producerNode.clear()
-    node.producerLastReadVersion.clear()
-    node.producerIndexOfThis.clear()
+	node.producerNode.clear()
+	node.producerLastReadVersion.clear()
+	node.producerIndexOfThis.clear()
 
-    if node.liveConsumerNode:
-        node.liveConsumerNode.clear()
-        node.liveConsumerIndexOfThis.clear()
+	if node.liveConsumerNode:
+		node.liveConsumerNode.clear()
+		node.liveConsumerIndexOfThis.clear()
 
 static func producerAddLiveConsumer(node: RdotNode, consumer: RdotNode, indexOfThis: int) -> int:
-    assertProducerNode(node)
-    assertConsumerNode(node)
+	assertProducerNode(node)
+	assertConsumerNode(node)
 
-    if node.liveConsumerNode.size() == 0:
-        if node.watched.is_null() == false:
-            node.watched.call(node.wrapper)
+	if node.liveConsumerNode.size() == 0:
+		if node.watched.is_null() == false:
+			node.watched.call(node.wrapper)
 
-        for i in range(node.producerNode.size()):
-            node.producerIndexOfThis[i] = producerAddLiveConsumer(node.producerNode[i], node, i)
+		for i in range(node.producerNode.size()):
+			node.producerIndexOfThis[i] = producerAddLiveConsumer(node.producerNode[i], node, i)
 
-    node.liveConsumerIndexOfThis.push_back(indexOfThis)
-    node.liveConsumerNode.push_back(consumer)
+	node.liveConsumerIndexOfThis.push_back(indexOfThis)
+	node.liveConsumerNode.push_back(consumer)
 
-    return node.liveConsumerNode.size() - 1
+	return node.liveConsumerNode.size() - 1
 
 static func producerRemoveLiveConsumerAtIndex(node: RdotNode, idx: int):
-    assertProducerNode(node)
-    assertConsumerNode(node)
+	assertProducerNode(node)
+	assertConsumerNode(node)
 
-    assert(idx < node.liveConsumerNode.size(), "active consumer index %s is out of bounds of %s consumers)" % [idx, node.liveConsumerNode.size()])
+	assert(idx < node.liveConsumerNode.size(), "active consumer index %s is out of bounds of %s consumers)" % [idx, node.liveConsumerNode.size()])
 
-    if node.liveConsumerNode.size() == 1:
-        if node.unwatched.is_null() == false:
-            node.unwatched.call(node.wrapper)
+	if node.liveConsumerNode.size() == 1:
+		if node.unwatched.is_null() == false:
+			node.unwatched.call(node.wrapper)
 
-        for i in range(node.producerNode.size()):
-            producerRemoveLiveConsumerAtIndex(node.producerNode[i], node.producerIndexOfThis[i])
+		for i in range(node.producerNode.size()):
+			producerRemoveLiveConsumerAtIndex(node.producerNode[i], node.producerIndexOfThis[i])
 
-    var lastIdx = node.liveConsumerNode.size() - 1
-    node.liveConsumerNode[idx] = node.liveConsumerNode[lastIdx]
-    node.liveConsumerIndexOfThis[idx] = node.liveConsumerIndexOfThis[lastIdx]
+	var lastIdx = node.liveConsumerNode.size() - 1
+	node.liveConsumerNode[idx] = node.liveConsumerNode[lastIdx]
+	node.liveConsumerIndexOfThis[idx] = node.liveConsumerIndexOfThis[lastIdx]
 
-    node.liveConsumerNode.pop_back()
-    node.liveConsumerIndexOfThis.pop_back()
+	node.liveConsumerNode.pop_back()
+	node.liveConsumerIndexOfThis.pop_back()
 
-    if idx < node.liveConsumerNode.size():
-        var idxProducer = node.liveConsumerIndexOfThis[idx]
-        var consumer = node.liveConsumerNode[idx]
-        assertConsumerNode(consumer)
-        consumer.producerIndexOfThis[idxProducer] = idx
+	if idx < node.liveConsumerNode.size():
+		var idxProducer = node.liveConsumerIndexOfThis[idx]
+		var consumer = node.liveConsumerNode[idx]
+		assertConsumerNode(consumer)
+		consumer.producerIndexOfThis[idxProducer] = idx
 
 static func consumerIsLive(node: RdotNode) -> bool:
-    return node.consumerIsAlwaysLive||(node.liveConsumerNode != null&&node.liveConsumerNode.size() > 0)
+	return node.consumerIsAlwaysLive||(node.liveConsumerNode != null&&node.liveConsumerNode.size() > 0)
 
 static func assertConsumerNode(node: RdotNode):
-    if node.producerNode == null:
-        node.producerNode = []
-    if node.producerIndexOfThis == null:
-        node.producerIndexOfThis = []
-    if node.producerLastReadVersion == null:
-        node.producerLastReadVersion = []
+	if node.producerNode == null:
+		node.producerNode = []
+	if node.producerIndexOfThis == null:
+		node.producerIndexOfThis = []
+	if node.producerLastReadVersion == null:
+		node.producerLastReadVersion = []
 
 static func assertProducerNode(node: RdotNode):
-    if node.liveConsumerNode == null:
-        node.liveConsumerNode = []
-    if node.liveConsumerIndexOfThis == null:
-        node.liveConsumerIndexOfThis = []
+	if node.liveConsumerNode == null:
+		node.liveConsumerNode = []
+	if node.liveConsumerIndexOfThis == null:
+		node.liveConsumerIndexOfThis = []

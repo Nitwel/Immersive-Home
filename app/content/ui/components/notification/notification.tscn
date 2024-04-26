@@ -1,15 +1,29 @@
-[gd_scene load_steps=10 format=3 uid="uid://bqj7qwj5mgd30"]
+[gd_scene load_steps=11 format=3 uid="uid://bqj7qwj5mgd30"]
 
 [ext_resource type="Script" path="res://content/ui/components/notification/notification.gd" id="1_yw3yb"]
-[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_5b8oo"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_b68od"]
 [ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="3_1ljpc"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_ocg5j"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_s37oj"]
-size = Vector3(0.25, 0.01, 0.05)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0ktvn"]
+render_priority = 10
+shader = ExtResource("2_b68od")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.25, 0.05)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.025
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_dx2yp"]
+size = Vector2(0.25, 0.05)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_m4d21"]
-size = Vector3(0.25, 0.01, 0.05)
+size = Vector3(0.25, 0.05, 0.01)
 
 [sub_resource type="Animation" id="Animation_bkual"]
 length = 0.001
@@ -164,25 +178,30 @@ script = ExtResource("1_yw3yb")
 collision_layer = 6
 collision_mask = 0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="AnimationNode"]
-material_override = ExtResource("2_5b8oo")
-mesh = SubResource("BoxMesh_s37oj")
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="AnimationNode"]
+material_override = SubResource("ShaderMaterial_0ktvn")
+mesh = SubResource("QuadMesh_dx2yp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AnimationNode"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.005)
 shape = SubResource("BoxShape3D_m4d21")
 
 [node name="Text" type="Label3D" parent="AnimationNode"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.08, 0.006, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0, 0.001)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 font_size = 10
 outline_size = 0
 horizontal_alignment = 0
 autowrap_mode = 3
-width = 190.0
+width = 170.0
 
 [node name="Icon" type="Label3D" parent="AnimationNode"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.1, 0.006, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0.001)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "info"
 font = ExtResource("3_1ljpc")
 font_size = 24
@@ -194,7 +213,7 @@ libraries = {
 }
 
 [node name="Button" parent="AnimationNode" instance=ExtResource("4_ocg5j")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.12, -0.003, -0.02)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.1, 0, 0)
 label = "close"
 icon = true
 

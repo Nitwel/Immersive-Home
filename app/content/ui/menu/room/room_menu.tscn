@@ -1,43 +1,62 @@
-[gd_scene load_steps=9 format=3 uid="uid://c01gkeldvjwtr"]
+[gd_scene load_steps=10 format=3 uid="uid://c01gkeldvjwtr"]
 
 [ext_resource type="Script" path="res://content/ui/menu/room/room_menu.gd" id="1_ch4jb"]
-[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_7m4yn"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_cghmp"]
 [ext_resource type="Script" path="res://content/ui/components/tabs/tabs.gd" id="5_ddrep"]
 [ext_resource type="PackedScene" uid="uid://dd71loi64gnmp" path="res://content/ui/menu/room/views/overview.tscn" id="6_206ad"]
 [ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="6_ba00g"]
 [ext_resource type="PackedScene" uid="uid://bpta22fahai46" path="res://content/ui/menu/room/views/rooms.tscn" id="7_2f8e0"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="7_bxp1w"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_e37nn"]
-size = Vector3(0.3, 0.01, 0.3)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2asng"]
+render_priority = -3
+shader = ExtResource("7_bxp1w")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.42, 0.32)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_16sg5"]
+size = Vector2(0.42, 0.32)
 
 [node name="RoomMenu" type="Node3D"]
 script = ExtResource("1_ch4jb")
 
-[node name="Background" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.15)
-material_override = ExtResource("2_7m4yn")
-mesh = SubResource("BoxMesh_e37nn")
-
 [node name="Interface" type="Node3D" parent="."]
 
 [node name="Tabs3D" type="Node3D" parent="Interface" node_paths=PackedStringArray("initial_selected")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.04, 0)
 script = ExtResource("5_ddrep")
 initial_selected = NodePath("Overview")
+gap = 0.01
 
 [node name="Overview" parent="Interface/Tabs3D" instance=ExtResource("4_cghmp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0.02)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0)
 label = "Overview"
+size = Vector3(0.06, 0.04, 0.01)
 
 [node name="Rooms" parent="Interface/Tabs3D" instance=ExtResource("4_cghmp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0, 0.02)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
 label = "Rooms"
+size = Vector3(0.06, 0.04, 0.01)
 
 [node name="TabsContent3D" type="Node3D" parent="Interface" node_paths=PackedStringArray("tabs")]
 script = ExtResource("6_ba00g")
 tabs = NodePath("../Tabs3D")
 
 [node name="Overview" parent="Interface/TabsContent3D" instance=ExtResource("6_206ad")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.04)
 
 [node name="Rooms" parent="Interface/TabsContent3D" instance=ExtResource("7_2f8e0")]
+
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
+visible = false
+material_override = SubResource("ShaderMaterial_2asng")
+mesh = SubResource("QuadMesh_16sg5")
+skeleton = NodePath("../..")

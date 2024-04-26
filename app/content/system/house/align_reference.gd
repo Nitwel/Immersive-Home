@@ -50,6 +50,9 @@ func get_new_transform():
 func update_align_reference():
 	corner1.global_position = Store.house.state.align_position1
 	corner2.global_position = Store.house.state.align_position2
+	
+	if corner1.global_position == corner2.global_position:
+		corner2.global_position = corner1.global_position + Vector3(1, 0, 0)
 
 	corner2.look_at(corner1.global_position, Vector3.UP)
 	corner2.rotate(Vector3.UP, deg_to_rad( - 90))

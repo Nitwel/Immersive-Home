@@ -1,20 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://bbwedgq63bj84"]
+[gd_scene load_steps=5 format=3 uid="uid://bbwedgq63bj84"]
 
 [ext_resource type="Script" path="res://content/entities/number/number.gd" id="1_26xwp"]
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="2_sninv"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="3_x8wda"]
-[ext_resource type="Script" path="res://content/functions/occludable.gd" id="4_3xwop"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7mk8w"]
-size = Vector3(0.0390625, 0.114258, 0.0142822)
+size = Vector3(0.0390625, 0.150391, 0.0142822)
 
-[node name="Number" type="StaticBody3D" ]
+[node name="Number" type="StaticBody3D"]
 script = ExtResource("1_26xwp")
 
 [node name="Slider" parent="." instance=ExtResource("2_sninv")]
-transform = Transform3D(8.74228e-08, 4.37114e-08, 1, 1, 4.37114e-08, -8.74228e-08, -4.37114e-08, 1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 value = 0.0
-size = Vector3(20, 0.8, 2)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.00762939)
@@ -22,6 +20,3 @@ shape = SubResource("BoxShape3D_7mk8w")
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("3_x8wda")
-
-[node name="Occludable" type="Node" parent="."]
-script = ExtResource("4_3xwop")

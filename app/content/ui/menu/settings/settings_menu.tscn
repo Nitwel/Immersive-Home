@@ -1,39 +1,52 @@
-[gd_scene load_steps=9 format=3 uid="uid://c6r4higceibif"]
+[gd_scene load_steps=10 format=3 uid="uid://c6r4higceibif"]
 
 [ext_resource type="Script" path="res://content/ui/menu/settings/settings_menu.gd" id="1_0lte6"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_faxng"]
-[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_6lhhi"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="3_qmg6q"]
 [ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="4_q3x6k"]
 [ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="5_eiwd4"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_e51x8"]
-size = Vector3(0.3, 0.01, 0.3)
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="6_mubnp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3qdps"]
-size = Vector3(0.08, 0.01, 0.02)
+size = Vector3(0.07, 0.02, 0.01)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3iv64"]
+render_priority = -3
+shader = ExtResource("6_mubnp")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.42, 0.32)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_d0l0p"]
+size = Vector2(0.42, 0.32)
 
 [node name="SettingsMenu" type="Node3D"]
 script = ExtResource("1_0lte6")
-
-[node name="Background" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.15)
-material_override = ExtResource("2_6lhhi")
-mesh = SubResource("BoxMesh_e51x8")
 
 [node name="Content" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.007, 0)
 
 [node name="ConnectionStatus" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.250698, 0, 0.151303)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.251, -0.151, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "Disconnected"
 font_size = 8
 outline_size = 0
 
 [node name="LabelURL" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.03)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.03, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "url:
 "
 font_size = 18
@@ -41,51 +54,63 @@ outline_size = 0
 horizontal_alignment = 0
 
 [node name="InputURL" parent="Content" instance=ExtResource("4_q3x6k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0, 0.03)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, -0.03, 0)
 text = "ws://192.168.0.1:8123"
+size = Vector3(0.2, 0.03, 0.01)
 
 [node name="LabelToken" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.07, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "token:"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
 [node name="InputToken" parent="Content" instance=ExtResource("4_q3x6k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0, 0.07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, -0.07, 0)
 text = "..."
+size = Vector3(0.2, 0.03, 0.01)
 
 [node name="LabelConnect" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.14, 0, 0.12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14, -0.12, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "Connect"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
 [node name="Connect" parent="Content" instance=ExtResource("1_faxng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0.12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.12, 0)
 label = "login"
 icon = true
 
 [node name="Credits" type="StaticBody3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0102286, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37, -0.300229, 0)
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Content/Credits"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.26, 0.005, 0.29)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.005, 0, 0)
 shape = SubResource("BoxShape3D_3qdps")
+disabled = true
 
 [node name="Label" type="Label3D" parent="Content/Credits"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.26, 0.0102286, 0.29)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.98023e-08, 0, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "credits"
 font_size = 12
 outline_size = 0
 
 [node name="Hearth" type="Label3D" parent="Content/Credits"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.29, 0.0102286, 0.29)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 modulate = Color(0.584314, 0, 0, 1)
 text = "favorite"
 font = ExtResource("5_eiwd4")
@@ -96,34 +121,40 @@ outline_size = 0
 script = ExtResource("3_qmg6q")
 
 [node name="SaveLabel" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.21)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.21, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "Manual Save:"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
 [node name="Save" parent="Content" instance=ExtResource("1_faxng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 0, 0.21)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, -0.21, 0)
 label = "save"
 icon = true
 
 [node name="clearSaveLabel" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.26)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.26, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "Clear Save:"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
 [node name="ClearSave" parent="Content" instance=ExtResource("1_faxng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 0, 0.27)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, -0.27, 0)
 label = "close"
 icon = true
 
 [node name="clearSaveWarning" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.28)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.28, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 modulate = Color(1, 0, 0, 1)
 text = "Caution! This will delete all your rooms and placed devices."
 font_size = 8
@@ -133,16 +164,34 @@ autowrap_mode = 3
 width = 150.0
 
 [node name="VoiceAssist" parent="Content" instance=ExtResource("1_faxng")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0.12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, -0.12, 0)
 label = "mic_off"
 icon = true
 toggleable = true
 
 [node name="LabelVoiceAssist" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.01, 0, 0.12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.12, 0)
 pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
 text = "Voice-
 Assist:"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
+
+[node name="LabelVersion" type="Label3D" parent="Content"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.41, -0.31, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "v0.0.0"
+font_size = 10
+outline_size = 0
+horizontal_alignment = 2
+
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
+material_override = SubResource("ShaderMaterial_3iv64")
+mesh = SubResource("QuadMesh_d0l0p")
+skeleton = NodePath("../..")

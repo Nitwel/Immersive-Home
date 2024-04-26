@@ -1,108 +1,135 @@
-[gd_scene load_steps=6 format=3 uid="uid://ddpxthb414unp"]
+[gd_scene load_steps=7 format=3 uid="uid://ddpxthb414unp"]
 
 [ext_resource type="Script" path="res://content/ui/menu/view/view_menu.gd" id="1_hxajx"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_qan1b"]
-[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_se6ic"]
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="4_d3xhb"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="5_cjxo5"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_qr3bi"]
-size = Vector3(0.3, 0.01, 0.3)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e5hvo"]
+render_priority = 10
+shader = ExtResource("5_cjxo5")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.42, 0.32)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_1j6jf"]
+size = Vector2(0.42, 0.32)
 
 [node name="ViewMenu" type="Node3D"]
 script = ExtResource("1_hxajx")
 
-[node name="Background" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0.15)
-material_override = ExtResource("2_se6ic")
-mesh = SubResource("BoxMesh_qr3bi")
-
 [node name="Content" type="Node3D" parent="."]
 
 [node name="MiniView" parent="Content" instance=ExtResource("2_qan1b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0.03)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.04, 0)
 label = "view_comfy"
 icon = true
 toggleable = true
 
 [node name="MiniViewLabel" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.07, 0.01, 0.03)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, -0.04, 0)
 pixel_size = 0.001
+double_sided = false
+render_priority = 15
+outline_render_priority = 14
 text = "Mini View"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
 [node name="HeatMap" parent="Content" instance=ExtResource("2_qan1b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0.09)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.1, 0)
 label = "device_thermostat"
 icon = true
 toggleable = true
 
 [node name="HeatMapLabel" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.07, 0.01, 0.09)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, -0.1, 0)
 pixel_size = 0.001
+double_sided = false
+render_priority = 15
+outline_render_priority = 14
 text = "Heat Map"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
 [node name="HumidityMap" parent="Content" instance=ExtResource("2_qan1b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.16, 0)
 label = "humidity_mid"
 icon = true
 toggleable = true
 
 [node name="HumidityMapLabel" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.07, 0.01, 0.15)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, -0.16, 0)
 pixel_size = 0.001
+double_sided = false
+render_priority = 15
+outline_render_priority = 14
 text = "Humidity Map"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
 [node name="MinSlider" parent="Content" instance=ExtResource("4_d3xhb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.01, 0.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, -0.21, 0)
 value = 0.0
 step = 1.0
-show_label = true
-size = Vector3(10, 0.4, 1)
 
 [node name="MinValue" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.15, 0.01, 0.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.21, 0)
 pixel_size = 0.001
+double_sided = false
+render_priority = 15
+outline_render_priority = 14
 text = "Min Value"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
 [node name="MaxSlider" parent="Content" instance=ExtResource("4_d3xhb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.01, 0.24)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, -0.25, 0)
 value = 0.0
 step = 1.0
-show_label = true
-size = Vector3(10, 0.4, 1)
 
 [node name="MaxValue" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.15, 0.01, 0.24)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.25, 0)
 pixel_size = 0.001
+double_sided = false
+render_priority = 15
+outline_render_priority = 14
 text = "Max Value"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
 [node name="OpacitySlider" parent="Content" instance=ExtResource("4_d3xhb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.01, 0.28)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, -0.29, 0)
 max = 100.0
 value = 30.0
 step = 10.0
-show_label = true
 label_unit = "%"
-size = Vector3(10, 0.4, 1)
 
 [node name="OpacityLabel" type="Label3D" parent="Content"]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.15, 0.01, 0.28)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.29, 0)
 pixel_size = 0.001
+double_sided = false
+render_priority = 15
+outline_render_priority = 14
 text = "Opacity"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
+
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
+material_override = SubResource("ShaderMaterial_e5hvo")
+mesh = SubResource("QuadMesh_1j6jf")
+skeleton = NodePath("../..")

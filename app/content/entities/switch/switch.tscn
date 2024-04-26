@@ -1,10 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://cscl5k7lhopj5"]
+[gd_scene load_steps=7 format=3 uid="uid://cscl5k7lhopj5"]
 
 [ext_resource type="Script" path="res://content/entities/switch/switch.gd" id="1_8ffhi"]
 [ext_resource type="Texture2D" uid="uid://br3p0c2foputg" path="res://assets/materials/swich_on.png" id="1_w68gw"]
 [ext_resource type="Texture2D" uid="uid://co2ishj2hx57p" path="res://assets/materials/switch_off.png" id="2_86ba1"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_6xr03"]
-[ext_resource type="Script" path="res://content/functions/occludable.gd" id="5_j5ucu"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
 radius = 0.0482081
@@ -13,17 +12,17 @@ radius = 0.0482081
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_w68gw")
+"texture": ExtResource("2_86ba1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_86ba1")
+"texture": ExtResource("1_w68gw")
 }],
 "loop": true,
 "name": &"default",
 "speed": 5.0
 }]
 
-[node name="Switch" type="StaticBody3D" ]
+[node name="Switch" type="StaticBody3D"]
 collision_mask = 0
 script = ExtResource("1_8ffhi")
 
@@ -37,6 +36,3 @@ sprite_frames = SubResource("SpriteFrames_ldpuo")
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("4_6xr03")
-
-[node name="Occludable" type="Node" parent="."]
-script = ExtResource("5_j5ucu")

@@ -1,28 +1,43 @@
-[gd_scene load_steps=6 format=3 uid="uid://bhyddd1f0ry1x"]
+[gd_scene load_steps=7 format=3 uid="uid://bhyddd1f0ry1x"]
 
 [ext_resource type="Script" path="res://content/ui/onboarding/onboarding.gd" id="1_k4yvw"]
-[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="2_aleti"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_87aan"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_hlpow"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nfwtf"]
 size = Vector3(0.5, 0.3, 0.01)
 
-[sub_resource type="BoxMesh" id="BoxMesh_yknqs"]
-size = Vector3(0.5, 0.3, 0.01)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d2ck8"]
+render_priority = 10
+shader = ExtResource("2_87aan")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.5, 0.3)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_ij2lj"]
+size = Vector2(0.5, 0.3)
 
 [node name="Onboarding" type="StaticBody3D"]
 collision_layer = 6
-collision_mask = 6
+collision_mask = 0
 script = ExtResource("1_k4yvw")
 
 [node name="Label3D2" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, -0.1, 0.006)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, -0.11, 0.001)
 pixel_size = 0.001
+render_priority = 30
+outline_render_priority = 29
 text = "Getting Started"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
-vertical_alignment = 0
 autowrap_mode = 3
 width = 470.0
 
@@ -30,12 +45,14 @@ width = 470.0
 shape = SubResource("BoxShape3D_nfwtf")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-material_override = ExtResource("2_aleti")
-mesh = SubResource("BoxMesh_yknqs")
+material_override = SubResource("ShaderMaterial_d2ck8")
+mesh = SubResource("QuadMesh_ij2lj")
 
 [node name="GettingStartedLabel" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, 0.14, 0.006)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, 0.13, 0.001)
 pixel_size = 0.001
+render_priority = 30
+outline_render_priority = 29
 text = "Hey!
 
 This app is still early in development and still has a lot of rough edges. Things might break or are sometimes difficult to use, this will improve the more polished the app becomes.
@@ -49,22 +66,23 @@ autowrap_mode = 3
 width = 470.0
 
 [node name="GettingStartedButton" parent="." instance=ExtResource("3_hlpow")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.05, -0.11, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, -0.11, 0.001)
 label = "open_in_new"
 icon = true
 
 [node name="CloseButton" parent="." instance=ExtResource("3_hlpow")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.21, -0.11, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21, -0.11, 0.001)
 label = "done"
 icon = true
 
 [node name="CloseLabel" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, -0.1, 0.006)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, -0.11, 0.001)
 pixel_size = 0.001
+render_priority = 30
+outline_render_priority = 29
 text = "Understood"
 font_size = 18
 outline_size = 0
-horizontal_alignment = 0
-vertical_alignment = 0
+horizontal_alignment = 2
 autowrap_mode = 3
 width = 470.0

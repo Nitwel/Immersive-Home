@@ -1,4 +1,5 @@
-extends Node3D
+@tool
+extends FlexContainer3D
 class_name Tabs3D
 
 signal on_select(selected: int)
@@ -8,6 +9,11 @@ var selected = R.state(null)
 @export var initial_selected: Node3D
 
 func _ready():
+	_update()
+
+	if Engine.is_editor_hint():
+		return
+
 	if initial_selected:
 		selected.value = initial_selected
 

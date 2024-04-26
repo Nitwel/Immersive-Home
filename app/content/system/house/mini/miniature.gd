@@ -9,7 +9,6 @@ const temperature_gradient = preload ("./temp_gradient.tres")
 @onready var small_node = $Body/Small
 @onready var model = $Body/Small/Model
 @onready var collision_shape = $Body/CollisionShape3D
-@onready var toggle_heatmap = $Body/HeatmapButton
 @onready var entity_select = $Body/EntitySelect
 
 enum HeatmapType {
@@ -37,6 +36,8 @@ var small = R.state(false)
 func _ready():
 	wall_material.set_shader_parameter("data", [])
 	wall_material.set_shader_parameter("data_size", 0)
+
+	entity_select.house_small = small
 
 	if Store.house.is_loaded() == false:
 		await Store.house.on_loaded

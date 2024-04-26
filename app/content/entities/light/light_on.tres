@@ -2,5 +2,6 @@
 
 [resource]
 resource_local_to_scene = true
+albedo_color = Color(0.231373, 0.231373, 0.231373, 1)
 emission = Color(1, 0.65098, 0, 1)
 emission_energy_multiplier = 0.0

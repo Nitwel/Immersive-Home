@@ -1,24 +1,15 @@
 @tool
-extends StaticBody3D
+extends Container3D
 class_name Input3D
 
 var text_handler = preload ("res://content/ui/components/input/text_handler.gd").new()
 
-@onready var caret: MeshInstance3D = $Label/Caret
-@onready var mesh_box: MeshInstance3D = $Box
-@onready var collision: CollisionShape3D = $Collision
+@onready var caret: MeshInstance3D = $Body/Label/Caret
+@onready var panel: Panel3D = $Body/Panel3D
+@onready var body: StaticBody3D = $Body
+@onready var collision: CollisionShape3D = $Body/Collision
 @onready var animation: AnimationPlayer = $AnimationPlayer
-@onready var label: Label3D = $Label
-
-@export_range(0.1, 2, 0.01, "suffix:m") var width: float = 0.15:
-	set(value):
-		width = value
-		text_handler.width = value
-		if !is_inside_tree(): return
-
-		mesh_box.mesh.size.x = width
-		collision.shape.size.x = width
-		label.position.x = -width / 2 + 0.002
+@onready var label: Label3D = $Body/Label
 	
 @export var text: String:
 	set(value):
@@ -38,7 +29,7 @@ var text_handler = preload ("res://content/ui/components/input/text_handler.gd")
 			label.modulate = Color(0.7, 0.7, 0.7)
 			add_to_group("ui_focus_skip")
 			animation.stop()
-			caret.hide()
+			caret.visible = false
 		else:
 			label.modulate = Color(1, 1, 1)
 			remove_from_group("ui_focus_skip")
@@ -48,9 +39,10 @@ var keyboard_input: bool = false
 var input_plane = Plane(Vector3.UP, Vector3.ZERO)
 
 func _ready():
-	Update.props(self, ["text", "disabled", "width"])
-
 	text_handler.label = label
+
+	Update.props(self, ["text", "disabled", "width"])
+	_update()
 
 	if Engine.is_editor_hint():
 		return
@@ -112,13 +104,23 @@ func _on_press_move(event):
 	caret.position.x = text_handler.get_caret_position()
 	label.text = text_handler.get_display_text()
 
+func _on_ray_enter(_event: EventPointer):
+	if disabled:
+		return
+
+	panel.hovering = true
+
+func _on_ray_leave(_event: EventPointer):
+	panel.hovering = false
+
 func _on_focus_in(_event):
 	if disabled:
 		return
 
 	caret.position.x = text_handler.get_caret_position()
 	label.text = text_handler.get_display_text()
-	caret.show()
+	caret.visible = true
+	panel.active = true
 	animation.play("blink")
 
 func update_caret_position(event):
@@ -143,7 +145,8 @@ func _on_focus_out(_event):
 		return
 
 	animation.stop()
-	caret.hide()
+	caret.visible = false
+	panel.active = false
 
 func _draw_debug_text_gaps():
 	if text_handler.gap_offsets == null:
@@ -156,3 +159,12 @@ func _draw_debug_text_gaps():
 			label.to_global(Vector3(offset, 0.01, 0)),
 			Color(1, 0, 0) if i != text_handler.overflow_index else Color(0, 1, 0)
 		)
+
+func _update():
+	text_handler.width = size.x
+	panel.size = Vector2(size.x, size.y)
+	panel.position.z = size.z / 2
+	collision.shape.size = size
+	label.position = Vector3( - size.x / 2 + 0.002, 0, size.z / 2)
+	label.text = text_handler.get_display_text()
+	body.position = Vector3(0, 0, size.z / 2)

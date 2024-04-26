@@ -26,6 +26,10 @@ func _ready():
 	var index = AudioServer.get_bus_index("Record")
 	effect = AudioServer.get_bus_effect(index, 0)
 
+	chat_assistant.visible = false
+	chat_user.visible = false
+	loader.visible = false
+
 	if !HomeApi.has_connected():
 		await HomeApi.on_connect
 
@@ -91,6 +95,9 @@ func finish():
 	loader.visible = false
 
 func _process(_delta):
+	if voice_assistant == null:
+		return
+
 	var sterioData: PackedVector2Array = effect.get_buffer(effect.get_frames_available())
 
 	if sterioData.size() == 0:

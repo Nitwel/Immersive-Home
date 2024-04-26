@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://uogsamyglyw5"]
+
+[ext_resource type="Script" path="res://content/ui/menu/edit/entity.gd" id="1_d4c6l"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_gi1de"]
+[ext_resource type="PackedScene" uid="uid://blkfqa3ttk0d2" path="res://content/ui/components/label_container/label_container.tscn" id="3_vva3t"]
+
+[node name="Entity" type="Node3D"]
+script = ExtResource("1_d4c6l")
+gap = 0.01
+size = Vector3(0.35, 0.03, 1)
+
+[node name="Button" parent="." instance=ExtResource("2_gi1de")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.015, 0, 0)
+label = "question_mark"
+icon = true
+size = Vector3(0.03, 0.03, 0.01)
+
+[node name="LabelContainer" parent="." instance=ExtResource("3_vva3t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0615, 0, 0)
+text = "Button"
+font_size = 12
+size = Vector3(0.043, 0.015, 0.1)

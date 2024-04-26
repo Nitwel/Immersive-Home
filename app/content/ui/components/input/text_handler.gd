@@ -5,16 +5,18 @@ const FontTools = preload ("res://lib/utils/font_tools.gd")
 var label: Label3D
 
 var text: String = ""
-var width: float = 0.2
+var width: float = 0.2:
+	set(value):
+		width = max(0.0, value)
+		gap_offsets = _calculate_text_gaps()
+		overflow_index = _calculate_overflow_index()
+		caret_position = 0
 var gap_offsets = null
 var overflow_index: int = -1
 var char_offset: int = 0
 var caret_position: int = 3:
 	set(value):
 		caret_position = clampi(value, 0, text.length())
-
-func set_width(value: float):
-	width = value
 
 func set_text(value: String, insert: bool=false):
 	var old_text = text

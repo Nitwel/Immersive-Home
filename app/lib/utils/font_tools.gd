@@ -1,5 +1,5 @@
 ## Returns the size of a Label3D in standard units
-static func get_font_size(label: Label3D, chars=null):
+static func get_font_size(label: Label3D, chars=null) -> Vector2:
 	var font = label.font
 
 	if font == null:

@@ -1,9 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://cw86rc42dv2d8"]
+[gd_scene load_steps=14 format=3 uid="uid://cw86rc42dv2d8"]
 
 [ext_resource type="Script" path="res://content/entities/light/light.gd" id="1_ykxy3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_4sfxb"]
 [ext_resource type="Material" uid="uid://vce66e7sbc3n" path="res://content/entities/light/light_on.tres" id="5_50gph"]
-[ext_resource type="Script" path="res://content/functions/occludable.gd" id="5_oh4jg"]
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="6_mhjlm"]
 [ext_resource type="Texture2D" uid="uid://hy2f6is7qjyv" path="res://assets/canvas.png" id="7_ximu1"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="8_1sfll"]
@@ -37,9 +36,6 @@ script = ExtResource("1_ykxy3")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_ukj14")
 
-[node name="Occludable" type="Node" parent="."]
-script = ExtResource("5_oh4jg")
-
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("4_4sfxb")
 
@@ -59,11 +55,10 @@ height = 0.03
 sides = 36
 
 [node name="Slider" parent="." instance=ExtResource("6_mhjlm")]
-transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0.08, 0, 0)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.08, 0, 0)
 max = 100.0
 value = 100.0
 step = 1.0
-size = Vector3(10, 0.4, 1)
 
 [node name="ColorWheel" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.15, 0, 0)
@@ -95,12 +90,12 @@ mesh = SubResource("CylinderMesh_x68ys")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.11, 0)
 
 [node name="Next" parent="Modes" instance=ExtResource("8_nhcff")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.04, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04, 0, 0)
 label = "navigate_next"
 icon = true
 
 [node name="Previous" parent="Modes" instance=ExtResource("8_nhcff")]
-transform = Transform3D(1, 0, 0, 0, 2.98023e-08, -1, 0, 1, 2.98023e-08, -0.1, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
 label = "navigate_before"
 icon = true
 

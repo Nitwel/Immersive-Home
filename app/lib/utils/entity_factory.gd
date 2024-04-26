@@ -39,3 +39,24 @@ static func create_entity(id: String, type=null):
 			
 	entity.entity_id = id
 	return entity
+
+static func get_entity_icon(type: String) -> String:
+	match type:
+		"switch":
+			return "toggle_on"
+		"light":
+			return "lightbulb"
+		"sensor":
+			return "sensors"
+		"media_player":
+			return "play_circle"
+		"camera":
+			return "photo_camera"
+		"button":
+			return "radio_button_checked"
+		"number":
+			return "sliders"
+		"line_chart":
+			return "finance"
+		_:
+			return "question_mark"

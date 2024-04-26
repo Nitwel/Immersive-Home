@@ -1,92 +1,92 @@
-[gd_scene load_steps=7 format=3 uid="uid://pk5k1q8bx0rj"]
+[gd_scene load_steps=9 format=3 uid="uid://pk5k1q8bx0rj"]
 
 [ext_resource type="Script" path="res://content/ui/components/slider/slider.gd" id="1_ylune"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eiwwn"]
-albedo_color = Color(0.133333, 0.133333, 0.133333, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_77ny1"]
-material = SubResource("StandardMaterial3D_eiwwn")
-top_radius = 0.008
-bottom_radius = 0.008
-height = 0.003
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_v34nn"]
-top_radius = 0.002
-bottom_radius = 0.002
-height = 0.005
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_by0d8"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h1mn1"]
-size = Vector3(0.2, 0.004, 0.01)
+resource_local_to_scene = true
+size = Vector3(0.15, 0.02, 0.01)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vgpd3"]
+resource_local_to_scene = true
+render_priority = 20
+shader = ExtResource("2_by0d8")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(1.5, 0.2)
+shader_parameter/border_size = 0.005
+shader_parameter/border_fade_in = 0.04
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.12
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_k78f4"]
+resource_local_to_scene = true
+size = Vector2(0.15, 0.02)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mv0la"]
+resource_local_to_scene = true
+render_priority = 30
+shader = ExtResource("2_by0d8")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.15, 0.15)
+shader_parameter/border_size = 0.002
+shader_parameter/border_fade_in = 0.02
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.085
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_vw14o"]
+resource_local_to_scene = true
+size = Vector2(0.015, 0.015)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s64dk"]
-size = Vector3(0.2, 0.008, 0.01)
+resource_local_to_scene = true
+size = Vector3(0.15, 0.02, 0.01)
 
 [node name="Slider" type="Node3D"]
 script = ExtResource("1_ylune")
-size = Vector3(20, 0.4, 1)
-cutout_border = 0.2
-cutout_depth = 0.36
+show_label = true
+size = Vector3(0.15, 0.02, 0.01)
 
-[node name="Rod" type="CSGCombiner3D" parent="."]
-transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
-snap = 0.0001
-
-[node name="Outside" type="CSGBox3D" parent="Rod"]
-snap = 0.0001
-size = Vector3(20, 0.4, 1)
-
-[node name="Cutout" type="CSGCombiner3D" parent="Rod"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.021, 0)
-operation = 2
-snap = 0.0001
-
-[node name="Length" type="CSGBox3D" parent="Rod/Cutout"]
-snap = 0.0001
-size = Vector3(19, 0.36, 0.6)
-
-[node name="EndRight" type="CSGCylinder3D" parent="Rod/Cutout"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 0, 0)
-snap = 0.0001
-radius = 0.3
-height = 0.36
-sides = 36
-
-[node name="EndLeft" type="CSGCylinder3D" parent="Rod/Cutout"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0, 0)
-snap = 0.0001
-radius = 0.3
-height = 0.36
-sides = 36
-
-[node name="Knob" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.057, 0.00409426, 0)
-mesh = SubResource("CylinderMesh_77ny1")
-
-[node name="Pin" type="MeshInstance3D" parent="Knob"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00353538, 0)
-mesh = SubResource("CylinderMesh_v34nn")
-
-[node name="CollisionBody" type="StaticBody3D" parent="."]
+[node name="Body" type="StaticBody3D" parent="."]
 collision_layer = 6
 collision_mask = 6
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionBody"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
 shape = SubResource("BoxShape3D_h1mn1")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.01)
+material_override = SubResource("ShaderMaterial_vgpd3")
+mesh = SubResource("QuadMesh_k78f4")
+
 [node name="Label" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.105, 0, 0)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0, 0.01)
 pixel_size = 0.001
+render_priority = 30
+outline_render_priority = 29
 text = "0.2 "
 font_size = 10
 outline_size = 4
 horizontal_alignment = 0
+
+[node name="Knob" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.039, 0, 0.012)
+material_override = SubResource("ShaderMaterial_mv0la")
+mesh = SubResource("QuadMesh_vw14o")
+skeleton = NodePath("../Body")
 
 [node name="Area3D" type="Area3D" parent="."]
 collision_layer = 4
 collision_mask = 4
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.004, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.015)
 shape = SubResource("BoxShape3D_s64dk")

@@ -1,16 +1,34 @@
-[gd_scene load_steps=10 format=3 uid="uid://blrhy2uccrdn4"]
+[gd_scene load_steps=13 format=3 uid="uid://blrhy2uccrdn4"]
 
-[ext_resource type="Material" uid="uid://bujy3egn1oqac" path="res://assets/materials/pri-500.material" id="1_0kd7r"]
 [ext_resource type="Script" path="res://content/ui/components/input/input.gd" id="1_uml3t"]
+[ext_resource type="Script" path="res://content/ui/components/panel/panel.gd" id="3_3bvrj"]
 [ext_resource type="FontVariation" uid="uid://d2ofyimg5s65q" path="res://assets/fonts/ui_font_500.tres" id="3_ij5fh"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_nl02b"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_kjbca"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_exbug"]
 resource_local_to_scene = true
-size = Vector3(0.15, 0.006, 0.03)
+render_priority = 10
+shader = ExtResource("3_nl02b")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(3.75, 0.75)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.2
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_lemta"]
+size = Vector2(0.15, 0.03)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x4yp8"]
 resource_local_to_scene = true
-size = Vector3(0.15, 0.006, 0.03)
+size = Vector3(0.15, 0.03, 0.01)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x1ra7"]
+shading_mode = 0
 
 [sub_resource type="BoxMesh" id="BoxMesh_2736g"]
 size = Vector3(0.001, 0.02, 0.001)
@@ -52,36 +70,46 @@ _data = {
 "blink": SubResource("Animation_8ny1h")
 }
 
-[node name="Input" type="StaticBody3D" groups=["ui_focus"]]
-collision_layer = 6
-collision_mask = 0
+[node name="Input" type="Node3D" groups=["ui_focus"]]
 script = ExtResource("1_uml3t")
-text = "Example"
+text = "Example Text"
+size = Vector3(0.15, 0.03, 0.01)
 
-[node name="Box" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.003, 0)
-material_override = ExtResource("1_0kd7r")
-mesh = SubResource("BoxMesh_kjbca")
+[node name="Body" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
+collision_layer = 6
+collision_mask = 6
 
-[node name="Collision" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.003, 0)
+[node name="Panel3D" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
+material_override = SubResource("ShaderMaterial_exbug")
+mesh = SubResource("QuadMesh_lemta")
+script = ExtResource("3_3bvrj")
+size = Vector2(0.15, 0.03)
+
+[node name="Collision" type="CollisionShape3D" parent="Body"]
 shape = SubResource("BoxShape3D_x4yp8")
 
-[node name="Label" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.073, 0.00618291, 0)
+[node name="Label" type="Label3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.073, 0, 0.005)
 pixel_size = 0.001
-text = "Example"
+double_sided = false
+render_priority = 30
+outline_render_priority = 29
+text = "Example Text"
 font = ExtResource("3_ij5fh")
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
-[node name="Caret" type="MeshInstance3D" parent="Label"]
+[node name="Caret" type="MeshInstance3D" parent="Body/Label"]
 visible = false
+material_override = SubResource("StandardMaterial3D_x1ra7")
 mesh = SubResource("BoxMesh_2736g")
 skeleton = NodePath("../..")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Body")
 libraries = {
 "": SubResource("AnimationLibrary_1sy4t")
 }

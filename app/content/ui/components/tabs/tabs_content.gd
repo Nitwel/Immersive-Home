@@ -16,6 +16,6 @@ func _ready():
 		R.effect(func(_arg):
 			if tabs.selected.value.get_index() == i:
 				add_child(child)
-			else:
+			elif child.get_parent() == self:
 				remove_child(child)
 		)

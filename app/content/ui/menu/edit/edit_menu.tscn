@@ -1,33 +1,95 @@
-[gd_scene load_steps=4 format=3 uid="uid://crrb0l3ekuotj"]
+[gd_scene load_steps=11 format=3 uid="uid://crrb0l3ekuotj"]
 
 [ext_resource type="Script" path="res://content/ui/menu/edit/edit_menu.gd" id="1_34cbn"]
+[ext_resource type="Script" path="res://content/ui/menu/edit/devices.gd" id="2_rkvf4"]
 [ext_resource type="Script" path="res://content/ui/components/grid_container/grid_container.gd" id="3_0xvyw"]
-[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_tvimg"]
+[ext_resource type="PackedScene" uid="uid://bef3gamrm6at2" path="res://content/ui/components/pagination/pagination.tscn" id="4_4jiu6"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_lpv7m"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="4_xunmy"]
+[ext_resource type="Script" path="res://content/ui/menu/edit/entities.gd" id="5_t34xe"]
+[ext_resource type="Script" path="res://content/ui/components/flex_container/flex_container.gd" id="6_cr6p6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hstwo"]
+render_priority = -3
+shader = ExtResource("4_xunmy")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.42, 0.32)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_4pj6f"]
+size = Vector2(0.42, 0.32)
 
 [node name="EditMenu" type="Node3D"]
 script = ExtResource("1_34cbn")
 
 [node name="Devices" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0.01, 0.03)
+script = ExtResource("2_rkvf4")
+
+[node name="GridContainer3D" type="Node3D" parent="Devices"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.08, 0)
 script = ExtResource("3_0xvyw")
-depth_gap = 0.06
-size = Vector3(0.24, 0.1, 0.1)
+columns = 7
+gaps = Vector2(0.01, 0.01)
+size = Vector3(0.28, 0.1, 0.1)
 
-[node name="PageNumberLabel" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.26, 0.01, 0.27)
+[node name="Label3D" type="Label3D" parent="Devices"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.03, 0)
 pixel_size = 0.001
-text = "0 / 0"
-font_size = 18
+double_sided = false
+render_priority = 15
+outline_render_priority = 14
+text = "Devices"
+font_size = 24
 outline_size = 0
+horizontal_alignment = 0
 
-[node name="Buttons" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, 0.01, 0.27)
+[node name="Pagination3D" parent="Devices" instance=ExtResource("4_4jiu6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.29, 0)
+pages = 10
+size = Vector3(9.92, 0.03, 0.01)
 
-[node name="NextPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
-label = "navigate_next"
+[node name="Entities" type="Node3D" parent="."]
+script = ExtResource("5_t34xe")
+
+[node name="FlexContainer3D" type="Node3D" parent="Entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, -0.06, 0)
+script = ExtResource("6_cr6p6")
+vertical = true
+gap = 0.01
+size = Vector3(1, 0.2, 1)
+
+[node name="Pagination3D" parent="Entities" instance=ExtResource("4_4jiu6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.29, 0)
+pages = 10
+size = Vector3(9.92, 0.03, 0.01)
+
+[node name="Label3D" type="Label3D" parent="Entities"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.03, 0)
+pixel_size = 0.001
+double_sided = false
+render_priority = 15
+outline_render_priority = 14
+text = "My Entity"
+font_size = 24
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="Button" parent="Entities" instance=ExtResource("4_lpv7m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, -0.03, 0)
+label = "arrow_back"
 icon = true
+size = Vector3(0.03, 0.03, 0.01)
 
-[node name="PreviousPageButton" parent="Buttons" instance=ExtResource("4_tvimg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0, 0)
-label = "navigate_before"
-icon = true
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
+visible = false
+material_override = SubResource("ShaderMaterial_hstwo")
+mesh = SubResource("QuadMesh_4pj6f")
+skeleton = NodePath("../..")
