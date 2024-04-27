@@ -3,17 +3,9 @@
     
 ## Description
 
-Stores general settings for the app
+If the onboarding process has been completed
 
-## Properties
 
-| Name                                             | Type                                                                    | Default     |
-| ------------------------------------------------ | ----------------------------------------------------------------------- | ----------- |
-| [onboarding_complete](#prop-onboarding-complete) | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html)     | `false`     |
-| [token](#prop-token)                             | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) | `""`        |
-| [type](#prop-type)                               | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) | `"HASS_WS"` |
-| [url](#prop-url)                                 | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) | `""`        |
-| [voice_assistant](#prop-voice-assistant)         | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html)     | `false`     |
 
 ## Methods
 
@@ -32,27 +24,7 @@ Stores general settings for the app
 
 No description provided yet.
 
-## Property Descriptions
 
-### onboarding_complete: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) {#prop-onboarding-complete}
-
-If the onboarding process has been completed
-
-### token: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) {#prop-token}
-
-No description provided yet.
-
-### type: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) {#prop-type}
-
-The adapter to use for connecting with a backend
-
-### url: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) {#prop-url}
-
-No description provided yet.
-
-### voice_assistant: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) {#prop-voice-assistant}
-
-If the voice assistant should be enabled
 
 ## Method Descriptions
 

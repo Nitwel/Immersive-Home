@@ -14,6 +14,7 @@
 | [devices_template](#prop-devices-template)       | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)               |         |
 | [entities](#prop-entities)                       | [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html)       |         |
 | [entitiy_callbacks](#prop-entitiy-callbacks)     | [CallbackMap](/reference/CallbackMap.html)                                            |         |
+| [history_handler](#prop-history-handler)         | [History](/reference/lib--home_apis--hass_ws--handlers--history.html)                 |         |
 | [id](#prop-id)                                   | [int](https://docs.godotengine.org/de/4.x/classes/class_int.html)                     | `1`     |
 | [integration_handler](#prop-integration-handler) | [Integration](/reference/lib--home_apis--hass_ws--handlers--integration.html)         |         |
 | [packet_callbacks](#prop-packet-callbacks)       | [CallbackMap](/reference/CallbackMap.html)                                            |         |
@@ -33,6 +34,7 @@
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [encode_packet](#encode-packet) ( packet: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) )                                                                                                                                                                |
 | void                                                                      | [get_device](#get-device) ( id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )                                                                                                                                                                                  |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_devices](#get-devices) (  )                                                                                                                                                                                                                                                           |
+| [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_history](#get-history) ( entity_id: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), start: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), end: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )     |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_state](#get-state) ( entity: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )                                                                                                                                                                                |
 | [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_voice_assistant](#get-voice-assistant) (  )                                                                                                                                                                                                                                           |
 | void                                                                      | [handle_connect](#handle-connect) (  )                                                                                                                                                                                                                                                     |
@@ -75,6 +77,10 @@ No description provided yet.
 
 No description provided yet.
 
+### HistoryHandler = `<Object>` {#const-HistoryHandler}
+
+No description provided yet.
+
 ## Property Descriptions
 
 ### LOG_MESSAGES: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) {#prop-LOG-MESSAGES}
@@ -102,6 +108,10 @@ No description provided yet.
 No description provided yet.
 
 ### entitiy_callbacks: [CallbackMap](/reference/CallbackMap.html) {#prop-entitiy-callbacks}
+
+No description provided yet.
+
+### history_handler: [History](/reference/lib--home_apis--hass_ws--handlers--history.html) {#prop-history-handler}
 
 No description provided yet.
 
@@ -160,6 +170,10 @@ No description provided yet.
 No description provided yet.
 
 ###  get_devices ( ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-devices}
+
+No description provided yet.
+
+###  get_history (entity_id: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , start: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , end: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-history}
 
 No description provided yet.
 

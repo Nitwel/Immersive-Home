@@ -9,9 +9,10 @@ This class is used to create entities based on their type
 
 ## Methods
 
-| Returns                                                                   | Name                                                                                                            |
-| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [create_entity](#create-entity) ( id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) ) |
+| Returns                                                                   | Name                                                                                                                                                                                             |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [create_entity](#create-entity) ( id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), type: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) |
+| [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)   | [get_entity_icon](#get-entity-icon) ( type: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) )                                                                            |
 
 
 
@@ -47,10 +48,18 @@ No description provided yet.
 
 No description provided yet.
 
+### LineGraphEntity = `<Object>` {#const-LineGraphEntity}
+
+No description provided yet.
+
 
 
 ## Method Descriptions
 
-### static create_entity (id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#create-entity}
+### static create_entity (id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , type: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#create-entity}
+
+No description provided yet.
+
+### static get_entity_icon (type: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html)  ) -> [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) {#get-entity-icon}
 
 No description provided yet.

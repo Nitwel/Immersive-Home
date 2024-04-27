@@ -71,6 +71,14 @@ export default {
                             link: '/development/event-system'
                         },
                         {
+                            text: 'Interaction System',
+                            link: '/development/interaction'
+                        },
+                        {
+                            text: 'Force Feedback',
+                            link: '/development/force-feedback'
+                        },
+                        {
                             text: 'Node Functions',
                             link: '/development/functions'
                         }
