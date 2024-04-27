@@ -8,8 +8,10 @@ const temperature_gradient = preload ("./temp_gradient.tres")
 @onready var body = $Body
 @onready var small_node = $Body/Small
 @onready var model = $Body/Small/Model
+@onready var player = $Body/Small/Player
 @onready var collision_shape = $Body/CollisionShape3D
 @onready var entity_select = $Body/EntitySelect
+@onready var main = $"/root/Main"
 
 enum HeatmapType {
 	NONE = 0,
@@ -71,6 +73,7 @@ func _ready():
 	# Update Size
 	R.effect(func(_arg):
 		collision_shape.disabled=small.value == false
+		player.visible=small.value
 
 		var tween:=create_tween()
 		tween.set_parallel(true)
@@ -130,6 +133,12 @@ func _ready():
 	R.effect(func(_arg):
 		wall_material.set_shader_parameter("alpha", opacity.value / 100.0)
 	)
+
+func _process(delta):
+	var cam_pos = main.camera.global_position
+	cam_pos.y += 0.1
+	player.mesh.height = cam_pos.y
+	player.position = Vector3(cam_pos.x, cam_pos.y / 2, cam_pos.z)
 
 const SensorEntity = preload ("res://content/entities/sensor/sensor.gd")
 

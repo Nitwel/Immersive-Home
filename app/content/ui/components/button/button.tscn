@@ -4,7 +4,7 @@
 [ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_db5by"]
 [ext_resource type="Script" path="res://content/ui/components/panel/panel.gd" id="3_skm86"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tulmb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n8om1"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("2_db5by")
@@ -19,7 +19,7 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_hvywi"]
+[sub_resource type="QuadMesh" id="QuadMesh_dxm1i"]
 size = Vector2(0.04, 0.04)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xwopm"]
@@ -42,8 +42,8 @@ collision_mask = 0
 
 [node name="Panel3D" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
-material_override = SubResource("ShaderMaterial_tulmb")
-mesh = SubResource("QuadMesh_hvywi")
+material_override = SubResource("ShaderMaterial_n8om1")
+mesh = SubResource("QuadMesh_dxm1i")
 skeleton = NodePath("../..")
 script = ExtResource("3_skm86")
 size = Vector2(0.04, 0.04)

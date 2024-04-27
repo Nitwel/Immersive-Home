@@ -6,7 +6,7 @@ The app currently supports 3 different types of interaction techniques:
 - **Using hands with raycast**
 - **Using hands with direct touch**
 
-The interaction system, like the [Event System](/development/event-system.html), is heavily inspired by the interaction system in browsers. Interaction Events can be broken down into 2 categories, [Pointer Events](/reference/EventPointer.html) initiated by a raycast and [Touch Events](/reference/TouchEvent.html) initiated by a collision shape in the tip of the fingers. Pointer Events](/reference/EventPointer.html)
+The interaction system, like the [Event System](/development/event-system.html), is heavily inspired by the interaction system in browsers. Interaction Events can be broken down into 2 categories, [Pointer Events](/reference/EventPointer.html) initiated by a raycast and [Touch Events](/reference/EventTouch.html) initiated by a collision shape in the tip of the fingers. Pointer Events](/reference/EventPointer.html)
 
 ## Pointer Events
 
