@@ -3,12 +3,14 @@ extends Node3D
 const Room = preload ("./room/room.tscn")
 const RoomType = preload ("./room/room.gd")
 const Miniature = preload ("./mini/miniature.gd")
+const Doors = preload ("./doors/doors.gd")
 const AlignReference = preload ("./align_reference.gd")
 
 @onready var levels = $Levels
 @onready var collision_shape = $Levels/CollisionShape3D
 @onready var align_reference: AlignReference = $AlignReference
 @onready var mini_view: Miniature = $Levels/Miniature
+@onready var doors: Doors = $Levels/Doors
 
 var fixing_reference: bool = false
 var editing_room: RoomType = null

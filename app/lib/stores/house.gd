@@ -19,6 +19,15 @@ func _init():
 		## 	 room: String
 		##   interface: String
 		"entities": [],
+		## Type Door
+		##   id: int
+		##   room1: String
+		##   room2: String
+		##   room1_position1: Vec3
+		##   room1_position2: Vec3
+		##   room2_position1: Vec3
+		##   room2_position2: Vec3
+		"doors": [],
 		"align_position1": Vector3(),
 		"align_position2": Vector3()
 	})
