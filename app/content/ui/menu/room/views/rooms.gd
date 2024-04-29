@@ -1,162 +1,72 @@
 extends Node3D
 
 const Room = preload ("res://content/system/house/room/room.tscn")
-const ConstructRoomMesh = preload ("res://lib/utils/mesh/construct_room_mesh.gd")
-
-const material_selected = preload ("../room_selected.tres")
-const material_unselected = preload ("../room_unselected.tres")
+const RoomsMap = preload ("rooms_map.gd")
 
 @onready var room_button = $Button
 @onready var input = $Input
-@onready var rooms_map = $Rooms
+@onready var rooms_map: RoomsMap = $Rooms
 
-var selected_room = null:
-	set(value):
-		if selected_room != null&&value == null:
-			room_button.label = "add"
-			input.text = "Room %s" % (rooms_map.get_child_count() + 1)
-
-		var old_room = get_room(selected_room)
-
-		if old_room != null:
-			old_room.get_node("MeshInstance3D").material_override = material_unselected
-
-		if value != null:
-			room_button.label = "edit"
-			input.text = value
-			edit_room = false
-			var new_room = get_room(value)
-			if new_room != null:
-				new_room.get_node("MeshInstance3D").material_override = material_selected
-				
-		selected_room = value
-
-var edit_room = false:
-	set(value):
-		if value == edit_room:
-			return
-
-		edit_room = value
-		if value:
-			room_button.label = "save"
-			input.disabled = false
-		else:
-			room_button.label = "edit"
-			input.disabled = true
-
-			if selected_room != null&&selected_room != input.text:
-				House.body.rename_room(selected_room, input.text)
-				selected_room = input.text
+var editing_room = R.state(false)
 
 func _ready():
+
+	R.effect(func(_arg):
+		if rooms_map.selected_room.value == null:
+			room_button.label="add"
+		elif editing_room.value:
+			room_button.label="save"
+		else:
+			room_button.label="edit"
+	)
+
+	R.effect(func(_arg):
+		input.disabled=editing_room.value == false
+	)
+
+	R.effect(func(_arg):
+		if rooms_map.selected_room.value == null:
+			var i=1
+			while rooms_map.get_room("Room %s" % i) != null:
+				i += 1
+
+			input.text="Room %s" % i
+		else:
+			input.text=rooms_map.selected_room.value
+	)
+
 	if !Store.house.is_loaded(): await Store.house.on_loaded
 
-	_generate_room_map()
-
-	input.text = "Room %s" % (rooms_map.get_child_count() + 1)
-
 	room_button.on_button_down.connect(func():
-		if selected_room == null:
+		var selected_room=rooms_map.selected_room
+
+		if selected_room.value == null:
 			var room_name=input.text
-			if get_room(room_name) != null:
+			if rooms_map.get_room(room_name) != null:
 				EventSystem.notify("Name already taken", EventNotify.Type.WARNING)
 				return
 			
 			House.body.create_room(room_name, 0)
 			House.body.edit_room(room_name)
-			selected_room=room_name
-			edit_room=true
+			selected_room.value=room_name
+			editing_room.value=true
+			rooms_map.selectable.value=false
 		else:
-			if edit_room:
-				edit_room=false
+			editing_room.value=!editing_room.value
+			rooms_map.selectable.value=!editing_room.value
 
-				if !House.body.is_valid_room(selected_room):
+			if editing_room.value == false:
+				if !House.body.is_valid_room(selected_room.value):
 					EventSystem.notify("Room was deleted as it had less than 3 corners.", EventNotify.Type.WARNING)
-					House.body.delete_room(selected_room)
-					selected_room=null
-				else:
-					House.body.edit_room(null)
-				_generate_room_map()
+					House.body.delete_room(selected_room.value)
+					selected_room.value=null
+					return
+
+				if selected_room.value != null&&selected_room.value != input.text:
+					House.body.rename_room(selected_room.value, input.text)
+					selected_room.value=input.text
+				
+				House.body.edit_room(null)
 			else:
-				edit_room=true
-				House.body.edit_room(selected_room)
+				House.body.edit_room(selected_room.value)
 	)
-
-func get_room(room_name):
-	if room_name == null:
-		return null
-
-	if rooms_map.has_node("%s"% room_name):
-		return rooms_map.get_node("%s"% room_name)
-	return null
-
-func _on_click(event: EventPointer):
-	if event.target.get_parent() == rooms_map:
-		var room_name = event.target.name
-
-		if selected_room == room_name:
-			selected_room = null
-			House.body.edit_room(null)
-			return
-
-		selected_room = room_name
-
-func _generate_room_map():
-	var rooms = Store.house.state.rooms
-
-	var target_size = Vector2(0.2, 0.2)
-	var target_offset = Vector2(0, 0.05)
-
-	for old_room in rooms_map.get_children():
-		old_room.queue_free()
-		await old_room.tree_exited
-
-	if rooms.size() == 0:
-		return
-
-	if rooms[0].corners.size() == 0:
-		return
-
-	var current_min = Vector2(rooms[0].corners[0].x, rooms[0].corners[0].y)
-	var current_max = current_min
-
-	for room in rooms:
-		for corner in room.corners:
-			current_min.x = min(current_min.x, corner.x)
-			current_min.y = min(current_min.y, corner.y)
-			current_max.x = max(current_max.x, corner.x)
-			current_max.y = max(current_max.y, corner.y)
-
-	for room in rooms:
-		var mesh = ConstructRoomMesh.generate_ceiling_mesh(room.corners)
-		
-		if mesh == null:
-			continue
-
-		var body = StaticBody3D.new()
-		body.name = room.name
-		
-		var mesh_instance = MeshInstance3D.new()
-		mesh_instance.name = "MeshInstance3D"
-		mesh_instance.mesh = mesh
-		mesh_instance.material_override = material_unselected if selected_room != room.name else material_selected
-		body.add_child(mesh_instance)
-
-		var collision_shape = CollisionShape3D.new()
-		collision_shape.shape = mesh.create_trimesh_shape()
-		body.add_child(collision_shape)
-
-		rooms_map.add_child(body)
-
-	if current_min == null:
-		return
-
-	var current_size = current_max - current_min
-	var target_scale = target_size / current_size
-	var scale_value = min(target_scale.x, target_scale.y)
-
-	rooms_map.position.x = -current_min.x * scale_value + target_offset.x
-	rooms_map.position.y = current_min.y * scale_value - target_offset.y
-	rooms_map.position.z = 0.002
-
-	rooms_map.scale = Vector3(scale_value, scale_value, scale_value)

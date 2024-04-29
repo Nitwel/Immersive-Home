@@ -63,7 +63,15 @@ func _ready():
 			model.add_child(walls_mesh)
 			model.add_child(floor_mesh)
 
-			walls_mesh.mesh=ConstructRoomMesh.generate_wall_mesh_grid(room.corners, room.height)
+			var doors=[]
+
+			for door in Store.house.state.doors:
+				if door.room1 == room.name:
+					doors.append([door.room1_position1, door.room1_position2])
+				elif door.room2 == room.name:
+					doors.append([door.room2_position1, door.room2_position2])
+
+			walls_mesh.mesh=ConstructRoomMesh.generate_wall_mesh_with_doors_grid(room.corners, room.height, doors)
 			floor_mesh.mesh=ConstructRoomMesh.generate_ceiling_mesh_grid(room.corners)
 
 			walls_mesh.material_override=wall_material

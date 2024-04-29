@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8nh8582vwc8u"]
+
+[ext_resource type="Script" path="res://content/system/house/doors/doors.gd" id="1_rsgao"]
+
+[node name="Doors" type="Node3D"]
+script = ExtResource("1_rsgao")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+top_level = true
+enabled = false
+collision_mask = 16
+hit_from_inside = true

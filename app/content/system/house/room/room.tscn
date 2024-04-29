@@ -37,6 +37,9 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WallCollision"]
 
+[node name="Clickable" type="Node" parent="WallCollision"]
+script = ExtResource("1_ugebq")
+
 [node name="Ceiling" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 collision_layer = 24

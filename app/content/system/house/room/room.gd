@@ -19,16 +19,19 @@ var editable: bool = false:
 		
 		if !is_inside_tree(): return
 		
-		if editable:
-			state_machine.change_to("Edit")
-		else:
-			state_machine.change_to("View")
+		update()
 
 func _ready():
 	Update.props(self, ["editable"])
 
 func has_point(point: Vector3) -> bool:
 	return get_aabb().has_point(point)
+
+func update():
+	if editable:
+		state_machine.change_to("Edit")
+	else:
+		state_machine.change_to("View")
 
 func get_aabb():
 	var room_store = Store.house.get_room(name)
@@ -56,13 +59,26 @@ func get_aabb():
 
 	return AABB(to_global(min_pos), to_global(max_pos) - to_global(min_pos))
 
-static func generate_wall_mesh(room_store: Dictionary):
-	var corners = room_store.corners
-	var height = room_store.height
+func generate_wall_mesh():
+	var room = Store.house.get_room(name)
 
-	return ConstructRoomMesh.generate_wall_mesh(corners, height)
+	if room == null||room.corners.size() < 3:
+		return null
 
-static func generate_ceiling_mesh(room_store: Dictionary):
-	var corners = room_store.corners
+	var corners = room.corners
+	var height = room.height
+	var doors = []
+
+	for door in Store.house.state.doors:
+		if door.room1 == name:
+			doors.append([door.room1_position1, door.room1_position2])
+		elif door.room2 == name:
+			doors.append([door.room2_position1, door.room2_position2])
+
+	# return ConstructRoomMesh.generate_wall_mesh(corners, height)
+	return ConstructRoomMesh.generate_wall_mesh_with_doors(corners, height, doors)
+
+static func generate_ceiling_mesh(room: Dictionary):
+	var corners = room.corners
 
 	return ConstructRoomMesh.generate_ceiling_mesh(corners)

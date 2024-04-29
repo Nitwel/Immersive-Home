@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c01gkeldvjwtr"]
+[gd_scene load_steps=11 format=3 uid="uid://c01gkeldvjwtr"]
 
 [ext_resource type="Script" path="res://content/ui/menu/room/room_menu.gd" id="1_ch4jb"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_cghmp"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="6_ba00g"]
 [ext_resource type="PackedScene" uid="uid://bpta22fahai46" path="res://content/ui/menu/room/views/rooms.tscn" id="7_2f8e0"]
 [ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="7_bxp1w"]
+[ext_resource type="PackedScene" uid="uid://biwinf4360f10" path="res://content/ui/menu/room/views/doors.tscn" id="7_fl4l8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2asng"]
 render_priority = -3
@@ -46,13 +47,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
 label = "Rooms"
 size = Vector3(0.06, 0.04, 0.01)
 
+[node name="Doors" parent="Interface/Tabs3D" instance=ExtResource("4_cghmp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 0, 0)
+label = "Doors"
+size = Vector3(0.06, 0.04, 0.01)
+
 [node name="TabsContent3D" type="Node3D" parent="Interface" node_paths=PackedStringArray("tabs")]
 script = ExtResource("6_ba00g")
 tabs = NodePath("../Tabs3D")
 
 [node name="Overview" parent="Interface/TabsContent3D" instance=ExtResource("6_206ad")]
+visible = false
 
 [node name="Rooms" parent="Interface/TabsContent3D" instance=ExtResource("7_2f8e0")]
+visible = false
+
+[node name="Doors" parent="Interface/TabsContent3D" instance=ExtResource("7_fl4l8")]
 
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)

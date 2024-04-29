@@ -25,6 +25,84 @@ static func generate_wall_mesh(corners, height):
 	
 	return mesh
 
+## Generate a wall mesh with doors
+## corners: Array of Vector2
+## height: float
+## doors: Array[Array[Vector3, Vector3]]
+static func generate_wall_mesh_with_doors(corners, height, doors):
+	if corners.size() < 3:
+		return null
+
+	var mesh = ArrayMesh.new()
+
+	for i in range(0, corners.size()):
+		var corner = corners[i]
+		var next_corner = corners[(i + 1) % corners.size()]
+
+		var forward = Vector3(next_corner.x - corner.x, 0, next_corner.y - corner.y).normalized()
+
+		var points := PackedVector2Array()
+
+		points.append(Vector2(0, 0))
+		points.append(Vector2(0, height))
+		points.append(Vector2(corner.distance_to(next_corner), height))
+		points.append(Vector2(corner.distance_to(next_corner), 0))
+
+		for door in doors:
+			var door_point1 = Vector2(door[0].x, door[0].z)
+			var door_point2 = Vector2(door[1].x, door[1].z)
+			var proj_point1 = Geometry2D.get_closest_point_to_segment_uncapped(door_point1, corner, next_corner)
+			var proj_point2 = Geometry2D.get_closest_point_to_segment_uncapped(door_point2, corner, next_corner)
+
+			if proj_point1.distance_to(door_point1) > 0.02&&proj_point2.distance_to(door_point2) > 0.02:
+				continue
+
+			if proj_point1.distance_to(proj_point2) < 0.02:
+				continue
+
+			var point1_distance = corner.distance_to(proj_point1)
+			var point2_distance = corner.distance_to(proj_point2)
+
+			var door_points := PackedVector2Array()
+
+			door_points.append(Vector2(point1_distance, -1))
+			door_points.append(Vector2(point1_distance, door[0].y))
+			door_points.append(Vector2(point2_distance, door[1].y))
+			door_points.append(Vector2(point2_distance, -1))
+
+			var clip = Geometry2D.clip_polygons(points, door_points)
+			if clip.size() == 0:
+				continue
+
+			assert(clip.size() != 2, "Door clip should not create holes")
+
+			points = clip[0]
+
+		var edges = PackedInt32Array()
+		for k in range(points.size()):
+			edges.append(k)
+			edges.append((k + 1) % points.size())
+
+		var cdt: ConstrainedTriangulation = ConstrainedTriangulation.new()
+		cdt.init(true, true, 0.1)
+
+		cdt.insert_vertices(points)
+		cdt.insert_edges(edges)
+
+		cdt.erase_outer_triangles()
+
+		points = cdt.get_all_vertices()
+		var triangles: PackedInt32Array = cdt.get_all_triangles()
+
+		var points_3d = PackedVector3Array()
+
+		for k in range(points.size()):
+			points_3d.append(Vector3(corner.x, 0, corner.y) + points[k].x * forward + Vector3(0, points[k].y, 0))
+
+		mesh = _create_mesh_3d(points_3d, triangles, mesh)
+
+	return mesh
+
 static func generate_ceiling_mesh(corners):
 	var points: PackedVector2Array = PackedVector2Array()
 	var edges: PackedInt32Array = PackedInt32Array()
@@ -51,7 +129,107 @@ static func generate_ceiling_mesh(corners):
 	points = cdt.get_all_vertices()
 	triangles = cdt.get_all_triangles()
 
-	return _create_mesh(points, triangles)
+	return _create_mesh_2d(points, triangles)
+
+static func generate_wall_mesh_with_doors_grid(corners, height, doors, grid:=0.1):
+	if corners.size() < 3:
+		return null
+
+	var mesh = ArrayMesh.new()
+
+	for i in range(0, corners.size()):
+		var corner = corners[i]
+		var next_corner = corners[(i + 1) % corners.size()]
+
+		var forward = Vector3(next_corner.x - corner.x, 0, next_corner.y - corner.y).normalized()
+
+		var points := PackedVector2Array()
+
+		points.append(Vector2(0, 0))
+		points.append(Vector2(0, height))
+		points.append(Vector2(corner.distance_to(next_corner), height))
+		points.append(Vector2(corner.distance_to(next_corner), 0))
+
+		for door in doors:
+			var door_point1 = Vector2(door[0].x, door[0].z)
+			var door_point2 = Vector2(door[1].x, door[1].z)
+			var proj_point1 = Geometry2D.get_closest_point_to_segment_uncapped(door_point1, corner, next_corner)
+			var proj_point2 = Geometry2D.get_closest_point_to_segment_uncapped(door_point2, corner, next_corner)
+
+			if proj_point1.distance_to(door_point1) > 0.02&&proj_point2.distance_to(door_point2) > 0.02:
+				continue
+
+			if proj_point1.distance_to(proj_point2) < 0.02:
+				continue
+
+			var point1_distance = corner.distance_to(proj_point1)
+			var point2_distance = corner.distance_to(proj_point2)
+
+			var door_points := PackedVector2Array()
+
+			door_points.append(Vector2(point1_distance, -1))
+			door_points.append(Vector2(point1_distance, door[0].y))
+			door_points.append(Vector2(point2_distance, door[1].y))
+			door_points.append(Vector2(point2_distance, -1))
+
+			var clip = Geometry2D.clip_polygons(points, door_points)
+			if clip.size() == 0:
+				continue
+
+			assert(clip.size() != 2, "Door clip should not create holes")
+
+			points = clip[0]
+
+		# Subdivide edge to grid
+
+		var new_points = PackedVector2Array()
+
+		for k in range(points.size()):
+			var point = points[k]
+			var next_point = points[(k + 1) % points.size()]
+
+			new_points.append(point)
+			
+			var steps = floor(point.distance_to(next_point) / grid)
+
+			for x in range(1, steps):
+				new_points.append(point + (next_point - point).normalized() * grid * x)
+
+		points = new_points
+
+		var edges = PackedInt32Array()
+		for k in range(points.size()):
+			edges.append(k)
+			edges.append((k + 1) % points.size())
+
+		# Subdivide inner polygon to grid
+		var steps = ceil(Vector2(corner.distance_to(next_corner) / grid, height / grid))
+
+		for y in range(1, steps.y):
+			for x in range(1, steps.x):
+				var point = Vector2(x * grid, y * grid)
+
+				points.append(point)
+
+		var cdt: ConstrainedTriangulation = ConstrainedTriangulation.new()
+		cdt.init(true, true, 0.001)
+
+		cdt.insert_vertices(points)
+		cdt.insert_edges(edges)
+
+		cdt.erase_outer_triangles()
+
+		points = cdt.get_all_vertices()
+		var triangles: PackedInt32Array = cdt.get_all_triangles()
+
+		var points_3d = PackedVector3Array()
+
+		for k in range(points.size()):
+			points_3d.append(Vector3(corner.x, 0, corner.y) + points[k].x * forward + Vector3(0, points[k].y, 0))
+
+		mesh = _create_mesh_3d(points_3d, triangles, mesh)
+
+	return mesh
 
 static func generate_wall_mesh_grid(corners, height, grid: Vector2=Vector2(0.1, 0.1)):
 	if corners.size() < 3:
@@ -186,9 +364,29 @@ static func generate_ceiling_mesh_grid(corners, grid: Vector2=Vector2(0.1, 0.1))
 	points = cdt.get_all_vertices()
 	triangles = cdt.get_all_triangles()
 
-	return _create_mesh(points, triangles)
+	return _create_mesh_2d(points, triangles)
 
-static func _create_mesh(points: PackedVector2Array, triangles: PackedInt32Array):
+static func _create_mesh_3d(points: PackedVector3Array, triangles: PackedInt32Array, existing=null):
+	var st = SurfaceTool.new()
+
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+
+	for i in range(points.size()):
+		st.add_vertex(Vector3(points[i].x, points[i].y, points[i].z))
+
+	for i in range(triangles.size()):
+		st.add_index(triangles[i])
+
+	st.index()
+	st.generate_normals()
+	st.generate_tangents()
+
+	if existing != null:
+		return st.commit(existing)
+
+	return st.commit()
+
+static func _create_mesh_2d(points: PackedVector2Array, triangles: PackedInt32Array):
 	var st = SurfaceTool.new()
 
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)

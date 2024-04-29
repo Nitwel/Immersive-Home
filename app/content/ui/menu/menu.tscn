@@ -269,7 +269,6 @@ visible = false
 [node name="EditMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("4_r2raj")]
 
 [node name="RoomMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("10_u4i1x")]
-visible = false
 
 [node name="AutomateMenu" type="Node3D" parent="AnimationContainer/TabsContent"]
 visible = false

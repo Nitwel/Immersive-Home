@@ -5,10 +5,10 @@ const RoomState = preload ("./room_state.gd")
 func _on_enter():
 	var room_store = Store.house.get_room(room.name)
 
-	if room_store == null||room_store.corners.size() < 3:
+	if room_store == null:
 		return
 
-	room.wall_mesh.mesh = Room.generate_wall_mesh(room_store)
+	room.wall_mesh.mesh = room.generate_wall_mesh()
 
 	if room.wall_mesh.mesh == null:
 		return

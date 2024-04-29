@@ -1,9 +1,14 @@
-[gd_scene load_steps=7 format=3 uid="uid://bpta22fahai46"]
+[gd_scene load_steps=9 format=3 uid="uid://bpta22fahai46"]
 
 [ext_resource type="Script" path="res://content/ui/menu/room/views/rooms.gd" id="1_3a1oa"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_y3lty"]
+[ext_resource type="Script" path="res://content/ui/menu/room/views/rooms_map.gd" id="2_2t24u"]
 [ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="2_hstw7"]
 [ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="4_jx6i3"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_ehu5x"]
+size = Vector2(0.2, 0.2)
+orientation = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dah0r"]
 render_priority = -3
@@ -26,7 +31,11 @@ size = Vector2(0.42, 0.32)
 script = ExtResource("1_3a1oa")
 
 [node name="Rooms" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.14, -0.15, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.12, -0.16, 0.005)
+script = ExtResource("2_2t24u")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Rooms"]
+mesh = SubResource("QuadMesh_ehu5x")
 
 [node name="Button" parent="." instance=ExtResource("1_y3lty")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.28, 0)

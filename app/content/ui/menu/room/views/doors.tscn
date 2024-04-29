@@ -1,0 +1,66 @@
+[gd_scene load_steps=9 format=3 uid="uid://biwinf4360f10"]
+
+[ext_resource type="Script" path="res://content/ui/menu/room/views/doors.gd" id="1_22w4h"]
+[ext_resource type="Script" path="res://content/ui/menu/room/views/rooms_map.gd" id="2_to21g"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_v01ty"]
+[ext_resource type="Script" path="res://content/ui/menu/room/views/doors_map.gd" id="3_0k2cc"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="4_eorpn"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_lkxbm"]
+size = Vector2(0.2, 0.2)
+orientation = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dah0r"]
+render_priority = -3
+shader = ExtResource("4_eorpn")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.42, 0.32)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_fq44b"]
+size = Vector2(0.42, 0.32)
+
+[node name="Doors" type="Node3D"]
+script = ExtResource("1_22w4h")
+
+[node name="Rooms" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.12, -0.16, 0.005)
+script = ExtResource("2_to21g")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Rooms"]
+mesh = SubResource("QuadMesh_lkxbm")
+
+[node name="Doors" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.12, -0.16, 0.006)
+script = ExtResource("3_0k2cc")
+
+[node name="Button" parent="." instance=ExtResource("2_v01ty")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.28, 0)
+label = "add"
+icon = true
+
+[node name="DeleteButton" parent="." instance=ExtResource("2_v01ty")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.28, 0)
+label = "delete"
+icon = true
+
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
+material_override = SubResource("ShaderMaterial_dah0r")
+mesh = SubResource("QuadMesh_fq44b")
+skeleton = NodePath("../..")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, -0.28, 0)
+pixel_size = 0.001
+text = "Add Door"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
