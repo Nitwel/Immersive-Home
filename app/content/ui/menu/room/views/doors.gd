@@ -6,6 +6,7 @@ const material_selected = preload ("../room_selected.tres")
 const material_unselected = preload ("../room_unselected.tres")
 
 @onready var door_button = $Button
+@onready var delete_button = $DeleteButton
 @onready var door_label = $Label3D
 @onready var rooms_map = $Rooms
 @onready var doors_map = $Doors
@@ -37,6 +38,11 @@ func _ready():
 
 	R.bind(door_label, "text", button_label)
 
+	R.effect(func(_arg):
+		delete_button.disabled=doors_map.selected_door.value == null
+		delete_button.visible=doors_map.selected_door.value != null
+	)
+
 	door_button.on_button_up.connect(func():
 		if doors_map.selected_door.value == null:
 			var id=House.body.doors.add()
@@ -48,5 +54,11 @@ func _ready():
 		else:
 			House.body.doors.save()
 			editing_door.value=false
+	)
+
+	delete_button.on_button_up.connect(func():
+		if doors_map.selected_door.value != null:
+			House.body.doors.delete(doors_map.selected_door.value)
+			doors_map.selected_door.value=null
 	)
 	

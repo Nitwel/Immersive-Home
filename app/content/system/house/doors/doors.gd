@@ -34,6 +34,10 @@ func add():
 
 	return next_index + 1
 
+func delete(door):
+	Store.house.state.doors = Store.house.state.doors.filter(func(d): return d.id != door)
+	Store.house.save_local()
+
 func edit(door):
 	var doors = Store.house.state.doors
 	editing_door = door
