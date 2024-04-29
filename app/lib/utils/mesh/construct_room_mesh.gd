@@ -30,7 +30,6 @@ static func generate_wall_mesh(corners, height):
 ## height: float
 ## doors: Array[Array[Vector3, Vector3]]
 static func generate_wall_mesh_with_doors(corners, height, doors):
-	print("Generating wall mesh with doors")
 	if corners.size() < 3:
 		return null
 
@@ -39,7 +38,6 @@ static func generate_wall_mesh_with_doors(corners, height, doors):
 	for i in range(0, corners.size()):
 		var corner = corners[i]
 		var next_corner = corners[(i + 1) % corners.size()]
-		print("Corner ", corner, " Next corner ", next_corner)
 
 		var forward = Vector3(next_corner.x - corner.x, 0, next_corner.y - corner.y).normalized()
 
@@ -56,15 +54,10 @@ static func generate_wall_mesh_with_doors(corners, height, doors):
 			var proj_point1 = Geometry2D.get_closest_point_to_segment_uncapped(door_point1, corner, next_corner)
 			var proj_point2 = Geometry2D.get_closest_point_to_segment_uncapped(door_point2, corner, next_corner)
 
-			print("Door points ", door_point1, " ", door_point2)
-			print("Projected points ", proj_point1, " ", proj_point2)
-
 			if proj_point1.distance_to(door_point1) > 0.02&&proj_point2.distance_to(door_point2) > 0.02:
-				print("Door is not on the wall")
 				continue
 
 			if proj_point1.distance_to(proj_point2) < 0.02:
-				print("Door is too small")
 				continue
 
 			var point1_distance = corner.distance_to(proj_point1)
@@ -101,13 +94,10 @@ static func generate_wall_mesh_with_doors(corners, height, doors):
 		points = cdt.get_all_vertices()
 		var triangles: PackedInt32Array = cdt.get_all_triangles()
 
-		print(points.size(), triangles.size())
-
 		var points_3d = PackedVector3Array()
 
 		for k in range(points.size()):
 			points_3d.append(Vector3(corner.x, 0, corner.y) + points[k].x * forward + Vector3(0, points[k].y, 0))
-			print(points_3d[k])
 
 		mesh = _create_mesh_3d(points_3d, triangles, mesh)
 
