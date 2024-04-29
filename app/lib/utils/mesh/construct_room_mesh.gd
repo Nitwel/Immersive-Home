@@ -25,6 +25,94 @@ static func generate_wall_mesh(corners, height):
 	
 	return mesh
 
+## Generate a wall mesh with doors
+## corners: Array of Vector2
+## height: float
+## doors: Array[Array[Vector3, Vector3]]
+static func generate_wall_mesh_with_doors(corners, height, doors):
+	print("Generating wall mesh with doors")
+	if corners.size() < 3:
+		return null
+
+	var mesh = ArrayMesh.new()
+
+	for i in range(0, corners.size()):
+		var corner = corners[i]
+		var next_corner = corners[(i + 1) % corners.size()]
+		print("Corner ", corner, " Next corner ", next_corner)
+
+		var forward = Vector3(next_corner.x - corner.x, 0, next_corner.y - corner.y).normalized()
+
+		var points := PackedVector2Array()
+
+		points.append(Vector2(0, 0))
+		points.append(Vector2(0, height))
+		points.append(Vector2(corner.distance_to(next_corner), height))
+		points.append(Vector2(corner.distance_to(next_corner), 0))
+
+		for door in doors:
+			var door_point1 = Vector2(door[0].x, door[0].z)
+			var door_point2 = Vector2(door[1].x, door[1].z)
+			var proj_point1 = Geometry2D.get_closest_point_to_segment_uncapped(door_point1, corner, next_corner)
+			var proj_point2 = Geometry2D.get_closest_point_to_segment_uncapped(door_point2, corner, next_corner)
+
+			print("Door points ", door_point1, " ", door_point2)
+			print("Projected points ", proj_point1, " ", proj_point2)
+
+			if proj_point1.distance_to(door_point1) > 0.02&&proj_point2.distance_to(door_point2) > 0.02:
+				print("Door is not on the wall")
+				continue
+
+			if proj_point1.distance_to(proj_point2) < 0.02:
+				print("Door is too small")
+				continue
+
+			var point1_distance = corner.distance_to(proj_point1)
+			var point2_distance = corner.distance_to(proj_point2)
+
+			var door_points := PackedVector2Array()
+
+			door_points.append(Vector2(point1_distance, -1))
+			door_points.append(Vector2(point1_distance, door[0].y))
+			door_points.append(Vector2(point2_distance, door[1].y))
+			door_points.append(Vector2(point2_distance, -1))
+
+			var clip = Geometry2D.clip_polygons(points, door_points)
+			if clip.size() == 0:
+				continue
+
+			assert(clip.size() != 2, "Door clip should not create holes")
+
+			points = clip[0]
+
+		var edges = PackedInt32Array()
+		for k in range(points.size()):
+			edges.append(k)
+			edges.append((k + 1) % points.size())
+
+		var cdt: ConstrainedTriangulation = ConstrainedTriangulation.new()
+		cdt.init(true, true, 0.1)
+
+		cdt.insert_vertices(points)
+		cdt.insert_edges(edges)
+
+		cdt.erase_outer_triangles()
+
+		points = cdt.get_all_vertices()
+		var triangles: PackedInt32Array = cdt.get_all_triangles()
+
+		print(points.size(), triangles.size())
+
+		var points_3d = PackedVector3Array()
+
+		for k in range(points.size()):
+			points_3d.append(Vector3(corner.x, 0, corner.y) + points[k].x * forward + Vector3(0, points[k].y, 0))
+			print(points_3d[k])
+
+		mesh = _create_mesh_3d(points_3d, triangles, mesh)
+
+	return mesh
+
 static func generate_ceiling_mesh(corners):
 	var points: PackedVector2Array = PackedVector2Array()
 	var edges: PackedInt32Array = PackedInt32Array()
@@ -51,7 +139,7 @@ static func generate_ceiling_mesh(corners):
 	points = cdt.get_all_vertices()
 	triangles = cdt.get_all_triangles()
 
-	return _create_mesh(points, triangles)
+	return _create_mesh_2d(points, triangles)
 
 static func generate_wall_mesh_grid(corners, height, grid: Vector2=Vector2(0.1, 0.1)):
 	if corners.size() < 3:
@@ -186,9 +274,29 @@ static func generate_ceiling_mesh_grid(corners, grid: Vector2=Vector2(0.1, 0.1))
 	points = cdt.get_all_vertices()
 	triangles = cdt.get_all_triangles()
 
-	return _create_mesh(points, triangles)
+	return _create_mesh_2d(points, triangles)
 
-static func _create_mesh(points: PackedVector2Array, triangles: PackedInt32Array):
+static func _create_mesh_3d(points: PackedVector3Array, triangles: PackedInt32Array, existing=null):
+	var st = SurfaceTool.new()
+
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+
+	for i in range(points.size()):
+		st.add_vertex(Vector3(points[i].x, points[i].y, points[i].z))
+
+	for i in range(triangles.size()):
+		st.add_index(triangles[i])
+
+	st.index()
+	st.generate_normals()
+	st.generate_tangents()
+
+	if existing != null:
+		return st.commit(existing)
+
+	return st.commit()
+
+static func _create_mesh_2d(points: PackedVector2Array, triangles: PackedInt32Array):
 	var st = SurfaceTool.new()
 
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)

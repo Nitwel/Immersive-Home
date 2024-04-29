@@ -3,6 +3,7 @@ extends Node3D
 const WallCornerScene = preload ("../room/wall_corner.tscn")
 const WallEdgeScene = preload ("../room/wall_edge.tscn")
 
+## int | null
 var editing_door = null
 
 var room1 = null
@@ -23,8 +24,56 @@ func is_editing():
 func is_valid():
 	return room1 != null&&room2 != null&&room1_corner1 != null&&room1_corner2 != null&&room2_corner1 != null&&room2_corner2 != null
 
+func add():
+	var doors = Store.house.state.doors
+
+	var next_index = 0
+	for i in range(doors.size()):
+		next_index = max(next_index, doors[i].id)
+	edit(next_index + 1)
+
+	return next_index + 1
+
 func edit(door):
+	var doors = Store.house.state.doors
 	editing_door = door
+
+	var existing_door = null
+
+	for i in range(doors.size()):
+		if doors[i].id == door:
+			existing_door = doors[i]
+			break
+
+	if existing_door != null:
+		room1 = House.body.find_room(existing_door.room1)
+		room2 = House.body.find_room(existing_door.room2)
+
+		room1_corner1 = WallCornerScene.instantiate()
+		room1_corner1.global_position = existing_door.room1_position1
+		room1_corner1.get_node("Clickable").on_grab_move.connect(_move_corner.bind(room1, room1_corner1))
+		add_child(room1_corner1)
+
+		room1_corner2 = WallCornerScene.instantiate()
+		room1_corner2.global_position = existing_door.room1_position2
+		room1_corner2.get_node("Clickable").on_grab_move.connect(_move_corner.bind(room1, room1_corner2))
+		add_child(room1_corner2)
+
+		room2_corner1 = WallCornerScene.instantiate()
+		room2_corner1.global_position = existing_door.room2_position1
+		room2_corner1.get_node("Clickable").on_grab_move.connect(_move_corner.bind(room2, room2_corner1))
+		add_child(room2_corner1)
+
+		room2_corner2 = WallCornerScene.instantiate()
+		room2_corner2.global_position = existing_door.room2_position2
+		room2_corner2.get_node("Clickable").on_grab_move.connect(_move_corner.bind(room2, room2_corner2))
+		add_child(room2_corner2)
+
+		for room in House.body.get_rooms(0):
+			if room != room1&&room != room2:
+				room.get_node("WallCollision/Clickable").on_click.connect(_add_corner.bind(room))
+			else:
+				room.get_node("WallCollision/Clickable").on_click.disconnect(_add_corner.bind(room))
 
 	for room in House.body.get_rooms(0):
 		if door != null:
@@ -33,10 +82,70 @@ func edit(door):
 			room.get_node("WallCollision/Clickable").on_click.disconnect(_add_corner.bind(room))
 
 func discard():
-	pass
+	_clear()
 
 func save():
-	pass
+	var doors = Store.house.state.doors
+
+	if is_valid() == false:
+		EventSystem.notify("Door is not valid", EventNotify.Type.WARNING)
+		return
+
+	var existing_door_index = -1
+	for i in range(doors.size()):
+
+		if doors[i].id == editing_door:
+			existing_door_index = i
+			break
+
+	var door = {
+		"id": editing_door,
+		"room1": room1.name,
+		"room2": room2.name,
+		"room1_position1": room1_corner1.global_position,
+		"room1_position2": room1_corner2.global_position,
+		"room2_position1": room2_corner1.global_position,
+		"room2_position2": room2_corner2.global_position
+	}
+
+	if existing_door_index == - 1:
+		doors.append(door)
+	else:
+		doors[existing_door_index] = door
+
+	Store.house.state.doors = Store.house.state.doors
+
+	room1.update()
+	room2.update()
+
+	Store.house.save_local()
+	
+	_clear()
+
+func _clear():
+	editing_door = null
+	room1 = null
+	room2 = null
+
+	if room1_corner1 != null:
+		remove_child(room1_corner1)
+		room1_corner1.queue_free()
+		room1_corner1 = null
+
+	if room1_corner2 != null:
+		remove_child(room1_corner2)
+		room1_corner2.queue_free()
+		room1_corner2 = null
+
+	if room2_corner1 != null:
+		remove_child(room2_corner1)
+		room2_corner1.queue_free()
+		room2_corner1 = null
+
+	if room2_corner2 != null:
+		remove_child(room2_corner2)
+		room2_corner2.queue_free()
+		room2_corner2 = null
 
 func _add_corner(event: EventPointer, room):
 	_match_connected_room(event.ray.get_collision_point(), event.ray.get_collision_normal() * - 1)

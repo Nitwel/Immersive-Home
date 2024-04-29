@@ -14,6 +14,8 @@ static func stringify_value(value):
 			)
 		TYPE_BOOL, TYPE_INT, TYPE_FLOAT, TYPE_STRING, TYPE_NIL:
 			return value
+		TYPE_STRING_NAME:
+			return str(value)
 		TYPE_VECTOR2:
 			return {
 				"x": value.x,

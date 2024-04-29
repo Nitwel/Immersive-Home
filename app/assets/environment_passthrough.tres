@@ -1,0 +1,15 @@
+[gd_resource type="Environment" load_steps=3 format=3 uid="uid://gljmitbkl86b"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_i4xao"]
+
+[sub_resource type="Sky" id="Sky_vhymk"]
+sky_material = SubResource("ProceduralSkyMaterial_i4xao")
+
+[resource]
+background_color = Color(0, 0, 0, 0)
+background_energy_multiplier = 0.0
+sky = SubResource("Sky_vhymk")
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ssao_radius = 6.52
+ssao_intensity = 5.68

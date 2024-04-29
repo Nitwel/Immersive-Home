@@ -7,11 +7,12 @@ const material_selected = preload ("../room_selected.tres")
 const material_unselected = preload ("../room_unselected.tres")
 
 var selectable = R.state(true)
-var selected_room = R.state(null)
+var selected_door = R.state(null)
 
 func _ready():
 	R.effect(func(_arg):
 		var rooms=Store.house.state.rooms
+		var doors=Store.house.state.doors
 
 		for old_room in get_children():
 			remove_child(old_room)
@@ -28,14 +29,20 @@ func _ready():
 
 		var box_transform=BoundingBoxTools.resize_bounding_box_2d(rooms_rect, target_rect)
 
-		for room in rooms:
-			var mesh=ConstructRoomMesh.generate_ceiling_mesh(room.corners)
+		for door in doors:
+			var door_points=[
+				Vector2(door.room1_position1.x, door.room1_position1.z),
+				Vector2(door.room1_position2.x, door.room1_position2.z),
+				Vector2(door.room2_position2.x, door.room2_position2.z),
+				Vector2(door.room2_position1.x, door.room2_position1.z)
+			]
+			var mesh=ConstructRoomMesh.generate_ceiling_mesh(door_points)
 			
 			if mesh == null:
 				continue
 
 			var body=StaticBody3D.new()
-			body.name=room.name
+			body.name=str(door.id)
 			body.position.x=box_transform.origin.x
 			body.position.z=box_transform.origin.y
 			body.set_collision_layer_value(1, false)
@@ -44,7 +51,7 @@ func _ready():
 			var mesh_instance=MeshInstance3D.new()
 			mesh_instance.name="Mesh"
 			mesh_instance.mesh=mesh
-			mesh_instance.material_override=material_unselected if selected_room.value != room.name else material_selected
+			mesh_instance.material_override=material_unselected if selected_door.value != door.id else material_selected
 
 			body.add_child(mesh_instance)
 
@@ -63,24 +70,18 @@ func _on_click(event: EventPointer):
 	if selectable.value == false:
 		return
 
-	var previous_room = get_room(selected_room.value)
+	var door_id = int(str(event.target.name))
 
-	if previous_room != null:
-		previous_room.get_node("Mesh").material_override = material_unselected
-
-	var room_name = event.target.name
-
-	if selected_room.value == room_name:
-		selected_room.value = null
+	if selected_door.value == door_id:
+		selected_door.value = null
 		return
 
-	selected_room.value = room_name
-	get_room(selected_room.value).get_node("Mesh").material_override = material_selected
+	selected_door.value = door_id
 
-func get_room(room_name):
-	if room_name == null:
+func get_room(door_id):
+	if door_id == null:
 		return null
 
-	if has_node(str(room_name)):
-		return get_node(str(room_name))
+	if has_node(str(door_id)):
+		return get_node(str(door_id))
 	return null

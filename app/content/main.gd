@@ -1,8 +1,7 @@
 extends Node3D
 
-var sky = preload ("res://assets/materials/sky.material")
-var sky_passthrough = preload ("res://assets/materials/sky_passthrough.material")
 const VoiceAssistant = preload ("res://content/system/assist/assist.tscn")
+const environment_passthrough_material = preload ("res://assets/environment_passthrough.tres")
 
 @onready var environment: WorldEnvironment = $WorldEnvironment
 @onready var camera: XRCamera3D = $XROrigin3D/XRCamera3D
@@ -15,9 +14,10 @@ var voice_assistant = null
 
 func _ready():
 	# In case we're running on the headset, use the passthrough sky
+
 	if OS.get_name() == "Android":
 		# OS.request_permissions()
-		environment.environment.sky.set_material(sky_passthrough)
+		environment.environment = environment_passthrough_material
 		get_viewport().transparent_bg = true
 	else:
 		RenderingServer.set_debug_generate_wireframes(true)

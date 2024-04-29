@@ -10,24 +10,3 @@ top_level = true
 enabled = false
 collision_mask = 16
 hit_from_inside = true
-
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
-
-[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 2.98023e-08, -1, 0, 1, 2.98023e-08, -3.32523, 0, -0.681036)
-snap = 1e-06
-flip_faces = true
-polygon = PackedVector2Array(1.44028, 2.37318, 1.98957, 0.544275, 0.705633, -0.829152, -0.559752, 0.530294, -0.933822, 2.4059)
-depth = 2.5
-
-[node name="CSGPolygon3D" type="CSGPolygon3D" parent="CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 2.98023e-08, -1, 0, 1, 2.98023e-08, 0, 0, 0)
-snap = 1e-06
-flip_faces = true
-polygon = PackedVector2Array(1.44028, 2.37318, 1.98957, 0.544275, 0.705633, -0.829152, -0.559752, 0.530294, -0.933822, 2.4059)
-depth = 2.5
-
-[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.767542, 0.804975, 0.629865)
-flip_faces = true
-size = Vector3(2.00439, 1, 1)

@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://biwinf4360f10"]
+[gd_scene load_steps=9 format=3 uid="uid://biwinf4360f10"]
 
 [ext_resource type="Script" path="res://content/ui/menu/room/views/doors.gd" id="1_22w4h"]
 [ext_resource type="Script" path="res://content/ui/menu/room/views/rooms_map.gd" id="2_to21g"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_v01ty"]
+[ext_resource type="Script" path="res://content/ui/menu/room/views/doors_map.gd" id="3_0k2cc"]
 [ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="4_eorpn"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_lkxbm"]
@@ -30,14 +31,15 @@ size = Vector2(0.42, 0.32)
 script = ExtResource("1_22w4h")
 
 [node name="Rooms" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.12, -0.16, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.12, -0.16, 0.005)
 script = ExtResource("2_to21g")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Rooms"]
 mesh = SubResource("QuadMesh_lkxbm")
 
 [node name="Doors" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.12, -0.16, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.12, -0.16, 0.006)
+script = ExtResource("3_0k2cc")
 
 [node name="Button" parent="." instance=ExtResource("2_v01ty")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.28, 0)
@@ -46,6 +48,7 @@ icon = true
 
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
+visible = false
 material_override = SubResource("ShaderMaterial_dah0r")
 mesh = SubResource("QuadMesh_fq44b")
 skeleton = NodePath("../..")

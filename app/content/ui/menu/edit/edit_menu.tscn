@@ -127,6 +127,7 @@ size = Vector3(0.14, 0.03, 0.01)
 
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
+visible = false
 material_override = SubResource("ShaderMaterial_hstwo")
 mesh = SubResource("QuadMesh_4pj6f")
 skeleton = NodePath("../..")
