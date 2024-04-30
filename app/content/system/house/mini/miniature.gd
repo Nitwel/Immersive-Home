@@ -96,6 +96,7 @@ func _ready():
 			var center=aabb.position + aabb.size / 2
 
 			collision_shape.shape.size=aabb.size * 0.1
+			collision_shape.position=center * 0.1
 			entity_select.position=Vector3(0, height * 0.1 + 0.1, 0)
 
 			var camera=$"/root/Main/XROrigin3D/XRCamera3D"

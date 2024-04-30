@@ -86,7 +86,7 @@ func _process(_delta):
 	if Engine.is_editor_hint():
 		return
 
-	if get_tree().debug_collisions_hint&&OS.get_name() != "Android":
+	if get_tree().debug_collisions_hint:
 		_draw_debug_text_gaps()
 	
 func _on_press_down(event):

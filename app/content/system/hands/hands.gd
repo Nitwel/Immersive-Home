@@ -25,7 +25,6 @@ var left_pointer: Pointer
 var right_pointer: Pointer
 var press_distance = 0.03
 var grip_distance = 0.03
-var close_distance = 0.1
 
 var pressed_left = false
 var pressed_right = false
@@ -99,55 +98,34 @@ func _process_hand(hand: OpenXRHand):
 	var distance_trigger = index_tip.global_position.distance_to(thumb_tip.global_position)
 	var distance_grab = middle_tip.global_position.distance_to(thumb_tip.global_position)
 
-	var distance_target = _ray.get_collision_point().distance_to(_ray.global_position)
-
 	var trigger_close = distance_trigger <= press_distance
 	var grab_close = distance_grab <= grip_distance
-	var distance_close = distance_target <= close_distance
 
 	if hand == hand_left:
-		
-		if !distance_close:
-			if trigger_close&&!pressed_left:
-				initiator.on_press.emit(Initiator.EventType.TRIGGER)
-				pressed_left = true
-			elif !trigger_close&&pressed_left:
-				initiator.on_release.emit(Initiator.EventType.TRIGGER)
-				pressed_left = false
-		
-			if grab_close&&!grabbed_left:
-				initiator.on_press.emit(Initiator.EventType.GRIP)
-				grabbed_left = true
-			elif !grab_close&&grabbed_left:
-				initiator.on_release.emit(Initiator.EventType.GRIP)
-				grabbed_left = false
-		else:
-			if trigger_close&&!grabbed_left:
-				initiator.on_press.emit(Initiator.EventType.GRIP)
-				grabbed_left = true
-			elif !trigger_close&&grabbed_left:
-				initiator.on_release.emit(Initiator.EventType.GRIP)
-				grabbed_left = false
+		if trigger_close&&!pressed_left:
+			initiator.on_press.emit(Initiator.EventType.TRIGGER)
+			pressed_left = true
+		elif !trigger_close&&pressed_left:
+			initiator.on_release.emit(Initiator.EventType.TRIGGER)
+			pressed_left = false
+	
+		if grab_close&&!grabbed_left:
+			initiator.on_press.emit(Initiator.EventType.GRIP)
+			grabbed_left = true
+		elif !grab_close&&grabbed_left:
+			initiator.on_release.emit(Initiator.EventType.GRIP)
+			grabbed_left = false
 	else:
-		if !distance_close:
-			if trigger_close&&!pressed_right:
-				initiator.on_press.emit(Initiator.EventType.TRIGGER)
-				pressed_right = true
-			elif !trigger_close&&pressed_right:
-				initiator.on_release.emit(Initiator.EventType.TRIGGER)
-				pressed_right = false
+		if trigger_close&&!pressed_right:
+			initiator.on_press.emit(Initiator.EventType.TRIGGER)
+			pressed_right = true
+		elif !trigger_close&&pressed_right:
+			initiator.on_release.emit(Initiator.EventType.TRIGGER)
+			pressed_right = false
 
-			if grab_close&&!grabbed_right:
-				initiator.on_press.emit(Initiator.EventType.GRIP)
-				grabbed_right = true
-			elif !grab_close&&grabbed_right:
-				initiator.on_release.emit(Initiator.EventType.GRIP)
-				grabbed_right = false
-
-		else:
-			if trigger_close&&!grabbed_right:
-				initiator.on_press.emit(Initiator.EventType.GRIP)
-				grabbed_right = true
-			elif !trigger_close&&grabbed_right:
-				initiator.on_release.emit(Initiator.EventType.GRIP)
-				grabbed_right = false
+		if grab_close&&!grabbed_right:
+			initiator.on_press.emit(Initiator.EventType.GRIP)
+			grabbed_right = true
+		elif !grab_close&&grabbed_right:
+			initiator.on_release.emit(Initiator.EventType.GRIP)
+			grabbed_right = false
