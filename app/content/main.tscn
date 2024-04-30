@@ -31,6 +31,9 @@ environment = ExtResource("2_lsndp")
 transform = Transform3D(1, -2.51787e-05, 0.000567105, -0.000567105, 4.3985e-08, 1, -2.51784e-05, -1, 2.97105e-08, -4.65661e-10, 7.21041, 2.06458)
 shadow_enabled = true
 
+[node name="StartXR" parent="." instance=ExtResource("1_i4c04")]
+enable_passthrough = true
+
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
 [node name="XRCamera3D" parent="XROrigin3D" instance=ExtResource("3_rj4ac")]
@@ -52,9 +55,6 @@ mesh = SubResource("BoxMesh_ir3co")
 transform = Transform3D(0.999968, -1.39576e-11, 0, 9.52038e-12, 0.999984, -2.59206e-11, -2.91038e-11, 5.22959e-11, 0.999984, 0, 0, 0)
 ray_left = NodePath("../XRControllerLeft/Raycast")
 ray_right = NodePath("../XRControllerRight/Raycast")
-
-[node name="StartXR" parent="." instance=ExtResource("1_i4c04")]
-enable_passthrough = true
 
 [node name="XRSimulator" parent="." instance=ExtResource("5_3qc8g")]
 min_camera_height = 0.01

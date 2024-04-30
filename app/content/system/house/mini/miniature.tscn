@@ -27,6 +27,7 @@ disabled = true
 [node name="Movable" type="Node" parent="Body"]
 script = ExtResource("2_x7oed")
 restricted = true
+resizable = true
 
 [node name="Small" type="Node3D" parent="Body"]
 

@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://87utftwh8lr6"]
+
+[ext_resource type="PackedScene" uid="uid://dnam3fe36gg62" path="res://content/ui/components/panel/panel.tscn" id="1_3t6cp"]
+[ext_resource type="Script" path="res://content/ui/ui_console.gd" id="1_ullcc"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_dbrjx"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="3_2a4np"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mfp33"]
+size = Vector3(1, 1, 0.01)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p0lm6"]
+resource_local_to_scene = true
+render_priority = 10
+shader = ExtResource("2_dbrjx")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(25, 25)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.2
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_drxk8"]
+
+[node name="Console" type="StaticBody3D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_ullcc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_mfp33")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.48, -0.49, 0)
+pixel_size = 0.001
+text = "aaadddddddddddddddd dad addddddddddd ad awd ddddd dawd aw dwadaw wd                 dawdwdawd dwd       dwdddd
+aaa
+aaa"
+horizontal_alignment = 0
+vertical_alignment = 2
+autowrap_mode = 3
+width = 980.0
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("3_2a4np")
+
+[node name="Panel" parent="." instance=ExtResource("1_3t6cp")]
+material_override = SubResource("ShaderMaterial_p0lm6")
+mesh = SubResource("QuadMesh_drxk8")
+size = Vector2(1, 1)

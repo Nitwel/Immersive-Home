@@ -1,28 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://cbemihbxkd4ll"]
+[gd_scene load_steps=5 format=3 uid="uid://cbemihbxkd4ll"]
 
 [ext_resource type="Script" path="res://content/system/house/house.gd" id="1_p8amj"]
-[ext_resource type="Script" path="res://content/functions/movable.gd" id="2_w1auk"]
 [ext_resource type="PackedScene" uid="uid://jls16btb8nko" path="res://content/system/house/align_reference.tscn" id="3_e1tcn"]
 [ext_resource type="PackedScene" uid="uid://c8nh8582vwc8u" path="res://content/system/house/doors/doors.tscn" id="4_bb3c2"]
 [ext_resource type="PackedScene" uid="uid://ds60i5n211hi3" path="res://content/system/house/mini/miniature.tscn" id="4_qjbly"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_x81up"]
-
 [node name="House" type="Node3D"]
 script = ExtResource("1_p8amj")
 
-[node name="Levels" type="StaticBody3D" parent="."]
+[node name="Levels" type="Node3D" parent="."]
 
 [node name="Level0" type="Node3D" parent="Levels"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Levels"]
-shape = SubResource("BoxShape3D_x81up")
-disabled = true
-
-[node name="Movable" type="Node" parent="Levels"]
-script = ExtResource("2_w1auk")
-restricted = true
-lock_rotation = true
 
 [node name="Miniature" parent="Levels" instance=ExtResource("4_qjbly")]
 
