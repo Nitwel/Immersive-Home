@@ -53,8 +53,6 @@ func set_state(stateInfo):
 	if stateInfo == null:
 		return
 
-	print("stateInfo: ", stateInfo)
-
 	var state = stateInfo["state"]
 	var attributes = stateInfo["attributes"]
 
