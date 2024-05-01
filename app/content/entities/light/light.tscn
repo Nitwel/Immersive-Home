@@ -38,6 +38,7 @@ shape = SubResource("SphereShape3D_ukj14")
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("4_4sfxb")
+resizable = true
 
 [node name="Lightbulb" type="CSGCombiner3D" parent="."]
 transform = Transform3D(1, 9.69949e-05, 0.000589194, -9.77749e-05, 0.999999, 0.00135802, -0.000589065, -0.00135808, 0.999999, 0, 0, 0)

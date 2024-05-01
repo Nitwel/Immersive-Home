@@ -49,6 +49,7 @@ func update_house():
 
 		entity_instance.global_position = entity.position
 		entity_instance.global_rotation = entity.rotation
+		entity_instance.scale = Vector3(entity.scale, entity.scale, entity.scale) if entity.has("scale") else Vector3(1, 1, 1)
 
 	loaded.value = true
 
@@ -245,6 +246,7 @@ func save_all_entities():
 				"id": entity.entity_id,
 				"position": entity.global_position,
 				"rotation": entity.global_rotation,
+				"scale": entity.scale.x,
 				"room": String(room.name),
 			}
 

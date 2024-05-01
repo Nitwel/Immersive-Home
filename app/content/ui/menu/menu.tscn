@@ -198,7 +198,6 @@ shape = SubResource("BoxShape3D_e1esh")
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("2_8coxu")
-resizable = false
 
 [node name="AnimationContainer" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, 0.15, 0)
@@ -226,38 +225,38 @@ size = Vector3(0.05, 0.4, 1)
 [node name="View" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, 0)
 label = "visibility"
-size = Vector3(0.05, 0.05, 0.01)
 icon = true
 toggleable = true
 disabled = true
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Edit" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.085, 0)
 label = "widgets"
-size = Vector3(0.05, 0.05, 0.01)
 icon = true
 toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Room" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.145, 0)
 label = "view_in_ar"
-size = Vector3(0.05, 0.05, 0.01)
 icon = true
 toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Automate" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.205, 0)
 label = "schema"
-size = Vector3(0.05, 0.05, 0.01)
 icon = true
 toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Settings" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.265, 0)
 label = "settings"
-size = Vector3(0.05, 0.05, 0.01)
 icon = true
 toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
 
 [node name="TabsContent" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("tabs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.00999999, 0)
