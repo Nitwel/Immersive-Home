@@ -26,6 +26,7 @@ font_size = 80
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("2_fpq5q")
+resizable = true
 
 [node name="Button" parent="." instance=ExtResource("5_bmtkc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)

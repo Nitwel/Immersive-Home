@@ -36,3 +36,4 @@ sprite_frames = SubResource("SpriteFrames_ldpuo")
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("4_6xr03")
+resizable = true

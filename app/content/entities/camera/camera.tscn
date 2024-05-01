@@ -25,3 +25,4 @@ shape = SubResource("BoxShape3D_te0pn")
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("2_e2u6o")
+resizable = true

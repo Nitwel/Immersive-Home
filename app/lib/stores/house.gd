@@ -16,6 +16,7 @@ func _init():
 		##   id: String
 		## 	 position: Vec3
 		## 	 rotation: Vec3
+		## 	 scale: float
 		## 	 room: String
 		##   interface: String
 		"entities": [],

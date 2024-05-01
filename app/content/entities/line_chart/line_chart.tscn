@@ -20,6 +20,7 @@ shape = SubResource("BoxShape3D_rmm5v")
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("3_lidml")
+resizable = true
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 60.0
