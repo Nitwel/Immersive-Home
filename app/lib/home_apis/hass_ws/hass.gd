@@ -259,6 +259,13 @@ func set_state(entity: String, state: Variant, attributes: Dictionary={}):
 	elif domain == 'number':
 		service = 'set_value'
 		attributes["value"] = state
+	elif domain == 'timer':
+		if state == 'start':
+			service = 'start'
+		elif state == 'cancel':
+			service = 'cancel'
+		elif state == 'pause':
+			service = 'pause'
 
 	if service == null:
 		return null

@@ -1,0 +1,83 @@
+[gd_scene load_steps=10 format=3 uid="uid://chxdrb8qenypb"]
+
+[ext_resource type="Script" path="res://content/entities/timer/timer.gd" id="1_bomjl"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="2_ug1vg"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="2_x0bn6"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_v7356"]
+[ext_resource type="PackedScene" uid="uid://dnam3fe36gg62" path="res://content/ui/components/panel/panel.tscn" id="5_j3gsb"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="6_40cd1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3qyo4"]
+size = Vector3(0.32, 0.16, 0.02)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_71h4x"]
+resource_local_to_scene = true
+render_priority = 10
+shader = ExtResource("6_40cd1")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(8, 4)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.2
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_3qjpe"]
+size = Vector2(0.32, 0.16)
+
+[node name="Timer" type="StaticBody3D" groups=["entity"]]
+script = ExtResource("1_bomjl")
+
+[node name="TimerLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "10:00:00"
+font_size = 70
+outline_size = 0
+
+[node name="NameLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.06, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Timer"
+font_size = 28
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="IconLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.06, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "timer"
+font = ExtResource("2_ug1vg")
+font_size = 28
+outline_size = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)
+shape = SubResource("BoxShape3D_3qyo4")
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("2_x0bn6")
+
+[node name="PlayButton" parent="." instance=ExtResource("3_v7356")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+label = "play_arrow"
+icon = true
+
+[node name="StopButton" parent="." instance=ExtResource("3_v7356")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, -0.05, 0)
+label = "stop"
+icon = true
+
+[node name="Panel" parent="." instance=ExtResource("5_j3gsb")]
+material_override = SubResource("ShaderMaterial_71h4x")
+mesh = SubResource("QuadMesh_3qjpe")
+size = Vector2(0.32, 0.16)
