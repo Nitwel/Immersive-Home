@@ -10,7 +10,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_3qyo4"]
 size = Vector3(0.32, 0.16, 0.02)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_71h4x"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mq5r1"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("6_40cd1")
@@ -21,11 +21,11 @@ shader_parameter/size = Vector2(8, 4)
 shader_parameter/border_size = 0.01
 shader_parameter/border_fade_in = 0.05
 shader_parameter/border_fade_out = 0.0
-shader_parameter/corner_radius = 0.2
+shader_parameter/corner_radius = 0.8
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_3qjpe"]
+[sub_resource type="QuadMesh" id="QuadMesh_x7s0p"]
 size = Vector2(0.32, 0.16)
 
 [node name="Timer" type="StaticBody3D" groups=["entity"]]
@@ -78,6 +78,7 @@ label = "stop"
 icon = true
 
 [node name="Panel" parent="." instance=ExtResource("5_j3gsb")]
-material_override = SubResource("ShaderMaterial_71h4x")
-mesh = SubResource("QuadMesh_3qjpe")
+material_override = SubResource("ShaderMaterial_mq5r1")
+mesh = SubResource("QuadMesh_x7s0p")
 size = Vector2(0.32, 0.16)
+corner_radius = 0.8
