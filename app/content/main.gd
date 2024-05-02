@@ -47,6 +47,9 @@ func _ready():
 			toggle_menu()
 		elif action.name == "by_button":
 			House.body.mini_view.small.value=!House.body.mini_view.small.value
+		elif action.name == "ax_button":
+			if take_screenshot():
+				EventSystem.notify("Screenshot taken", EventNotify.Type.INFO)
 	)
 
 	EventSystem.on_focus_in.connect(func(event):
@@ -115,6 +118,9 @@ func _input(event):
 	if event is InputEventKey and Input.is_key_pressed(KEY_F10):
 		var vp = get_viewport()
 		vp.debug_draw = (vp.debug_draw + 1) % 5
+
+	if event is InputEventKey and Input.is_key_pressed(KEY_F2):
+		take_screenshot()
 		
 	if event is InputEventKey and Input.is_key_pressed(KEY_M):
 		toggle_menu()
@@ -138,3 +144,26 @@ func vector_key_mapping(key_positive_x: int, key_negative_x: int, key_positive_y
 		vec = vec.normalized()
 	
 	return vec
+
+func take_screenshot():
+	var vp = get_viewport()
+	var texture = vp.get_texture()
+	var image = texture.get_image()
+
+	var file_name = "%s.png" % Time.get_datetime_string_from_system().replace(":", "-")
+
+	if image == null:
+		return false
+
+	if OS.get_name() == "Android":
+		var path = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES, false) + "/immersive-home/" + file_name
+
+		if not FileAccess.file_exists(path):
+			var dir = path.get_base_dir()
+			DirAccess.open("user://").make_dir_recursive(dir)
+
+		image.save_png(path)
+	else:
+		image.save_png("user://screenshots/%s.png" % Time.get_datetime_string_from_system().replace(":", "-"))
+
+	return true
