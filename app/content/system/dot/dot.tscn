@@ -20,6 +20,8 @@ shape = SubResource("SphereShape3D_3wgjq")
 [node name="Label3D" type="Label3D" parent="."]
 pixel_size = 0.002
 billboard = 1
+render_priority = 15
+outline_render_priority = 14
 text = "lightbulb"
 font = ExtResource("4_504vw")
 font_size = 100
