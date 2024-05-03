@@ -66,6 +66,22 @@ func save_local(path=_save_path):
 	var json_text = JSON.stringify(data)
 	save_file.store_line(json_text)
 
+	# var path2 = OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS, false) + "/immersive-home/" + path.split("/")[- 1]
+	# path2 = path2.replace("/Android/data/org.godotengine.immersivehome/files", "")
+
+	# print(path2)
+
+	# if not FileAccess.file_exists(path2):
+	# 	var dir = path2.get_base_dir()
+	# 	DirAccess.open("user://").make_dir_recursive(dir)
+
+	# var save_file2 = FileAccess.open(path2, FileAccess.WRITE)
+
+	# if save_file2 == null:
+	# 	return false
+
+	# save_file2.store_line(json_text)
+
 	on_saved.emit()
 
 	return true
