@@ -31,7 +31,7 @@ var base_scale = {
 	HeatmapType.HUMIDITY: Vector2(0.0, 100.0)
 }
 var selected_scale = R.state(Vector2(0.0, 1.0))
-var opacity = R.state(30)
+var opacity = R.state(70)
 var heatmap_type = R.state(HeatmapType.NONE)
 var small = R.state(false)
 
@@ -106,7 +106,7 @@ func _ready():
 			camera_position.y *= 0.5
 			camera_direction.y=0
 
-			var target_position=camera_position + camera_direction.normalized() * 0.2
+			var target_position=camera_position + camera_direction.normalized() * 0.5
 			var new_position=target_position - center * 0.1
 
 			tween.tween_property(small_node, "scale", Vector3(0.1, 0.1, 0.1), 0.5)

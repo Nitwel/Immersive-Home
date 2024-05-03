@@ -29,6 +29,10 @@ EventSystem="*res://lib/globals/event_system.gd"
 House="*res://lib/globals/house_body.gd"
 Request="*res://lib/globals/request.gd"
 
+[display]
+
+window/vsync/vsync_mode=0
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg")

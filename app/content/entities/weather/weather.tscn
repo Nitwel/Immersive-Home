@@ -30427,7 +30427,7 @@ pixel_size = 0.001
 render_priority = 15
 sprite_frames = SubResource("SpriteFrames_71wxj")
 animation = &"sleet"
-frame_progress = 0.23404
+frame_progress = 0.689981
 
 [node name="WeatherLabel" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0.02, 0)

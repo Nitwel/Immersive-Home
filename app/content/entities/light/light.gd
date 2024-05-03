@@ -23,6 +23,9 @@ var color_supported = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	super()
+
+	if HomeApi.has_connected() == false:
+		await HomeApi.on_connect
 	
 	icon.value = "lightbulb"
 	var stateInfo = await HomeApi.get_state(entity_id)
