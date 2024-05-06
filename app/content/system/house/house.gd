@@ -174,7 +174,7 @@ func create_entity(entity_id: String, entity_position: Vector3, type=null):
 	var room = find_room_at(entity_position)
 
 	if room == null:
-		return null
+		return false
 
 	var entity = EntityFactory.create_entity(entity_id, type)
 
@@ -192,7 +192,7 @@ func create_entity_in(entity_id: String, room_name: String, type=null):
 	var room = find_room(room_name)
 
 	if room == null:
-		return null
+		return false
 
 	var entity = EntityFactory.create_entity(entity_id, type)
 
