@@ -8,6 +8,9 @@ var finger_areas: Dictionary
 
 var areas_entered = {}
 
+func is_touching() -> bool:
+	return areas_entered.keys().size() > 0
+
 func add_finger(finger_type: Finger.Type, area: Area3D):
 	finger_areas[finger_type] = area
 

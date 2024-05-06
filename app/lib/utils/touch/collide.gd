@@ -27,9 +27,19 @@ func _ready():
 func _physics_process(_delta):
 		_move_tip_rigidbody_to_bone(tip_body, tip)
 
+var last_run_active = false
+
 func _move_tip_rigidbody_to_bone(tip_rigidbody: RigidBody3D, tip_bone: Node3D):
 	if tip_rigidbody.is_inside_tree() == false:
 		return
+
+	if TouchManager.is_touching() == false:
+		hand_mesh.position = Vector3.ZERO
+		last_run_active = false
+		return
+
+	if last_run_active == false:
+		tip_rigidbody.global_position = tip_bone.global_position
 
 	var move_delta: Vector3 = tip_bone.global_position - tip_rigidbody.global_position
 
@@ -43,3 +53,5 @@ func _move_tip_rigidbody_to_bone(tip_rigidbody: RigidBody3D, tip_bone: Node3D):
 	var coef_force = 30.0
 	tip_rigidbody.apply_central_force(move_delta * coef_force)
 	tip_rigidbody.global_transform.basis = hand.global_transform.basis
+
+	last_run_active = true

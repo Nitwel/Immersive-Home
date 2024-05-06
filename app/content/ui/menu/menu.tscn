@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=21 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_8coxu"]
@@ -187,6 +187,9 @@ _data = {
 "hide_menu": SubResource("Animation_lkh72")
 }
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_emmtq"]
+size = Vector3(0.503906, 0.355225, 0.148712)
+
 [node name="Menu" type="StaticBody3D"]
 collision_layer = 6
 collision_mask = 6
@@ -293,3 +296,12 @@ mesh = ExtResource("7_f4u4o")
 libraries = {
 "": SubResource("AnimationLibrary_s30cd")
 }
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0194855)
+shape = SubResource("BoxShape3D_emmtq")
