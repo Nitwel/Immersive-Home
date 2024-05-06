@@ -11,11 +11,13 @@ const Miniature = preload ("res://content/system/house/mini/miniature.gd")
 @onready var ray: RayCast3D = $Raycast
 @onready var hand: Node3D = $hand_r
 @onready var hand_mesh = $hand_r/Armature/Skeleton3D/mesh_Hand_R
+@onready var auto_hand = $AutoHandtracker
 
 @onready var index_tip = $IndexTip
 @onready var thumb_tip = $ThumbTip
 @onready var middle_tip = $MiddleTip
 
+var hand_active = false
 var initiator: Initiator = Initiator.new()
 var collide: Collide
 var pointer: Pointer
@@ -37,7 +39,18 @@ func _ready():
 	pointer = Pointer.new(initiator, ray)
 	add_child(pointer)
 
+	auto_hand.hand_active_changed.connect(func(hand: int, active: bool):
+		if hand != 1: return
+			
+		hand_active=active
+
+		$IndexTip/TouchArea/CollisionShape3D.disabled=!active
+		hand_mesh.visible=active
+	)
+
 func _physics_process(_delta):
+	if !hand_active: return
+
 	var distance_trigger = index_tip.global_position.distance_to(thumb_tip.global_position)
 	var distance_grab = middle_tip.global_position.distance_to(thumb_tip.global_position)
 
