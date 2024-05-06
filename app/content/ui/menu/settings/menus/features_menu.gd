@@ -1,6 +1,6 @@
 extends Node3D
 
-@onready var voice_assist = $Content/VoiceAssist
+@onready var voice_assist = $VoiceAssist
 
 func _ready():
 	var settings_store = Store.settings.state

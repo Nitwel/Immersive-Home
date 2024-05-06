@@ -10,12 +10,19 @@ func _init():
 		var devices=await HomeApi.get_devices()
 
 		devices.sort_custom(func(a, b):
-			return a.values()[0]["name"].to_lower() < b.values()[0]["name"].to_lower()
+			return a["name"].to_lower() < b["name"].to_lower()
 		)
 
 		for device in devices:
-			device.values()[0]["entities"].sort_custom(func(a, b):
-				return a.to_lower() < b.to_lower()
+			if device["name"] == null:
+				device["name"]=device["id"]
+
+			for entity in device["entities"]:
+				if entity["name"] == null:
+					entity["name"]=entity["id"]
+
+			device["entities"].sort_custom(func(a, b):
+				return a["name"].to_lower() < b["name"].to_lower()
 			)
 
 		self.state.devices=devices

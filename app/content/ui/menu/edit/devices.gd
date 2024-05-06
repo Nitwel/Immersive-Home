@@ -18,8 +18,7 @@ func _ready():
 
 		if search.value != "":
 			return devices.filter(func(device):
-				var info=device.values()[0]
-				return info["name"].to_lower().find(search.value.to_lower()) != - 1
+				return device["name"].to_lower().find(search.value.to_lower()) != - 1||device["id"].to_lower().find(search.value.to_lower()) != - 1
 			)
 
 		return devices
@@ -47,13 +46,12 @@ func _ready():
 			child.free()
 
 		for device in visible_devices.value:
-			var info=device.values()[0]
 
 			var button_instance=ButtonScene.instantiate()
-			button_instance.label=info["name"]
+			button_instance.label=device["name"]
 			button_instance.font_size=8
 			button_instance.on_button_up.connect(func():
-				on_select_device.emit(device.keys()[0])
+				on_select_device.emit(device["id"])
 			)
 			grid_container.add_child(button_instance)
 

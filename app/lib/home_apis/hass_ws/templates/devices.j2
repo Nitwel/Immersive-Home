@@ -1,19 +1,23 @@
 {% set devices = states | map(attribute='entity_id') | map('device_id') | unique | reject('eq',None) | list %}
 
-{%- set ns = namespace(devices = []) %}
+{%- set ns = namespace(devices = [], entities = []) %}
 {%- for device in devices %}
   {%- set entities = device_entities(device) | list %}
+  {%- set ns.entities = [] %}
   {%- if entities %}
-    {%- set ns.devices = ns.devices +  [ {device: {"name": device_attr(device, "name"), "entities": entities }} ] %}
+    {%- for entity in entities %}
+      {%- set ns.entities = ns.entities +  [ {"id": entity, "name": state_attr(entity, "friendly_name")} ] %}
+    {%- endfor %}
+    {%- set ns.devices = ns.devices +  [{"id": device, "name": device_attr(device, "name"), "entities": ns.entities } ] %}
   {%- endif %}
 {%- endfor %}
 
 {%- set ns_group = namespace(entities = []) %}
 {%- for state in states %}
   {%- if device_id(state.entity_id) == None %}
-    {%- set ns_group.entities = ns_group.entities + [state.entity_id] %}
+    {%- set ns_group.entities = ns_group.entities + [{"id": state.entity_id, "name": state.entity_id}] %}
   {%- endif %}
 {%- endfor %}
-{%- set ns.devices = ns.devices +  [ {"other": {"name": "Other", "entities": ns_group.entities }} ] %}
+{%- set ns.devices = ns.devices +  [ {"id": "other.other", "name": "Other", "entities": ns_group.entities } ] %}
 
 {{ ns.devices }}
