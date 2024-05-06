@@ -32,7 +32,10 @@ var api: Node
 
 func _ready():
 	print("HomeApi ready")
+	start()
 
+## Starts the adapter with the settings from the settings file
+func start():
 	var success = Store.settings.load_local()
 
 	if success:

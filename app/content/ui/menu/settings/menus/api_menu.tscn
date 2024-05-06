@@ -1,0 +1,64 @@
+[gd_scene load_steps=4 format=3 uid="uid://cdto8shis71nu"]
+
+[ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="1_01lhk"]
+[ext_resource type="Script" path="res://content/ui/menu/settings/menus/api_menu.gd" id="1_uatcf"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_kmvrs"]
+
+[node name="ApiMenu" type="Node3D"]
+script = ExtResource("1_uatcf")
+
+[node name="LabelURL" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.08, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Url:
+"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="InputURL" parent="." instance=ExtResource("1_01lhk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, -0.08, 0)
+text = "ws://192.168.0.1:8123"
+size = Vector3(0.2, 0.03, 0.01)
+
+[node name="LabelToken" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.12, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Token:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="InputToken" parent="." instance=ExtResource("1_01lhk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, -0.12, 0)
+text = "..."
+size = Vector3(0.2, 0.03, 0.01)
+
+[node name="LabelConnect" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.17, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Connect:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="Connect" parent="." instance=ExtResource("2_kmvrs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13, -0.17, 0)
+label = "login"
+icon = true
+
+[node name="LabelStatus" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.22, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Status: Disconnected"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0

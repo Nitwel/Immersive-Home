@@ -10,6 +10,7 @@ const environment_passthrough_material = preload ("res://assets/environment_pass
 @onready var house = $House
 @onready var menu = $Menu
 @onready var keyboard = $Keyboard
+@onready var xr: XRToolsStartXR = $StartXR
 var voice_assistant = null
 
 func _ready():
@@ -65,6 +66,11 @@ func _ready():
 			return
 
 		remove_child(keyboard)
+	)
+
+	xr.xr_started.connect(func():
+		if HomeApi.has_connected() == false:
+			HomeApi.start()
 	)
 
 func create_voice_assistant():
