@@ -28,6 +28,7 @@ Store="*res://lib/globals/main_store.gd"
 EventSystem="*res://lib/globals/event_system.gd"
 House="*res://lib/globals/house_body.gd"
 Request="*res://lib/globals/request.gd"
+TouchManager="*res://lib/utils/touch/touch.gd"
 
 [display]
 

@@ -8,18 +8,20 @@ var finger_areas: Dictionary
 
 var areas_entered = {}
 
-func _init(finger_areas: Dictionary):
-	self.finger_areas = finger_areas
+func add_finger(finger_type: Finger.Type, area: Area3D):
+	finger_areas[finger_type] = area
 
-func _ready():
-	for finger_type in finger_areas.keys():
-		finger_areas[finger_type].area_entered.connect(func(area):
-			_on_area_entered(finger_type, area)
-		)
+	area.area_entered.connect(func(entered_area):
+		_on_area_entered(finger_type, entered_area)
+	)
 
-		finger_areas[finger_type].area_exited.connect(func(area):
-			_on_area_exited(finger_type, area)
-		)
+	area.area_exited.connect(func(entered_area):
+		_on_area_exited(finger_type, entered_area)
+	)
+
+func remove_finger(finger_type: Finger.Type):
+	if finger_areas.has(finger_type):
+		finger_areas.erase(finger_type)
 
 func _physics_process(_delta):
 	for area in areas_entered.keys():
