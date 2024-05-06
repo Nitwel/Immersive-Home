@@ -1,6 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://cu3kqg067ts0q"]
-
-[resource]
-resource_name = "edge_color214214214255"
-vertex_color_use_as_albedo = true
-roughness = 0.6

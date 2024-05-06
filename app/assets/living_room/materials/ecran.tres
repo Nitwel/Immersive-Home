@@ -1,7 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://bgjkq2eb0kl4c"]
-
-[resource]
-resource_name = "ecran"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.432588, 0.432588, 0.432588, 1)
-roughness = 0.00438262

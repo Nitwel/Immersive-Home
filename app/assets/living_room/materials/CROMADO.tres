@@ -1,8 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://ch6p4eokk8vt"]
-
-[resource]
-resource_name = "CROMADO"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.780531, 0.780531, 0.780531, 1)
-metallic = 0.550495
-roughness = 0.78487

@@ -1,6 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://by7tdvuqailvh"]
-
-[resource]
-resource_name = "material_2"
-vertex_color_use_as_albedo = true
-roughness = 0.6

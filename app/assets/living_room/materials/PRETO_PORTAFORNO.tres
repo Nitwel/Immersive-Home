@@ -1,7 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://wyhbfdly1ucp"]
-
-[resource]
-resource_name = "PRETO_PORTAFORNO"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.325076, 0.325076, 0.325076, 1)
-roughness = 0.6

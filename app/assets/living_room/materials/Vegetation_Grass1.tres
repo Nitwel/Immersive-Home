@@ -1,6 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://btrbhm6l2bl2"]
-
-[resource]
-resource_name = "Vegetation_Grass1"
-vertex_color_use_as_albedo = true
-roughness = 0.6

@@ -1,7 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://cxhdclokf2ejd"]
-
-[resource]
-resource_name = "FRIGORIFICO_CORPO"
-vertex_color_use_as_albedo = true
-albedo_color = Color(0.975468, 0.977248, 0.984322, 1)
-roughness = 0.6

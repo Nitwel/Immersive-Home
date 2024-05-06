@@ -6,3 +6,5 @@
 render_priority = 0
 shader = ExtResource("1_kyekt")
 shader_parameter/albedo = Color(1, 1, 1, 0.4)
+shader_parameter/fade_offset = 0.0
+shader_parameter/fade_sharpness = 15.0
