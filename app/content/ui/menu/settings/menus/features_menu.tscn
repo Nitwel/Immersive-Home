@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://4hai6lp64m2o"]
+
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_52ufi"]
+[ext_resource type="Script" path="res://content/ui/menu/settings/menus/features_menu.gd" id="1_imqs2"]
+
+[node name="FeaturesMenu" type="Node3D"]
+script = ExtResource("1_imqs2")
+
+[node name="VoiceAssist" parent="." instance=ExtResource("1_52ufi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, -0.08, 0)
+label = "mic_off"
+icon = true
+toggleable = true
+
+[node name="LabelVoiceAssist" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.08, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Voice Assistant: "
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0

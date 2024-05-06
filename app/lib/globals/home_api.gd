@@ -29,10 +29,25 @@ signal on_disconnect()
 
 ## The current home automation system adapter
 var api: Node
+var reconnect_timer := Timer.new()
 
 func _ready():
 	print("HomeApi ready")
+	start()
 
+	reconnect_timer.wait_time = 60
+	reconnect_timer.one_shot = false
+	reconnect_timer.autostart = true
+
+	add_child(reconnect_timer)
+
+	reconnect_timer.timeout.connect(func():
+		if has_connected() == false:
+			start()
+	)
+
+## Starts the adapter with the settings from the settings file
+func start():
 	var success = Store.settings.load_local()
 
 	if success:

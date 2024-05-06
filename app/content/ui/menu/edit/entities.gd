@@ -22,13 +22,13 @@ func _ready():
 		var entities=[]
 
 		for device in devices:
-			if device.keys()[0] == selected_device.value:
-				entities=device.values()[0]["entities"]
+			if device["id"] == selected_device.value:
+				entities=device["entities"]
 				break
 
 		if search.value != "":
 			return entities.filter(func(entity):
-				return entity.to_lower().find(search.value.to_lower()) != - 1
+				return entity["name"].to_lower().find(search.value.to_lower()) != - 1||entity["id"].to_lower().find(search.value.to_lower()) != - 1
 			)
 
 		return entities
@@ -61,10 +61,10 @@ func _ready():
 
 		for entity in visible_entities.value:
 			var entity_node=EntityScene.instantiate()
-			entity_node.icon=EntityFactory.get_entity_icon(entity.split(".")[0])
-			entity_node.text=entity
+			entity_node.icon=EntityFactory.get_entity_icon(entity["id"].split(".")[0])
+			entity_node.text=entity["name"]
 			entity_node.on_select.connect(func():
-				on_select_entity.emit(entity)
+				on_select_entity.emit(entity["id"])
 			)
 			entity_container.add_child(entity_node)
 

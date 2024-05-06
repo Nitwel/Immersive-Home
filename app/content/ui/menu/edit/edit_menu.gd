@@ -21,8 +21,11 @@ func _ready():
 
 		var entity=House.body.create_entity(entity_name, global_position)
 
-		if entity == null:
+		if typeof(entity) == TYPE_BOOL&&entity == false:
 			EventSystem.notify("Entity is not in Room", EventNotify.Type.INFO)
+
+		if entity == null:
+			EventSystem.notify("This Entity is not supported yet", EventNotify.Type.INFO)
 	)
 
 	entities_page.on_back.connect(func():
