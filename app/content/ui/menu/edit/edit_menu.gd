@@ -21,7 +21,7 @@ func _ready():
 
 		var entity=House.body.create_entity(entity_name, global_position)
 
-		if entity == false:
+		if typeof(entity) == TYPE_BOOL&&entity == false:
 			EventSystem.notify("Entity is not in Room", EventNotify.Type.INFO)
 
 		if entity == null:
