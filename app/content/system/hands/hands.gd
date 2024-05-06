@@ -8,8 +8,6 @@ const Collide = preload ("res://lib/utils/touch/collide.gd")
 const Miniature = preload ("res://content/system/house/mini/miniature.gd")
 
 @onready var main = $"/root/Main"
-@onready var hand_right: OpenXRHand = $XRHandRight
-@onready var hand_left: OpenXRHand = $XRHandLeft
 @onready var palm = $XRHandLeft/Palm
 @onready var quick_actions = $XRHandLeft/Palm/QuickActions
 @onready var mini_view_button = $XRHandLeft/Palm/QuickActions/MiniView
@@ -17,6 +15,14 @@ const Miniature = preload ("res://content/system/house/mini/miniature.gd")
 @onready var humidity_button = $XRHandLeft/Palm/QuickActions/Humidity
 @export var ray_left: RayCast3D
 @export var ray_right: RayCast3D
+@export var hand_left: Node3D
+@export var hand_right: Node3D
+
+@onready var bone_attachments_right = [$XRHandRight/IndexTip, $XRHandRight/ThumbTip, $XRHandRight/MiddleTip]
+@onready var bone_attachments_left = [$XRHandLeft/IndexTip, $XRHandLeft/ThumbTip, $XRHandLeft/MiddleTip]
+
+enum Fingers {INDEX, THUMB, MIDDLE}
+
 var left_initiator: Initiator = Initiator.new()
 var right_initiator: Initiator = Initiator.new()
 var touch: Touch
@@ -84,13 +90,13 @@ func _process(_delta):
 		if quick_actions.is_inside_tree(): palm.remove_child(quick_actions)
 
 func _physics_process(_delta):
-	_process_hand(hand_left)
-	_process_hand(hand_right)
+	_process_hand_left(hand_left)
+	_process_hand_right(hand_right)
 
-func _process_hand(hand: OpenXRHand):
-	var index_tip = hand.get_node("IndexTip/Marker3D")
-	var thumb_tip = hand.get_node("ThumbTip/Marker3D")
-	var middle_tip = hand.get_node("MiddleTip/Marker3D")
+func _process_hand_left(hand: Node3D):
+	var index_tip = bone_attachments_left[Fingers.INDEX].get_node("Marker3D")
+	var thumb_tip = bone_attachments_left[Fingers.THUMB].get_node("Marker3D")
+	var middle_tip = bone_attachments_left[Fingers.MIDDLE].get_node("Marker3D")
 
 	var _ray = ray_left if hand == hand_left else ray_right
 	var initiator = left_initiator if hand == hand_left else right_initiator
@@ -101,31 +107,44 @@ func _process_hand(hand: OpenXRHand):
 	var trigger_close = distance_trigger <= press_distance
 	var grab_close = distance_grab <= grip_distance
 
-	if hand == hand_left:
-		if trigger_close&&!pressed_left:
-			initiator.on_press.emit(Initiator.EventType.TRIGGER)
-			pressed_left = true
-		elif !trigger_close&&pressed_left:
-			initiator.on_release.emit(Initiator.EventType.TRIGGER)
-			pressed_left = false
-	
-		if grab_close&&!grabbed_left:
-			initiator.on_press.emit(Initiator.EventType.GRIP)
-			grabbed_left = true
-		elif !grab_close&&grabbed_left:
-			initiator.on_release.emit(Initiator.EventType.GRIP)
-			grabbed_left = false
-	else:
-		if trigger_close&&!pressed_right:
-			initiator.on_press.emit(Initiator.EventType.TRIGGER)
-			pressed_right = true
-		elif !trigger_close&&pressed_right:
-			initiator.on_release.emit(Initiator.EventType.TRIGGER)
-			pressed_right = false
+	if trigger_close&&!pressed_left:
+		initiator.on_press.emit(Initiator.EventType.TRIGGER)
+		pressed_left = true
+	elif !trigger_close&&pressed_left:
+		initiator.on_release.emit(Initiator.EventType.TRIGGER)
+		pressed_left = false
 
-		if grab_close&&!grabbed_right:
-			initiator.on_press.emit(Initiator.EventType.GRIP)
-			grabbed_right = true
-		elif !grab_close&&grabbed_right:
-			initiator.on_release.emit(Initiator.EventType.GRIP)
-			grabbed_right = false
+	if grab_close&&!grabbed_left:
+		initiator.on_press.emit(Initiator.EventType.GRIP)
+		grabbed_left = true
+	elif !grab_close&&grabbed_left:
+		initiator.on_release.emit(Initiator.EventType.GRIP)
+		grabbed_left = false
+
+func _process_hand_right(hand: Node3D):
+	var index_tip = bone_attachments_right[Fingers.INDEX].get_node("Marker3D")
+	var thumb_tip = bone_attachments_right[Fingers.THUMB].get_node("Marker3D")
+	var middle_tip = bone_attachments_right[Fingers.MIDDLE].get_node("Marker3D")
+
+	var _ray = ray_left if hand == hand_left else ray_right
+	var initiator = left_initiator if hand == hand_left else right_initiator
+
+	var distance_trigger = index_tip.global_position.distance_to(thumb_tip.global_position)
+	var distance_grab = middle_tip.global_position.distance_to(thumb_tip.global_position)
+
+	var trigger_close = distance_trigger <= press_distance
+	var grab_close = distance_grab <= grip_distance
+
+	if trigger_close&&!pressed_right:
+		initiator.on_press.emit(Initiator.EventType.TRIGGER)
+		pressed_right = true
+	elif !trigger_close&&pressed_right:
+		initiator.on_release.emit(Initiator.EventType.TRIGGER)
+		pressed_right = false
+
+	if grab_close&&!grabbed_right:
+		initiator.on_press.emit(Initiator.EventType.GRIP)
+		grabbed_right = true
+	elif !grab_close&&grabbed_right:
+		initiator.on_release.emit(Initiator.EventType.GRIP)
+		grabbed_right = false

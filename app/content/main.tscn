@@ -1,24 +1,16 @@
-[gd_scene load_steps=15 format=3 uid="uid://eecv28y6jxk4"]
+[gd_scene load_steps=12 format=3 uid="uid://eecv28y6jxk4"]
 
 [ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_i4c04"]
 [ext_resource type="Script" path="res://content/main.gd" id="1_uvrd4"]
 [ext_resource type="PackedScene" uid="uid://b30w6tywfj4fp" path="res://content/system/controller_left/controller_left.tscn" id="2_2lraw"]
 [ext_resource type="Environment" uid="uid://cfm0g4r0h2n1p" path="res://assets/environment.tres" id="2_lsndp"]
-[ext_resource type="PackedScene" uid="uid://dscp8x0ari57n" path="res://content/system/raycast/raycast.tscn" id="3_67lii"]
 [ext_resource type="PackedScene" uid="uid://b2kjh1fpjptdr" path="res://content/system/camera/camera.tscn" id="3_rj4ac"]
-[ext_resource type="PackedScene" uid="uid://bsx12q23v8apy" path="res://content/system/hands/hands.tscn" id="4_v8xu6"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="5_3qc8g"]
+[ext_resource type="PackedScene" uid="uid://biu66ihmvmku3" path="res://content/system/controller_right/controller_right.tscn" id="7_0b3tc"]
 [ext_resource type="PackedScene" uid="uid://c3kdssrmv84kv" path="res://content/ui/menu/menu.tscn" id="8_du83w"]
 [ext_resource type="PackedScene" uid="uid://lrehk38exd5n" path="res://content/system/keyboard/keyboard.tscn" id="9_e5n3p"]
 [ext_resource type="PackedScene" uid="uid://cbemihbxkd4ll" path="res://content/system/house/house.tscn" id="9_np6mw"]
 [ext_resource type="PackedScene" uid="uid://bhyddd1f0ry1x" path="res://content/ui/onboarding/onboarding.tscn" id="12_uq2nj"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58yb"]
-ao_enabled = true
-
-[sub_resource type="BoxMesh" id="BoxMesh_ir3co"]
-material = SubResource("StandardMaterial3D_m58yb")
-size = Vector3(0.01, 0.01, 0.01)
 
 [node name="Main" type="Node3D"]
 transform = Transform3D(1, -0.000296142, 0.000270963, 0.000296143, 1, -4.5899e-06, -0.000270962, 4.67014e-06, 1, 0, 0, 0)
@@ -41,20 +33,20 @@ enable_passthrough = true
 [node name="XRControllerLeft" parent="XROrigin3D" instance=ExtResource("2_2lraw")]
 transform = Transform3D(0.999999, -1.39633e-11, 0, 9.48075e-12, 1, 0, 0, 0, 1, -0.355145, 0.550439, -0.477945)
 
-[node name="XRControllerRight" type="XRController3D" parent="XROrigin3D"]
-transform = Transform3D(0.999999, -1.39633e-11, 0, 9.48075e-12, 1, 0, 0, 0, 1, 0.272616, 0.559282, -0.468369)
-tracker = &"right_hand"
-pose = &"aim"
+[node name="IndexTip" parent="XROrigin3D/XRControllerLeft" index="6"]
+transform = Transform3D(0.967526, 0.252326, -0.0150302, -0.0150302, 0.116784, 0.993043, 0.252326, -0.960569, 0.116784, -0.00665808, 0.0427912, -0.169868)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/XRControllerRight"]
-mesh = SubResource("BoxMesh_ir3co")
+[node name="ThumbTip" parent="XROrigin3D/XRControllerLeft" index="7"]
+transform = Transform3D(0.967043, 0.24582, -0.0663439, -0.0663439, 0.494837, 0.86645, 0.24582, -0.833492, 0.494837, 0.0261569, 0.0891963, -0.0934418)
 
-[node name="Raycast" parent="XROrigin3D/XRControllerRight" instance=ExtResource("3_67lii")]
+[node name="MiddleTip" parent="XROrigin3D/XRControllerLeft" index="8"]
+transform = Transform3D(0.98042, 0.196912, 0.00149799, 0.001498, -0.015065, 0.999885, 0.196912, -0.980305, -0.0150651, -0.00327212, -0.00771427, -0.176318)
 
-[node name="Hands" parent="XROrigin3D" node_paths=PackedStringArray("ray_left", "ray_right") instance=ExtResource("4_v8xu6")]
-transform = Transform3D(0.999968, -1.39576e-11, 0, 9.52038e-12, 0.999984, -2.59206e-11, -2.91038e-11, 5.22959e-11, 0.999984, 0, 0, 0)
-ray_left = NodePath("../XRControllerLeft/Raycast")
-ray_right = NodePath("../XRControllerRight/Raycast")
+[node name="Palm" parent="XROrigin3D/XRControllerLeft" index="9"]
+transform = Transform3D(1, 3.12361e-06, -3.13859e-06, -3.12371e-06, 1, -1.97886e-05, 3.13859e-06, 1.97889e-05, 1, 0.0307807, -0.0419722, -0.0399505)
+
+[node name="XRControllerRight" parent="XROrigin3D" instance=ExtResource("7_0b3tc")]
+transform = Transform3D(0.999999, -1.39635e-11, 0, 1.31553e-10, 1, 0, 0, 0, 1, 0.336726, 0.575093, -0.437942)
 
 [node name="XRSimulator" parent="." instance=ExtResource("5_3qc8g")]
 min_camera_height = 0.01
@@ -74,3 +66,4 @@ transform = Transform3D(0.5, 5.24309e-05, 0.000144384, -0.000139169, 0.353553, 0
 transform = Transform3D(1, -1.39636e-11, 0, 4.42413e-11, 1, 0, 0, 0, 1, -0.576793, 0.820168, -0.60016)
 
 [editable path="XROrigin3D/XRControllerLeft"]
+[editable path="XROrigin3D/XRControllerLeft/hand_l"]

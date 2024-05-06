@@ -1,8 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://b30w6tywfj4fp"]
+[gd_scene load_steps=16 format=3 uid="uid://b30w6tywfj4fp"]
 
 [ext_resource type="Script" path="res://content/system/controller_left/controller_left.gd" id="1_2j3qs"]
 [ext_resource type="PackedScene" uid="uid://dqjcqdhe3rbtn" path="res://assets/models/trash_bin/trash_bin.gltf" id="3_m33ce"]
 [ext_resource type="PackedScene" uid="uid://dscp8x0ari57n" path="res://content/system/raycast/raycast.tscn" id="4_n7lao"]
+[ext_resource type="PackedScene" uid="uid://bufelcry36rw1" path="res://addons/xr-autohandtracker/auto_handtracker.tscn" id="4_oe7fv"]
+[ext_resource type="PackedScene" uid="uid://dhaqth6q5yw4n" path="res://addons/godot-xr-tools/hands/model/hand_l.gltf" id="5_w1pvs"]
+[ext_resource type="Shader" path="res://assets/materials/hands.gdshader" id="6_wk733"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="6_x5vuc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58yb"]
 ao_enabled = true
@@ -94,6 +98,17 @@ _data = {
 "add_trashbin": SubResource("Animation_hax52")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ca85m"]
+render_priority = 0
+shader = ExtResource("6_wk733")
+shader_parameter/albedo = Color(1, 1, 1, 0.4)
+shader_parameter/fade_offset = 0.0
+shader_parameter/fade_sharpness = 15.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_65k2y"]
+radius = 0.001
+height = 0.02
+
 [node name="XRControllerLeft" type="XRController3D"]
 tracker = &"left_hand"
 pose = &"aim"
@@ -120,3 +135,79 @@ libraries = {
 
 [node name="Raycast" parent="." instance=ExtResource("4_n7lao")]
 is_right = false
+
+[node name="AutoHandtracker" parent="." instance=ExtResource("4_oe7fv")]
+visible = false
+visiblehandtrackskeleton = false
+enableautotracker = false
+
+[node name="hand_l" parent="." instance=ExtResource("5_w1pvs")]
+
+[node name="mesh_Hand_L" parent="hand_l/Armature/Skeleton3D" index="0"]
+material_override = SubResource("ShaderMaterial_ca85m")
+
+[node name="IndexTip" type="BoneAttachment3D" parent="."]
+transform = Transform3D(0.967526, 0.252326, -0.0150302, -0.0150302, 0.116784, 0.993043, 0.252326, -0.960569, 0.116784, -0.00665802, 0.0427913, -0.169868)
+bone_name = "Index_Tip_L"
+bone_idx = 9
+use_external_skeleton = true
+external_skeleton = NodePath("../hand_l/Armature/Skeleton3D")
+
+[node name="Marker3D" type="Marker3D" parent="IndexTip"]
+gizmo_extents = 0.02
+
+[node name="TouchArea" type="Area3D" parent="IndexTip"]
+transform = Transform3D(1, 0, 0, 1.49012e-08, 1, 0, 1.86265e-09, 0, 1, 0, 0, 0)
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="IndexTip/TouchArea"]
+transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_65k2y")
+
+[node name="ThumbTip" type="BoneAttachment3D" parent="."]
+transform = Transform3D(0.967042, 0.24582, -0.0663439, -0.0663439, 0.494837, 0.866449, 0.24582, -0.833492, 0.494837, 0.0261569, 0.0891964, -0.0934418)
+bone_name = "Thumb_Tip_L"
+bone_idx = 4
+use_external_skeleton = true
+external_skeleton = NodePath("../hand_l/Armature/Skeleton3D")
+
+[node name="Marker3D" type="Marker3D" parent="ThumbTip"]
+gizmo_extents = 0.02
+
+[node name="MiddleTip" type="BoneAttachment3D" parent="."]
+transform = Transform3D(0.98042, 0.196912, 0.00149799, 0.001498, -0.015065, 0.999885, 0.196912, -0.980305, -0.0150651, -0.00327212, -0.00771424, -0.176318)
+bone_name = "Middle_Tip_L"
+bone_idx = 14
+use_external_skeleton = true
+external_skeleton = NodePath("../hand_l/Armature/Skeleton3D")
+
+[node name="Marker3D" type="Marker3D" parent="MiddleTip"]
+gizmo_extents = 0.02
+
+[node name="Palm" type="BoneAttachment3D" parent="."]
+transform = Transform3D(1, 3.12364e-06, -3.13861e-06, -3.12371e-06, 1, -1.97886e-05, 3.13854e-06, 1.97889e-05, 1, 0.0307807, -0.0419721, -0.0399505)
+bone_name = "Palm_L"
+bone_idx = 25
+use_external_skeleton = true
+external_skeleton = NodePath("../hand_l/Armature/Skeleton3D")
+
+[node name="QuickActions" type="Node3D" parent="Palm"]
+transform = Transform3D(-1.54544e-08, -1.54544e-08, 0.5, -0.353553, 0.353553, -4.15241e-13, -0.353553, -0.353553, -2.18557e-08, -1.04308e-07, 0.0344645, -6.81728e-07)
+
+[node name="MiniView" parent="Palm/QuickActions" instance=ExtResource("6_x5vuc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0600001, 0, 0)
+label = "nest_multi_room"
+icon = true
+
+[node name="Temperature" parent="Palm/QuickActions" instance=ExtResource("6_x5vuc")]
+label = "device_thermostat"
+icon = true
+
+[node name="Humidity" parent="Palm/QuickActions" instance=ExtResource("6_x5vuc")]
+transform = Transform3D(1, 1.73472e-18, 0, 0, 1, 0, 0, 0, 1, 0.0600001, -5.68873e-13, 0)
+label = "humidity_mid"
+icon = true
+
+[editable path="hand_l"]

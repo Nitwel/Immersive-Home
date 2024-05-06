@@ -1,41 +1,24 @@
-[gd_scene load_steps=8 format=3 uid="uid://bsx12q23v8apy"]
+[gd_scene load_steps=4 format=3 uid="uid://bsx12q23v8apy"]
 
 [ext_resource type="Script" path="res://content/system/hands/hands.gd" id="1_c4f76"]
-[ext_resource type="PackedScene" uid="uid://c0kow4g10wolq" path="res://assets/models/hands_steam/right_hand.glb" id="1_uekbj"]
-[ext_resource type="PackedScene" uid="uid://dt4ksvogfctkr" path="res://assets/models/hands_steam/left_hand.glb" id="2_n73lt"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_te2p8"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3bjtw"]
-transparency = 1
-albedo_color = Color(1, 1, 1, 0.705882)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dopke"]
 radius = 0.001
 height = 0.02
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n27ki"]
-transparency = 1
-albedo_color = Color(1, 1, 1, 0.705882)
-
 [node name="Hands" type="Node3D"]
 script = ExtResource("1_c4f76")
 
-[node name="XRHandLeft" type="OpenXRHand" parent="."]
+[node name="XRHandLeft" type="Node3D" parent="."]
 transform = Transform3D(0.999999, -1.39628e-11, 0, 9.48119e-12, 0.999999, -4.54747e-13, 0, 0, 0.999999, -0.25, 0, 0)
-hand_skeleton = NodePath("left_hand/Armature_001/Skeleton3D")
-
-[node name="left_hand" parent="XRHandLeft" instance=ExtResource("2_n73lt")]
-transform = Transform3D(1, 4.42441e-11, 0, -1.06936e-10, 1, 1.81899e-12, 5.82077e-11, -1.81899e-12, 1, 0, 0, 0)
-
-[node name="vr_glove_left_slim" parent="XRHandLeft/left_hand/Armature_001/Skeleton3D" index="0"]
-material_override = SubResource("StandardMaterial3D_3bjtw")
 
 [node name="IndexTip" type="BoneAttachment3D" parent="XRHandLeft"]
-transform = Transform3D(0.19221, -0.669965, -0.717079, 0.977075, 0.19881, 0.076153, 0.0915428, -0.715277, 0.692819, 0.0345973, 0.0355402, -0.164767)
+transform = Transform3D(0.967526, 0.252326, -0.0150302, -0.0150302, 0.116784, 0.993043, 0.252326, -0.960569, 0.116784, -0.00665802, 0.0427913, -0.169868)
 bone_name = "Index_Tip_L"
 bone_idx = 9
 use_external_skeleton = true
-external_skeleton = NodePath("../left_hand/Armature_001/Skeleton3D")
+external_skeleton = NodePath("")
 
 [node name="Marker3D" type="Marker3D" parent="XRHandLeft/IndexTip"]
 gizmo_extents = 0.02
@@ -51,21 +34,21 @@ transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 
 shape = SubResource("CapsuleShape3D_dopke")
 
 [node name="ThumbTip" type="BoneAttachment3D" parent="XRHandLeft"]
-transform = Transform3D(0.937246, 0.0284254, -0.347508, 0.0184905, 0.991216, 0.130949, 0.348178, -0.129157, 0.928488, 0.0498668, 0.0560917, -0.112777)
+transform = Transform3D(0.967043, 0.24582, -0.0663439, -0.0663439, 0.494837, 0.86645, 0.24582, -0.833492, 0.494837, 0.0261569, 0.0891964, -0.0934418)
 bone_name = "Thumb_Tip_L"
 bone_idx = 4
 use_external_skeleton = true
-external_skeleton = NodePath("../left_hand/Armature_001/Skeleton3D")
+external_skeleton = NodePath("")
 
 [node name="Marker3D" type="Marker3D" parent="XRHandLeft/ThumbTip"]
 gizmo_extents = 0.02
 
 [node name="MiddleTip" type="BoneAttachment3D" parent="XRHandLeft"]
-transform = Transform3D(0.0812012, -0.650531, -0.755125, 0.996577, 0.064817, 0.051326, 0.0155558, -0.756708, 0.653568, 0.032112, 0.00654224, -0.171612)
+transform = Transform3D(0.98042, 0.196912, 0.00149799, 0.001498, -0.015065, 0.999885, 0.196912, -0.980305, -0.0150651, -0.00327212, -0.00771424, -0.176318)
 bone_name = "Middle_Tip_L"
 bone_idx = 14
 use_external_skeleton = true
-external_skeleton = NodePath("../left_hand/Armature_001/Skeleton3D")
+external_skeleton = NodePath("")
 
 [node name="Marker3D" type="Marker3D" parent="XRHandLeft/MiddleTip"]
 gizmo_extents = 0.02
@@ -100,23 +83,15 @@ transform = Transform3D(1, 1.73472e-18, 0, 0, 1, 0, 0, 0, 1, 0.0600001, -5.68873
 label = "humidity_mid"
 icon = true
 
-[node name="XRHandRight" type="OpenXRHand" parent="."]
-transform = Transform3D(0.999998, -0.000567105, 2.47889e-11, 0, -4.37113e-08, -0.999999, 0.000567104, 0.999999, -4.37113e-08, 0.264391, 0, 0)
-hand = 1
-hand_skeleton = NodePath("right_hand/Armature/Skeleton3D")
-
-[node name="right_hand" parent="XRHandRight" instance=ExtResource("1_uekbj")]
-
-[node name="vr_glove_right_slim" parent="XRHandRight/right_hand/Armature/Skeleton3D" index="0"]
-transform = Transform3D(1, 0, 4.7579e-13, 0, 1, 0, -1.34149e-12, 1.77636e-15, 1, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_n27ki")
+[node name="XRHandRight" type="Node3D" parent="."]
+transform = Transform3D(0.999998, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0.264391, 0, 0)
 
 [node name="IndexTip" type="BoneAttachment3D" parent="XRHandRight"]
-transform = Transform3D(0.19221, 0.669966, 0.717079, -0.091543, -0.715277, 0.69282, 0.977075, -0.19881, -0.0761527, -0.0345977, -0.164767, -0.0355401)
+transform = Transform3D(0.967526, -0.252326, 0.0150302, 0.0150302, 0.116784, 0.993043, -0.252326, -0.960569, 0.116784, 0.00665802, 0.0427913, -0.169868)
 bone_name = "Index_Tip_R"
 bone_idx = 9
 use_external_skeleton = true
-external_skeleton = NodePath("../right_hand/Armature/Skeleton3D")
+external_skeleton = NodePath("")
 
 [node name="Marker3D" type="Marker3D" parent="XRHandRight/IndexTip"]
 gizmo_extents = 0.02
@@ -132,21 +107,21 @@ transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 
 shape = SubResource("CapsuleShape3D_dopke")
 
 [node name="ThumbTip" type="BoneAttachment3D" parent="XRHandRight"]
-transform = Transform3D(0.937246, -0.0284254, 0.347508, -0.348179, -0.129158, 0.928488, 0.0184906, -0.991216, -0.130949, -0.0498677, -0.112777, -0.0560909)
+transform = Transform3D(0.967042, -0.24582, 0.0663439, 0.0663439, 0.494837, 0.866449, -0.24582, -0.833492, 0.494837, -0.0261569, 0.0891963, -0.0934418)
 bone_name = "Thumb_Tip_R"
 bone_idx = 4
 use_external_skeleton = true
-external_skeleton = NodePath("../right_hand/Armature/Skeleton3D")
+external_skeleton = NodePath("")
 
 [node name="Marker3D" type="Marker3D" parent="XRHandRight/ThumbTip"]
 gizmo_extents = 0.02
 
 [node name="MiddleTip" type="BoneAttachment3D" parent="XRHandRight"]
-transform = Transform3D(0.0812011, 0.650531, 0.755126, -0.0155557, -0.756709, 0.653568, 0.996576, -0.0648169, -0.0513262, -0.032112, -0.171612, -0.00654216)
+transform = Transform3D(0.98042, -0.196912, -0.00149799, -0.001498, -0.015065, 0.999885, -0.196912, -0.980305, -0.0150651, 0.00327212, -0.00771424, -0.176318)
 bone_name = "Middle_Tip_R"
 bone_idx = 14
 use_external_skeleton = true
-external_skeleton = NodePath("../right_hand/Armature/Skeleton3D")
+external_skeleton = NodePath("")
 
 [node name="Marker3D" type="Marker3D" parent="XRHandRight/MiddleTip"]
 gizmo_extents = 0.02
@@ -160,6 +135,3 @@ monitorable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="XRHandRight/MiddleTip/TouchArea"]
 transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_dopke")
-
-[editable path="XRHandLeft/left_hand"]
-[editable path="XRHandRight/right_hand"]

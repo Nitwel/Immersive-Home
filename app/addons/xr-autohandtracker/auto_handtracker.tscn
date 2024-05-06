@@ -1,0 +1,130 @@
+[gd_scene load_steps=20 format=3 uid="uid://bufelcry36rw1"]
+
+[ext_resource type="Script" path="res://addons/xr-autohandtracker/auto_handtracker.gd" id="1_kokq6"]
+[ext_resource type="Script" path="res://addons/xr-autohandtracker/visible_handtrack_skeleton.gd" id="2_51p5j"]
+[ext_resource type="Script" path="res://addons/xr-autohandtracker/auto_tracker.gd" id="3_6kyde"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_lsd0h"]
+size = Vector3(0.1, 0.8, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dawss"]
+albedo_color = Color(0.6842, 0.671572, 0.696409, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h2ysa"]
+size = Vector3(0.8, 0.8, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kb47o"]
+albedo_color = Color(0.188235, 0.6, 0.00392157, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ga8xh"]
+top_radius = 0.2
+bottom_radius = 0.4
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2y0qr"]
+albedo_color = Color(0, 0.470588, 0.698039, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_r0bsl"]
+inner_radius = 0.19
+outer_radius = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r0qnr"]
+transparency = 1
+albedo_color = Color(1, 1, 0.00784314, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_wsh6v"]
+inner_radius = 0.59
+outer_radius = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pce3n"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.002
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2wqtw"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 1, 0.00784314, 0.235294)
+disable_receive_shadows = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_53tyc"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 1, 0.00784314, 0.235294)
+disable_receive_shadows = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f71oj"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_epivk"]
+material = SubResource("StandardMaterial3D_f71oj")
+size = Vector3(0.01, 0.02, 0.01)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fvumm"]
+albedo_color = Color(1, 0.0431373, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ssbes"]
+material = SubResource("StandardMaterial3D_fvumm")
+size = Vector3(0.005, 0.19, 0.005)
+
+[node name="AutoHandtracker" type="Node3D"]
+top_level = true
+script = ExtResource("1_kokq6")
+
+[node name="VisibleHandTrackSkeleton" type="Node3D" parent="."]
+visible = false
+script = ExtResource("2_51p5j")
+
+[node name="ExampleStick" type="Node3D" parent="VisibleHandTrackSkeleton"]
+
+[node name="StemY" type="MeshInstance3D" parent="VisibleHandTrackSkeleton/ExampleStick"]
+mesh = SubResource("BoxMesh_lsd0h")
+surface_material_override/0 = SubResource("StandardMaterial3D_dawss")
+
+[node name="ExampleJoint" type="Node3D" parent="VisibleHandTrackSkeleton"]
+
+[node name="Box" type="MeshInstance3D" parent="VisibleHandTrackSkeleton/ExampleJoint"]
+mesh = SubResource("BoxMesh_h2ysa")
+surface_material_override/0 = SubResource("StandardMaterial3D_kb47o")
+
+[node name="AutoTracker" type="Node3D" parent="."]
+script = ExtResource("3_6kyde")
+
+[node name="DragRod" type="MeshInstance3D" parent="AutoTracker"]
+transform = Transform3D(-8.74228e-09, -1, 0, 0.2, -4.37114e-08, 0, 0, 0, 0.2, -0.5, 0, 0)
+mesh = SubResource("CylinderMesh_ga8xh")
+surface_material_override/0 = SubResource("StandardMaterial3D_2y0qr")
+
+[node name="ThumbstickBoundaries" type="Node3D" parent="AutoTracker"]
+
+[node name="InnerRing" type="MeshInstance3D" parent="AutoTracker/ThumbstickBoundaries"]
+mesh = SubResource("TorusMesh_r0bsl")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_r0qnr")
+
+[node name="OuterRing" type="MeshInstance3D" parent="AutoTracker/ThumbstickBoundaries"]
+mesh = SubResource("TorusMesh_wsh6v")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_r0qnr")
+
+[node name="UpDisc" type="MeshInstance3D" parent="AutoTracker/ThumbstickBoundaries"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_pce3n")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_2wqtw")
+
+[node name="DownDisc" type="MeshInstance3D" parent="AutoTracker/ThumbstickBoundaries"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_pce3n")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_53tyc")
+
+[node name="GraspMarker" type="MeshInstance3D" parent="AutoTracker"]
+mesh = SubResource("BoxMesh_epivk")
+skeleton = NodePath("../..")
+
+[node name="ControllerMarker" type="MeshInstance3D" parent="AutoTracker"]
+mesh = SubResource("BoxMesh_ssbes")
+skeleton = NodePath("../..")

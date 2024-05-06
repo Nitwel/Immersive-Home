@@ -86,6 +86,10 @@ func _on_grab_move(event: EventPointer):
 	if lock_rotation:
 		get_parent().global_transform = TransformTools.rotate_around_point(get_parent().global_transform, get_parent().to_global(initial_point), initial_rotation - get_parent().global_rotation)
 
+	if restrict_movement:
+		get_parent().global_position = restrict_movement.call(get_parent().global_position)
+	on_move.emit(get_parent().global_position, get_parent().global_rotation)
+
 func _on_grab_up(event: EventPointer):
 	if event.initiator == initiator2:
 		initiator2 = null
