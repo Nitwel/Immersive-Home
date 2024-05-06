@@ -188,7 +188,7 @@ _data = {
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_emmtq"]
-size = Vector3(0.503906, 0.355225, 0.148712)
+size = Vector3(0.542114, 0.355225, 0.0774612)
 
 [node name="Menu" type="StaticBody3D"]
 collision_layer = 6
@@ -303,5 +303,5 @@ collision_mask = 0
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0194855)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0299683, 0, 0.00889969)
 shape = SubResource("BoxShape3D_emmtq")
