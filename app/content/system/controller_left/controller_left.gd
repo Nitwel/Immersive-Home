@@ -37,20 +37,22 @@ func _ready():
 	trash_bin_visible = false
 
 	EventSystem.on_grab_down.connect(func(event: EventPointer):
-		trash_bin_visible=event.target is Entity
+		trash_bin_visible=_get_entity(event.target) != null
 	)
 
 	EventSystem.on_grab_move.connect(func(event):
 		if !trash_bin_visible:
 			return
 
-		if event.target is Entity&&area.overlaps_body(event.target):
-			if !to_delete.has(event.target):
-				to_delete.append(event.target)
+		var entity=_get_entity(event.target)
+
+		if entity is Entity&&area.overlaps_body(entity):
+			if !to_delete.has(entity):
+				to_delete.append(entity)
 			trash_bin_large=true
 			
 		else:
-			to_delete.erase(event.target)
+			to_delete.erase(entity)
 			trash_bin_large=false
 			
 	)
@@ -64,4 +66,15 @@ func _ready():
 		to_delete.clear()
 		trash_bin_large=false
 		trash_bin_visible=false
+
+		House.body.save_all_entities()
 	)
+
+func _get_entity(node: Node):
+	if node is Entity:
+		return node
+
+	if node.get_parent() == null:
+		return null
+
+	return _get_entity(node.get_parent())
