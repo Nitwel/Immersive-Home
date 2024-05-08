@@ -41,6 +41,10 @@ In the Home Assistant Dashboard, do the following:
 1. Click on your user profile in the bottom left corner.
 2. Scroll to the bottom and click on **create token** under "Long-Lived Access Tokens".
 
+::: tip
+You can use a pastebin like [immho.me](https://immho.me) to access your token from the headset. Simply paste the token and click **Save**. You can then access the token from the headset using the URL you got redirected to. E.g. `https://immho.me/upload/your-token`. `/upload/` can be replaced with `/u/`.
+:::
+
 ![Home Assistant Dashboard](/img/setup-1.jpg)
 
 3. Open the Menu in the app and open the settings panel by either:
@@ -49,8 +53,7 @@ In the Home Assistant Dashboard, do the following:
 4. Enter the URL of your Home Assistant instance and the token you just created. Make sure to change `http` -> `ws` or `https` -> `wss` in the URL.
 
 ::: tip
-The fastest way to enter the token and URL is to send a message to your headset with the token and URL and then copy each part inside the headset.
-The bottom right button on the keyboard will paste the copied text into the input field.
+If you have used a pastebin to store your token, open the Browser on your headset and enter your pastebin URL. You can then copy the token from there.
 :::
 
 5. Finally, by clicking the **Connect** button, the app will try to connect to your Home Assistant instance. If everything is correct, you will see the text change to **Connected** below the button.
