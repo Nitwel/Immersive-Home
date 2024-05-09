@@ -19,6 +19,7 @@ func _ready():
 	R.effect(func(_arg):
 		if house_small.value == false||editing.value.size() == 0:
 			if group_entity != null:
+				remove_child(group_entity)
 				group_entity.queue_free()
 				group_entity=null
 		elif group_entity == null:

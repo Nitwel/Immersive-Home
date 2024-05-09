@@ -67,6 +67,7 @@ func _ready():
 			delete_sound.play()
 
 		for entity in to_delete:
+			entity.get_parent().remove_child(entity)
 			entity.queue_free()
 		to_delete.clear()
 		trash_bin_large=false

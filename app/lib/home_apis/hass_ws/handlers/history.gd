@@ -14,6 +14,9 @@ func get_history(entity_id: String, start: String, end=null):
 		]
 	})
 
+	if meta_response.status != OK:
+		return null
+
 	var data_response = await api.send_request_packet({
 		"type": "recorder/statistics_during_period",
 		"start_time": start,
@@ -26,6 +29,9 @@ func get_history(entity_id: String, start: String, end=null):
 			"mean"
 		]
 	})
+
+	if data_response.status != OK:
+		return null
 
 	return {
 		"unit": meta_response.payload.result[0]["display_unit_of_measurement"],

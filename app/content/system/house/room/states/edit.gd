@@ -43,18 +43,18 @@ func _on_leave():
 	update_store()
 
 	for child in room.wall_corners.get_children():
+		room.wall_corners.remove_child(child)
 		child.queue_free()
-		await child.tree_exited
 
 	for child in room.wall_edges.get_children():
+		room.wall_edges.remove_child(child)
 		child.queue_free()
-		await child.tree_exited
 	
 	if floor_corner != null:
+		room.remove_child(floor_corner)
 		floor_corner.queue_free()
-		await floor_corner.tree_exited
+		room.remove_child(height_edge)
 		height_edge.queue_free()
-		await height_edge.tree_exited
 
 	room.room_ceiling.get_node("CollisionShape3D").disabled = true
 	room.room_floor.get_node("CollisionShape3D").disabled = true
