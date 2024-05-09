@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cw86rc42dv2d8"]
+[gd_scene load_steps=15 format=3 uid="uid://cw86rc42dv2d8"]
 
 [ext_resource type="Script" path="res://content/entities/light/light.gd" id="1_ykxy3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_4sfxb"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="6_mhjlm"]
 [ext_resource type="Texture2D" uid="uid://hy2f6is7qjyv" path="res://assets/canvas.png" id="7_ximu1"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="8_1sfll"]
+[ext_resource type="AudioStream" uid="uid://du7ur0lu28cvn" path="res://assets/sound/finger-snap.mp3" id="8_3togy"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="8_nhcff"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
@@ -105,3 +106,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, 0, 0)
 pixel_size = 0.001
 text = "Default"
 horizontal_alignment = 0
+
+[node name="SnapSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_3togy")
+volume_db = -20.0

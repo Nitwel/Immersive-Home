@@ -22,7 +22,6 @@ driver/enable_input=true
 [autoload]
 
 XRToolsUserSettings="*res://addons/godot-xr-tools/user_settings/user_settings.gd"
-AudioPlayer="*res://lib/globals/audio_player.gd"
 HomeApi="*res://lib/globals/home_api.gd"
 Store="*res://lib/globals/main_store.gd"
 EventSystem="*res://lib/globals/event_system.gd"

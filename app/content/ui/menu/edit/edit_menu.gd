@@ -4,6 +4,7 @@ const ButtonScene = preload ("res://content/ui/components/button/button.tscn")
 
 @onready var devices_page = $Devices
 @onready var entities_page = $Entities
+@onready var spawn_sound = $SpawnSound
 
 var selected_device = R.state(null)
 
@@ -17,7 +18,7 @@ func _ready():
 	)
 
 	entities_page.on_select_entity.connect(func(entity_name):
-		AudioPlayer.play_effect("spawn")
+		spawn_sound.play()
 
 		var entity=House.body.create_entity(entity_name, global_position)
 

@@ -1,0 +1,93 @@
+[gd_scene load_steps=8 format=3 uid="uid://cfsnkoxb7mtok"]
+
+[ext_resource type="PackedScene" uid="uid://dqjcqdhe3rbtn" path="res://assets/models/trash_bin/trash_bin.gltf" id="1_g2oxl"]
+[ext_resource type="Script" path="res://content/system/trash_bin/trash_bin.gd" id="1_krk5w"]
+[ext_resource type="AudioStream" uid="uid://bm2uxwqfmnvs6" path="res://assets/sound/crumple.mp3" id="3_p7u0v"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_fmaps"]
+height = 0.105954
+radius = 0.0447927
+
+[sub_resource type="Animation" id="Animation_wg64y"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("trash_bin:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.03, 0.03, 0.03)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("trash_bin:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, -0.02, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_cxelh"]
+resource_name = "add_trashbin"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("trash_bin:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.03, 0.03, 0.03), Vector3(0.04, 0.04, 0.04)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("trash_bin:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.02, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hrejr"]
+_data = {
+"RESET": SubResource("Animation_wg64y"),
+"add_trashbin": SubResource("Animation_cxelh")
+}
+
+[node name="TrashBin" type="Node3D"]
+script = ExtResource("1_krk5w")
+
+[node name="trash_bin" parent="." instance=ExtResource("1_g2oxl")]
+transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0, -0.02, 0)
+
+[node name="Area3D" type="Area3D" parent="trash_bin"]
+transform = Transform3D(25, 0, 0, 0, 25, 0, 0, 0, 25, 0, 0, 0)
+collision_layer = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="trash_bin/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0542412, 0)
+shape = SubResource("CylinderShape3D_fmaps")
+
+[node name="DeleteSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_p7u0v")
+volume_db = -10.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_hrejr")
+}

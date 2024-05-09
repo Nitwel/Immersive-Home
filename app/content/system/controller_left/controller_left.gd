@@ -1,6 +1,5 @@
 extends XRController3D
 
-const Entity = preload ("res://content/entities/entity.gd")
 const Pointer = preload ("res://lib/utils/pointer/pointer.gd")
 const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
 const Finger = preload ("res://lib/utils/touch/finger.gd")
@@ -23,9 +22,6 @@ const Miniature = preload ("res://content/system/house/mini/miniature.gd")
 
 @onready var palm = $Palm
 @onready var ray: RayCast3D = $Raycast
-@onready var area = $trash_bin/Area3D
-@onready var trash_bin = $trash_bin
-@onready var animation = $AnimationPlayer
 @onready var quick_actions = $Palm/QuickActions
 
 var hand_active = false
@@ -38,71 +34,9 @@ var grip_distance = 0.02
 var pressed = false
 var grabbed = false
 
-var to_delete = []
-var trash_bin_visible: bool = true:
-	set(value):
-		if trash_bin_visible == value:
-			return
-
-		if value:
-			add_child(trash_bin)
-		else:
-			if animation.is_playing():
-				await animation.animation_finished
-			remove_child(trash_bin)
-
-		trash_bin_visible = value
-
-var trash_bin_large: bool = false:
-	set(value):
-		if trash_bin_large == value:
-			return
-
-		if value:
-			animation.play("add_trashbin")
-		else:
-			animation.play_backwards("add_trashbin")
-
-		trash_bin_large = value
-
 func _ready():
-	trash_bin_visible = false
 
 	_setup_hand()
-
-	EventSystem.on_grab_down.connect(func(event: EventPointer):
-		trash_bin_visible=_get_entity(event.target) != null
-	)
-
-	EventSystem.on_grab_move.connect(func(event):
-		if !trash_bin_visible:
-			return
-
-		var entity=_get_entity(event.target)
-
-		if entity is Entity&&area.overlaps_body(entity):
-			if !to_delete.has(entity):
-				to_delete.append(entity)
-			trash_bin_large=true
-			
-		else:
-			to_delete.erase(entity)
-			trash_bin_large=false
-			
-	)
-
-	EventSystem.on_grab_up.connect(func(_event: EventPointer):
-		if !trash_bin_visible:
-			return
-
-		for entity in to_delete:
-			entity.queue_free()
-		to_delete.clear()
-		trash_bin_large=false
-		trash_bin_visible=false
-
-		House.body.save_all_entities()
-	)
 
 func _process(_delta):
 	if !hand_active:
@@ -124,27 +58,18 @@ func _physics_process(_delta):
 	var grab_close = distance_grab <= grip_distance
 
 	if trigger_close&&!pressed:
-		initiator.on_press.emit(Initiator.EventType.TRIGGER)
+		pointer.pressed(Initiator.EventType.TRIGGER)
 		pressed = true
 	elif !trigger_close&&pressed:
-		initiator.on_release.emit(Initiator.EventType.TRIGGER)
+		pointer.released(Initiator.EventType.TRIGGER)
 		pressed = false
 
 	if grab_close&&!grabbed:
-		initiator.on_press.emit(Initiator.EventType.GRIP)
+		pointer.pressed(Initiator.EventType.GRIP)
 		grabbed = true
 	elif !grab_close&&grabbed:
-		initiator.on_release.emit(Initiator.EventType.GRIP)
+		pointer.released(Initiator.EventType.GRIP)
 		grabbed = false
-
-func _get_entity(node: Node):
-	if node is Entity:
-		return node
-
-	if node.get_parent() == null:
-		return null
-
-	return _get_entity(node.get_parent())
 
 func _setup_hand():
 	TouchManager.add_finger(Finger.Type.INDEX_LEFT, $IndexTip/TouchArea)

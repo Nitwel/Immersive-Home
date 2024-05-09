@@ -19,6 +19,7 @@ const ECHO_WAIT_REPEAT = 0.1
 @onready var finger_area_collision: CollisionShape3D = $FingerArea/CollisionShape3D
 @onready var touch_collision: CollisionShape3D = $TouchBody/CollisionShape3D
 @onready var touch: StaticBody3D = $TouchBody
+@onready var click_sound = $ClickSound
 
 @export var focusable: bool = true:
 	set(value):
@@ -115,7 +116,7 @@ func _on_press_down(event):
 		event.bubbling = false
 		return
 
-	AudioPlayer.play_effect("click")
+	click_sound.play()
 
 	if toggleable:
 		return
@@ -163,7 +164,7 @@ func _on_touch_enter(event: EventTouch):
 		event.bubbling = false
 		return
 
-	AudioPlayer.play_effect("click")
+	click_sound.play()
 
 	if toggleable:
 		active = !active

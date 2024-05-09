@@ -28,11 +28,11 @@ func _ready():
 
 	get_parent().button_pressed.connect(func(button: String):
 		if _event_type_map.has(button):
-			initiator.on_press.emit(_event_type_map[button])
+			pointer.pressed(_event_type_map[button])
 	)
 	get_parent().button_released.connect(func(button: String):
 		if _event_type_map.has(button):
-			initiator.on_release.emit(_event_type_map[button])
+			pointer.released(_event_type_map[button])
 	)
 
 func _physics_process(_delta):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=23 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_8coxu"]
@@ -11,9 +11,11 @@
 [ext_resource type="PackedScene" uid="uid://ddpxthb414unp" path="res://content/ui/menu/view/view_menu.tscn" id="8_71pkg"]
 [ext_resource type="PackedScene" uid="uid://c01gkeldvjwtr" path="res://content/ui/menu/room/room_menu.tscn" id="10_u4i1x"]
 [ext_resource type="PackedScene" uid="uid://c6r4higceibif" path="res://content/ui/menu/settings/settings_menu.tscn" id="11_7wm6b"]
+[ext_resource type="AudioStream" uid="uid://nmm8y0xt5wyj" path="res://assets/sound/open_menu.wav" id="12_dsnuc"]
+[ext_resource type="AudioStream" uid="uid://bnx2uv4nmra8f" path="res://assets/sound/close_menu.wav" id="13_nnnln"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_e1esh"]
-size = Vector3(0.51, 0.32, 0.013)
+size = Vector3(0.51, 0.32, 0.034332)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_du6qr"]
 render_priority = 0
@@ -188,7 +190,7 @@ _data = {
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_emmtq"]
-size = Vector3(0.542114, 0.355225, 0.0774612)
+size = Vector3(0.542114, 0.355225, 0.091465)
 
 [node name="Menu" type="StaticBody3D"]
 collision_layer = 6
@@ -196,7 +198,7 @@ collision_mask = 6
 script = ExtResource("1_ng4u3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, -0.005)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0, -0.015666)
 shape = SubResource("BoxShape3D_e1esh")
 
 [node name="Movable" type="Node" parent="."]
@@ -303,5 +305,13 @@ collision_mask = 0
 monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0299683, 0, 0.00889969)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0299683, 0, 0.0018978)
 shape = SubResource("BoxShape3D_emmtq")
+
+[node name="OpenSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("12_dsnuc")
+volume_db = -6.0
+
+[node name="CloseSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("13_nnnln")
+volume_db = -6.0
