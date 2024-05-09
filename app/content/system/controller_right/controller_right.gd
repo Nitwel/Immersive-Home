@@ -58,15 +58,15 @@ func _physics_process(_delta):
 	var grab_close = distance_grab <= grip_distance
 
 	if trigger_close&&!pressed:
-		initiator.on_press.emit(Initiator.EventType.TRIGGER)
+		pointer.pressed(Initiator.EventType.TRIGGER)
 		pressed = true
 	elif !trigger_close&&pressed:
-		initiator.on_release.emit(Initiator.EventType.TRIGGER)
+		pointer.released(Initiator.EventType.TRIGGER)
 		pressed = false
 
 	if grab_close&&!grabbed:
-		initiator.on_press.emit(Initiator.EventType.GRIP)
+		pointer.pressed(Initiator.EventType.GRIP)
 		grabbed = true
 	elif !grab_close&&grabbed:
-		initiator.on_release.emit(Initiator.EventType.GRIP)
+		pointer.released(Initiator.EventType.GRIP)
 		grabbed = false

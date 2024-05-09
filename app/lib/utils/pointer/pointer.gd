@@ -19,10 +19,6 @@ func _init(initiator: Initiator, ray: RayCast3D):
 	self.initiator = initiator
 	self.ray = ray
 
-func _ready():
-	initiator.on_press.connect(_on_pressed)
-	initiator.on_release.connect(_on_released)
-
 func _physics_process(_delta):
 	_handle_enter_leave()
 	_handle_move()
@@ -56,7 +52,7 @@ func _handle_enter_leave():
 
 	last_collided = collider
 
-func _on_pressed(type: Initiator.EventType):
+func pressed(type: Initiator.EventType):
 	var collider = ray.get_collider()
 
 	if collider == null:
@@ -73,7 +69,7 @@ func _on_pressed(type: Initiator.EventType):
 			click_point = ray.get_collision_point()
 			_emit_event("grab_down", collider)
 
-func _on_released(type: Initiator.EventType):
+func released(type: Initiator.EventType):
 	match type:
 		Initiator.EventType.TRIGGER:
 			if is_pressed:

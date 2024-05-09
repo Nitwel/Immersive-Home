@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://bsjqdvkt0u87c"]
+[gd_scene load_steps=9 format=3 uid="uid://bsjqdvkt0u87c"]
 
 [ext_resource type="Script" path="res://content/ui/components/button/button.gd" id="1_74x7g"]
 [ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_db5by"]
 [ext_resource type="Script" path="res://content/ui/components/panel/panel.gd" id="3_skm86"]
+[ext_resource type="AudioStream" uid="uid://c1yu80uj3fsn7" path="res://assets/sound/click.wav" id="4_51sb0"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_n8om1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_826v7"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("2_db5by")
@@ -19,7 +20,7 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_dxm1i"]
+[sub_resource type="QuadMesh" id="QuadMesh_02501"]
 size = Vector2(0.04, 0.04)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xwopm"]
@@ -42,8 +43,8 @@ collision_mask = 0
 
 [node name="Panel3D" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
-material_override = SubResource("ShaderMaterial_n8om1")
-mesh = SubResource("QuadMesh_dxm1i")
+material_override = SubResource("ShaderMaterial_826v7")
+mesh = SubResource("QuadMesh_02501")
 skeleton = NodePath("../..")
 script = ExtResource("3_skm86")
 size = Vector2(0.04, 0.04)
@@ -78,3 +79,7 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TouchBody"]
 shape = SubResource("BoxShape3D_xwopm")
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_51sb0")
+volume_db = -18.0

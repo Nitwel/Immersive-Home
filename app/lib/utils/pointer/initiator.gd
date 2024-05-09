@@ -13,9 +13,6 @@ enum EventType {
 	TRIGGER,
 }
 
-signal on_press(type: EventType)
-signal on_release(type: EventType)
-
 var node: Node3D
 var type: Type
 

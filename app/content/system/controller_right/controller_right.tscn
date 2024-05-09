@@ -54,7 +54,7 @@ collision_mask = 4
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="IndexTip/TouchArea"]
-transform = Transform3D(1, -7.45058e-09, -2.22045e-16, 7.45058e-09, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 0, -1.49012e-08, 1, 0, 0, -7.45058e-09, 1, 0, -0.01, 0)
 shape = SubResource("CapsuleShape3D_66uu0")
 
 [node name="ThumbTip" type="BoneAttachment3D" parent="."]

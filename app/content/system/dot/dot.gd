@@ -7,6 +7,7 @@ const TOUCH_LONG = 400.0
 @export var entity: Entity
 
 @onready var collision = $CollisionShape3D
+@onready var snap_sound = $SnapSound
 @onready var label = $Label3D
 var active = R.state(false)
 var disabled = R.state(true)
@@ -36,6 +37,7 @@ func _ready():
 func _on_click(_event: EventPointer):
 	if entity.has_method("quick_action")&&miniature.entity_select.selection_active() == false:
 		entity.quick_action()
+		snap_sound.play()
 	else:
 		miniature.entity_select.toggle(entity)
 
@@ -62,6 +64,7 @@ func _on_touch_leave(_event: EventTouch):
 	if touch_ran: return
 	
 	if entity.has_method("quick_action")&&miniature.entity_select.selection_active() == false:
+		snap_sound.play()
 		entity.quick_action()
 	else:
 		miniature.entity_select.toggle(entity)

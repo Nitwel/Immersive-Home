@@ -13,6 +13,7 @@ signal on_text_changed(text: String)
 @onready var animation: AnimationPlayer = $AnimationPlayer
 @onready var label: Label3D = $Body/Label
 @onready var placeholder_label: Label3D = $Body/Placeholder
+@onready var snap_sound = $SnapSound
 
 @export var placeholder: String = "":
 	set(value):
@@ -135,6 +136,7 @@ func _on_focus_in(_event):
 	caret.visible = true
 	panel.active = true
 	animation.play("blink")
+	snap_sound.play()
 	_update_placeholder()
 
 func update_caret_position(event):

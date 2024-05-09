@@ -13,7 +13,6 @@ signal on_moved()
 
 var initiator = null
 var initiator2 = null
-var resizing = false
 
 var relative_transform = Transform3D()
 var initial_point = Vector3()
@@ -27,7 +26,7 @@ var initial_transform = Transform3D()
 var distances = Vector2()
 
 func _process(delta):
-	if get_tree().debug_collisions_hint&&resizing:
+	if get_tree().debug_collisions_hint&&initiator2 != null:
 		DebugDraw3D.draw_line(initial_position, initial_position + initial_direction, Color(1, 0, 0))
 		DebugDraw3D.draw_line(initial_position, initial_position + initial_up, Color(0, 1, 0))
 
@@ -38,12 +37,11 @@ func _on_grab_down(event: EventPointer):
 	if restricted&&event.target != get_parent():
 		return
 
-	if resizing&&initiator2 != null:
+	if initiator != null&&initiator2 != null:
 		return
 
-	if resizable&&initiator != null:
+	if initiator != null&&initiator2 == null&&initiator != event.initiator:
 		initiator2 = event.initiator
-		resizing = true
 
 		distances.y = event.ray.get_collision_point().distance_to(event.ray.global_position)
 
@@ -54,8 +52,7 @@ func _on_grab_down(event: EventPointer):
 
 		return
 
-	if resizable:
-		distances.x = event.ray.get_collision_point().distance_to(event.ray.global_position)
+	distances.x = event.ray.get_collision_point().distance_to(event.ray.global_position)
 
 	initiator = event.initiator
 
@@ -69,10 +66,13 @@ func _on_grab_move(event: EventPointer):
 	if event.initiator != initiator:
 		return
 
-	if resizing:
+	if initiator != null&&initiator2 != null:
 		var new_position = _get_first_ray_point()
 		var new_direction = _get_second_ray_point() - new_position
 		var new_up = -initiator.node.global_transform.basis.z.normalized() * distances.x
+
+		if resizable == false:
+			new_direction = new_direction.normalized() * initial_direction.length()
 
 		if get_tree().debug_collisions_hint:
 			DebugDraw3D.draw_line(new_position, new_position + new_direction, Color(1, 0, 0))
@@ -93,7 +93,6 @@ func _on_grab_move(event: EventPointer):
 func _on_grab_up(event: EventPointer):
 	if event.initiator == initiator2:
 		initiator2 = null
-		resizing = false
 		_update_relative_transform()
 		return
 
@@ -101,12 +100,10 @@ func _on_grab_up(event: EventPointer):
 		if initiator2 != null:
 			initiator = initiator2
 			initiator2 = null
-			resizing = false
 			_update_relative_transform()
 		else:
 			initiator = null
 			initiator2 = null
-			resizing = false
 			on_moved.emit()
 
 func _get_first_ray_point():

@@ -14,6 +14,7 @@ const color_wheel_img := preload ("res://assets/canvas.png")
 @onready var mode_next = $Modes/Next
 @onready var mode_before = $Modes/Previous
 @onready var mode_label = $Modes/Label
+@onready var snap_sound = $SnapSound
 
 var active = R.state(false)
 var brightness = R.state(0) # 0-255
@@ -78,6 +79,8 @@ func _ready():
 				"rgb_color": [int(picked_color.r * 255), int(picked_color.g * 255), int(picked_color.b * 255)],
 			}
 
+			snap_sound.play()
+
 			HomeApi.set_state(entity_id, "on", attributes)
 		)
 		color_supported = true
@@ -123,6 +126,7 @@ func set_state(stateInfo):
 
 func _on_click(event):
 	if event.target == self:
+		snap_sound.play()
 		_toggle()
 
 func quick_action():

@@ -64,6 +64,9 @@ static func effect(callback: Callable):
 		if !deconstructor.is_null():
 			deconstructor.call()
 
+		if callback.is_valid() == false:
+			return
+
 		var result=callback.call(_arg)
 
 		if result is Callable:

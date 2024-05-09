@@ -3,6 +3,7 @@ extends Entity
 const Entity = preload ("../entity.gd")
 
 @onready var sprite: AnimatedSprite3D = $Icon
+@onready var snap_sound = $SnapSound
 
 var active = R.state(false)
 
@@ -29,6 +30,7 @@ func set_state(stateInfo):
 	icon.value = "toggle_" + stateInfo["state"]
 
 func _on_click(_event):
+	snap_sound.play()
 	_toggle()
 
 func quick_action():

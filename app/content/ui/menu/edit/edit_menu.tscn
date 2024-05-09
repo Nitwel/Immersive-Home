@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://crrb0l3ekuotj"]
+[gd_scene load_steps=14 format=3 uid="uid://crrb0l3ekuotj"]
 
 [ext_resource type="Script" path="res://content/ui/menu/edit/edit_menu.gd" id="1_34cbn"]
 [ext_resource type="Script" path="res://content/ui/menu/edit/devices.gd" id="2_rkvf4"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://content/ui/menu/edit/entities.gd" id="5_t34xe"]
 [ext_resource type="Script" path="res://content/ui/components/flex_container/flex_container.gd" id="6_cr6p6"]
 [ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="6_evh58"]
+[ext_resource type="AudioStream" uid="uid://cn2qohl6abgeu" path="res://assets/sound/spawn.wav" id="11_7qxwt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hstwo"]
 render_priority = -3
@@ -131,3 +132,7 @@ visible = false
 material_override = SubResource("ShaderMaterial_hstwo")
 mesh = SubResource("QuadMesh_4pj6f")
 skeleton = NodePath("../..")
+
+[node name="SpawnSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("11_7qxwt")
+volume_db = -10.0

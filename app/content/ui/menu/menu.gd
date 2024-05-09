@@ -3,6 +3,8 @@ extends Node3D
 const Notification = preload ("res://content/ui/components/notification/notification.tscn")
 
 @onready var animation_player = $AnimationPlayer
+@onready var open_sound = $OpenSound
+@onready var close_sound = $CloseSound
 @onready var notify_place = $AnimationContainer/NotifyPlace
 @onready var main = $"/root/Main"
 
@@ -18,10 +20,12 @@ func _ready():
 			main.add_child(self)
 			move_into_view()
 			animation_player.play_backwards("hide_menu")
-			AudioPlayer.play_effect("open_menu")
+			open_sound.play()
+			close_sound.stop()
 		else:
 			animation_player.play("hide_menu")
-			AudioPlayer.play_effect("close_menu")
+			close_sound.play()
+			open_sound.stop()
 	)
 
 	animation_player.animation_finished.connect(func(_animation):

@@ -3,7 +3,7 @@
 [ext_resource type="Shader" path="res://assets/materials/hands.gdshader" id="1_kyekt"]
 
 [resource]
-render_priority = 0
+render_priority = 50
 shader = ExtResource("1_kyekt")
 shader_parameter/albedo = Color(1, 1, 1, 0.4)
 shader_parameter/fade_offset = 0.0

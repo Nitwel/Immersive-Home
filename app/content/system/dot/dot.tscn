@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://b5buw1sas18n4"]
+[gd_scene load_steps=6 format=3 uid="uid://b5buw1sas18n4"]
 
 [ext_resource type="Script" path="res://content/system/dot/dot.gd" id="1_vdpux"]
+[ext_resource type="AudioStream" uid="uid://du7ur0lu28cvn" path="res://assets/sound/finger-snap.mp3" id="3_04fcm"]
 [ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="4_504vw"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_3wgjq"]
@@ -34,3 +35,7 @@ monitoring = false
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("SphereShape3D_y1ne8")
+
+[node name="SnapSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_04fcm")
+volume_db = -20.0
