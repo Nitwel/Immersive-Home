@@ -16,7 +16,7 @@ material = SubResource("StandardMaterial3D_m58yb")
 size = Vector3(0.01, 0.01, 0.01)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ca85m"]
-render_priority = 0
+render_priority = 50
 shader = ExtResource("6_wk733")
 shader_parameter/albedo = Color(1, 1, 1, 0.4)
 shader_parameter/fade_offset = 0.0
