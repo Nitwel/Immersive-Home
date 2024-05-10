@@ -7,10 +7,11 @@ const TOUCH_LONG = 400.0
 @export var entity: Entity
 
 @onready var collision = $CollisionShape3D
+@onready var area = $Area3D/CollisionShape3D2
 @onready var snap_sound = $SnapSound
 @onready var label = $Label3D
 var active = R.state(false)
-var disabled = R.state(true)
+var disabled = null
 var touched_enter = 0.0
 var moved_ran = false
 var touch_ran = false
@@ -32,6 +33,7 @@ func _ready():
 	R.effect(func(_arg):
 		visible=!disabled.value
 		collision.disabled=disabled.value
+		area.disabled=disabled.value
 	)
 
 func _on_click(_event: EventPointer):

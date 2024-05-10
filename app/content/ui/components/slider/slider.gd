@@ -58,7 +58,7 @@ func _ready():
 
 	_update_slider()
 	_update()
-	move_plane = Plane(Vector3.UP, Vector3(0, size.y / 200, 0))
+	move_plane = Plane(Vector3.BACK, Vector3(0, 0, size.z))
 
 func _on_press_down(event: EventPointer):
 	_handle_press(event)

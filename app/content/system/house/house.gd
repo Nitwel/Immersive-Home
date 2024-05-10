@@ -24,8 +24,8 @@ func _ready():
 func update_house():
 	loaded.value = false
 	for old_room in get_rooms(0):
+		old_room.get_parent().remove_child(old_room)
 		old_room.queue_free()
-		await old_room.tree_exited
 
 	align_reference.update_align_reference()
 
@@ -101,6 +101,7 @@ func delete_room(room_name):
 	if editing_room == room:
 		editing_room = null
 
+	room.get_parent().remove_child(room)
 	room.queue_free()
 	await room.tree_exited
 

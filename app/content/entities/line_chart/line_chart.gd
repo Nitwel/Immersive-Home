@@ -36,6 +36,9 @@ func request_history():
 
 	var result = await HomeApi.get_history(entity_id, start)
 
+	if result == null:
+		return
+
 	var points = result.data.map(func(point):
 		# Divide by 1000 to convert milliseconds to seconds
 		return Vector2((point.start + point.end) / (2 * 1000), point.mean)

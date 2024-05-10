@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://b0nq4wjfckxsa"]
+[gd_scene load_steps=7 format=3 uid="uid://b0nq4wjfckxsa"]
 
 [ext_resource type="Script" path="res://content/entities/camera/camera.gd" id="1_htxq3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_e2u6o"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_8whxu"]
+[ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="4_lfexu"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_830bv"]
 size = Vector2(0.15, 0.15)
@@ -26,3 +28,19 @@ shape = SubResource("BoxShape3D_te0pn")
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("2_e2u6o")
 resizable = true
+
+[node name="RefreshTimer" type="Timer" parent="."]
+wait_time = 0.1
+
+[node name="Button" parent="." instance=ExtResource("3_8whxu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, -0.1, 0)
+label = "videocam_off"
+icon = true
+
+[node name="Slider" parent="." instance=ExtResource("4_lfexu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.1, 0)
+min = 1.0
+max = 30.0
+value = 1.0
+step = 1.0
+label_unit = "FPS"
