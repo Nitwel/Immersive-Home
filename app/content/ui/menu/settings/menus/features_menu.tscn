@@ -1,7 +1,56 @@
-[gd_scene load_steps=3 format=3 uid="uid://4hai6lp64m2o"]
+[gd_scene load_steps=14 format=3 uid="uid://4hai6lp64m2o"]
 
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_52ufi"]
 [ext_resource type="Script" path="res://content/ui/menu/settings/menus/features_menu.gd" id="1_imqs2"]
+[ext_resource type="Script" path="res://content/ui/components/tabs/tabs.gd" id="3_cwu20"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="4_v4u0l"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="5_3vfb4"]
+[ext_resource type="Texture2D" uid="uid://bl33klueufwja" path="res://assets/cursors/pointer.png" id="6_ypel5"]
+[ext_resource type="Texture2D" uid="uid://churthrr24yhw" path="res://assets/cursors/old.png" id="7_un12x"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0hxn1"]
+resource_local_to_scene = true
+render_priority = 10
+shader = ExtResource("4_v4u0l")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(1, 1)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.2
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_1x032"]
+size = Vector2(0.04, 0.04)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_01skh"]
+resource_local_to_scene = true
+size = Vector3(0.04, 0.04, 0.01)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_surd4"]
+resource_local_to_scene = true
+size = Vector3(0.04, 0.04, 0.03)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pnxr8"]
+resource_local_to_scene = true
+render_priority = 10
+shader = ExtResource("4_v4u0l")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(1, 1)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.2
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_6ehqp"]
+size = Vector2(0.04, 0.04)
 
 [node name="FeaturesMenu" type="Node3D"]
 script = ExtResource("1_imqs2")
@@ -21,3 +70,87 @@ text = "Voice Assistant: "
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
+
+[node name="LabelCursor" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.13, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Cursor Style: "
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="CursorOptions" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, -0.13, 0)
+script = ExtResource("3_cwu20")
+gap = 0.01
+
+[node name="CircleCursor" parent="CursorOptions" instance=ExtResource("1_52ufi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0, 0)
+label = ""
+icon = true
+toggleable = true
+
+[node name="Panel3D" parent="CursorOptions/CircleCursor/Body" index="0"]
+material_override = SubResource("ShaderMaterial_0hxn1")
+mesh = SubResource("QuadMesh_1x032")
+
+[node name="CollisionShape3D" parent="CursorOptions/CircleCursor/Body" index="1"]
+shape = SubResource("BoxShape3D_01skh")
+
+[node name="Label" parent="CursorOptions/CircleCursor/Body" index="2"]
+text = ""
+font = ExtResource("5_3vfb4")
+font_size = 28
+autowrap_mode = 0
+width = 1000.0
+
+[node name="Sprite3D" type="Sprite3D" parent="CursorOptions/CircleCursor/Body/Label" index="0"]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
+pixel_size = 0.001
+double_sided = false
+render_priority = 20
+texture = ExtResource("6_ypel5")
+
+[node name="CollisionShape3D" parent="CursorOptions/CircleCursor/FingerArea" index="0"]
+shape = SubResource("BoxShape3D_surd4")
+
+[node name="CollisionShape3D" parent="CursorOptions/CircleCursor/TouchBody" index="0"]
+shape = SubResource("BoxShape3D_01skh")
+
+[node name="RetroCursor" parent="CursorOptions" instance=ExtResource("1_52ufi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, 0, 0)
+label = ""
+icon = true
+toggleable = true
+
+[node name="Panel3D" parent="CursorOptions/RetroCursor/Body" index="0"]
+material_override = SubResource("ShaderMaterial_pnxr8")
+mesh = SubResource("QuadMesh_6ehqp")
+
+[node name="CollisionShape3D" parent="CursorOptions/RetroCursor/Body" index="1"]
+shape = SubResource("BoxShape3D_01skh")
+
+[node name="Label" parent="CursorOptions/RetroCursor/Body" index="2"]
+text = ""
+font = ExtResource("5_3vfb4")
+font_size = 28
+autowrap_mode = 0
+width = 1000.0
+
+[node name="Sprite3D" type="Sprite3D" parent="CursorOptions/RetroCursor/Body/Label" index="0"]
+pixel_size = 0.001
+double_sided = false
+texture_filter = 0
+render_priority = 20
+texture = ExtResource("7_un12x")
+
+[node name="CollisionShape3D" parent="CursorOptions/RetroCursor/FingerArea" index="0"]
+shape = SubResource("BoxShape3D_surd4")
+
+[node name="CollisionShape3D" parent="CursorOptions/RetroCursor/TouchBody" index="0"]
+shape = SubResource("BoxShape3D_01skh")
+
+[editable path="CursorOptions/CircleCursor"]
+[editable path="CursorOptions/RetroCursor"]

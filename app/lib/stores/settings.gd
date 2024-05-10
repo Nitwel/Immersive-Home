@@ -3,6 +3,11 @@ extends StoreClass
 
 const StoreClass = preload ("./store.gd")
 
+enum CursorStyle {
+	DEFAULT,
+	RETRO
+}
+
 func _init():
 	_save_path = "user://settings.json"
 
@@ -14,7 +19,8 @@ func _init():
 		## If the voice assistant should be enabled
 		"voice_assistant": false,
 		## If the onboarding process has been completed
-		"onboarding_complete": false
+		"onboarding_complete": false,
+		"cursor_style": CursorStyle.DEFAULT
 	})
 
 func clear():
@@ -23,3 +29,4 @@ func clear():
 	self.state.token = ""
 	self.state.voice_assistant = false
 	self.state.onboarding_complete = false
+	self.state.cursor_style = CursorStyle.DEFAULT

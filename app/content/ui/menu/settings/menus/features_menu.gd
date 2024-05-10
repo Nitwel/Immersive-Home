@@ -1,6 +1,7 @@
 extends Node3D
 
 @onready var voice_assist = $VoiceAssist
+@onready var cursor_options = $CursorOptions
 
 func _ready():
 	var settings_store = Store.settings.state
@@ -32,7 +33,15 @@ func _ready():
 
 		settings_store.voice_assistant=false
 		Store.settings.save_local()
+	)
 
+	cursor_options.selected.value = settings_store.cursor_style
+
+	cursor_options.on_select.connect(func(option):
+		settings_store.cursor_style=option
+		settings_store.cursor_style=option
+		print("cursor_style", option)
+		Store.settings.save_local()
 	)
 
 	R.bind(voice_assist, "label", button_label)
