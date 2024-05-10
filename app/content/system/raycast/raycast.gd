@@ -4,6 +4,8 @@ const Pointer = preload ("res://lib/utils/pointer/pointer.gd")
 const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
 
 @onready var cursor: Node3D = $Cursor
+@onready var default_cursor: Sprite3D = $Cursor/DefaultCursor
+@onready var retro_cursor: Sprite3D = $Cursor/RetroCursor
 @onready var decal: Decal = $Decal
 
 @export var is_right: bool = true
@@ -35,6 +37,16 @@ func _ready():
 			pointer.released(_event_type_map[button])
 	)
 
+	R.effect(func(_arg):
+		match Store.settings.state.cursor_style:
+			1:
+				default_cursor.visible=false
+				retro_cursor.visible=true
+			0, _:
+				default_cursor.visible=true
+				retro_cursor.visible=false
+	)
+
 func _physics_process(_delta):
 	_handle_cursor()
 
@@ -58,4 +70,13 @@ func _handle_cursor():
 	cursor.visible = true
 	decal.visible = false
 	cursor.global_transform.origin = get_collision_point() + get_collision_normal() * 0.001 # offset to avoid z-fighting
-	cursor.global_transform.basis = Basis.looking_at(get_collision_normal(), Vector3.UP)
+
+	if abs(get_collision_normal().dot(Vector3.UP)) > 0.9:
+		var ray_dir_inv = global_transform.basis.z
+		cursor.global_transform.basis = Basis.looking_at(get_collision_normal().lerp(ray_dir_inv, 0.01), Vector3.UP, true)
+	else:
+		cursor.global_transform.basis = Basis.looking_at(get_collision_normal(), Vector3.UP, true)
+		
+	var cursor_scale = clamp(distance * 1.5 - 0.75, 1.0, 3.0)
+
+	cursor.scale = Vector3(cursor_scale, cursor_scale, cursor_scale)

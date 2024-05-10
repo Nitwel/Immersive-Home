@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dscp8x0ari57n"]
+[gd_scene load_steps=8 format=3 uid="uid://dscp8x0ari57n"]
 
-[ext_resource type="Texture2D" uid="uid://bl33klueufwja" path="res://assets/materials/pointer.png" id="1_2f2iv"]
+[ext_resource type="Texture2D" uid="uid://bl33klueufwja" path="res://assets/cursors/pointer.png" id="1_2f2iv"]
 [ext_resource type="Script" path="res://content/system/raycast/raycast.gd" id="1_gp8nv"]
+[ext_resource type="Texture2D" uid="uid://churthrr24yhw" path="res://assets/cursors/old.png" id="3_f5ibs"]
 [ext_resource type="Shader" path="res://content/system/raycast/raycast.gdshader" id="3_lpfe7"]
 [ext_resource type="Texture2D" uid="uid://cy5dna78q6tn6" path="res://assets/models/ray/ray.png" id="4_fe8o8"]
 [ext_resource type="ArrayMesh" uid="uid://d3kriab522o2w" path="res://assets/models/ray/ray.obj" id="5_3o4gy"]
@@ -28,11 +29,21 @@ lower_fade = 0.000919435
 
 [node name="Cursor" type="Node3D" parent="."]
 
-[node name="CursorSprite" type="Sprite3D" parent="Cursor"]
+[node name="DefaultCursor" type="Sprite3D" parent="Cursor"]
 transform = Transform3D(0.03, 2.71051e-20, 0, -5.42101e-20, 0.03, -2.03288e-21, -2.46521e-33, 2.5411e-21, 0.03, 0, 0, 0)
+visible = false
 pixel_size = 0.001
+texture_filter = 0
 render_priority = 90
 texture = ExtResource("1_2f2iv")
+
+[node name="RetroCursor" type="Sprite3D" parent="Cursor"]
+transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0, 0, 0)
+offset = Vector2(5.835, -9.175)
+pixel_size = 0.03
+texture_filter = 0
+render_priority = 90
+texture = ExtResource("3_f5ibs")
 
 [node name="Ray" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, -1.39624e-11, -6.10317e-19, 0, -4.37114e-08, 1, -1.39624e-11, -1, -4.37114e-08, 0, 0, -0.0182334)
