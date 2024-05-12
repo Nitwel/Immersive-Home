@@ -30,7 +30,7 @@ var grabbed = false
 func _ready():
 	TouchManager.add_finger(Finger.Type.INDEX_RIGHT, $IndexTip/TouchArea)
 
-	collide = Collide.new(hand, hand_mesh, index_tip)
+	collide = Collide.new(hand, hand_mesh, index_tip.get_node("Marker3D"))
 	add_child(collide)
 
 	initiator.type = Initiator.Type.HAND_RIGHT

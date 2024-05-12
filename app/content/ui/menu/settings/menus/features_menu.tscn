@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bl33klueufwja" path="res://assets/cursors/pointer.png" id="6_ypel5"]
 [ext_resource type="Texture2D" uid="uid://churthrr24yhw" path="res://assets/cursors/old.png" id="7_un12x"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0hxn1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_51ev7"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("4_v4u0l")
@@ -23,7 +23,7 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_1x032"]
+[sub_resource type="QuadMesh" id="QuadMesh_gh4gw"]
 size = Vector2(0.04, 0.04)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_01skh"]
@@ -34,7 +34,7 @@ size = Vector3(0.04, 0.04, 0.01)
 resource_local_to_scene = true
 size = Vector3(0.04, 0.04, 0.03)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pnxr8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mn1g0"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("4_v4u0l")
@@ -49,7 +49,7 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_6ehqp"]
+[sub_resource type="QuadMesh" id="QuadMesh_jbtbu"]
 size = Vector2(0.04, 0.04)
 
 [node name="FeaturesMenu" type="Node3D"]
@@ -93,8 +93,8 @@ icon = true
 toggleable = true
 
 [node name="Panel3D" parent="CursorOptions/CircleCursor/Body" index="0"]
-material_override = SubResource("ShaderMaterial_0hxn1")
-mesh = SubResource("QuadMesh_1x032")
+material_override = SubResource("ShaderMaterial_51ev7")
+mesh = SubResource("QuadMesh_gh4gw")
 
 [node name="CollisionShape3D" parent="CursorOptions/CircleCursor/Body" index="1"]
 shape = SubResource("BoxShape3D_01skh")
@@ -126,8 +126,8 @@ icon = true
 toggleable = true
 
 [node name="Panel3D" parent="CursorOptions/RetroCursor/Body" index="0"]
-material_override = SubResource("ShaderMaterial_pnxr8")
-mesh = SubResource("QuadMesh_6ehqp")
+material_override = SubResource("ShaderMaterial_mn1g0")
+mesh = SubResource("QuadMesh_jbtbu")
 
 [node name="CollisionShape3D" parent="CursorOptions/RetroCursor/Body" index="1"]
 shape = SubResource("BoxShape3D_01skh")

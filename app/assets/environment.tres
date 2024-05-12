@@ -7,9 +7,10 @@ sky_material = SubResource("ProceduralSkyMaterial_i4xao")
 
 [resource]
 background_mode = 1
-background_color = Color(0.441, 0.962033, 0.98, 1)
+background_color = Color(1, 1, 1, 1)
 sky = SubResource("Sky_vhymk")
 ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
 ssao_radius = 6.52
 ssao_intensity = 5.68
+adjustment_contrast = 2.23

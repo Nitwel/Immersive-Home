@@ -14,7 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://bhyddd1f0ry1x" path="res://content/ui/onboarding/onboarding.tscn" id="12_uq2nj"]
 
 [node name="Main" type="Node3D"]
-transform = Transform3D(1, -0.000296142, 0.000270963, 0.000296143, 1, -4.5899e-06, -0.000270962, 4.67014e-06, 1, 0, 0, 0)
 script = ExtResource("1_uvrd4")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -22,6 +21,7 @@ environment = ExtResource("2_lsndp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, -2.51787e-05, 0.000567105, -0.000567105, 4.3985e-08, 1, -2.51784e-05, -1, 2.97105e-08, -4.65661e-10, 7.21041, 2.06458)
+visible = false
 shadow_enabled = true
 
 [node name="StartXR" parent="." instance=ExtResource("1_i4c04")]
@@ -35,19 +35,24 @@ enable_passthrough = true
 transform = Transform3D(0.999999, -1.39633e-11, 0, 9.48075e-12, 1, 0, 0, 0, 1, -0.355145, 0.550439, -0.477945)
 
 [node name="IndexTip" parent="XROrigin3D/XRControllerLeft" index="4"]
-transform = Transform3D(0.967526, 0.252326, -0.0150302, -0.0150302, 0.116784, 0.993043, 0.252326, -0.960569, 0.116784, -0.00665808, 0.0427912, -0.169868)
+transform = Transform3D(0.967526, 0.252326, -0.0150302, -0.0150302, 0.116784, 0.993043, 0.252326, -0.960569, 0.116784, -0.00665802, 0.0427912, -0.169868)
 
 [node name="ThumbTip" parent="XROrigin3D/XRControllerLeft" index="5"]
-transform = Transform3D(0.967043, 0.24582, -0.0663439, -0.0663439, 0.494837, 0.86645, 0.24582, -0.833492, 0.494837, 0.0261569, 0.0891963, -0.0934418)
+transform = Transform3D(0.967043, 0.24582, -0.0663439, -0.0663439, 0.494837, 0.866449, 0.24582, -0.833492, 0.494837, 0.0261569, 0.0891963, -0.0934418)
 
 [node name="MiddleTip" parent="XROrigin3D/XRControllerLeft" index="6"]
 transform = Transform3D(0.98042, 0.196912, 0.00149799, 0.001498, -0.015065, 0.999885, 0.196912, -0.980305, -0.0150651, -0.00327212, -0.00771427, -0.176318)
 
 [node name="Palm" parent="XROrigin3D/XRControllerLeft" index="7"]
-transform = Transform3D(1, 3.12361e-06, -3.13859e-06, -3.12371e-06, 1, -1.97886e-05, 3.13859e-06, 1.97889e-05, 1, 0.0307807, -0.0419722, -0.0399505)
+transform = Transform3D(1, 3.12364e-06, -3.13861e-06, -3.12371e-06, 1, -1.97886e-05, 3.13854e-06, 1.97889e-05, 1, 0.0307807, -0.0419721, -0.0399505)
 
 [node name="XRControllerRight" parent="XROrigin3D" instance=ExtResource("7_0b3tc")]
 transform = Transform3D(0.999999, -1.39635e-11, 0, 1.31553e-10, 1, 0, 0, 0, 1, 0.336726, 0.575093, -0.437942)
+
+[node name="OpenXRCompositionLayerEquirect" type="OpenXRCompositionLayerEquirect" parent="XROrigin3D" node_paths=PackedStringArray("layer_viewport")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.71, 0)
+layer_viewport = NodePath("../../SubViewportContainer/SubViewport")
+alpha_blend = true
 
 [node name="XRSimulator" parent="." instance=ExtResource("5_3qc8g")]
 min_camera_height = 0.01
@@ -68,6 +73,31 @@ transform = Transform3D(1, -1.39636e-11, 0, 4.42413e-11, 1, 0, 0, 0, 1, -0.57679
 
 [node name="Node" type="Node" parent="."]
 script = ExtResource("12_e13ym")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -298.0
+offset_top = -61.5
+offset_right = 298.0
+offset_bottom = 61.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "Hello World"
 
 [editable path="XROrigin3D/XRControllerLeft"]
 [editable path="XROrigin3D/XRControllerLeft/hand_l"]

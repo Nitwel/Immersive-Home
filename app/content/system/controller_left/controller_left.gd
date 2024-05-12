@@ -74,7 +74,7 @@ func _physics_process(_delta):
 func _setup_hand():
 	TouchManager.add_finger(Finger.Type.INDEX_LEFT, $IndexTip/TouchArea)
 
-	collide = Collide.new(hand, hand_mesh, index_tip)
+	collide = Collide.new(hand, hand_mesh, index_tip.get_node("Marker3D"))
 	add_child(collide)
 
 	auto_hand.hand_active_changed.connect(func(hand: int, active: bool):

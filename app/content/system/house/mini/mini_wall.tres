@@ -4,11 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://bbuq4wn7e5o2q" path="res://content/system/house/mini/temp_gradient.tres" id="2_3lwi8"]
 
 [resource]
-render_priority = 9
+render_priority = 0
 shader = ExtResource("1_sbr3e")
 shader_parameter/data = PackedFloat32Array()
 shader_parameter/data_size = 0
-shader_parameter/alpha = 0.3
+shader_parameter/alpha = 1.0
 shader_parameter/roughness = 0.15
 shader_parameter/edge_color = Color(0, 0, 0, 1)
 shader_parameter/color_gradient = ExtResource("2_3lwi8")

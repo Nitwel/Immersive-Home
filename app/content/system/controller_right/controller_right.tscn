@@ -45,6 +45,7 @@ use_external_skeleton = true
 external_skeleton = NodePath("../hand_r/Armature/Skeleton3D")
 
 [node name="Marker3D" type="Marker3D" parent="IndexTip"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
 gizmo_extents = 0.02
 
 [node name="TouchArea" type="Area3D" parent="IndexTip"]

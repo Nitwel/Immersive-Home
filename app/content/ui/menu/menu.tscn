@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=22 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_8coxu"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://crrb0l3ekuotj" path="res://content/ui/menu/edit/edit_menu.tscn" id="4_r2raj"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_w4i01"]
 [ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="6_7rntr"]
-[ext_resource type="ArrayMesh" uid="uid://cbqhhnknyium2" path="res://assets/immersive_home_panels/immersive_home_panels.obj" id="7_f4u4o"]
 [ext_resource type="PackedScene" uid="uid://ddpxthb414unp" path="res://content/ui/menu/view/view_menu.tscn" id="8_71pkg"]
 [ext_resource type="PackedScene" uid="uid://c01gkeldvjwtr" path="res://content/ui/menu/room/room_menu.tscn" id="10_u4i1x"]
 [ext_resource type="PackedScene" uid="uid://c6r4higceibif" path="res://content/ui/menu/settings/settings_menu.tscn" id="11_7wm6b"]
@@ -26,7 +25,7 @@ shader_parameter/edge_color = Color(0, 0, 0, 1)
 shader_parameter/size = Vector2(0.42, 0.32)
 shader_parameter/border_size = 0.001
 shader_parameter/border_fade_in = 0.005
-shader_parameter/border_fade_out = 0.0
+shader_parameter/border_fade_out = 0.001
 shader_parameter/corner_radius = 0.02
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
@@ -272,8 +271,10 @@ tabs = NodePath("../Tabs")
 visible = false
 
 [node name="EditMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("4_r2raj")]
+visible = false
 
 [node name="RoomMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("10_u4i1x")]
+visible = false
 
 [node name="AutomateMenu" type="Node3D" parent="AnimationContainer/TabsContent"]
 visible = false
@@ -288,11 +289,6 @@ gizmo_extents = 0.02
 [node name="KeyboardPlace" type="Marker3D" parent="AnimationContainer"]
 transform = Transform3D(0.5, 0, 0, 0, 0.433012, 0.25, 0, -0.25, 0.433012, 0.2, -0.38, 0.11)
 gizmo_extents = 0.02
-
-[node name="ImmersiveHomePanels" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-10, 0, 0.01, 0, 0.01, 0, -0.01, 0, -4.37114e-10, 0.32, 0, -0.0500001)
-visible = false
-mesh = ExtResource("7_f4u4o")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

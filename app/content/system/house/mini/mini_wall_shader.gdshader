@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specular_schlick_ggx, shadows_disabled;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx, shadows_disabled;
 
 uniform vec4 data[100];
 uniform int data_size: hint_range(0, 100, 1);
@@ -27,7 +27,7 @@ float SchlickFresnel(float u) {
 }
 
 void vertex() {
-	color = vec3(1.0, 1.0, 1.0);
+	color = vec3(0.9, 0.9, 0.9);
 	
 	if(data_size > 0) {
 		float distances[100];
@@ -68,16 +68,16 @@ void vertex() {
 
 void fragment() {
 	ALBEDO = vec3(color.xyz);
-	ALPHA = alpha;
+	//ALPHA = alpha;
 	
 	float VdotN = dot(VIEW, NORMAL);
 	float fresnel = clamp(SchlickFresnel(VdotN), 0.0, 1.0);
 	
 	// apply glass look
-	float a = mix(0.001, 1.0, ALPHA);
-	ALPHA = mix(fresnel * edge_color.a, 1.0, a);
-	ALBEDO = mix(edge_color.rgb * edge_color.a, ALBEDO, a);
+	//float a = mix(0.001, 1.0, ALPHA);
+	//ALPHA = mix(fresnel * edge_color.a, 1.0, a);
+	//ALBEDO = mix(edge_color.rgb * edge_color.a, ALBEDO, a);
 	ROUGHNESS = roughness;
-	SPECULAR = 0.5 * inversesqrt(ALPHA);
+	//SPECULAR = 0.5 * inversesqrt(ALPHA);
 	DEPTH = FRAGCOORD.z - 0.00001;
 }
