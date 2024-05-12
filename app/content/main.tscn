@@ -49,11 +49,6 @@ transform = Transform3D(1, 3.12364e-06, -3.13861e-06, -3.12371e-06, 1, -1.97886e
 [node name="XRControllerRight" parent="XROrigin3D" instance=ExtResource("7_0b3tc")]
 transform = Transform3D(0.999999, -1.39635e-11, 0, 1.31553e-10, 1, 0, 0, 0, 1, 0.336726, 0.575093, -0.437942)
 
-[node name="OpenXRCompositionLayerEquirect" type="OpenXRCompositionLayerEquirect" parent="XROrigin3D" node_paths=PackedStringArray("layer_viewport")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.71, 0)
-layer_viewport = NodePath("../../SubViewportContainer/SubViewport")
-alpha_blend = true
-
 [node name="XRSimulator" parent="." instance=ExtResource("5_3qc8g")]
 min_camera_height = 0.01
 xr_origin = NodePath("../XROrigin3D")
@@ -73,31 +68,6 @@ transform = Transform3D(1, -1.39636e-11, 0, 4.42413e-11, 1, 0, 0, 0, 1, -0.57679
 
 [node name="Node" type="Node" parent="."]
 script = ExtResource("12_e13ym")
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
-disable_3d = true
-transparent_bg = true
-handle_input_locally = false
-render_target_update_mode = 4
-
-[node name="Label" type="Label" parent="SubViewportContainer/SubViewport"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -298.0
-offset_top = -61.5
-offset_right = 298.0
-offset_bottom = 61.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 100
-text = "Hello World"
 
 [editable path="XROrigin3D/XRControllerLeft"]
 [editable path="XROrigin3D/XRControllerLeft/hand_l"]
