@@ -1,13 +1,11 @@
 extends Node
 ## Manages the connection to the home automation system and provides a unified interface to the different home automation systems.
 
-const Hass = preload ("res://lib/home_apis/hass/hass.gd")
 const EntityGroups = preload ("res://lib/utils/entity_group.gd")
 const HassWebSocket = preload ("res://lib/home_apis/hass_ws/hass.gd")
 const VoiceAssistant = preload ("res://lib/home_apis/voice_handler.gd")
 
 const apis = {
-	"hass": Hass,
 	"hass_ws": HassWebSocket
 }
 
