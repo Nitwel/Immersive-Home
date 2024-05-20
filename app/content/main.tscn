@@ -43,9 +43,6 @@ transform = Transform3D(0.967043, 0.24582, -0.0663439, -0.0663439, 0.494837, 0.8
 [node name="MiddleTip" parent="XROrigin3D/XRControllerLeft" index="6"]
 transform = Transform3D(0.98042, 0.196912, 0.00149799, 0.001498, -0.015065, 0.999885, 0.196912, -0.980305, -0.0150651, -0.00327212, -0.00771427, -0.176318)
 
-[node name="Palm" parent="XROrigin3D/XRControllerLeft" index="7"]
-transform = Transform3D(1, 3.12364e-06, -3.13861e-06, -3.12371e-06, 1, -1.97886e-05, 3.13854e-06, 1.97889e-05, 1, 0.0307807, -0.0419721, -0.0399505)
-
 [node name="XRControllerRight" parent="XROrigin3D" instance=ExtResource("7_0b3tc")]
 transform = Transform3D(0.999999, -1.39635e-11, 0, 1.31553e-10, 1, 0, 0, 0, 1, 0.336726, 0.575093, -0.437942)
 

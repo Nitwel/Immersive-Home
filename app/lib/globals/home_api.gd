@@ -9,14 +9,6 @@ const apis = {
 	"hass_ws": HassWebSocket
 }
 
-const methods = [
-	"get_devices",
-	"get_device",
-	"get_state",
-	"set_state",
-	"watch_state"
-]
-
 var groups = EntityGroups.new()
 
 ## Emitted when the connection to the home automation system is established
@@ -72,9 +64,6 @@ func start_adapter(type: String, url: String, token: String):
 	api.on_disconnect.connect(func():
 		on_disconnect.emit()
 	)
-
-	for method in methods:
-		assert(api.has_method(method), "%s Api does not implement method: %s" % [type, method])
 
 func _on_connect():
 	on_connect.emit()
