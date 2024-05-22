@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://d26xg5okbaen6"]
+
+[ext_resource type="Script" path="res://test/content/grid_shader.gd" id="1_jgxlt"]
+[ext_resource type="Material" uid="uid://bb4kgiocswfv7" path="res://assets/materials/grid.tres" id="2_siin6"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_atwo6"]
+size = Vector2(1, 1)
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_jgxlt")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.843227, -0.537538, -0.00456947, -0.18903, 0.28855, 0.93862, -0.503225, 0.792333, -0.344923, 0.968812, 1.30895, -0.0715666)
+material_override = ExtResource("2_siin6")
+mesh = SubResource("PlaneMesh_atwo6")

@@ -23,7 +23,13 @@ const Miniature = preload ("res://content/system/miniature/miniature.gd")
 @onready var ray: RayCast3D = $Raycast
 @onready var quick_actions = $Palm/QuickActions
 
-var hand_active = false
+var hand_active = false:
+	set(value):
+		hand_active = value
+
+		if pointer != null:
+			pointer.set_physics_process(value)
+
 var initiator: Initiator = Initiator.new()
 var collide: Collide
 var pointer: Pointer

@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bb4kgiocswfv7"]
+
+[ext_resource type="Shader" path="res://assets/materials/grid.gdshader" id="1_oebjc"]
+
+[resource]
+resource_local_to_scene = true
+render_priority = 8
+shader = ExtResource("1_oebjc")
+shader_parameter/dot_size = 0.12
+shader_parameter/dot_falloff = 0.024
+shader_parameter/size = 12.0
+shader_parameter/dot_offset = Vector2(0, 0)
+shader_parameter/supersampling = 8
