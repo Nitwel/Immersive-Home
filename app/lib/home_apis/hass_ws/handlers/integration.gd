@@ -5,9 +5,10 @@ var integration_exists: bool = false
 
 func _init(hass: HASS_API):
 	self.api = hass
+	test_integration.call_deferred()
 
-func on_connect():
-	var response = await api.send_request_packet({
+func test_integration():
+	var response = await api.connection.send_request_packet({
 		"type": "immersive_home/register",
 		"device_id": OS.get_unique_id(),
 		"name": OS.get_model_name(),

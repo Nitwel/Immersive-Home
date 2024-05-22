@@ -19,13 +19,13 @@ func _ready():
 
 	edit_button.on_button_down.connect(func():
 		if active:
-			House.body.save_reference()
+			App.house.save_reference()
 		else:
-			House.body.edit_reference()
-		active = !active
+			App.house.edit_reference()
+		active=!active
 	)
 
 	fix_button.on_button_down.connect(func():
-		House.body.fix_reference()
-		active = true
+		App.house.fix_reference()
+		active=true
 	)

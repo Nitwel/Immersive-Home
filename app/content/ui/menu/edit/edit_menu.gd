@@ -20,7 +20,7 @@ func _ready():
 	entities_page.on_select_entity.connect(func(entity_name):
 		spawn_sound.play()
 
-		var entity=House.body.create_entity(entity_name, global_position)
+		var entity=App.house.create_entity(entity_name, global_position)
 
 		if typeof(entity) == TYPE_BOOL&&entity == false:
 			EventSystem.notify("Entity is not in Room", EventNotify.Type.INFO)

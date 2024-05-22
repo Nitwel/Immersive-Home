@@ -50,8 +50,8 @@ func edit(door):
 			break
 
 	if existing_door != null:
-		room1 = House.body.find_room(existing_door.room1)
-		room2 = House.body.find_room(existing_door.room2)
+		room1 = App.house.find_room(existing_door.room1)
+		room2 = App.house.find_room(existing_door.room2)
 
 		room1_corner1 = WallCornerScene.instantiate()
 		room1_corner1.global_position = existing_door.room1_position1
@@ -73,13 +73,13 @@ func edit(door):
 		room2_corner2.get_node("Clickable").on_grab_move.connect(_move_corner.bind(room2, room2_corner2))
 		add_child(room2_corner2)
 
-		for room in House.body.get_rooms(0):
+		for room in App.house.get_rooms():
 			if room != room1&&room != room2:
 				room.get_node("WallCollision/Clickable").on_click.connect(_add_corner.bind(room))
 			else:
 				room.get_node("WallCollision/Clickable").on_click.disconnect(_add_corner.bind(room))
 
-	for room in House.body.get_rooms(0):
+	for room in App.house.get_rooms():
 		if door != null:
 			room.get_node("WallCollision/Clickable").on_click.connect(_add_corner.bind(room))
 		else:

@@ -5,9 +5,8 @@ const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
 const Finger = preload ("res://lib/utils/touch/finger.gd")
 const Touch = preload ("res://lib/utils/touch/touch.gd")
 const Collide = preload ("res://lib/utils/touch/collide.gd")
-const Miniature = preload ("res://content/system/house/mini/miniature.gd")
+const Miniature = preload ("res://content/system/miniature/miniature.gd")
 
-@onready var main = $"/root/Main"
 @onready var ray: RayCast3D = $Raycast
 @onready var hand: Node3D = $hand_r
 @onready var hand_mesh = $hand_r/Armature/Skeleton3D/mesh_Hand_R
@@ -28,9 +27,17 @@ var pressed = false
 var grabbed = false
 
 func _ready():
+	button_pressed.connect(func(action_name):
+		EventSystem.emit_action(action_name, true, true)
+	)
+	button_released.connect(func(action_name):
+		EventSystem.emit_action(action_name, false, true)
+	)
+
+func _setup_hand():
 	TouchManager.add_finger(Finger.Type.INDEX_RIGHT, $IndexTip/TouchArea)
 
-	collide = Collide.new(hand, hand_mesh, index_tip)
+	collide = Collide.new(hand, hand_mesh, index_tip.get_node("Marker3D"))
 	add_child(collide)
 
 	initiator.type = Initiator.Type.HAND_RIGHT

@@ -16,8 +16,6 @@ var touched_enter = 0.0
 var moved_ran = false
 var touch_ran = false
 
-var miniature = House.body.mini_view
-
 func _ready():
 	R.effect(func(_arg):
 		label.text=entity.icon.value
@@ -37,15 +35,15 @@ func _ready():
 	)
 
 func _on_click(_event: EventPointer):
-	if entity.has_method("quick_action")&&miniature.entity_select.selection_active() == false:
+	if entity.has_method("quick_action")&&App.miniature.entity_select.selection_active() == false:
 		entity.quick_action()
 		snap_sound.play()
 	else:
-		miniature.entity_select.toggle(entity)
+		App.miniature.entity_select.toggle(entity)
 
 func _on_press_move(_event: EventPointer):
 	if moved_ran: return
-	miniature.entity_select.toggle(entity)
+	App.miniature.entity_select.toggle(entity)
 	moved_ran = true
 
 func _on_press_up(_event: EventPointer):
@@ -58,15 +56,15 @@ func _on_touch_enter(_event: EventTouch):
 func _on_touch_move(_event: EventTouch):
 	if touch_ran||Time.get_ticks_msec() - touched_enter < TOUCH_LONG: return
 
-	miniature.entity_select.toggle(entity)
+	App.miniature.entity_select.toggle(entity)
 
 	touch_ran = true
 
 func _on_touch_leave(_event: EventTouch):
 	if touch_ran: return
 	
-	if entity.has_method("quick_action")&&miniature.entity_select.selection_active() == false:
+	if entity.has_method("quick_action")&&App.miniature.entity_select.selection_active() == false:
 		snap_sound.play()
 		entity.quick_action()
 	else:
-		miniature.entity_select.toggle(entity)
+		App.miniature.entity_select.toggle(entity)

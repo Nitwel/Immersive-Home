@@ -26,7 +26,7 @@ func _ready():
 	remove_child(chart_button)
 
 	chart_button.on_button_down.connect(func():
-		House.body.create_entity(entity_id, global_position, "line_chart")
+		App.house.create_entity(entity_id, global_position, "line_chart")
 		remove_child(chart_button)
 	)
 

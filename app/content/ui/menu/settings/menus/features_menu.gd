@@ -40,7 +40,6 @@ func _ready():
 	cursor_options.on_select.connect(func(option):
 		settings_store.cursor_style=option
 		settings_store.cursor_style=option
-		print("cursor_style", option)
 		Store.settings.save_local()
 	)
 

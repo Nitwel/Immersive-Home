@@ -35,6 +35,9 @@ static func generate_wall_mesh_with_doors(corners, height, doors):
 
 	var mesh = ArrayMesh.new()
 
+	if Geometry2D.is_polygon_clockwise(PackedVector2Array(corners)) == false:
+		corners.reverse()
+
 	for i in range(0, corners.size()):
 		var corner = corners[i]
 		var next_corner = corners[(i + 1) % corners.size()]

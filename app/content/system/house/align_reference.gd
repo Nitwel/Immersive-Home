@@ -19,7 +19,7 @@ extends Node3D
 		edge.visible = !disabled
 
 func _ready():
-	update_initial_positions()
+	update_initial_positions.call_deferred()
 
 	corner1.get_node("Movable").on_move.connect(func(position, rotation):
 		edge.align_to_corners(corner1.global_position, corner2.global_position)
@@ -40,8 +40,11 @@ func _ready():
 		return corner1.position + delta_new_pos_corner1
 
 func update_initial_positions():
+	if App.main.is_node_ready() == false:
+		await App.main.ready
+
 	edge.align_to_corners(corner1.global_position, corner2.global_position)
-	marker.global_transform = House.body.transform
+	marker.global_transform = App.house.transform
 
 func get_new_transform():
 	marker.scale = Vector3(1, 1, 1)

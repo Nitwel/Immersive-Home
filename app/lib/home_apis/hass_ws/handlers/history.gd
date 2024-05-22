@@ -7,7 +7,7 @@ func _init(hass: HASS_API):
 	self.api = hass
 
 func get_history(entity_id: String, start: String, end=null):
-	var meta_response = await api.send_request_packet({
+	var meta_response = await api.connection.send_request_packet({
 		"type": "recorder/get_statistics_metadata",
 		"statistic_ids": [
 			entity_id
@@ -17,7 +17,7 @@ func get_history(entity_id: String, start: String, end=null):
 	if meta_response.status != OK:
 		return null
 
-	var data_response = await api.send_request_packet({
+	var data_response = await api.connection.send_request_packet({
 		"type": "recorder/statistics_during_period",
 		"start_time": start,
 		"statistic_ids": [

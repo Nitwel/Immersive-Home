@@ -1,6 +1,5 @@
 extends Node
 
-const console_scene = preload ("res://content/ui/console.tscn")
 @onready var main = $"/root/Main"
 @onready var console = $"/root/Main/Console"
 

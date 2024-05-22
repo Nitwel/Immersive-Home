@@ -82,6 +82,19 @@ func notify(message: String, type:=EventNotify.Type.INFO):
 	event.type = type
 	emit("notify", event)
 
+## Helper for emitting controller actions
+func emit_action(name: String, value, right_controller: bool=true):
+	var event = EventAction.new()
+	event.name = name
+	event.value = value
+	event.right_controller = right_controller
+
+	match typeof(value):
+		TYPE_BOOL:
+			EventSystem.emit("action_down" if value else "action_up", event)
+		TYPE_FLOAT, TYPE_VECTOR2:
+			EventSystem.emit("action_value", event)
+
 ## Returns true when the node is focused
 func is_focused(node: Node):
 	return _active_node == node

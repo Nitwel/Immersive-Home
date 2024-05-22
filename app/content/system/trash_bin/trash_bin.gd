@@ -73,7 +73,7 @@ func _ready():
 		trash_bin_large=false
 		trash_bin_visible=false
 
-		House.body.save_all_entities()
+		App.house.save_all_entities()
 	)
 
 func _get_entity(node: Node):

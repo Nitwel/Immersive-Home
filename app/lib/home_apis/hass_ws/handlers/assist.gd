@@ -33,11 +33,13 @@ var tts_sound = null:
 func _init(hass: HASS_API):
 	self.api = hass
 
+	api.connection.on_packed_received.connect(handle_message)
+
 func start_wakeword():
 	if pipe_running:
 		return
 
-	api.send_packet({
+	api.connection.send_packet({
 		"type": "assist_pipeline/run",
 		"start_stage": "wake_word",
 		"end_stage": "tts",

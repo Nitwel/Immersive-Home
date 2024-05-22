@@ -46,8 +46,8 @@ func _ready():
 				EventSystem.notify("Name already taken", EventNotify.Type.WARNING)
 				return
 			
-			House.body.create_room(room_name, 0)
-			House.body.edit_room(room_name)
+			App.house.create_room(room_name)
+			App.house.edit_room(room_name)
 			selected_room.value=room_name
 			editing_room.value=true
 			rooms_map.selectable.value=false
@@ -56,17 +56,17 @@ func _ready():
 			rooms_map.selectable.value=!editing_room.value
 
 			if editing_room.value == false:
-				if !House.body.is_valid_room(selected_room.value):
+				if !App.house.is_valid_room(selected_room.value):
 					EventSystem.notify("Room was deleted as it had less than 3 corners.", EventNotify.Type.WARNING)
-					House.body.delete_room(selected_room.value)
+					App.house.delete_room(selected_room.value)
 					selected_room.value=null
 					return
 
 				if selected_room.value != null&&selected_room.value != input.text:
-					House.body.rename_room(selected_room.value, input.text)
+					App.house.rename_room(selected_room.value, input.text)
 					selected_room.value=input.text
 				
-				House.body.edit_room(null)
+				App.house.edit_room(null)
 			else:
-				House.body.edit_room(selected_room.value)
+				App.house.edit_room(selected_room.value)
 	)

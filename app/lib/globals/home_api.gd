@@ -1,23 +1,13 @@
 extends Node
 ## Manages the connection to the home automation system and provides a unified interface to the different home automation systems.
 
-const Hass = preload ("res://lib/home_apis/hass/hass.gd")
 const EntityGroups = preload ("res://lib/utils/entity_group.gd")
 const HassWebSocket = preload ("res://lib/home_apis/hass_ws/hass.gd")
 const VoiceAssistant = preload ("res://lib/home_apis/voice_handler.gd")
 
 const apis = {
-	"hass": Hass,
 	"hass_ws": HassWebSocket
 }
-
-const methods = [
-	"get_devices",
-	"get_device",
-	"get_state",
-	"set_state",
-	"watch_state"
-]
 
 var groups = EntityGroups.new()
 
@@ -32,7 +22,6 @@ var api: Node
 var reconnect_timer := Timer.new()
 
 func _ready():
-	print("HomeApi ready")
 	start()
 
 	reconnect_timer.wait_time = 60
@@ -74,9 +63,6 @@ func start_adapter(type: String, url: String, token: String):
 	api.on_disconnect.connect(func():
 		on_disconnect.emit()
 	)
-
-	for method in methods:
-		assert(api.has_method(method), "%s Api does not implement method: %s" % [type, method])
 
 func _on_connect():
 	on_connect.emit()

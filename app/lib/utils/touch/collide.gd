@@ -17,8 +17,9 @@ func _init(hand: Node3D, hand_mesh: MeshInstance3D, tip: Node3D):
 func _ready():
 	var body_container = Node3D.new()
 	body_container.name = "HandBodyContainer"
+	body_container.top_level = true
 
-	get_node("/root/Main/").add_child.call_deferred(body_container)
+	add_child(body_container)
 
 	tip_body = TipCollider.instantiate()
 	tip_body.global_position = tip.global_position

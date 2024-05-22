@@ -2,15 +2,12 @@ extends Node3D
 
 const Room = preload ("./room/room.tscn")
 const RoomType = preload ("./room/room.gd")
-const Miniature = preload ("./mini/miniature.gd")
 const Doors = preload ("./doors/doors.gd")
 const AlignReference = preload ("./align_reference.gd")
 
-@onready var levels = $Levels
-@onready var collision_shape = $Levels/CollisionShape3D
+@onready var rooms = $Rooms
 @onready var align_reference: AlignReference = $AlignReference
-@onready var mini_view: Miniature = $Levels/Miniature
-@onready var doors: Doors = $Levels/Doors
+@onready var doors: Doors = $Doors
 
 var fixing_reference: bool = false
 var editing_room: RoomType = null
@@ -23,7 +20,7 @@ func _ready():
 
 func update_house():
 	loaded.value = false
-	for old_room in get_rooms(0):
+	for old_room in get_rooms():
 		old_room.get_parent().remove_child(old_room)
 		old_room.queue_free()
 
@@ -37,7 +34,7 @@ func update_house():
 			Store.house.save_local()
 			continue
 
-		create_room(new_room.name, 0)
+		create_room(new_room.name)
 
 	for entity_index in range(Store.house.state.entities.size()):
 		var entity = Store.house.state.entities[entity_index]
@@ -53,7 +50,7 @@ func update_house():
 
 	loaded.value = true
 
-func create_room(room_name: String, level: int) -> RoomType:
+func create_room(room_name: String) -> RoomType:
 	var existing_room = Store.house.get_room(room_name)
 
 	if existing_room == null:
@@ -66,7 +63,7 @@ func create_room(room_name: String, level: int) -> RoomType:
 	var room = Room.instantiate()
 	room.name = room_name
 	
-	get_level(level).add_child(room)
+	rooms.add_child(room)
 
 	return room
 
@@ -116,13 +113,13 @@ func is_editiong(room_name):
 	return editing_room != null&&editing_room.name == room_name
 
 func find_room(room_name):
-	for room in get_rooms(0):
+	for room in get_rooms():
 		if room.name == room_name:
 			return room
 	return null
 
 func find_room_at(entity_position: Vector3):
-	for room in get_rooms(0):
+	for room in get_rooms():
 		if room.has_point(entity_position):
 			return room
 	return null
@@ -143,11 +140,8 @@ func rename_room(old_room: String, new_name: String):
 	save_all_entities()
 	Store.house.save_local()
 
-func get_level(level: int):
-	return levels.get_child(level)
-
-func get_level_aabb(level: int):
-	var rooms = get_level(level).get_children()
+func get_rooms_aabb():
+	var rooms = get_rooms()
 	if rooms.size() == 0:
 		return AABB()
 
@@ -168,8 +162,8 @@ func get_level_aabb(level: int):
 
 	return AABB(min_pos, max_pos - min_pos)
 
-func get_rooms(level: int):
-	return get_level(level).get_children()
+func get_rooms():
+	return rooms.get_children()
 
 func create_entity(entity_id: String, entity_position: Vector3, type=null):
 	var room = find_room_at(entity_position)
@@ -218,7 +212,7 @@ func fix_reference():
 
 func save_reference():
 	if fixing_reference:
-		for room in get_rooms(0):
+		for room in get_rooms():
 			room.editable = true
 
 		var align_transform = align_reference.global_transform
@@ -227,7 +221,7 @@ func save_reference():
 
 		align_reference.update_store()
 
-		for room in get_rooms(0):
+		for room in get_rooms():
 			room.editable = false
 
 		save_all_entities()
@@ -241,7 +235,7 @@ func save_reference():
 func save_all_entities():
 	Store.house.state.entities.clear()
 
-	for room in get_rooms(0):
+	for room in get_rooms():
 		for entity in room.get_node("Entities").get_children():
 			var entity_data = {
 				"id": entity.entity_id,

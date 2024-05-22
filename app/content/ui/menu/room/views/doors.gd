@@ -45,20 +45,20 @@ func _ready():
 
 	door_button.on_button_up.connect(func():
 		if doors_map.selected_door.value == null:
-			var id=House.body.doors.add()
+			var id=App.house.doors.add()
 			editing_door.value=true
 			doors_map.selected_door.value=id
 		elif editing_door.value == false:
 			editing_door.value=true
-			House.body.doors.edit(doors_map.selected_door.value)
+			App.house.doors.edit(doors_map.selected_door.value)
 		else:
-			House.body.doors.save()
+			App.house.doors.save()
 			editing_door.value=false
 	)
 
 	delete_button.on_button_up.connect(func():
 		if doors_map.selected_door.value != null:
-			House.body.doors.delete(doors_map.selected_door.value)
+			App.house.doors.delete(doors_map.selected_door.value)
 			doors_map.selected_door.value=null
 	)
 	
