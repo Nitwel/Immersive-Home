@@ -9,5 +9,5 @@ func _ready():
 
 	if movable:
 		movable.on_moved.connect(func():
-			House.body.save_all_entities()
+			App.house.save_all_entities()
 		)

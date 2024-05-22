@@ -5,9 +5,8 @@ const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
 const Finger = preload ("res://lib/utils/touch/finger.gd")
 const Touch = preload ("res://lib/utils/touch/touch.gd")
 const Collide = preload ("res://lib/utils/touch/collide.gd")
-const Miniature = preload ("res://content/system/house/mini/miniature.gd")
+const Miniature = preload ("res://content/system/miniature/miniature.gd")
 
-@onready var main = $"/root/Main"
 @onready var hand = $hand_l
 @onready var hand_mesh = $hand_l/Armature/Skeleton3D/mesh_Hand_L
 @onready var auto_hand = $AutoHandtracker
@@ -35,6 +34,13 @@ var pressed = false
 var grabbed = false
 
 func _ready():
+	button_pressed.connect(func(action_name):
+		EventSystem.emit_action(action_name, true, false)
+	)
+
+	button_released.connect(func(action_name):
+		EventSystem.emit_action(action_name, false, false)
+	)
 
 	_setup_hand()
 
@@ -43,7 +49,7 @@ func _process(_delta):
 		if quick_actions.is_inside_tree(): palm.remove_child(quick_actions)
 		return
 
-	if main.camera.global_transform.basis.z.dot(palm.global_transform.basis.x) > 0.85:
+	if App.camera.global_transform.basis.z.dot(palm.global_transform.basis.x) > 0.85:
 		if quick_actions.is_inside_tree() == false: palm.add_child(quick_actions)
 	else:
 		if quick_actions.is_inside_tree(): palm.remove_child(quick_actions)
@@ -87,21 +93,21 @@ func _setup_hand():
 	)
 
 	mini_view_button.on_button_up.connect(func():
-		House.body.mini_view.small.value=!House.body.mini_view.small.value
+		App.miniature.small.value=!App.miniature.small.value
 	)
 
 	temperature_button.on_button_up.connect(func():
-		if House.body.mini_view.heatmap_type.value == Miniature.HeatmapType.TEMPERATURE:
-			House.body.mini_view.heatmap_type.value=Miniature.HeatmapType.NONE
+		if App.miniature.heatmap_type.value == Miniature.HeatmapType.TEMPERATURE:
+			App.miniature.heatmap_type.value=Miniature.HeatmapType.NONE
 		else:
-			House.body.mini_view.heatmap_type.value=Miniature.HeatmapType.TEMPERATURE
+			App.miniature.heatmap_type.value=Miniature.HeatmapType.TEMPERATURE
 	)
 
 	humidity_button.on_button_up.connect(func():
-		if House.body.mini_view.heatmap_type.value == Miniature.HeatmapType.HUMIDITY:
-			House.body.mini_view.heatmap_type.value=Miniature.HeatmapType.NONE
+		if App.miniature.heatmap_type.value == Miniature.HeatmapType.HUMIDITY:
+			App.miniature.heatmap_type.value=Miniature.HeatmapType.NONE
 		else:
-			House.body.mini_view.heatmap_type.value=Miniature.HeatmapType.HUMIDITY
+			App.miniature.heatmap_type.value=Miniature.HeatmapType.HUMIDITY
 	)
 
 	initiator.type = Initiator.Type.HAND_LEFT

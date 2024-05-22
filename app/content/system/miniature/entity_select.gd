@@ -4,20 +4,17 @@ const DotScene = preload ("res://content/system/dot/dot.tscn")
 const Entity = preload ("res://content/entities/entity.gd")
 
 @onready var dots = $"../Small/Dots"
-@onready var main = $"/root/Main"
 
 var active_type = null
 var editing = R.state([])
 var group_entity = null
 
-var house_small = null
-
 func _ready():
-	await House.body.ready
+	await App.main.ready
 
 	# Update Group Entity
 	R.effect(func(_arg):
-		if house_small.value == false||editing.value.size() == 0:
+		if App.miniature.small.value == false||editing.value.size() == 0:
 			if group_entity != null:
 				remove_child(group_entity)
 				group_entity.queue_free()
@@ -29,19 +26,19 @@ func _ready():
 				if entity_node is Movable:
 					entity_node.disabled=true
 
-			group_entity.transform=Transform3D().looking_at(to_local((main.camera.global_position)), Vector3.UP, true)
+			group_entity.transform=Transform3D().looking_at(to_local((App.camera.global_position)), Vector3.UP, true)
 			add_child(group_entity)
 		else:
 			HomeApi.groups.update_entities(group_entity.entity_id, editing.value.map(func(entity): return entity.entity_id))
 	)
 
 	var dots_disabled = R.computed(func(_arg):
-		return House.body.mini_view.small.value == false
+		return App.miniature.small.value == false
 	)
 
 	# Update Entities
 	R.effect(func(_arg):
-		if House.body.loaded.value == false:
+		if App.house.loaded.value == false:
 			return
 
 		if Store.house.state.entities.size() == 0:
@@ -51,11 +48,11 @@ func _ready():
 			dots.remove_child(old_dot)
 			old_dot.free()
 
-		for room in House.body.get_rooms(0):
+		for room in App.house.get_rooms():
 			for entity in room.get_node("Entities").get_children():
 				var dot=DotScene.instantiate()
 
-				dot.position=House.body.to_local(entity.global_position)
+				dot.position=App.house.to_local(entity.global_position)
 				dot.entity=entity
 				dot.active=R.computed(func(_arg2):
 					return editing.value.has(entity)

@@ -6,18 +6,15 @@ const Notification = preload ("res://content/ui/components/notification/notifica
 @onready var open_sound = $OpenSound
 @onready var close_sound = $CloseSound
 @onready var notify_place = $AnimationContainer/NotifyPlace
-@onready var main = $"/root/Main"
 
 var show_menu = R.state(false)
 
 func _ready():
-	await main.ready
-
-	main.remove_child(self)
+	App.main.remove_child(self)
 
 	R.effect(func(_arg):
 		if show_menu.value:
-			main.add_child(self)
+			App.main.add_child(self)
 			move_into_view()
 			animation_player.play_backwards("hide_menu")
 			open_sound.play()
@@ -30,7 +27,12 @@ func _ready():
 
 	animation_player.animation_finished.connect(func(_animation):
 		if show_menu.value == false:
-			main.remove_child(self)
+			App.main.remove_child(self)
+	)
+
+	EventSystem.on_action_down.connect(func(action):
+		if action.name == "menu_button":
+			toggle_open()
 	)
 
 	EventSystem.on_notify.connect(func(event: EventNotify):
@@ -44,8 +46,11 @@ func _ready():
 		notify_place.add_child(notification_node)
 	)
 
+func toggle_open():
+	show_menu.value = !show_menu.value
+
 func move_into_view():
-	var camera_transform = main.camera.global_transform
+	var camera_transform = App.camera.global_transform
 	camera_transform.origin -= camera_transform.basis.z * 0.5
 
 	global_transform = camera_transform

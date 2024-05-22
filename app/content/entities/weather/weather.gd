@@ -22,8 +22,6 @@ func set_state(stateInfo):
 	if stateInfo == null:
 		return
 
-	print(stateInfo)
-
 	var state = stateInfo["state"]
 	var attributes = stateInfo["attributes"]
 
@@ -39,7 +37,7 @@ func set_state(stateInfo):
 			animation.play("clear-night")
 		"cloudy":
 			weather_label.text = "Cloudy"
-			animation.play("cloudy")
+			animation.play("partly-cloudy-day")
 		"fog":
 			weather_label.text = "Fog"
 			animation.play("fog")

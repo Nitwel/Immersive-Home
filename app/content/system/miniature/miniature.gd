@@ -11,7 +11,6 @@ const temperature_gradient = preload ("./temp_gradient.tres")
 @onready var player = $Body/Small/Player
 @onready var collision_shape = $Body/CollisionShape3D
 @onready var entity_select = $Body/EntitySelect
-@onready var main = $"/root/Main"
 
 enum HeatmapType {
 	NONE = 0,
@@ -39,7 +38,10 @@ func _ready():
 	wall_material.set_shader_parameter("data", [])
 	wall_material.set_shader_parameter("data_size", 0)
 
-	entity_select.house_small = small
+	EventSystem.on_action_down.connect(func(action):
+		if action.name == "by_button":
+			small.value=!small.value
+	)
 
 	if Store.house.is_loaded() == false:
 		await Store.house.on_loaded
@@ -87,7 +89,7 @@ func _ready():
 		tween.set_parallel(true)
 		if small.value:
 
-			var aabb=House.body.get_level_aabb(0)
+			var aabb=App.house.get_level_aabb(0)
 			var height=aabb.size.y
 
 			aabb.position.y=- 0.03
@@ -99,9 +101,8 @@ func _ready():
 			collision_shape.position=center * 0.1
 			entity_select.position=Vector3(0, height * 0.1 + 0.1, 0)
 
-			var camera=$"/root/Main/XROrigin3D/XRCamera3D"
-			var camera_position=camera.global_position
-			var camera_direction=- camera.global_transform.basis.z
+			var camera_position=App.camera.global_position
+			var camera_direction=- App.camera.global_transform.basis.z
 
 			camera_position.y *= 0.5
 			camera_direction.y=0
@@ -119,10 +120,7 @@ func _ready():
 
 	# Update Walls
 	R.effect(func(_arg):
-		var show_map=heatmap_type.value != HeatmapType.NONE
-		var show_small=small.value
-		
-		model.visible=show_map||show_small
+		model.visible=heatmap_type.value != HeatmapType.NONE||small.value
 	)
 
 	# Update Heatmap
@@ -144,7 +142,7 @@ func _ready():
 	)
 
 func _process(delta):
-	var cam_pos = main.camera.global_position
+	var cam_pos = App.camera.global_position
 	cam_pos.y += 0.1
 	player.mesh.height = cam_pos.y
 	player.position = Vector3(cam_pos.x, cam_pos.y / 2, cam_pos.z)
@@ -157,7 +155,7 @@ func get_base_scale() -> Vector2:
 func get_sensor_data():
 	var data_list = []
 
-	for room in House.body.get_rooms(0):
+	for room in App.house.get_rooms():
 		for entity in room.get_node("Entities").get_children():
 			if entity is SensorEntity:
 				var sensor = entity as SensorEntity
@@ -165,14 +163,14 @@ func get_sensor_data():
 				if data == null:
 					continue
 
-				var sensor_pos = House.body.to_local(sensor.global_position)
+				var sensor_pos = App.house.to_local(sensor.global_position)
 
 				data_list.append(Vector4(sensor_pos.x, sensor_pos.y, sensor_pos.z, float(data)))
 
 	return data_list
 
 func get_sensor_unit():
-	for room in House.body.get_rooms(0):
+	for room in App.house.get_rooms():
 		for entity in room.get_node("Entities").get_children():
 			if entity is SensorEntity:
 				var sensor = entity as SensorEntity

@@ -7,7 +7,7 @@ func _physics_process(_delta):
 		update_room()
 
 func update_room():
-	var room = House.body.find_room_at(global_position)
+	var room = App.house.find_room_at(global_position)
 
 	if room != last_room:
 		if room:

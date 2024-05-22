@@ -6,11 +6,11 @@ extends Node3D
 func _ready():
 
 	save.on_button_down.connect(func():
-		House.body.save_all_entities()
+		App.house.save_all_entities()
 		Store.house.save_local()
 	)
 
 	clear_save.on_button_down.connect(func():
 		Store.house.clear()
-		House.body.update_house()
+		App.house.update_house()
 	)

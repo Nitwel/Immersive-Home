@@ -2,7 +2,6 @@ extends Node3D
 
 @onready var getting_started_button = $GettingStartedButton
 @onready var close_button = $CloseButton
-@onready var camera = $"/root/Main/XROrigin3D/XRCamera3D"
 var next_new_position = null
 
 func _ready():
@@ -30,11 +29,11 @@ func close():
 	queue_free()
 
 func _slow_tick(delta):
-	var new_position = camera.global_position + camera.global_transform.basis.z * - 0.5
+	var new_position = App.camera.global_position + App.camera.global_transform.basis.z * - 0.5
 		
 	if next_new_position.distance_to(new_position) > 0.2:
 		next_new_position = new_position
-		var new_direction = Basis.looking_at((camera.global_position - new_position) * - 1)
+		var new_direction = Basis.looking_at((App.camera.global_position - new_position) * - 1)
 
 		var tween = create_tween()
 		tween.set_parallel(true)

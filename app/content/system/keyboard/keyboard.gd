@@ -20,9 +20,35 @@ var caps = false:
 		update_labels()
 
 func _ready():
+	get_parent().remove_child.call_deferred(self)
+
+	_create_keys()
+	_prepare_keyboard_spawn()
+	_connect_key_events()
+
+func _prepare_keyboard_spawn():
+	if Engine.is_editor_hint():
+		return
+
+	EventSystem.on_focus_in.connect(func(event):
+		if is_inside_tree():
+			return
+
+		App.main.add_child(self)
+		global_transform=App.menu.get_node("AnimationContainer/KeyboardPlace").global_transform
+	)
+
+	EventSystem.on_focus_out.connect(func(event):
+		if !is_inside_tree():
+			return
+
+		App.main.remove_child(self)
+	)
+
+func _create_keys():
 	for row in key_list:
 		for key in row:
-			var key_node = create_key(key)
+			var key_node = _create_key(key)
 			keys.add_child(key_node)
 
 			if Engine.is_editor_hint():
@@ -37,6 +63,7 @@ func _ready():
 
 	keys.columns = key_list[0].size()
 
+func _connect_key_events():
 	if Engine.is_editor_hint():
 		return
 
@@ -67,7 +94,7 @@ func _ready():
 		_emit_event("key_up", KEY_INSERT)
 	)
 
-func create_key(key: Key):
+func _create_key(key: Key):
 	var key_node = button_scene.instantiate()
 	
 	key_node.label = EventKey.key_to_string(key, caps)

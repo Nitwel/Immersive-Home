@@ -48,8 +48,6 @@ func _ready():
 	)
 
 func set_state(stateInfo):
-	print("Setting state: ", stateInfo)
-
 	if stateInfo == null:
 		view.texture = null
 		mesh.visible = true

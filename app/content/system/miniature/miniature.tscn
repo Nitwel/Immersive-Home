@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://ds60i5n211hi3"]
 
-[ext_resource type="Script" path="res://content/system/house/mini/miniature.gd" id="1_b53yn"]
+[ext_resource type="Script" path="res://content/system/miniature/miniature.gd" id="1_b53yn"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_x7oed"]
-[ext_resource type="Script" path="res://content/system/house/mini/Entity.gd" id="3_tgpny"]
+[ext_resource type="Script" path="res://content/system/miniature/entity_select.gd" id="3_tgpny"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bckw3"]
 

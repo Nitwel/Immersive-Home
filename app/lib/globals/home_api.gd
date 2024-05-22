@@ -22,7 +22,6 @@ var api: Node
 var reconnect_timer := Timer.new()
 
 func _ready():
-	print("HomeApi ready")
 	start()
 
 	reconnect_timer.wait_time = 60

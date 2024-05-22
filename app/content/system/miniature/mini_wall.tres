@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bcfcough6ucvc"]
 
-[ext_resource type="Shader" path="res://content/system/house/mini/mini_wall_shader.gdshader" id="1_sbr3e"]
-[ext_resource type="Texture2D" uid="uid://bbuq4wn7e5o2q" path="res://content/system/house/mini/temp_gradient.tres" id="2_3lwi8"]
+[ext_resource type="Shader" path="res://content/system/miniature/mini_wall_shader.gdshader" id="1_sbr3e"]
+[ext_resource type="Texture2D" uid="uid://bbuq4wn7e5o2q" path="res://content/system/miniature/temp_gradient.tres" id="2_3lwi8"]
 
 [resource]
 render_priority = 0

@@ -17,7 +17,6 @@ var effect: AudioEffectCapture
 @onready var chat_user: Chat = $ChatUser
 @onready var chat_assistant: Chat = $ChatAssistant
 @onready var loader: Node3D = $Loader
-@onready var camera = $"/root/Main/XROrigin3D/XRCamera3D"
 
 var running := false
 var voice_assistant: VoiceAssistant
@@ -50,9 +49,9 @@ func _ready():
 		loader.visible=true
 		chat_user.visible=false
 		chat_assistant.visible=false
-		global_position=camera.global_position + camera.global_transform.basis.z * - 0.5
+		global_position=App.camera.global_position + App.camera.global_transform.basis.z * - 0.5
 		global_position.y *= 0.7
-		global_transform.basis=Basis.looking_at((camera.global_position - global_position) * - 1)
+		global_transform.basis=Basis.looking_at((App.camera.global_position - global_position) * - 1)
 		running=true
 	)
 
