@@ -4,6 +4,7 @@ const VoiceAssistant = preload ("res://content/system/assist/assist.tscn")
 const environment_passthrough_material = preload ("res://assets/environment_passthrough.tres")
 const Menu = preload ("res://content/ui/menu/menu.gd")
 const OnboardingScene = preload ("res://content/ui/onboarding/onboarding.tscn")
+const MetaSceneEntity = preload ("res://content/system/house/meta_scene_entity/meta_scene_entity.tscn")
 
 @onready var environment: WorldEnvironment = $WorldEnvironment
 @onready var camera: XRCamera3D = %XRCamera3D
@@ -12,7 +13,10 @@ const OnboardingScene = preload ("res://content/ui/onboarding/onboarding.tscn")
 @onready var house = $House
 @onready var menu: Menu = $Menu
 @onready var xr: XRToolsStartXR = $StartXR
+@onready var xr_origin: XROrigin3D = $XROrigin3D
+
 var voice_assistant = null
+var meta_scene_manager = null
 
 func _ready():
 	if OS.get_name() == "Android":
@@ -28,6 +32,18 @@ func _ready():
 		if HomeApi.has_connected() == false:
 			HomeApi.start()
 	)
+
+	if OS.get_model_name() == "Quest":
+		meta_scene_manager = OpenXRFbSceneManager.new()
+		meta_scene_manager.auto_create = false
+		meta_scene_manager.visible = false
+		meta_scene_manager.default_scene = MetaSceneEntity
+
+		meta_scene_manager.openxr_fb_scene_data_missing.connect(func():
+			meta_scene_manager.request_scene_capture()
+		)
+
+		xr_origin.add_child(meta_scene_manager)
 
 	HomeApi.on_connect.connect(func():
 		start_setup_flow.call_deferred()
