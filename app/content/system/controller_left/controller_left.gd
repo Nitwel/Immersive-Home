@@ -23,6 +23,13 @@ const Miniature = preload ("res://content/system/miniature/miniature.gd")
 @onready var ray: RayCast3D = $Raycast
 @onready var quick_actions = $Palm/QuickActions
 
+@export var show_grid = false:
+	set(value):
+		show_grid = value
+
+		if ray != null:
+			ray.with_grid = value
+
 var hand_active = false:
 	set(value):
 		hand_active = value

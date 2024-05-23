@@ -16,6 +16,13 @@ const Miniature = preload ("res://content/system/miniature/miniature.gd")
 @onready var thumb_tip = $ThumbTip
 @onready var middle_tip = $MiddleTip
 
+@export var show_grid = false:
+	set(value):
+		show_grid = value
+
+		if ray != null:
+			ray.with_grid = value
+
 var hand_active = false:
 	set(value):
 		hand_active = value
@@ -38,6 +45,8 @@ func _ready():
 	button_released.connect(func(action_name):
 		EventSystem.emit_action(action_name, false, true)
 	)
+
+	_setup_hand()
 
 func _setup_hand():
 	TouchManager.add_finger(Finger.Type.INDEX_RIGHT, $IndexTip/TouchArea)
