@@ -60,7 +60,7 @@ func send_data(data: PackedByteArray):
 		stream.encode_s8(0, handler_id)
 		stream.append_array(data)
 
-		api.send_raw(stream)
+		api.connection.send_raw(stream)
 
 func handle_message(message: Dictionary):
 	if message["type"] != "event":

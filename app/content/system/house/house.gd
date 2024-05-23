@@ -73,6 +73,9 @@ func edit_room(room_name):
 	if room == editing_room:
 		return
 
+	App.controller_left.show_grid = false
+	App.controller_right.show_grid = false
+
 	if editing_room != null:
 		editing_room.editable = false
 		editing_room = null
@@ -80,6 +83,8 @@ func edit_room(room_name):
 	if room != null:
 		room.editable = true
 		editing_room = room
+		App.controller_left.show_grid = true
+		App.controller_right.show_grid = true
 
 func is_valid_room(room_name):
 	var room = find_room(room_name)

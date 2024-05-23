@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dscp8x0ari57n"]
+[gd_scene load_steps=10 format=3 uid="uid://dscp8x0ari57n"]
 
 [ext_resource type="Texture2D" uid="uid://bl33klueufwja" path="res://assets/cursors/pointer.png" id="1_2f2iv"]
 [ext_resource type="Script" path="res://content/system/raycast/raycast.gd" id="1_gp8nv"]
@@ -6,12 +6,16 @@
 [ext_resource type="Shader" path="res://content/system/raycast/raycast.gdshader" id="3_lpfe7"]
 [ext_resource type="Texture2D" uid="uid://cy5dna78q6tn6" path="res://assets/models/ray/ray.png" id="4_fe8o8"]
 [ext_resource type="ArrayMesh" uid="uid://d3kriab522o2w" path="res://assets/models/ray/ray.obj" id="5_3o4gy"]
+[ext_resource type="Material" uid="uid://bb4kgiocswfv7" path="res://assets/materials/grid.tres" id="7_tnbkv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ov0gt"]
 render_priority = 0
 shader = ExtResource("3_lpfe7")
 shader_parameter/albedo = Color(1, 1, 1, 1)
 shader_parameter/texture_albedo = ExtResource("4_fe8o8")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_cq16e"]
+orientation = 2
 
 [node name="Raycast" type="RayCast3D"]
 transform = Transform3D(0.999999, -1.39624e-11, 0, 9.48108e-12, 0.999999, 0, 0, 4.54747e-13, 0.999998, 0, 0, 0)
@@ -49,3 +53,11 @@ texture = ExtResource("3_f5ibs")
 transform = Transform3D(1, -1.39624e-11, -6.10317e-19, 0, -4.37114e-08, 1, -1.39624e-11, -1, -4.37114e-08, 0, 0, -0.0182334)
 material_override = SubResource("ShaderMaterial_ov0gt")
 mesh = ExtResource("5_3o4gy")
+
+[node name="Grid" type="MeshInstance3D" parent="."]
+material_override = ExtResource("7_tnbkv")
+mesh = SubResource("PlaneMesh_cq16e")
+
+[node name="WallCollider" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -10)
+collision_mask = 16

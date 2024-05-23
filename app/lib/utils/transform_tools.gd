@@ -1,5 +1,13 @@
 class_name TransformTools
 
+static func plane_2d_coords(transform: Transform3D) -> Vector2:
+	var point = transform.origin
+
+	transform.origin = Vector3.ZERO
+	point = transform.inverse() * point
+
+	return Vector2( - point.x, point.y)
+
 ## Calculate the transform that would transform the source position, direction and up vector to the target position, direction and up vector
 ## Basically a bit more fancy Inputs for a Transform3D
 static func calc_delta_transform(source_pos: Vector3, source_dir: Vector3, source_up: Vector3, target_pos: Vector3, target_dir: Vector3, target_up: Vector3) -> Transform3D:

@@ -39,6 +39,9 @@ is_right = false
 
 [node name="AutoHandtracker" parent="." instance=ExtResource("4_oe7fv")]
 visible = false
+applymiddlefingerfix = null
+applyscaling = null
+coincidewristorknuckle = null
 visiblehandtrackskeleton = false
 enableautotracker = false
 

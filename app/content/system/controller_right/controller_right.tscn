@@ -27,15 +27,15 @@ mesh = SubResource("BoxMesh_ir3co")
 
 [node name="Raycast" parent="." instance=ExtResource("1_3p68p")]
 
-[node name="hand_r" parent="." instance=ExtResource("2_kex6u")]
-
-[node name="mesh_Hand_R" parent="hand_r/Armature/Skeleton3D" index="0"]
-material_override = ExtResource("4_vhkya")
-
 [node name="AutoHandtracker" parent="." instance=ExtResource("3_pjmb2")]
 visible = false
 visiblehandtrackskeleton = false
 enableautotracker = false
+
+[node name="hand_r" parent="." instance=ExtResource("2_kex6u")]
+
+[node name="mesh_Hand_R" parent="hand_r/Armature/Skeleton3D" index="0"]
+material_override = ExtResource("4_vhkya")
 
 [node name="IndexTip" type="BoneAttachment3D" parent="."]
 transform = Transform3D(0.967526, -0.252326, 0.0150302, 0.0150302, 0.116784, 0.993043, -0.252326, -0.960569, 0.116784, 0.00665802, 0.0427913, -0.169868)
