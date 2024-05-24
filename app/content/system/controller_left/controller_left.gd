@@ -6,6 +6,7 @@ const Finger = preload ("res://lib/utils/touch/finger.gd")
 const Touch = preload ("res://lib/utils/touch/touch.gd")
 const Collide = preload ("res://lib/utils/touch/collide.gd")
 const Miniature = preload ("res://content/system/miniature/miniature.gd")
+const Entity = preload ("res://content/entities/entity.gd")
 
 @onready var hand = $hand_l
 @onready var hand_mesh = $hand_l/Armature/Skeleton3D/mesh_Hand_L
@@ -22,6 +23,8 @@ const Miniature = preload ("res://content/system/miniature/miniature.gd")
 @onready var palm = $Palm
 @onready var ray: RayCast3D = $Raycast
 @onready var quick_actions = $Palm/QuickActions
+@onready var entity_settings = $Palm/Settings
+@onready var entity_settings_button = $Palm/Settings/SettingsButton
 
 @export var show_grid = false:
 	set(value):
@@ -46,6 +49,8 @@ var grip_distance = 0.02
 var pressed = false
 var grabbed = false
 
+var moving_entity = null
+
 func _ready():
 	button_pressed.connect(func(action_name):
 		EventSystem.emit_action(action_name, true, false)
@@ -56,6 +61,35 @@ func _ready():
 	)
 
 	_setup_hand()
+
+	palm.remove_child(entity_settings)
+
+	EventSystem.on_ray_enter.connect(func(event: EventPointer):
+		if event.initiator.is_right() == true: return
+		if moving_entity != null: return
+
+		var entity=_get_entity(event.target)
+
+		if entity != null&&entity.has_method("toggle_settings")&&entity_settings.is_inside_tree() == false:
+			palm.add_child(entity_settings)
+			moving_entity=entity
+	)
+
+	EventSystem.on_ray_leave.connect(func(event: EventPointer):
+		if event.initiator.is_right() == true: return
+		var entity=_get_entity(event.target)
+
+		if moving_entity != null&&moving_entity == entity&&entity_settings.is_inside_tree():
+			palm.remove_child(entity_settings)
+			moving_entity=null
+	)
+
+	entity_settings_button.on_button_up.connect(func():
+		if moving_entity == null:
+			return
+
+		moving_entity.toggle_settings()
+	)
 
 func _process(_delta):
 	if !hand_active:
@@ -128,3 +162,12 @@ func _setup_hand():
 
 	pointer = Pointer.new(initiator, ray)
 	add_child(pointer)
+
+func _get_entity(node: Node):
+	if node is Entity:
+		return node
+
+	if node.get_parent() == null:
+		return null
+
+	return _get_entity(node.get_parent())

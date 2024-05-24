@@ -115,6 +115,14 @@ transform = Transform3D(1, 1.73472e-18, 0, 0, 1, 0, 0, 0, 1, 0.0600001, -5.68873
 label = "humidity_mid"
 icon = true
 
+[node name="Settings" type="Node3D" parent="Palm"]
+transform = Transform3D(-4.37114e-08, -1, 0, -4.37114e-08, 0, 1, -1, 4.37114e-08, -4.37114e-08, -0.02, 0.09, 0.09)
+
+[node name="SettingsButton" parent="Palm/Settings" instance=ExtResource("6_x5vuc")]
+transform = Transform3D(0.499999, 0, 0, 0, 0.499999, 0, 0, 0, 0.5, 0, 0, 0)
+label = "settings"
+icon = true
+
 [node name="TrashBin" parent="." instance=ExtResource("7_vigb6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.109418, -0.126353, 0.0278937)
 

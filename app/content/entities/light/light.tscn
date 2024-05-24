@@ -1,34 +1,17 @@
-[gd_scene load_steps=15 format=3 uid="uid://cw86rc42dv2d8"]
+[gd_scene load_steps=11 format=3 uid="uid://cw86rc42dv2d8"]
 
 [ext_resource type="Script" path="res://content/entities/light/light.gd" id="1_ykxy3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_4sfxb"]
 [ext_resource type="Material" uid="uid://vce66e7sbc3n" path="res://content/entities/light/light_on.tres" id="5_50gph"]
+[ext_resource type="PackedScene" uid="uid://chrjqr4l7atrc" path="res://content/ui/components/color_wheel/color_wheel.tscn" id="5_qj75k"]
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="6_mhjlm"]
-[ext_resource type="Texture2D" uid="uid://hy2f6is7qjyv" path="res://assets/canvas.png" id="7_ximu1"]
-[ext_resource type="Script" path="res://content/functions/clickable.gd" id="8_1sfll"]
 [ext_resource type="AudioStream" uid="uid://du7ur0lu28cvn" path="res://assets/sound/finger-snap.mp3" id="8_3togy"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="8_nhcff"]
+[ext_resource type="Script" path="res://content/functions/camera_follower.gd" id="9_a7u7m"]
+[ext_resource type="PackedScene" uid="uid://de34yde00ngkv" path="res://content/entities/light/settings.tscn" id="10_su84f"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
 radius = 0.05
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_k3ob2"]
-points = PackedVector3Array(0, -0.005, -0.08, -0.00784652, -0.005, -0.0796241, 0, 0.005, -0.08, 0.00783085, -0.005, -0.0796241, -0.00784652, 0.005, -0.0796241, -0.0156147, -0.005, -0.0784651, 0.00783085, 0.005, -0.0796241, 0.0155991, -0.005, -0.0784651, -0.0156147, 0.005, -0.0784651, -0.0232263, -0.005, -0.0765701, 0.0155991, 0.005, -0.0784651, 0.0232106, -0.005, -0.0765701, -0.0232263, 0.005, -0.0765701, -0.0306186, -0.005, -0.0739233, 0.0232106, 0.005, -0.0765701, 0.030603, -0.005, -0.0739233, -0.0306186, 0.005, -0.0739233, -0.0377134, -0.005, -0.070556, 0.030603, 0.005, -0.0739233, 0.0376977, -0.005, -0.070556, -0.0377134, 0.005, -0.070556, -0.0444479, -0.005, -0.0665309, 0.0376977, 0.005, -0.070556, 0.0444323, -0.005, -0.0665309, -0.0444479, 0.005, -0.0665309, -0.0507596, -0.005, -0.0618481, 0.0444323, 0.005, -0.0665309, 0.0507439, -0.005, -0.0618481, -0.0507596, 0.005, -0.0618481, -0.0565701, -0.005, -0.0565701, 0.0507439, 0.005, -0.0618481, 0.0565544, -0.005, -0.0565701, -0.0565701, 0.005, -0.0565701, -0.0618481, -0.005, -0.0507596, 0.0565544, 0.005, -0.0565701, 0.0618324, -0.005, -0.0507596, -0.0618481, 0.005, -0.0507596, -0.0665309, -0.005, -0.0444479, 0.0618324, 0.005, -0.0507596, 0.0665153, -0.005, -0.0444479, -0.0665309, 0.005, -0.0444479, -0.070556, -0.005, -0.0377134, 0.0665153, 0.005, -0.0444479, 0.0705403, -0.005, -0.0377134, -0.070556, 0.005, -0.0377134, -0.0739233, -0.005, -0.0306186, 0.0705403, 0.005, -0.0377134, 0.0739076, -0.005, -0.0306186, -0.0739233, 0.005, -0.0306186, -0.0765701, -0.005, -0.0232263, 0.0739076, 0.005, -0.0306186, 0.0765544, -0.005, -0.0232263, -0.0765701, 0.005, -0.0232263, -0.0784651, -0.005, -0.0156147, 0.0765544, 0.005, -0.0232263, 0.0784495, -0.005, -0.0156147, -0.0784651, 0.005, -0.0156147, -0.0796241, -0.005, -0.00784652, 0.0784495, 0.005, -0.0156147, 0.0796085, -0.005, -0.00784652, -0.0796241, 0.005, -0.00784652, -0.08, -0.005, 0, 0.0796085, 0.005, -0.00784652, 0.08, -0.005, 0, -0.08, 0.005, 0, -0.0796241, -0.005, 0.00783085, 0.08, 0.005, 0, 0.0796085, -0.005, 0.00783085, -0.0796241, 0.005, 0.00783085, -0.0784651, -0.005, 0.0155991, 0.0796085, 0.005, 0.00783085, 0.0784495, -0.005, 0.0155991, -0.0784651, 0.005, 0.0155991, -0.0765701, -0.005, 0.0232106, 0.0784495, 0.005, 0.0155991, 0.0765544, -0.005, 0.0232106, -0.0765701, 0.005, 0.0232106, -0.0739233, -0.005, 0.030603, 0.0765544, 0.005, 0.0232106, 0.0739076, -0.005, 0.030603, -0.0739233, 0.005, 0.030603, -0.070556, -0.005, 0.0376977, 0.0739076, 0.005, 0.030603, 0.0705403, -0.005, 0.0376977, -0.070556, 0.005, 0.0376977, -0.0665309, -0.005, 0.0444323, 0.0705403, 0.005, 0.0376977, 0.0665153, -0.005, 0.0444323, -0.0665309, 0.005, 0.0444323, -0.0618481, -0.005, 0.0507439, 0.0665153, 0.005, 0.0444323, 0.0618324, -0.005, 0.0507439, -0.0618481, 0.005, 0.0507439, -0.0565701, -0.005, 0.0565544, 0.0618324, 0.005, 0.0507439, 0.0565544, -0.005, 0.0565544, -0.0565701, 0.005, 0.0565544, -0.0507596, -0.005, 0.0618324, 0.0565544, 0.005, 0.0565544, 0.0507439, -0.005, 0.0618324, -0.0507596, 0.005, 0.0618324, -0.0444479, -0.005, 0.0665153, 0.0507439, 0.005, 0.0618324, 0.0444323, -0.005, 0.0665153, -0.0444479, 0.005, 0.0665153, -0.0377134, -0.005, 0.0705403, 0.0444323, 0.005, 0.0665153, 0.0376977, -0.005, 0.0705403, -0.0377134, 0.005, 0.0705403, -0.0306186, -0.005, 0.0739076, 0.0376977, 0.005, 0.0705403, 0.030603, -0.005, 0.0739076, -0.0306186, 0.005, 0.0739076, -0.0232263, -0.005, 0.0765544, 0.030603, 0.005, 0.0739076, 0.0232106, -0.005, 0.0765544, -0.0232263, 0.005, 0.0765544, -0.0156147, -0.005, 0.0784495, 0.0232106, 0.005, 0.0765544, 0.0155991, -0.005, 0.0784495, -0.0156147, 0.005, 0.0784495, -0.00784652, -0.005, 0.0796085, 0.0155991, 0.005, 0.0784495, 0.00783085, -0.005, 0.0796085, -0.00784652, 0.005, 0.0796085, 0, -0.005, 0.08, 0.00783085, 0.005, 0.0796085, 0, 0.005, 0.08)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7p762"]
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_c10un"]
-top_radius = 0.08
-bottom_radius = 0.08
-height = 0.01
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1jd14"]
-resource_local_to_scene = true
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_x68ys"]
-top_radius = 0.01
-bottom_radius = 0.01
-height = 0.005
 
 [node name="Light" type="StaticBody3D"]
 collision_mask = 0
@@ -62,31 +45,10 @@ max = 100.0
 value = 100.0
 step = 1.0
 
-[node name="ColorWheel" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.15, 0, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ColorWheel"]
-shape = SubResource("ConvexPolygonShape3D_k3ob2")
-
-[node name="Sprite3D" type="Sprite3D" parent="ColorWheel"]
-transform = Transform3D(0.15, 0, 0, 0, -6.55671e-09, -0.15, 0, 0.15, -6.55671e-09, 0, 0.004, 0)
-flip_v = true
-pixel_size = 0.001
-texture = ExtResource("7_ximu1")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ColorWheel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.002, 0)
-material_override = SubResource("StandardMaterial3D_7p762")
-mesh = SubResource("CylinderMesh_c10un")
-skeleton = NodePath("../..")
-
-[node name="Clickable" type="Node" parent="ColorWheel"]
-script = ExtResource("8_1sfll")
-
-[node name="Puck" type="MeshInstance3D" parent="ColorWheel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.65661e-10, 0.01, 0)
-material_override = SubResource("StandardMaterial3D_1jd14")
-mesh = SubResource("CylinderMesh_x68ys")
+[node name="ColorWheel" parent="." instance=ExtResource("5_qj75k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0, 0)
+color = Color(0, 0.616667, 1, 1)
+size = Vector3(0.15, 0.2, 0.01)
 
 [node name="Modes" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.11, 0)
@@ -110,3 +72,15 @@ horizontal_alignment = 0
 [node name="SnapSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_3togy")
 volume_db = -20.0
+
+[node name="CameraFollower" type="Node" parent="." node_paths=PackedStringArray("focus_point")]
+script = ExtResource("9_a7u7m")
+enabled = false
+focus_point = NodePath("../FocusPoint")
+
+[node name="FocusPoint" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29, 0, 0)
+gizmo_extents = 0.1
+
+[node name="Settings" parent="." instance=ExtResource("10_su84f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29, 0, 0)

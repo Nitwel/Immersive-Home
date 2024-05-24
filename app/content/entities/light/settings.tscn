@@ -1,0 +1,112 @@
+[gd_scene load_steps=8 format=3 uid="uid://de34yde00ngkv"]
+
+[ext_resource type="PackedScene" uid="uid://dnam3fe36gg62" path="res://content/ui/components/panel/panel.tscn" id="1_78ups"]
+[ext_resource type="Script" path="res://content/entities/light/settings.gd" id="1_gw2gi"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_m4moa"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_2gpr3"]
+[ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="4_upyp3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vmdy0"]
+resource_local_to_scene = true
+render_priority = 10
+shader = ExtResource("2_m4moa")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(7.5, 6.25)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.2
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_qu5ku"]
+size = Vector2(0.3, 0.25)
+
+[node name="Settings" type="Node3D"]
+script = ExtResource("1_gw2gi")
+
+[node name="Panel" parent="." instance=ExtResource("1_78ups")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.45058e-09, 0)
+material_override = SubResource("ShaderMaterial_vmdy0")
+mesh = SubResource("QuadMesh_qu5ku")
+skeleton = NodePath("../..")
+size = Vector2(0.3, 0.25)
+
+[node name="Close" parent="." instance=ExtResource("3_2gpr3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.1, 0)
+label = "close"
+icon = true
+
+[node name="Name" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.1, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Light Settings"
+font_size = 24
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="IDLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.06, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "ID:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="IDInput" parent="." instance=ExtResource("4_upyp3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0.06, 0)
+disabled = true
+
+[node name="ColorWheelLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.02, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Color Wheel:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="ColorWheelButton" parent="." instance=ExtResource("3_2gpr3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00999999, 0.02, 0)
+label = "check"
+icon = true
+toggleable = true
+
+[node name="BrightnessLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, -0.03, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Brightness:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="BrightnessButton" parent="." instance=ExtResource("3_2gpr3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00999999, -0.03, 0)
+label = "check"
+icon = true
+toggleable = true
+
+[node name="ModesLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, -0.08, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Modes:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="ModesButton" parent="." instance=ExtResource("3_2gpr3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00999999, -0.08, 0)
+label = "check"
+icon = true
+toggleable = true

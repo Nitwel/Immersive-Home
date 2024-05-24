@@ -17,8 +17,6 @@ const ECHO_WAIT_REPEAT = 0.1
 @onready var label_node: Label3D = $Body/Label
 @onready var finger_area: Area3D = $FingerArea
 @onready var finger_area_collision: CollisionShape3D = $FingerArea/CollisionShape3D
-@onready var touch_collision: CollisionShape3D = $TouchBody/CollisionShape3D
-@onready var touch: StaticBody3D = $TouchBody
 @onready var click_sound = $ClickSound
 
 @export var focusable: bool = true:
@@ -71,12 +69,11 @@ const ECHO_WAIT_REPEAT = 0.1
 
 var active: bool = false:
 	set(value):
-		if active == value:
-			return
-			
-		on_toggled.emit(value)
+		if active != value:
+			on_toggled.emit(value)
+
 		active = value
-		if !is_inside_tree(): return
+		if !is_node_ready(): return
 		panel.active = active
 		update_animation(1.0 if active else 0.0)
 	
@@ -202,24 +199,15 @@ func _on_touch_leave(event: EventTouch):
 	on_button_up.emit()
 
 func _touch_change(event: EventTouch):
+	var click_pos = to_local(event.fingers[0].area.global_position)
 
-	var pos = Vector3(0, 1, 0)
-	for finger in event.fingers:
-		var finger_pos = to_local(finger.area.global_position)
-		if pos.z > finger_pos.z:
-			pos = finger_pos
-
-	var button_height = 0.2
-	var button_center = 0.1
-
-	var percent = clamp((button_center + button_height / 2 - pos.z) / (button_height / 2), 0, 1)
+	var percent = (click_pos.z - size.z / 2) / (size.z / 2)
+	percent = clamp(percent, 0.0, 1.0)
 		
 	update_animation(percent)
 
 func _update():
 	body.position = Vector3(0, 0, size.z / 2)
-	finger_area.position = Vector3(0, 0, -0.015)
-	touch.position = Vector3(0, 0, size.z / 2)
 
 	panel.size = Vector2(size.x, size.y)
 	panel.position = Vector3(0, 0, size.z / 2)
@@ -227,4 +215,5 @@ func _update():
 	label_node.width = size.x / label_node.pixel_size
 	label_node.position = Vector3(0, 0, size.z / 2 + 0.001)
 
-	finger_area_collision.shape.size = Vector3(size.x, size.y, 0.03)
+	finger_area.position = Vector3(0, 0, size.z * 0.75)
+	finger_area_collision.shape.size = Vector3(size.x, size.y, size.z / 2)

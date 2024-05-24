@@ -1,7 +1,6 @@
 extends Entity
 
 const Entity = preload ("../entity.gd")
-const color_wheel_img := preload ("res://assets/canvas.png")
 
 @export var color_off = Color(0.23, 0.23, 0.23)
 @export var color_on = Color(1.0, 0.85, 0.0)
@@ -9,17 +8,24 @@ const color_wheel_img := preload ("res://assets/canvas.png")
 @onready var lightbulb = $Lightbulb
 @onready var slider: Slider3D = $Slider
 @onready var color_wheel = $ColorWheel
-@onready var color_puck = $ColorWheel/Puck
 @onready var modes = $Modes
 @onready var mode_next = $Modes/Next
 @onready var mode_before = $Modes/Previous
 @onready var mode_label = $Modes/Label
 @onready var snap_sound = $SnapSound
+@onready var settings = $Settings
+@onready var movable = $Movable
+@onready var camera_follower = $CameraFollower
 
 var active = R.state(false)
 var brightness = R.state(0) # 0-255
 var color = R.state(color_on)
-var color_supported = false
+var show_color_wheel = R.state(true)
+var color_wheel_supported = R.state(false)
+var show_brightness = R.state(true)
+var show_modes = R.state(true)
+var modes_supported = R.state(false)
+var show_settings = R.state(false)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -32,7 +38,41 @@ func _ready():
 	var stateInfo = await HomeApi.get_state(entity_id)
 	set_state(stateInfo)
 
+	remove_child(settings)
+
+	R.effect(func(_arg):
+		if show_settings.value:
+			add_child(settings)
+		elif settings.is_inside_tree():
+			remove_child(settings)
+			camera_follower.reset()
+			App.house.save_all_entities()
+	)
+
+	R.effect(func(_arg):
+		if show_color_wheel.value&&color_wheel_supported.value:
+			add_child(color_wheel)
+		else:
+			remove_child(color_wheel)
+	)
+
+	R.effect(func(_arg):
+		if show_brightness.value:
+			add_child(slider)
+		else:
+			remove_child(slider)
+	)
+
+	R.effect(func(_arg):
+		if show_modes.value&&modes_supported.value:
+			add_child(modes)
+		else:
+			remove_child(modes)
+	)
+
 	if stateInfo.has("attributes")&&stateInfo["attributes"].has("effect_list")&&stateInfo["attributes"]["effect_list"].size() > 0:
+		modes_supported.value = true
+
 		if stateInfo["attributes"].has("effect")&&stateInfo["attributes"]["effect"] != null:
 			mode_label.text = stateInfo["attributes"]["effect"]
 
@@ -59,36 +99,27 @@ func _ready():
 
 			HomeApi.set_state(entity_id, "on", {"effect": stateInfo["attributes"]["effect_list"][index]})
 		)
-	else:
-		remove_child(modes)
 
 	if stateInfo.has("attributes")&&stateInfo["attributes"].has("supported_color_modes")&&stateInfo["attributes"]["supported_color_modes"].has("rgb"):
-		color_wheel.get_node("Clickable").on_press_down.connect(func(event: EventPointer):
-			var target_point=color_wheel.to_local(event.ray.get_collision_point())
-
-			var delta=Vector2(target_point.x, target_point.z) * (1.0 / 0.08)
-			if delta.length() > 1:
-				delta=delta.normalized()
-			
-			var picked_color=color_wheel_img.get_image().get_pixel((delta.x * 0.5 + 0.5) * 1000, (delta.y * 0.5 + 0.5) * 1000)
-
-			color_puck.material_override.albedo_color=picked_color
-			color_puck.position=Vector3(target_point.x, color_puck.position.y, target_point.z)
-
-			var attributes={
-				"rgb_color": [int(picked_color.r * 255), int(picked_color.g * 255), int(picked_color.b * 255)],
-			}
-
-			snap_sound.play()
-
-			HomeApi.set_state(entity_id, "on", attributes)
-		)
-		color_supported = true
-	else:
-		remove_child(color_wheel)
+		color_wheel_supported.value = true
 
 	await HomeApi.watch_state(entity_id, func(new_state):
 		set_state(new_state)
+	)
+
+	color_wheel.on_color_changed.connect(func(new_color):
+		if color.value == new_color:
+			return
+
+		var attributes={
+			"rgb_color": [int(new_color.r * 255), int(new_color.g * 255), int(new_color.b * 255)],
+		}
+
+		snap_sound.play()
+
+		print("set color", new_color, attributes["rgb_color"])
+
+		HomeApi.set_state(entity_id, "on", attributes)
 	)
 
 	slider.on_value_changed.connect(func(new_value):
@@ -110,6 +141,8 @@ func set_state(stateInfo):
 
 	if attributes.has("rgb_color")&&attributes["rgb_color"] != null:
 		color.value = Color(attributes["rgb_color"][0] / 255.0, attributes["rgb_color"][1] / 255.0, attributes["rgb_color"][2] / 255.0, 1)
+		print("got color", color.value, attributes["rgb_color"])
+		color_wheel.color = color.value
 
 	var tween = create_tween()
 
@@ -117,9 +150,9 @@ func set_state(stateInfo):
 
 	if active.value:
 		if brightness.value == null:
-			target_color = color.value if color_supported else color_on
+			target_color = color.value if show_color_wheel.value else color_on
 		else:
-			target_color = color_off.lerp(color.value if color_supported else color_on, brightness.value / 255.0)
+			target_color = color_off.lerp(color.value if show_color_wheel.value else color_on, brightness.value / 255.0)
 
 	icon_color.value = target_color
 	tween.tween_property(lightbulb, "material_override:albedo_color", target_color, 0.3)
@@ -134,3 +167,22 @@ func quick_action():
 
 func _toggle():
 	HomeApi.set_state(entity_id, "off" if active.value else "on")
+
+func toggle_settings():
+	if show_settings.value == false:
+		show_settings.value = true
+		camera_follower.enabled = true
+	else:
+		show_settings.value = false
+
+func get_options():
+	return {
+		"color_wheel": show_color_wheel.value,
+		"brightness": show_brightness.value,
+		"modes": show_modes.value,
+	}
+
+func set_options(options):
+	show_color_wheel.value = options["color_wheel"]
+	show_brightness.value = options["brightness"]
+	show_modes.value = options["modes"]

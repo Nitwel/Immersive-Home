@@ -48,6 +48,9 @@ func update_house():
 		entity_instance.global_rotation = entity.rotation
 		entity_instance.scale = Vector3(entity.scale, entity.scale, entity.scale) if entity.has("scale") else Vector3(1, 1, 1)
 
+		if entity.has("options")&&entity_instance.has_method("set_options"):
+			entity_instance.set_options(entity.options)
+
 	loaded.value = true
 
 func create_room(room_name: String) -> RoomType:
@@ -243,11 +246,14 @@ func save_all_entities():
 				"position": entity.global_position,
 				"rotation": entity.global_rotation,
 				"scale": entity.scale.x,
-				"room": String(room.name),
+				"room": String(room.name)
 			}
 
 			if entity.has_method("get_interface"):
 				entity_data["interface"] = entity.get_interface()
+
+			if entity.has_method("get_options"):
+				entity_data["options"] = entity.get_options()
 
 			Store.house.state.entities.append(entity_data)
 
