@@ -42,8 +42,8 @@ func _ready():
 		sync_room_button.visible=editing_room.value
 		sync_room_label.visible=editing_room.value
 		sync_room_button.disabled=!editing_room.value
-		delete_button.visible=editing_room.value
-		delete_button.disabled=!editing_room.value
+		delete_button.visible=rooms_map.selected_room.value != null
+		delete_button.disabled=rooms_map.selected_room.value == null
 	)
 
 	if !Store.house.is_loaded(): await Store.house.on_loaded

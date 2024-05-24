@@ -103,14 +103,10 @@ func delete_room(room_name):
 	if editing_room == room:
 		editing_room = null
 
-	room.get_parent().remove_child(room)
+	rooms.remove_child(room)
 	room.queue_free()
-	await room.tree_exited
 
-	var store_room = Store.house.get_room(room_name)
-
-	if store_room != null:
-		Store.house.state.rooms.erase(store_room)
+	Store.house.state.rooms = Store.house.state.rooms.filter(func(r): return r.name != room_name)
 
 	Store.house.save_local()
 

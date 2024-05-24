@@ -53,6 +53,7 @@ unique_name_in_owner = true
 transform = Transform3D(0.999999, -1.39635e-11, 0, 1.31553e-10, 1, 0, 0, 0, 1, 0.336726, 0.575093, -0.437942)
 
 [node name="XRSimulator" parent="." instance=ExtResource("5_3qc8g")]
+disable_xr_in_editor = false
 min_camera_height = 0.01
 xr_origin = NodePath("../XROrigin3D")
 
