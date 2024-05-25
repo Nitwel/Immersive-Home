@@ -10,11 +10,11 @@
     "websocket_api"
   ],
   "documentation": "https://docs.immersive-home.org",
-  "issue_tracker": "https://github.com/Nitwel/Immersive-Home/issues",
   "homekit": {},
   "iot_class": "local_push",
+  "issue_tracker": "https://github.com/Nitwel/Immersive-Home/issues",
   "requirements": [],
   "ssdp": [],
-  "zeroconf": [],
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "zeroconf": []
 }
