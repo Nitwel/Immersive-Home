@@ -53,3 +53,21 @@ visible = false
 material_override = SubResource("ShaderMaterial_dah0r")
 mesh = SubResource("QuadMesh_fq44b")
 skeleton = NodePath("../..")
+
+[node name="SyncRoomsLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.23, 0)
+pixel_size = 0.001
+text = "Sync Room"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="SyncRoomsButton" parent="." instance=ExtResource("1_y3lty")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, -0.23, 0)
+label = "sync"
+icon = true
+
+[node name="DeleteButton" parent="." instance=ExtResource("1_y3lty")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.28, 0)
+label = "delete"
+icon = true

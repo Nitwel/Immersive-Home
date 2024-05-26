@@ -16,19 +16,7 @@ func _on_enter():
 	if room_store == null:
 		return
 
-	var corners = room_store.corners
-	
-	if corners.size() > 0:
-		add_floor_corner(room.to_local(Vector3(corners[0].x, 0, corners[0].y)))
-		add_height_corner(room.to_local(Vector3(corners[0].x, 0, corners[0].y)))
-		room.room_ceiling.position.y = room_store.height
-		height_edge.align_to_corners(floor_corner.position, floor_corner.position + Vector3.UP * room.room_ceiling.position.y)
-
-		for i in range(1, corners.size()):
-			add_corner(room.to_local(Vector3(corners[i].x, 0, corners[i].y)))
-
-	room.room_ceiling.get_node("CollisionShape3D").disabled = (floor_corner == null&&height_corner == null)
-	room.room_floor.get_node("CollisionShape3D").disabled = false
+	create_from_corners(room_store.corners, room_store.height)
 
 	var ceiling_shape = WorldBoundaryShape3D.new()
 	ceiling_shape.plane = Plane(Vector3.DOWN, 0)
@@ -41,7 +29,40 @@ func _on_enter():
 
 func _on_leave():
 	update_store()
+	clear()
 
+	room.room_ceiling.get_node("CollisionShape3D").disabled = true
+	room.room_floor.get_node("CollisionShape3D").disabled = true
+
+	room.room_ceiling.get_node("Clickable").on_click.disconnect(_on_click_ceiling)
+	room.room_floor.get_node("Clickable").on_click.disconnect(_on_click_floor)
+
+func create_from_corners(corners, height):
+	clear()
+
+	if corners.size() > 0:
+		add_floor_corner(room.to_local(Vector3(corners[0].x, 0, corners[0].y)))
+		add_height_corner(room.to_local(Vector3(corners[0].x, 0, corners[0].y)))
+		room.room_ceiling.position.y = height
+		height_edge.align_to_corners(floor_corner.position, floor_corner.position + Vector3.UP * room.room_ceiling.position.y)
+
+		for i in range(1, corners.size()):
+			add_corner(room.to_local(Vector3(corners[i].x, 0, corners[i].y)))
+
+	room.room_ceiling.get_node("CollisionShape3D").disabled = (floor_corner == null&&height_corner == null)
+	room.room_floor.get_node("CollisionShape3D").disabled = false
+
+func get_corner(index: int) -> MeshInstance3D:
+	return room.wall_corners.get_child(index % room.wall_corners.get_child_count())
+
+func get_edge(index: int) -> MeshInstance3D:
+	return room.wall_edges.get_child(index % room.wall_edges.get_child_count())
+
+func remove_corner(index: int):
+	get_corner(index).queue_free()
+	get_edge(index).queue_free()
+
+func clear():
 	for child in room.wall_corners.get_children():
 		room.wall_corners.remove_child(child)
 		child.queue_free()
@@ -53,24 +74,10 @@ func _on_leave():
 	if floor_corner != null:
 		room.remove_child(floor_corner)
 		floor_corner.queue_free()
+		floor_corner = null
 		room.remove_child(height_edge)
 		height_edge.queue_free()
-
-	room.room_ceiling.get_node("CollisionShape3D").disabled = true
-	room.room_floor.get_node("CollisionShape3D").disabled = true
-
-	room.room_ceiling.get_node("Clickable").on_click.disconnect(_on_click_ceiling)
-	room.room_floor.get_node("Clickable").on_click.disconnect(_on_click_floor)
-
-func get_corner(index: int) -> MeshInstance3D:
-	return room.wall_corners.get_child(index % room.wall_corners.get_child_count())
-
-func get_edge(index: int) -> MeshInstance3D:
-	return room.wall_edges.get_child(index % room.wall_edges.get_child_count())
-
-func remove_corner(index: int):
-	get_corner(index).queue_free()
-	get_edge(index).queue_free()
+		height_edge = null
 
 func _on_click_floor(event):
 	if floor_corner != null&&height_corner != null:

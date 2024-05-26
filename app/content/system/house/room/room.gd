@@ -11,7 +11,7 @@ const ConstructRoomMesh = preload ("res://lib/utils/mesh/construct_room_mesh.gd"
 @onready var room_floor = $Floor
 @onready var room_ceiling = $Ceiling
 
-@onready var state_machine = $StateMachine
+@onready var state_machine: StateMachine = $StateMachine
 
 var editable: bool = false:
 	set(value):

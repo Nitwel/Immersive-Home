@@ -60,9 +60,9 @@ tabs = NodePath("../Tabs3D")
 visible = false
 
 [node name="Rooms" parent="Interface/TabsContent3D" instance=ExtResource("7_2f8e0")]
-visible = false
 
 [node name="Doors" parent="Interface/TabsContent3D" instance=ExtResource("7_fl4l8")]
+visible = false
 
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)

@@ -25,10 +25,19 @@ var initial_up = Vector3()
 var initial_transform = Transform3D()
 var distances = Vector2()
 
+# For Resetting
+var initial_global_transform = Transform3D()
+
 func _process(delta):
 	if get_tree().debug_collisions_hint&&initiator2 != null:
 		DebugDraw3D.draw_line(initial_position, initial_position + initial_direction, Color(1, 0, 0))
 		DebugDraw3D.draw_line(initial_position, initial_position + initial_up, Color(0, 1, 0))
+
+func reset():
+	get_parent().global_transform = initial_global_transform
+	initiator = null
+	initiator2 = null
+	on_moved.emit()
 
 func _on_grab_down(event: EventPointer):
 	if disabled:
@@ -57,6 +66,7 @@ func _on_grab_down(event: EventPointer):
 	initiator = event.initiator
 
 	_update_relative_transform()
+	initial_global_transform = get_parent().global_transform
 
 	if lock_rotation:
 		initial_point = get_parent().to_local(event.ray.get_collision_point())

@@ -10,7 +10,7 @@ const Notification = preload ("res://content/ui/components/notification/notifica
 var show_menu = R.state(false)
 
 func _ready():
-	App.main.remove_child(self)
+	App.main.remove_child.call_deferred(self)
 
 	R.effect(func(_arg):
 		if show_menu.value:

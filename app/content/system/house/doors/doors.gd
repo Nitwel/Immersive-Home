@@ -38,6 +38,9 @@ func delete(door):
 	Store.house.state.doors = Store.house.state.doors.filter(func(d): return d.id != door)
 	Store.house.save_local()
 
+	App.controller_left.show_grid = false
+	App.controller_right.show_grid = false
+
 func edit(door):
 	var doors = Store.house.state.doors
 	editing_door = door
@@ -48,6 +51,9 @@ func edit(door):
 		if doors[i].id == door:
 			existing_door = doors[i]
 			break
+
+	App.controller_left.show_grid = true
+	App.controller_right.show_grid = true
 
 	if existing_door != null:
 		room1 = App.house.find_room(existing_door.room1)
@@ -130,6 +136,9 @@ func _clear():
 	editing_door = null
 	room1 = null
 	room2 = null
+
+	App.controller_left.show_grid = true
+	App.controller_right.show_grid = true
 
 	if room1_corner1 != null:
 		remove_child(room1_corner1)

@@ -11,3 +11,6 @@ func _ready():
 		movable.on_moved.connect(func():
 			App.house.save_all_entities()
 		)
+
+func get_options():
+	return {}

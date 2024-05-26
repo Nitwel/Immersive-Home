@@ -2,10 +2,8 @@ extends Node3D
 
 @onready var getting_started_button = $GettingStartedButton
 @onready var close_button = $CloseButton
-var next_new_position = null
 
 func _ready():
-	next_new_position = global_position
 	if Store.settings.is_loaded() == false:
 		await Store.settings.on_loaded
 
@@ -21,23 +19,7 @@ func _ready():
 		close()
 	)
 
-	EventSystem.on_slow_tick.connect(_slow_tick)
-
 func close():
 	Store.settings.state.onboarding_complete = true
 	Store.settings.save_local()
 	queue_free()
-
-func _slow_tick(delta):
-	var new_position = App.camera.global_position + App.camera.global_transform.basis.z * - 0.5
-		
-	if next_new_position.distance_to(new_position) > 0.2:
-		next_new_position = new_position
-		var new_direction = Basis.looking_at((App.camera.global_position - new_position) * - 1)
-
-		var tween = create_tween()
-		tween.set_parallel(true)
-		tween.set_trans(Tween.TransitionType.TRANS_QUAD)
-		
-		tween.tween_property(self, "global_position", new_position, 0.6)
-		tween.tween_property(self, "global_transform:basis", new_direction, 0.6)

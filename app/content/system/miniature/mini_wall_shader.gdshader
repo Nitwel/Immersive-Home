@@ -79,5 +79,5 @@ void fragment() {
 	//ALBEDO = mix(edge_color.rgb * edge_color.a, ALBEDO, a);
 	ROUGHNESS = roughness;
 	//SPECULAR = 0.5 * inversesqrt(ALPHA);
-	DEPTH = FRAGCOORD.z - 0.00001;
+	DEPTH = FRAGCOORD.z + 0.0001;
 }
