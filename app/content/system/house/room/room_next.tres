@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://xehjkoeofqc"]
+
+[ext_resource type="Shader" path="res://content/system/house/room/room_next.gdshader" id="1_hwtkw"]
+
+[resource]
+render_priority = -99
+shader = ExtResource("1_hwtkw")
+shader_parameter/border_color = Color(0, 0, 0.564706, 1)
+shader_parameter/show_border = false

@@ -42,6 +42,7 @@ static func generate_wall_mesh_with_doors(corners, height, doors):
 		var corner = corners[i]
 		var next_corner = corners[(i + 1) % corners.size()]
 
+		var width = corner.distance_to(next_corner)
 		var forward = Vector3(next_corner.x - corner.x, 0, next_corner.y - corner.y).normalized()
 
 		var points := PackedVector2Array()
@@ -98,11 +99,14 @@ static func generate_wall_mesh_with_doors(corners, height, doors):
 		var triangles: PackedInt32Array = cdt.get_all_triangles()
 
 		var points_3d = PackedVector3Array()
+		var points_uv = PackedVector2Array()
 
 		for k in range(points.size()):
-			points_3d.append(Vector3(corner.x, 0, corner.y) + points[k].x * forward + Vector3(0, points[k].y, 0))
+			var point = Vector3(corner.x, 0, corner.y) + points[k].x * forward + Vector3(0, points[k].y, 0)
+			points_3d.append(point)
+			points_uv.append(Vector2(points[k].x / width, points[k].y / height))
 
-		mesh = _create_mesh_3d(points_3d, triangles, mesh)
+		mesh = _create_mesh_3d(points_3d, triangles, points_uv, width, height, mesh)
 
 	return mesh
 
@@ -144,6 +148,7 @@ static func generate_wall_mesh_with_doors_grid(corners, height, doors, grid:=0.1
 		var corner = corners[i]
 		var next_corner = corners[(i + 1) % corners.size()]
 
+		var width = corner.distance_to(next_corner)
 		var forward = Vector3(next_corner.x - corner.x, 0, next_corner.y - corner.y).normalized()
 
 		var points := PackedVector2Array()
@@ -226,11 +231,13 @@ static func generate_wall_mesh_with_doors_grid(corners, height, doors, grid:=0.1
 		var triangles: PackedInt32Array = cdt.get_all_triangles()
 
 		var points_3d = PackedVector3Array()
+		var points_uv = PackedVector2Array()
 
 		for k in range(points.size()):
 			points_3d.append(Vector3(corner.x, 0, corner.y) + points[k].x * forward + Vector3(0, points[k].y, 0))
+			points_uv.append(Vector2(points[k].x / width, points[k].y / height))
 
-		mesh = _create_mesh_3d(points_3d, triangles, mesh)
+		mesh = _create_mesh_3d(points_3d, triangles, points_uv, width, height, mesh)
 
 	return mesh
 
@@ -369,12 +376,15 @@ static func generate_ceiling_mesh_grid(corners, grid: Vector2=Vector2(0.1, 0.1))
 
 	return _create_mesh_2d(points, triangles)
 
-static func _create_mesh_3d(points: PackedVector3Array, triangles: PackedInt32Array, existing=null):
+static func _create_mesh_3d(points: PackedVector3Array, triangles: PackedInt32Array, points_uv, width: float, height: float, existing=null):
 	var st = SurfaceTool.new()
 
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	st.set_custom_format(0, SurfaceTool.CUSTOM_RG_FLOAT)
 
 	for i in range(points.size()):
+		st.set_uv(points_uv[i])
+		st.set_custom(0, Color(width, height, 0, 0))
 		st.add_vertex(Vector3(points[i].x, points[i].y, points[i].z))
 
 	for i in range(triangles.size()):
@@ -393,8 +403,11 @@ static func _create_mesh_2d(points: PackedVector2Array, triangles: PackedInt32Ar
 	var st = SurfaceTool.new()
 
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	st.set_custom_format(0, SurfaceTool.CUSTOM_RG_FLOAT)
 
 	for i in range(points.size()):
+		st.set_uv(Vector2(0.5, 0.5))
+		st.set_custom(0, Color(1.0, 1.0, 0, 0))
 		st.add_vertex(Vector3(points[i].x, 0, points[i].y))
 
 	for i in range(triangles.size()):

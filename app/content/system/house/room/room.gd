@@ -21,6 +21,8 @@ var editable: bool = false:
 		
 		update()
 
+var _show_border: bool = false
+
 func _ready():
 	Update.props(self, ["editable"])
 

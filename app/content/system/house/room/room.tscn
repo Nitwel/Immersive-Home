@@ -1,13 +1,23 @@
-[gd_scene load_steps=9 format=3 uid="uid://bswgmclohuqui"]
+[gd_scene load_steps=12 format=3 uid="uid://bswgmclohuqui"]
 
 [ext_resource type="Script" path="res://content/system/house/room/room.gd" id="1_fccq0"]
 [ext_resource type="Script" path="res://content/functions/clickable.gd" id="1_ugebq"]
-[ext_resource type="Material" uid="uid://bbx6fv7jq50tr" path="res://content/system/house/room/wall.tres" id="3_w4vos"]
+[ext_resource type="Material" uid="uid://xehjkoeofqc" path="res://content/system/house/room/room_next.tres" id="3_4q8ik"]
+[ext_resource type="Shader" path="res://content/system/house/room/room.gdshader" id="3_lwge0"]
 [ext_resource type="Script" path="res://lib/utils/state_machine/state_machine.gd" id="4_nbbo6"]
 [ext_resource type="Script" path="res://content/system/house/room/states/view.gd" id="6_g066t"]
 [ext_resource type="Script" path="res://content/system/house/room/states/edit.gd" id="7_ap14h"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_08sv0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rqpss"]
+render_priority = -100
+next_pass = ExtResource("3_4q8ik")
+shader = ExtResource("3_lwge0")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1hn7n"]
+render_priority = -100
+shader = ExtResource("3_lwge0")
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_ap613"]
 plane = Plane(0, -1, 0, 0)
@@ -26,10 +36,10 @@ shape = SubResource("WorldBoundaryShape3D_08sv0")
 script = ExtResource("1_ugebq")
 
 [node name="WallMesh" type="MeshInstance3D" parent="."]
-material_override = ExtResource("3_w4vos")
+material_override = SubResource("ShaderMaterial_rqpss")
 
 [node name="CeilingMesh" type="MeshInstance3D" parent="."]
-material_override = ExtResource("3_w4vos")
+material_override = SubResource("ShaderMaterial_1hn7n")
 
 [node name="WallCollision" type="StaticBody3D" parent="."]
 collision_layer = 24

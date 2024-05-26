@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://ds60i5n211hi3"]
+[gd_scene load_steps=9 format=3 uid="uid://ds60i5n211hi3"]
 
 [ext_resource type="Script" path="res://content/system/miniature/miniature.gd" id="1_b53yn"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_x7oed"]
 [ext_resource type="Script" path="res://content/system/miniature/entity_select.gd" id="3_tgpny"]
+[ext_resource type="Material" uid="uid://bcfcough6ucvc" path="res://content/system/miniature/mini_wall.tres" id="4_be66c"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bckw3"]
 
@@ -14,6 +15,8 @@ albedo_color = Color(0.404, 0.22, 0.627, 0.5)
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_f3avi"]
 radius = 0.3
 height = 1.75
+
+[sub_resource type="QuadMesh" id="QuadMesh_4asi8"]
 
 [node name="Miniature" type="Node3D"]
 script = ExtResource("1_b53yn")
@@ -43,3 +46,8 @@ mesh = SubResource("CapsuleMesh_f3avi")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.757576, 0)
 gizmo_extents = 0.1
 script = ExtResource("3_tgpny")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0, 0)
+material_override = ExtResource("4_be66c")
+mesh = SubResource("QuadMesh_4asi8")

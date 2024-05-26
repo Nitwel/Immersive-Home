@@ -89,7 +89,7 @@ func _ready():
 		tween.set_parallel(true)
 		if small.value:
 
-			var aabb=App.house.get_level_aabb(0)
+			var aabb=App.house.get_rooms_aabb()
 			var height=aabb.size.y
 
 			aabb.position.y=- 0.03
