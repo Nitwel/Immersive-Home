@@ -33,18 +33,18 @@ float SchlickFresnel(float u) {
 }
 
 void fragment() {
-	
+
 	float VdotN = dot(VIEW, NORMAL);
 	float fresnel = clamp(SchlickFresnel(VdotN), 0.0, 1.0);
-	
+
 	ALBEDO = border_color.xyz;
 	ALPHA = 0.0;
 	float border_scale = 1.0 + 2.0 * corner_radius;
 	float d = rectangle((UV - 0.5) * size * border_scale);
 	float border_width = (border_size + border_fade_in + border_fade_out) * border_scale;
-	
+
 	bool inside = false;
-	
+
 	if (d >= corner_radius - border_width && d <= corner_radius) {
 		// Border
 		float rel_d = (d - corner_radius + border_width) / border_width;
@@ -65,15 +65,15 @@ void fragment() {
 		ALPHA = color.w;
 		inside = true;
 	}
-	
+
 	if (inside) {
 		float a = mix(0.001, 1.0, ALPHA);
 		ALPHA = mix(fresnel * edge_color.a, 1.0, a);
 		ALBEDO = mix(edge_color.rgb * edge_color.a, ALBEDO.rgb, a);
-		
+
 		ROUGHNESS = roughness;
 		SPECULAR = 0.5 * inversesqrt(ALPHA);
-		
+
 		float noise = (fract(sin(dot(UV, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * 2.0;
 
 	    ALBEDO += noise * grain_amount;
