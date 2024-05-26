@@ -51,7 +51,7 @@ import/fbx/enabled=false
 
 [gui]
 
-theme/custom_font="res://assets/fonts/ui_font_500.tres"
+theme/custom_font="res://assets/fonts/Montserrat-Medium.ttf"
 
 [layer_names]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://xsiy71rsqulj"]
 
 [ext_resource type="Script" path="res://content/entities/sensor/sensor.gd" id="1_57ac8"]
-[ext_resource type="FontVariation" uid="uid://d2ofyimg5s65q" path="res://assets/fonts/ui_font_500.tres" id="2_4np3x"]
+[ext_resource type="FontFile" uid="uid://drsixxc4tmvjf" path="res://assets/fonts/Montserrat-Medium.ttf" id="2_3sfs5"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_fpq5q"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_bmtkc"]
 
@@ -21,8 +21,9 @@ transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 pixel_size = 0.001
 text = "some text
 "
-font = ExtResource("2_4np3x")
+font = ExtResource("2_3sfs5")
 font_size = 80
+outline_size = 0
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("2_fpq5q")
