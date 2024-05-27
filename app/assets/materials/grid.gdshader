@@ -23,7 +23,7 @@ vec2 sdf_repeat(vec2 position) {
 
 void fragment() {
 	float total_dist = 0.0;
-	
+
 	for(int i = 0; i < supersampling; i++) {
 		float center_dist = distance(UV, vec2(0.5, 0.5));
 		vec2 rand = random(vec2(float(i))) * 0.004 * (0.5 - center_dist);
@@ -32,10 +32,10 @@ void fragment() {
 			total_dist += 1.0 / float(supersampling);
 		}
 	}
-	
+
 	ALBEDO = vec3(1.0);
 	ALPHA = total_dist;
-	
+
 	//if(dist <= 0.0) {
 		//ALBEDO = vec3(1.0);
 	//} else {

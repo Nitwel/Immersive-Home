@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://content/ui/components/input/input.gd" id="1_uml3t"]
 [ext_resource type="Script" path="res://content/ui/components/panel/panel.gd" id="3_3bvrj"]
-[ext_resource type="FontVariation" uid="uid://d2ofyimg5s65q" path="res://assets/fonts/ui_font_500.tres" id="3_ij5fh"]
 [ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_nl02b"]
+[ext_resource type="FontFile" uid="uid://drsixxc4tmvjf" path="res://assets/fonts/Montserrat-Medium.ttf" id="4_yukbj"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_46adm"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j4b8n"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("3_nl02b")
@@ -20,7 +20,7 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_1me1o"]
+[sub_resource type="QuadMesh" id="QuadMesh_ltwsx"]
 size = Vector2(0.15, 0.03)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x4yp8"]
@@ -83,8 +83,8 @@ collision_mask = 6
 
 [node name="Panel3D" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
-material_override = SubResource("ShaderMaterial_46adm")
-mesh = SubResource("QuadMesh_1me1o")
+material_override = SubResource("ShaderMaterial_j4b8n")
+mesh = SubResource("QuadMesh_ltwsx")
 script = ExtResource("3_3bvrj")
 size = Vector2(0.15, 0.03)
 
@@ -98,7 +98,7 @@ double_sided = false
 render_priority = 30
 outline_render_priority = 29
 text = "Example Text"
-font = ExtResource("3_ij5fh")
+font = ExtResource("4_yukbj")
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
@@ -118,7 +118,7 @@ render_priority = 30
 outline_render_priority = 29
 modulate = Color(0.470076, 0.470076, 0.470076, 1)
 text = "Placeholder"
-font = ExtResource("3_ij5fh")
+font = ExtResource("4_yukbj")
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0

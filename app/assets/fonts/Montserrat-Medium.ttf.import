@@ -2,23 +2,23 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://d4akk1evuaowr"
-path="res://.godot/imported/Montserrat-VariableFont_wght.ttf-e7d36c45e6f35c48e6b1cd49837f5785.fontdata"
+uid="uid://drsixxc4tmvjf"
+path="res://.godot/imported/Montserrat-Medium.ttf-9322cac81db17d2f033bd26b2a37967f.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Montserrat-VariableFont_wght.ttf"
-dest_files=["res://.godot/imported/Montserrat-VariableFont_wght.ttf-e7d36c45e6f35c48e6b1cd49837f5785.fontdata"]
+source_file="res://assets/fonts/Montserrat-Medium.ttf"
+dest_files=["res://.godot/imported/Montserrat-Medium.ttf-9322cac81db17d2f033bd26b2a37967f.fontdata"]
 
 [params]
 
 Rendering=null
-antialiasing=0
+antialiasing=1
 generate_mipmaps=true
 disable_embedded_bitmaps=true
-multichannel_signed_distance_field=true
+multichannel_signed_distance_field=false
 msdf_pixel_range=8
-msdf_size=100
+msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
 hinting=1
@@ -32,8 +32,7 @@ preload=[{
 "chars": [],
 "glyphs": [],
 "name": "New Configuration",
-"size": Vector2i(16, 0),
-"variation_embolden": 0.0
+"size": Vector2i(16, 0)
 }]
 language_support={}
 script_support={}

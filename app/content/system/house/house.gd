@@ -1,5 +1,7 @@
 extends Node3D
 
+const RoomMaterial = preload ("res://content/system/house/room/room_next.tres")
+
 const Room = preload ("./room/room.tscn")
 const RoomType = preload ("./room/room.gd")
 const Doors = preload ("./doors/doors.gd")
@@ -213,6 +215,7 @@ func fix_reference():
 	align_reference.disabled = false
 	align_reference.visible = true
 	align_reference.update_initial_positions()
+	RoomMaterial.set_shader_parameter("show_border", true)
 
 func save_reference():
 	if fixing_reference:
@@ -235,6 +238,7 @@ func save_reference():
 	align_reference.update_initial_positions()
 
 	Store.house.save_local()
+	RoomMaterial.set_shader_parameter("show_border", false)
 
 func save_all_entities():
 	Store.house.state.entities.clear()
