@@ -56,7 +56,7 @@ func start(url: String, token: String) -> ConnectionError:
 	connecting = true
 
 	print("Connecting to %s" % url + "/api/websocket")
-	var error = socket.connect_to_url(url + "/api/websocket")
+	var error = socket.connect_to_url(url + "/api/websocket", TLSOptions.client_unsafe())
 
 	if error != OK:
 		print("Error connecting to %s: %s" % [url, error])
