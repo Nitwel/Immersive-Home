@@ -122,5 +122,5 @@ func get_options():
 	}
 
 func set_options(options):
-	cam_active.value = options["cam_active"]
-	cam_fps.value = options["cam_fps"]
+	if options.has("cam_active"): cam_active.value = options["cam_active"]
+	if options.has("cam_fps"): cam_fps.value = options["cam_fps"]

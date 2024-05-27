@@ -19,7 +19,13 @@ signal on_select(value: String)
 @onready var options_panel = $Options/Panel
 @onready var options_collision = $Options/CollisionShape3D
 
-@export var options: Dictionary = {}
+@export var options: Dictionary = {}:
+	set(value):
+		options = value
+
+		if is_node_ready() == false: return
+
+		_update_options()
 @export var selected: Variant = null:
 	set(value):
 		if selected != value:
@@ -47,6 +53,7 @@ var _options_list = []
 func _ready():
 	_update()
 	_update_options()
+	_update_options_visible()
 
 func _on_focus_out(_event: EventFocus):
 	open = false
@@ -68,7 +75,7 @@ func _on_touch_leave(event: EventTouch):
 		open = false
 
 func _update():
-	if selected == null:
+	if selected == null||options == null||options.has(selected) == false:
 		label.text = "Select..."
 	else:
 		label.text = options[selected]

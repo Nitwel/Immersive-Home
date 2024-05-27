@@ -1,7 +1,7 @@
 @tool
 extends Node3D
 
-const FontTools = preload ("res://lib/utils/font_tools.gd")
+const LabelFont = preload ("res://assets/fonts/Raleway-Medium.ttf")
 
 @onready var label = $Body/Label3D
 @onready var collision = $Body/CollisionShape3D
@@ -24,7 +24,7 @@ func _ready():
 	_update()
 
 func get_size() -> Vector2:
-	return FontTools.get_font_size(label)
+	return LabelFont.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, 10000, 18) * 0.001
 
 func _update():
 	var size = get_size()

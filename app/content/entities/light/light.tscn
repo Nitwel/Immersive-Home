@@ -5,8 +5,8 @@
 [ext_resource type="Material" uid="uid://vce66e7sbc3n" path="res://content/entities/light/light_on.tres" id="5_50gph"]
 [ext_resource type="PackedScene" uid="uid://chrjqr4l7atrc" path="res://content/ui/components/color_wheel/color_wheel.tscn" id="5_qj75k"]
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="6_mhjlm"]
+[ext_resource type="PackedScene" uid="uid://wgnowarejk5y" path="res://content/ui/components/select/select.tscn" id="7_wbegr"]
 [ext_resource type="AudioStream" uid="uid://du7ur0lu28cvn" path="res://assets/sound/finger-snap.mp3" id="8_3togy"]
-[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="8_nhcff"]
 [ext_resource type="Script" path="res://content/functions/camera_follower.gd" id="9_a7u7m"]
 [ext_resource type="PackedScene" uid="uid://de34yde00ngkv" path="res://content/entities/light/settings.tscn" id="10_su84f"]
 
@@ -55,24 +55,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0, 0)
 color = Color(0, 0.616667, 1, 1)
 size = Vector3(0.15, 0.2, 0.01)
 
-[node name="Modes" type="Node3D" parent="."]
+[node name="Modes" parent="." instance=ExtResource("7_wbegr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.11, 0)
-
-[node name="Next" parent="Modes" instance=ExtResource("8_nhcff")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04, 0, 0)
-label = "navigate_next"
-icon = true
-
-[node name="Previous" parent="Modes" instance=ExtResource("8_nhcff")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0, 0)
-label = "navigate_before"
-icon = true
-
-[node name="Label" type="Label3D" parent="Modes"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, 0, 0)
-pixel_size = 0.001
-text = "Default"
-horizontal_alignment = 0
 
 [node name="SnapSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_3togy")

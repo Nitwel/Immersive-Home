@@ -59,7 +59,7 @@ func request_history():
 
 	match duration.value:
 		Duration.ONE_HOUR:
-			date = now - 60 * 60
+			date = now - 2 * 60 * 60
 		Duration.ONE_DAY:
 			date = now - 24 * 60 * 60
 		Duration.ONE_WEEK:
@@ -68,6 +68,8 @@ func request_history():
 			date = now - 30 * 24 * 60 * 60
 		Duration.ONE_YEAR:
 			date = now - 365 * 24 * 60 * 60
+		_:
+			date = now - 24 * 60 * 60
 
 	var start = Time.get_datetime_string_from_unix_time(date) + ".000Z"
 
@@ -92,5 +94,5 @@ func get_options():
 		"duration": duration.value
 	}
 
-func set_options(options):
-	duration.value = options["duration"]
+func set_options(options: Dictionary):
+	if options.has("duration"): duration.value = options["duration"]

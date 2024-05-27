@@ -15,7 +15,7 @@ const FontTools = preload ("res://lib/utils/font_tools.gd")
 		if !is_inside_tree(): return
 		
 		label.text = text
-		var text_width = FontTools.get_font_size(label).x
+		var text_width = FontTools.get_label_size(label).x
 
 		var offset = (text_width - base_width) / 0.2
 

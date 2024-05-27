@@ -37,5 +37,5 @@ func get_history(entity_id: String, start: String, interval: String="5minute", e
 		"unit": meta_response.payload.result[0]["display_unit_of_measurement"],
 		"has_mean": meta_response.payload.result[0]["has_mean"],
 		"unit_class": meta_response.payload.result[0]["unit_class"],
-		"data": data_response.payload.result[entity_id]
+		"data": data_response.payload.result[entity_id] if data_response.payload.result.has(entity_id) else []
 	}
