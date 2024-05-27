@@ -29,8 +29,9 @@ shape = SubResource("BoxShape3D_te0pn")
 script = ExtResource("2_e2u6o")
 resizable = true
 
-[node name="CameraFollower" type="Node" parent="."]
+[node name="CameraFollower" type="Node" parent="." node_paths=PackedStringArray("focus_point")]
 script = ExtResource("3_j7lrc")
+focus_point = NodePath("../Settings")
 
 [node name="RefreshTimer" type="Timer" parent="."]
 wait_time = 0.1

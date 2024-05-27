@@ -27,7 +27,7 @@ resizable = true
 [node name="CameraFollower" type="Node" parent="." node_paths=PackedStringArray("focus_point")]
 script = ExtResource("9_a7u7m")
 enabled = false
-focus_point = NodePath("../FocusPoint")
+focus_point = NodePath("../Settings")
 
 [node name="Lightbulb" type="CSGCombiner3D" parent="."]
 transform = Transform3D(1, 9.69949e-05, 0.000589194, -9.77749e-05, 0.999999, 0.00135802, -0.000589065, -0.00135808, 0.999999, 0, 0, 0)
@@ -77,10 +77,6 @@ horizontal_alignment = 0
 [node name="SnapSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_3togy")
 volume_db = -20.0
-
-[node name="FocusPoint" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29, 0, 0)
-gizmo_extents = 0.1
 
 [node name="Settings" parent="." instance=ExtResource("10_su84f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29, 0, 0)

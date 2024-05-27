@@ -8,6 +8,7 @@ const Entity = preload ("../entity.gd")
 @onready var http_request = $HTTPRequest
 @onready var mesh = $MeshInstance3D
 @onready var refresh_timer = $RefreshTimer
+@onready var settings = $Settings
 
 var cam_active = R.state(false)
 var cam_fps = R.state(10)
@@ -18,6 +19,17 @@ func _ready():
 
 	R.effect(func(_arg):
 		refresh_timer.wait_time=1.0 / cam_fps.value
+	)
+
+	remove_child(settings)
+
+	R.effect(func(_arg):
+		if show_settings.value:
+			add_child(settings)
+		elif settings.is_inside_tree():
+			remove_child(settings)
+			camera_follower.reset()
+			App.house.save_all_entities()
 	)
 
 	R.effect(func(_arg):
