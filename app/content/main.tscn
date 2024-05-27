@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://eecv28y6jxk4"]
+[gd_scene load_steps=14 format=3 uid="uid://eecv28y6jxk4"]
 
 [ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_i4c04"]
 [ext_resource type="Script" path="res://content/main.gd" id="1_uvrd4"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://lib/utils/screenshot.gd" id="12_e13ym"]
 [ext_resource type="PackedScene" uid="uid://ds60i5n211hi3" path="res://content/system/miniature/miniature.tscn" id="12_lmxhs"]
 [ext_resource type="PackedScene" uid="uid://bhyddd1f0ry1x" path="res://content/ui/onboarding/onboarding.tscn" id="12_uq2nj"]
+[ext_resource type="PackedScene" uid="uid://lrehk38exd5n" path="res://content/system/keyboard/keyboard.tscn" id="13_kylpi"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_uvrd4")
@@ -25,6 +26,7 @@ visible = false
 shadow_enabled = true
 
 [node name="StartXR" parent="." instance=ExtResource("1_i4c04")]
+render_target_size_multiplier = 1.5
 enable_passthrough = true
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
@@ -57,3 +59,6 @@ transform = Transform3D(1, -1.39636e-11, 0, 4.42413e-11, 1, 0, 0, 0, 1, -0.57679
 
 [node name="Screenshot" type="Node" parent="."]
 script = ExtResource("12_e13ym")
+
+[node name="Keyboard" parent="." instance=ExtResource("13_kylpi")]
+transform = Transform3D(0.5, 0, 0, 0, 0.237697, 0.439887, 0, -0.439887, 0.237697, -0.0241798, 0.452996, -0.531271)

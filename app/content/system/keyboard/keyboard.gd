@@ -20,9 +20,12 @@ var caps = false:
 		update_labels()
 
 func _ready():
-	get_parent().remove_child.call_deferred(self)
-
 	_create_keys()
+
+	if Engine.is_editor_hint():
+		return
+	get_parent().remove_child.call_deferred(self)
+	
 	_prepare_keyboard_spawn()
 	_connect_key_events()
 
