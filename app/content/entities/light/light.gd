@@ -15,7 +15,6 @@ const Entity = preload ("../entity.gd")
 @onready var snap_sound = $SnapSound
 @onready var settings = $Settings
 @onready var movable = $Movable
-@onready var camera_follower = $CameraFollower
 
 var active = R.state(false)
 var brightness = R.state(0) # 0-255
@@ -25,7 +24,6 @@ var color_wheel_supported = R.state(false)
 var show_brightness = R.state(true)
 var show_modes = R.state(true)
 var modes_supported = R.state(false)
-var show_settings = R.state(false)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -167,13 +165,6 @@ func quick_action():
 
 func _toggle():
 	HomeApi.set_state(entity_id, "off" if active.value else "on")
-
-func toggle_settings():
-	if show_settings.value == false:
-		show_settings.value = true
-		camera_follower.enabled = true
-	else:
-		show_settings.value = false
 
 func get_options():
 	return {

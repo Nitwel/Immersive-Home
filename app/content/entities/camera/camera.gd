@@ -8,8 +8,6 @@ const Entity = preload ("../entity.gd")
 @onready var http_request = $HTTPRequest
 @onready var mesh = $MeshInstance3D
 @onready var refresh_timer = $RefreshTimer
-@onready var button = $Button
-@onready var slider = $Slider
 
 var cam_active = R.state(false)
 var cam_fps = R.state(10)
@@ -18,12 +16,6 @@ var cam_fps = R.state(10)
 func _ready():
 	super()
 
-	button.on_button_up.connect(func():
-		cam_active.value=!cam_active.value
-	)
-
-	R.bind(slider, "value", cam_fps, slider.on_value_changed)
-
 	R.effect(func(_arg):
 		refresh_timer.wait_time=1.0 / cam_fps.value
 	)
@@ -31,10 +23,8 @@ func _ready():
 	R.effect(func(_arg):
 		if cam_active.value:
 			refresh_timer.start()
-			button.label="videocam"
 		else:
 			refresh_timer.stop()
-			button.label="videocam_off"
 	)
 
 	icon.value = "photo_camera"

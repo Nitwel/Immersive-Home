@@ -1,0 +1,98 @@
+[gd_scene load_steps=9 format=3 uid="uid://dejilst6cwqvi"]
+
+[ext_resource type="Script" path="res://content/entities/camera/settings.gd" id="1_1ixy6"]
+[ext_resource type="PackedScene" uid="uid://dnam3fe36gg62" path="res://content/ui/components/panel/panel.tscn" id="1_myvk1"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_wwobq"]
+[ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="3_dog14"]
+[ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="4_t8xp5"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_opf0y"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jtvwv"]
+resource_local_to_scene = true
+render_priority = 10
+shader = ExtResource("2_wwobq")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(7.5, 5)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.2
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_myer6"]
+size = Vector2(0.3, 0.2)
+
+[node name="Settings" type="Node3D"]
+script = ExtResource("1_1ixy6")
+
+[node name="Panel" parent="." instance=ExtResource("1_myvk1")]
+material_override = SubResource("ShaderMaterial_jtvwv")
+mesh = SubResource("QuadMesh_myer6")
+skeleton = NodePath("../..")
+size = Vector2(0.3, 0.2)
+
+[node name="Name" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.07, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Camera Settings"
+font_size = 24
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="Close" parent="." instance=ExtResource("5_opf0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.07, 0)
+label = "close"
+icon = true
+
+[node name="IDLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.03, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "ID:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="IDInput" parent="." instance=ExtResource("3_dog14")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0.03, 0)
+disabled = true
+
+[node name="VideoLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, -0.01, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Video: "
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="VideoButton" parent="." instance=ExtResource("5_opf0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, -0.01, 0)
+label = "videocam_off"
+icon = true
+
+[node name="FPSLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, -0.05, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Refresh Rate: "
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="FPSSlider" parent="." instance=ExtResource("4_t8xp5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.05, 0)
+min = 1.0
+max = 30.0
+value = 1.0
+step = 1.0
+label_unit = "FPS"
+size = Vector3(0.11, 0.02, 0.01)
