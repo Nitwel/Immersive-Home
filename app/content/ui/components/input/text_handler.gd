@@ -81,7 +81,7 @@ func _calculate_text_gaps():
 
 	for i in range(text.length()):
 		var chars = text.substr(0, i + 1) # Can't use single chars because of kerning.
-		var size = FontTools.get_font_size(label, chars)
+		var size = FontTools.get_label_size(label, chars)
 		
 		offsets.append(size.x)
 

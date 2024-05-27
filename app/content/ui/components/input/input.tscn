@@ -5,7 +5,7 @@
 [ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_nl02b"]
 [ext_resource type="FontFile" uid="uid://drsixxc4tmvjf" path="res://assets/fonts/Montserrat-Medium.ttf" id="4_yukbj"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_j4b8n"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4vor6"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("3_nl02b")
@@ -20,7 +20,7 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_ltwsx"]
+[sub_resource type="QuadMesh" id="QuadMesh_dndsq"]
 size = Vector2(0.15, 0.03)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x4yp8"]
@@ -83,8 +83,8 @@ collision_mask = 6
 
 [node name="Panel3D" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
-material_override = SubResource("ShaderMaterial_j4b8n")
-mesh = SubResource("QuadMesh_ltwsx")
+material_override = SubResource("ShaderMaterial_4vor6")
+mesh = SubResource("QuadMesh_dndsq")
 script = ExtResource("3_3bvrj")
 size = Vector2(0.15, 0.03)
 

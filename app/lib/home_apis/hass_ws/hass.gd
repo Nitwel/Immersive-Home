@@ -164,5 +164,5 @@ func update_room(room: String):
 func get_voice_assistant():
 	return assist_handler
 
-func get_history(entity_id, start, end=null):
-	return await history_handler.get_history(entity_id, start, end)
+func get_history(entity_id, start, interval, end=null):
+	return await history_handler.get_history(entity_id, start, interval, end)

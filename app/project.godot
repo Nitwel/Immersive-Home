@@ -29,6 +29,10 @@ EventSystem="*res://lib/globals/event_system.gd"
 Request="*res://lib/globals/request.gd"
 TouchManager="*res://lib/utils/touch/touch.gd"
 
+[debug_draw_3d]
+
+settings/3d/volumetric_defaults/thickness=0.001
+
 [display]
 
 window/vsync/vsync_mode=0
@@ -48,6 +52,12 @@ folder_colors={
 [filesystem]
 
 import/fbx/enabled=false
+
+[global_group]
+
+ui_focus="Makes the node foucsable"
+ui_focus_skip="Skip the focus check on this node"
+ui_focus_stop="Stops checking for focus entirely"
 
 [gui]
 

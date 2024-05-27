@@ -28,5 +28,5 @@ func _ready():
 func _update_text():
 	label.font_size = font_size
 	label.text = text
-	var text_size = FontTools.get_font_size(label)
+	var text_size = FontTools.get_label_size(label)
 	size = Vector3(text_size.x, text_size.y, 0.1)

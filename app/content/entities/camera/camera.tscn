@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://content/entities/camera/camera.gd" id="1_htxq3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_e2u6o"]
-[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_8whxu"]
-[ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="4_lfexu"]
+[ext_resource type="Script" path="res://content/functions/camera_follower.gd" id="3_j7lrc"]
+[ext_resource type="PackedScene" uid="uid://dejilst6cwqvi" path="res://content/entities/camera/settings.tscn" id="3_qlnvv"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_830bv"]
 size = Vector2(0.15, 0.15)
@@ -29,19 +29,12 @@ shape = SubResource("BoxShape3D_te0pn")
 script = ExtResource("2_e2u6o")
 resizable = true
 
+[node name="CameraFollower" type="Node" parent="." node_paths=PackedStringArray("focus_point")]
+script = ExtResource("3_j7lrc")
+focus_point = NodePath("../Settings")
+
 [node name="RefreshTimer" type="Timer" parent="."]
 wait_time = 0.1
 
-[node name="Button" parent="." instance=ExtResource("3_8whxu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, -0.1, 0)
-label = "videocam_off"
-icon = true
-
-[node name="Slider" parent="." instance=ExtResource("4_lfexu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.1, 0)
-min = 1.0
-max = 30.0
-value = 1.0
-step = 1.0
-label_unit = "FPS"
-size = Vector3(0.1, 0.02, 0.01)
+[node name="Settings" parent="." instance=ExtResource("3_qlnvv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 0, 0)

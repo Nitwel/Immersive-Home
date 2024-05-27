@@ -8,8 +8,7 @@ const Entity = preload ("../entity.gd")
 @onready var http_request = $HTTPRequest
 @onready var mesh = $MeshInstance3D
 @onready var refresh_timer = $RefreshTimer
-@onready var button = $Button
-@onready var slider = $Slider
+@onready var settings = $Settings
 
 var cam_active = R.state(false)
 var cam_fps = R.state(10)
@@ -18,23 +17,26 @@ var cam_fps = R.state(10)
 func _ready():
 	super()
 
-	button.on_button_up.connect(func():
-		cam_active.value=!cam_active.value
-	)
-
-	R.bind(slider, "value", cam_fps, slider.on_value_changed)
-
 	R.effect(func(_arg):
 		refresh_timer.wait_time=1.0 / cam_fps.value
+	)
+
+	remove_child(settings)
+
+	R.effect(func(_arg):
+		if show_settings.value:
+			add_child(settings)
+		elif settings.is_inside_tree():
+			remove_child(settings)
+			camera_follower.reset()
+			App.house.save_all_entities()
 	)
 
 	R.effect(func(_arg):
 		if cam_active.value:
 			refresh_timer.start()
-			button.label="videocam"
 		else:
 			refresh_timer.stop()
-			button.label="videocam_off"
 	)
 
 	icon.value = "photo_camera"
@@ -112,3 +114,13 @@ func load_image(url: String):
 	view.texture = texture
 	view.pixel_size = pixel_size
 	mesh.visible = false
+
+func get_options():
+	return {
+		"cam_active": cam_active.value,
+		"cam_fps": cam_fps.value,
+	}
+
+func set_options(options):
+	if options.has("cam_active"): cam_active.value = options["cam_active"]
+	if options.has("cam_fps"): cam_fps.value = options["cam_fps"]

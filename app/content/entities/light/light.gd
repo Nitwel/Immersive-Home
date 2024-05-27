@@ -8,14 +8,10 @@ const Entity = preload ("../entity.gd")
 @onready var lightbulb = $Lightbulb
 @onready var slider: Slider3D = $Slider
 @onready var color_wheel = $ColorWheel
-@onready var modes = $Modes
-@onready var mode_next = $Modes/Next
-@onready var mode_before = $Modes/Previous
-@onready var mode_label = $Modes/Label
+@onready var modes: Select3D = $Modes
 @onready var snap_sound = $SnapSound
 @onready var settings = $Settings
 @onready var movable = $Movable
-@onready var camera_follower = $CameraFollower
 
 var active = R.state(false)
 var brightness = R.state(0) # 0-255
@@ -25,7 +21,6 @@ var color_wheel_supported = R.state(false)
 var show_brightness = R.state(true)
 var show_modes = R.state(true)
 var modes_supported = R.state(false)
-var show_settings = R.state(false)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -74,30 +69,17 @@ func _ready():
 		modes_supported.value = true
 
 		if stateInfo["attributes"].has("effect")&&stateInfo["attributes"]["effect"] != null:
-			mode_label.text = stateInfo["attributes"]["effect"]
+			modes.selected = stateInfo["attributes"]["effect"]
 
-		mode_next.on_button_down.connect(func():
-			var index=stateInfo["attributes"]["effect_list"].find(stateInfo["attributes"]["effect"])
-			if index == - 1:
-				index=0
-			else:
-				index=(index + 1) % stateInfo["attributes"]["effect_list"].size()
+		var options = {}
 
-			mode_label.text=stateInfo["attributes"]["effect_list"][index]
+		for effect in stateInfo["attributes"]["effect_list"]:
+			options[effect] = effect
 
-			HomeApi.set_state(entity_id, "on", {"effect": stateInfo["attributes"]["effect_list"][index]})
-		)
+		modes.options = options
 
-		mode_before.on_button_down.connect(func():
-			var index=stateInfo["attributes"]["effect_list"].find(stateInfo["attributes"]["effect"])
-			if index == - 1:
-				index=0
-			else:
-				index=(index - 1) % stateInfo["attributes"]["effect_list"].size()
-
-			mode_label.text=stateInfo["attributes"]["effect_list"][index]
-
-			HomeApi.set_state(entity_id, "on", {"effect": stateInfo["attributes"]["effect_list"][index]})
+		modes.on_select.connect(func(option):
+			HomeApi.set_state(entity_id, "on", {"effect": option})
 		)
 
 	if stateInfo.has("attributes")&&stateInfo["attributes"].has("supported_color_modes")&&stateInfo["attributes"]["supported_color_modes"].has("rgb"):
@@ -168,13 +150,6 @@ func quick_action():
 func _toggle():
 	HomeApi.set_state(entity_id, "off" if active.value else "on")
 
-func toggle_settings():
-	if show_settings.value == false:
-		show_settings.value = true
-		camera_follower.enabled = true
-	else:
-		show_settings.value = false
-
 func get_options():
 	return {
 		"color_wheel": show_color_wheel.value,
@@ -183,6 +158,6 @@ func get_options():
 	}
 
 func set_options(options):
-	show_color_wheel.value = options["color_wheel"]
-	show_brightness.value = options["brightness"]
-	show_modes.value = options["modes"]
+	if options.has("color_wheel"): show_color_wheel.value = options["color_wheel"]
+	if options.has("brightness"): show_brightness.value = options["brightness"]
+	if options.has("modes"): show_modes.value = options["modes"]

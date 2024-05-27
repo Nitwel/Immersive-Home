@@ -146,7 +146,7 @@ func get_voice_assistant() -> VoiceAssistant:
 
 	return api.get_voice_assistant()
 
-func get_history(entity_id, start, end=null):
+func get_history(entity_id, start, interval, end=null):
 	assert(has_connected(), "Not connected")
 
 	if api.has_method("get_history") == false:
@@ -155,4 +155,4 @@ func get_history(entity_id, start, end=null):
 	if groups.is_group(entity_id):
 		return null
 
-	return await api.get_history(entity_id, start, end)
+	return await api.get_history(entity_id, start, interval, end)

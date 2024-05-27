@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7yxuroa2pfyu"]
+
+[ext_resource type="FontFile" uid="uid://cs508knjj1lnw" path="res://assets/fonts/Raleway-Medium.ttf" id="1_2dk7o"]
+[ext_resource type="Script" path="res://content/ui/components/select/option.gd" id="1_cdx1b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v323n"]
+resource_local_to_scene = true
+size = Vector3(0.032, 0.022, 0.004)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6yqdi"]
+resource_local_to_scene = true
+size = Vector3(0.032, 0.022, 0.01)
+
+[node name="Option" type="Node3D"]
+script = ExtResource("1_cdx1b")
+
+[node name="Body" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016, -0.011, 0.002)
+shape = SubResource("BoxShape3D_v323n")
+
+[node name="Label3D" type="Label3D" parent="Body"]
+pixel_size = 0.001
+render_priority = 40
+text = "test"
+font = ExtResource("1_2dk7o")
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016, -0.011, 0.005)
+shape = SubResource("BoxShape3D_6yqdi")

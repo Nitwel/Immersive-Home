@@ -106,6 +106,9 @@ func _handle_focus(target: Variant, event: EventBubble):
 		if target.is_in_group("ui_focus_stop"):
 			return true
 
+	if target == _active_node:
+		return true
+
 	if is_instance_valid(_active_node) == false:
 		_active_node = null
 
