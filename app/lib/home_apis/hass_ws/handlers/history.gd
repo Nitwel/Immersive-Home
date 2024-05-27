@@ -6,7 +6,7 @@ var integration_exists: bool = false
 func _init(hass: HASS_API):
 	self.api = hass
 
-func get_history(entity_id: String, start: String, end=null):
+func get_history(entity_id: String, start: String, interval: String="5minute", end=null):
 	var meta_response = await api.connection.send_request_packet({
 		"type": "recorder/get_statistics_metadata",
 		"statistic_ids": [
@@ -23,7 +23,7 @@ func get_history(entity_id: String, start: String, end=null):
 		"statistic_ids": [
 			entity_id
 		],
-		"period": "5minute",
+		"period": interval,
 		"types": [
 			"state",
 			"mean"

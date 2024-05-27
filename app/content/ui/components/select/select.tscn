@@ -1,0 +1,122 @@
+[gd_scene load_steps=12 format=3 uid="uid://wgnowarejk5y"]
+
+[ext_resource type="Script" path="res://content/ui/components/select/select.gd" id="1_0yka7"]
+[ext_resource type="PackedScene" uid="uid://dnam3fe36gg62" path="res://content/ui/components/panel/panel.tscn" id="2_5mspw"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_8yxox"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="4_61i7u"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wfc33"]
+resource_local_to_scene = true
+render_priority = 10
+shader = ExtResource("3_8yxox")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(5, 1)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.2
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_sal60"]
+resource_local_to_scene = true
+size = Vector2(0.2, 0.04)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uwnbp"]
+resource_local_to_scene = true
+size = Vector3(0.16, 0.03, 0.01)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qowt5"]
+resource_local_to_scene = true
+render_priority = 10
+shader = ExtResource("3_8yxox")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.5, 0.25)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.2
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_3gij7"]
+resource_local_to_scene = true
+size = Vector2(0.02, 0.01)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cv4hj"]
+resource_local_to_scene = true
+size = Vector3(0.114, 0.17, 0.01)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n5ty8"]
+resource_local_to_scene = true
+size = Vector3(0.16, 0.03, 0.01)
+
+[node name="Select" type="Node3D" groups=["ui_focus"]]
+script = ExtResource("1_0yka7")
+size = Vector3(0.2, 0.04, 0.01)
+
+[node name="Body" type="StaticBody3D" parent="." groups=["ui_focus_skip"]]
+collision_layer = 6
+collision_mask = 0
+
+[node name="Panel" parent="Body" instance=ExtResource("2_5mspw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.01)
+material_override = SubResource("ShaderMaterial_wfc33")
+mesh = SubResource("QuadMesh_sal60")
+skeleton = NodePath("../..")
+size = Vector2(0.2, 0.04)
+
+[node name="Label" type="Label3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0, 0.01)
+pixel_size = 0.001
+double_sided = false
+render_priority = 30
+text = "Select..."
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="Icon" type="Label3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0.01)
+pixel_size = 0.001
+double_sided = false
+render_priority = 30
+text = "arrow_drop_down"
+font = ExtResource("4_61i7u")
+font_size = 30
+outline_size = 0
+horizontal_alignment = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
+shape = SubResource("BoxShape3D_uwnbp")
+
+[node name="Options" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, -0.02, 0.02)
+visible = false
+collision_layer = 6
+collision_mask = 0
+
+[node name="Panel" parent="Options" instance=ExtResource("2_5mspw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.005, 0)
+material_override = SubResource("ShaderMaterial_qowt5")
+mesh = SubResource("QuadMesh_3gij7")
+skeleton = NodePath("../..")
+size = Vector2(0.02, 0.01)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Options"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.005, -0.005)
+shape = SubResource("BoxShape3D_cv4hj")
+disabled = true
+
+[node name="Area3D" type="Area3D" parent="." groups=["ui_focus_skip"]]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.015)
+shape = SubResource("BoxShape3D_n5ty8")

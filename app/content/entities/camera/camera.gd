@@ -114,3 +114,13 @@ func load_image(url: String):
 	view.texture = texture
 	view.pixel_size = pixel_size
 	mesh.visible = false
+
+func get_options():
+	return {
+		"cam_active": cam_active.value,
+		"cam_fps": cam_fps.value,
+	}
+
+func set_options(options):
+	cam_active.value = options["cam_active"]
+	cam_fps.value = options["cam_fps"]

@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cltcs0gokeald"]
+[gd_scene load_steps=7 format=3 uid="uid://cltcs0gokeald"]
 
 [ext_resource type="Script" path="res://content/entities/line_chart/line_chart.gd" id="1_5dxim"]
 [ext_resource type="PackedScene" uid="uid://cwvykoymlrrel" path="res://content/ui/components/line_chart/line_chart.tscn" id="2_k4shm"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="3_lidml"]
+[ext_resource type="Script" path="res://content/functions/camera_follower.gd" id="4_ovcs6"]
+[ext_resource type="PackedScene" uid="uid://q5p1701gdfiq" path="res://content/entities/line_chart/settings.tscn" id="5_w7tql"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rmm5v"]
 size = Vector3(0.5, 0.3, 0.001)
@@ -22,6 +24,10 @@ shape = SubResource("BoxShape3D_rmm5v")
 script = ExtResource("3_lidml")
 resizable = true
 
+[node name="CameraFollower" type="Node" parent="." node_paths=PackedStringArray("focus_point")]
+script = ExtResource("4_ovcs6")
+focus_point = NodePath("../Settings")
+
 [node name="Timer" type="Timer" parent="."]
 wait_time = 60.0
 autostart = true
@@ -32,3 +38,6 @@ pixel_size = 0.001
 text = "sensor.tada"
 font_size = 18
 outline_size = 4
+
+[node name="Settings" parent="." instance=ExtResource("5_w7tql")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.67, 0.15, 0)
