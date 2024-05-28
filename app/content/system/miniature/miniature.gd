@@ -78,6 +78,9 @@ func _ready():
 
 			walls_mesh.material_override=wall_material
 			floor_mesh.material_override=wall_material
+
+			walls_mesh.set_layer_mask_value(2, true)
+			floor_mesh.set_layer_mask_value(2, true)
 	)
 
 	# Update Size
