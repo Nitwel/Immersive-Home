@@ -39,13 +39,6 @@ var pressed = false
 var grabbed = false
 
 func _ready():
-	button_pressed.connect(func(action_name):
-		EventSystem.emit_action(action_name, true, true)
-	)
-	button_released.connect(func(action_name):
-		EventSystem.emit_action(action_name, false, true)
-	)
-
 	_setup_hand()
 
 func _setup_hand():

@@ -39,6 +39,12 @@ func reset():
 	initiator2 = null
 	on_moved.emit()
 
+func _on_action_value(event: EventAction):
+	if event.name != "primary"||event.initiator != initiator:
+		return
+
+	relative_transform = relative_transform.translated(Vector3(0, 0, -event.value.y * 0.05)).rotated_local(Vector3(0, 1, 0), event.value.x * 0.05)
+
 func _on_grab_down(event: EventPointer):
 	if disabled:
 		return
@@ -64,6 +70,8 @@ func _on_grab_down(event: EventPointer):
 	distances.x = event.ray.get_collision_point().distance_to(event.ray.global_position)
 
 	initiator = event.initiator
+
+	EventSystem.on_action_value.connect(_on_action_value)
 
 	_update_relative_transform()
 	initial_global_transform = get_parent().global_transform
@@ -115,6 +123,7 @@ func _on_grab_up(event: EventPointer):
 			initiator = null
 			initiator2 = null
 			on_moved.emit()
+			EventSystem.on_action_value.disconnect(_on_action_value)
 
 func _get_first_ray_point():
 	if initiator == null:

@@ -52,14 +52,6 @@ var grabbed = false
 var moving_entity = null
 
 func _ready():
-	button_pressed.connect(func(action_name):
-		EventSystem.emit_action(action_name, true, false)
-	)
-
-	button_released.connect(func(action_name):
-		EventSystem.emit_action(action_name, false, false)
-	)
-
 	_setup_hand()
 
 	palm.remove_child(entity_settings)
