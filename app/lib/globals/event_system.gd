@@ -1,5 +1,7 @@
 extends Node
 
+const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
+
 ## Prefix for the function names to be called
 const FN_PREFIX = "_on_"
 ## Prefix for the signal names to be emitted
@@ -83,11 +85,11 @@ func notify(message: String, type:=EventNotify.Type.INFO):
 	emit("notify", event)
 
 ## Helper for emitting controller actions
-func emit_action(name: String, value, right_controller: bool=true):
+func emit_action(name: String, value, initiator: Initiator):
 	var event = EventAction.new()
 	event.name = name
 	event.value = value
-	event.right_controller = right_controller
+	event.initiator = initiator
 
 	match typeof(value):
 		TYPE_BOOL:

@@ -32,12 +32,24 @@ func _ready():
 	add_child(pointer)
 
 	get_parent().button_pressed.connect(func(button: String):
+		EventSystem.emit_action(button, true, initiator)
+
 		if _event_type_map.has(button):
 			pointer.pressed(_event_type_map[button])
 	)
 	get_parent().button_released.connect(func(button: String):
+		EventSystem.emit_action(button, false, initiator)
+
 		if _event_type_map.has(button):
 			pointer.released(_event_type_map[button])
+	)
+
+	get_parent().input_float_changed.connect(func(action_name, value):
+		EventSystem.emit_action(action_name, value, initiator)
+	)
+
+	get_parent().input_vector2_changed.connect(func(action_name, value):
+		EventSystem.emit_action(action_name, value, initiator)
 	)
 
 	R.effect(func(_arg):
