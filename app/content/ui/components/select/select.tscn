@@ -5,7 +5,7 @@
 [ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_8yxox"]
 [ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="4_61i7u"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o58sw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_81jws"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("3_8yxox")
@@ -20,14 +20,14 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_xblx4"]
+[sub_resource type="QuadMesh" id="QuadMesh_3uyfs"]
 size = Vector2(0.2, 0.04)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_uwnbp"]
 resource_local_to_scene = true
 size = Vector3(0.2, 0.04, 0.01)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fnoxg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t7hp2"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("3_8yxox")
@@ -42,7 +42,7 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_6v0t1"]
+[sub_resource type="QuadMesh" id="QuadMesh_b0yu6"]
 size = Vector2(0.02, 0.01)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cv4hj"]
@@ -63,8 +63,8 @@ collision_mask = 0
 
 [node name="Panel" parent="Body" instance=ExtResource("2_5mspw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.01)
-material_override = SubResource("ShaderMaterial_o58sw")
-mesh = SubResource("QuadMesh_xblx4")
+material_override = SubResource("ShaderMaterial_81jws")
+mesh = SubResource("QuadMesh_3uyfs")
 skeleton = NodePath("../..")
 size = Vector2(0.2, 0.04)
 
@@ -101,8 +101,8 @@ collision_mask = 0
 
 [node name="Panel" parent="Options" instance=ExtResource("2_5mspw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01, -0.005, 0)
-material_override = SubResource("ShaderMaterial_fnoxg")
-mesh = SubResource("QuadMesh_6v0t1")
+material_override = SubResource("ShaderMaterial_t7hp2")
+mesh = SubResource("QuadMesh_b0yu6")
 skeleton = NodePath("../..")
 size = Vector2(0.02, 0.01)
 

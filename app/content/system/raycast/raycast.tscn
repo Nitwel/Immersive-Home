@@ -55,6 +55,7 @@ material_override = SubResource("ShaderMaterial_ov0gt")
 mesh = ExtResource("5_3o4gy")
 
 [node name="Grid" type="MeshInstance3D" parent="."]
+visible = false
 material_override = ExtResource("7_tnbkv")
 mesh = SubResource("PlaneMesh_cq16e")
 

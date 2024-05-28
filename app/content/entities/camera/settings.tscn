@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dejilst6cwqvi"]
+[gd_scene load_steps=10 format=3 uid="uid://dejilst6cwqvi"]
 
 [ext_resource type="Script" path="res://content/entities/camera/settings.gd" id="1_1ixy6"]
 [ext_resource type="PackedScene" uid="uid://dnam3fe36gg62" path="res://content/ui/components/panel/panel.tscn" id="1_myvk1"]
@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="4_t8xp5"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_opf0y"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oovyb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_smnuk"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("2_wwobq")
@@ -22,15 +22,20 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_cftc5"]
+[sub_resource type="QuadMesh" id="QuadMesh_jill0"]
 size = Vector2(0.3, 0.2)
 
-[node name="Settings" type="Node3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_ctomk"]
+size = Vector3(0.3, 0.2, 0.02)
+
+[node name="Settings" type="StaticBody3D"]
+collision_layer = 6
+collision_mask = 0
 script = ExtResource("1_1ixy6")
 
 [node name="Panel" parent="." instance=ExtResource("1_myvk1")]
-material_override = SubResource("ShaderMaterial_oovyb")
-mesh = SubResource("QuadMesh_cftc5")
+material_override = SubResource("ShaderMaterial_smnuk")
+mesh = SubResource("QuadMesh_jill0")
 skeleton = NodePath("../..")
 size = Vector2(0.3, 0.2)
 
@@ -96,3 +101,7 @@ value = 1.0
 step = 1.0
 label_unit = "FPS"
 size = Vector3(0.11, 0.02, 0.01)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)
+shape = SubResource("BoxShape3D_ctomk")

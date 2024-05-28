@@ -1,4 +1,4 @@
-extends Node3D
+extends StaticBody3D
 
 const Camera = preload ("./camera.gd")
 
