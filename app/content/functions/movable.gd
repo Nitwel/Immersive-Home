@@ -43,7 +43,7 @@ func _on_action_value(event: EventAction):
 	if event.name != "primary"||event.initiator != initiator:
 		return
 
-	relative_transform = relative_transform.translated(Vector3(0, 0, -event.value.y * 0.05))
+	relative_transform = relative_transform.translated(Vector3(0, 0, -event.value.y * 0.05)).rotated_local(Vector3(0, 1, 0), event.value.x * 0.05)
 
 func _on_grab_down(event: EventPointer):
 	if disabled:
