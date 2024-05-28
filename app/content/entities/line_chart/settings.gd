@@ -1,4 +1,4 @@
-extends Node3D
+extends StaticBody3D
 
 const LineChart = preload ("./line_chart.gd")
 
