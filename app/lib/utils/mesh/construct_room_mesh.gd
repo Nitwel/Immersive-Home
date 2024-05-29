@@ -138,7 +138,7 @@ static func generate_ceiling_mesh(corners):
 
 	return _create_mesh_2d(points, triangles)
 
-static func generate_wall_mesh_with_doors_grid(corners, height, doors, grid:=0.1):
+static func generate_wall_mesh_with_doors_grid(corners, height, doors, grid:=0.2):
 	if corners.size() < 3:
 		return null
 
@@ -241,7 +241,7 @@ static func generate_wall_mesh_with_doors_grid(corners, height, doors, grid:=0.1
 
 	return mesh
 
-static func generate_wall_mesh_grid(corners, height, grid: Vector2=Vector2(0.1, 0.1)):
+static func generate_wall_mesh_grid(corners, height, grid: Vector2=Vector2(0.2, 0.2)):
 	if corners.size() < 3:
 		return null
 
@@ -289,7 +289,7 @@ static func generate_wall_mesh_grid(corners, height, grid: Vector2=Vector2(0.1, 
 	
 	return mesh
 
-static func generate_ceiling_mesh_grid(corners, grid: Vector2=Vector2(0.1, 0.1)):
+static func generate_ceiling_mesh_grid(corners, grid: Vector2=Vector2(0.2, 0.2)):
 	var points: PackedVector2Array = PackedVector2Array()
 	var edges: PackedInt32Array = PackedInt32Array()
 	var triangles: PackedInt32Array
