@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://d0i5oae6evn08"]
+
+[ext_resource type="Material" uid="uid://xehjkoeofqc" path="res://content/system/house/room/room_next.tres" id="1_irw15"]
+[ext_resource type="Shader" path="res://content/system/house/room/room.gdshader" id="2_hhffe"]
+
+[resource]
+render_priority = -100
+next_pass = ExtResource("1_irw15")
+shader = ExtResource("2_hhffe")

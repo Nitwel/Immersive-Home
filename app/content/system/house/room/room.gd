@@ -1,6 +1,8 @@
 extends Node3D
 
 const ConstructRoomMesh = preload ("res://lib/utils/mesh/construct_room_mesh.gd")
+const ConstructDoorMesh = preload ("res://lib/utils/mesh/construct_door_mesh.gd")
+const RoomMaterial = preload ("res://content/system/house/room/states/room.tres")
 
 @onready var wall_corners = $Ceiling/WallCorners
 @onready var wall_edges = $Ceiling/WallEdges
@@ -10,6 +12,7 @@ const ConstructRoomMesh = preload ("res://lib/utils/mesh/construct_room_mesh.gd"
 
 @onready var room_floor = $Floor
 @onready var room_ceiling = $Ceiling
+@onready var doors = $Doors
 
 @onready var state_machine: StateMachine = $StateMachine
 
@@ -84,3 +87,29 @@ static func generate_ceiling_mesh(room: Dictionary):
 	var corners = room.corners
 
 	return ConstructRoomMesh.generate_ceiling_mesh(corners)
+
+func generate_doors_mesh():
+	for door in Store.house.state.doors:
+		if door.room1 != name:
+			continue
+
+		var door_mesh = MeshInstance3D.new()
+
+		doors.add_child(door_mesh)
+
+		if Geometry2D.is_polygon_clockwise([
+			Vector2(door.room1_position1.x, door.room1_position1.z),
+			Vector2(door.room2_position1.x, door.room2_position1.z),
+			Vector2(door.room2_position2.x, door.room2_position2.z),
+			Vector2(door.room1_position2.x, door.room1_position2.z)
+		]):
+			door_mesh.mesh = ConstructDoorMesh.generate_door_mesh(door.room1_position2, door.room2_position2, door.room2_position1, door.room1_position1)
+		else:
+			door_mesh.mesh = ConstructDoorMesh.generate_door_mesh(door.room1_position1, door.room2_position1, door.room2_position2, door.room1_position2)
+
+		door_mesh.material_override = RoomMaterial
+
+func clear_doors_mesh():
+	for door in doors.get_children():
+		doors.remove_child(door)
+		door.queue_free()
