@@ -37,8 +37,3 @@ shape = SubResource("SphereShape3D_y1ne8")
 [node name="SnapSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_04fcm")
 volume_db = -20.0
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-layers = 2
-light_color = Color(0.537607, 0.0297858, 0.226152, 1)
-omni_range = 0.5
