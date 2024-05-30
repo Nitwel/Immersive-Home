@@ -63,22 +63,22 @@ void fragment() {
 	ROUGHNESS = roughness;
 	DEPTH = FRAGCOORD.z + 0.0001;
 	ALBEDO = vec3(color.xyz);
-	
+
 	vec2 pos = vec2(UV.x * aspect_ratio.x, UV.y * aspect_ratio.y);
 	float border = 0.05;
-	
+
 	if (pos.x <= border) {
 		ALBEDO = mix(vec3(0.0), ALBEDO, pos.x / border);
 	}
-	 
+
 	if (pos.x >= aspect_ratio.x - border) {
 		ALBEDO = mix(vec3(0.0), ALBEDO, 1.0 - (pos.x - (aspect_ratio.x - border)) / border);
 	}
-	
+
 	if (pos.y <= border) {
 		ALBEDO = mix(vec3(0.0), ALBEDO, pos.y / border);
 	}
-	 
+
 	if (pos.y >= aspect_ratio.y - border) {
 		ALBEDO = mix(vec3(0.0), ALBEDO, 1.0 - (pos.y - (aspect_ratio.y - border)) / border);
 	}
