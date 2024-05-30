@@ -1,6 +1,7 @@
 extends StaticBody3D
 
 const Entity = preload ("res://content/entities/entity.gd")
+const Light = preload ("res://content/entities/light/light.gd")
 
 const TOUCH_LONG = 400.0
 
@@ -9,6 +10,7 @@ const TOUCH_LONG = 400.0
 @onready var collision = $CollisionShape3D
 @onready var area = $Area3D/CollisionShape3D2
 @onready var snap_sound = $SnapSound
+# @onready var light: OmniLight3D = $OmniLight3D
 @onready var label = $Label3D
 var active = R.state(false)
 var disabled = null
@@ -17,6 +19,16 @@ var moved_ran = false
 var touch_ran = false
 
 func _ready():
+	#  Wait until https://github.com/godotengine/godot/pull/83360 is merged for faster vertex lighting
+	# if entity is Light:
+	# 	R.effect(func(_arg):
+	# 		light.light_energy=1 if entity.active.value else 0
+	# 		light.light_color=entity.color.value
+	# 	)
+	# else:
+	# 	remove_child(light)
+	# 	light.queue_free()
+
 	R.effect(func(_arg):
 		label.text=entity.icon.value
 		label.modulate=entity.icon_color.value

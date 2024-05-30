@@ -30,6 +30,8 @@ func _on_enter():
 	wall_collisions.backface_collision = true
 	room.wall_collision.shape = wall_collisions
 
+	room.generate_doors_mesh()
+
 func _on_leave():
 	room.room_ceiling.get_node("CollisionShape3D").disabled = true
 	room.room_floor.get_node("CollisionShape3D").disabled = true
@@ -37,3 +39,5 @@ func _on_leave():
 	room.wall_collision.shape = null
 	room.wall_mesh.mesh = null
 	room.ceiling_mesh.mesh = null
+
+	room.clear_doors_mesh()

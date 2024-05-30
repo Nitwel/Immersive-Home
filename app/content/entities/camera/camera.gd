@@ -5,7 +5,7 @@ const Entity = preload ("../entity.gd")
 @export var view_width = 0.15
 
 @onready var view = $View
-@onready var http_request = $HTTPRequest
+@onready var http_request: HTTPRequest = $HTTPRequest
 @onready var mesh = $MeshInstance3D
 @onready var refresh_timer = $RefreshTimer
 @onready var settings = $Settings
@@ -33,6 +33,7 @@ func _ready():
 	)
 
 	R.effect(func(_arg):
+		print("Cam active: ", cam_active.value)
 		if cam_active.value:
 			refresh_timer.start()
 		else:
@@ -69,6 +70,10 @@ func set_state(stateInfo):
 		refresh_timer.timeout.connect(load_image.bind(url))
 
 func load_image(url: String):
+	if http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
+		print("HTTP client is busy, skipping")
+		return
+
 	http_request.request("http://192.168.33.33:8123" + url)
 
 	var result = await http_request.request_completed
@@ -114,6 +119,8 @@ func load_image(url: String):
 	view.texture = texture
 	view.pixel_size = pixel_size
 	mesh.visible = false
+
+	print("Loaded image: ", url)
 
 func get_options():
 	return {

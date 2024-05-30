@@ -1,0 +1,102 @@
+[gd_scene load_steps=9 format=3 uid="uid://cm070pgl3s7gm"]
+
+[ext_resource type="Script" path="res://content/entities/media_player/settings.gd" id="1_03bil"]
+[ext_resource type="PackedScene" uid="uid://dnam3fe36gg62" path="res://content/ui/components/panel/panel.tscn" id="2_kt6qc"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_abcrk"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_u2igx"]
+[ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="5_1jm5m"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ncmoa"]
+resource_local_to_scene = true
+render_priority = 10
+shader = ExtResource("3_abcrk")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(7.5, 5)
+shader_parameter/border_size = 0.01
+shader_parameter/border_fade_in = 0.05
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.2
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_qm2qb"]
+size = Vector2(0.3, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_53oq0"]
+size = Vector3(0.3, 0.2, 0.02)
+
+[node name="Settings" type="StaticBody3D"]
+script = ExtResource("1_03bil")
+
+[node name="Panel" parent="." instance=ExtResource("2_kt6qc")]
+material_override = SubResource("ShaderMaterial_ncmoa")
+mesh = SubResource("QuadMesh_qm2qb")
+skeleton = NodePath("../..")
+size = Vector2(0.3, 0.2)
+
+[node name="Name" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.07, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Media Player Settings"
+font_size = 20
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="Close" parent="." instance=ExtResource("4_u2igx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.07, 0)
+label = "close"
+icon = true
+
+[node name="IDLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, 0.03, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "ID:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="IDInput" parent="." instance=ExtResource("5_1jm5m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0.03, 0)
+disabled = true
+
+[node name="VideoLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, -0.02, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Show Volume:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="VolumeButton" parent="." instance=ExtResource("4_u2igx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.02, 0)
+label = "close"
+icon = true
+toggleable = true
+
+[node name="VideoLabel2" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14, -0.07, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Show Image:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="ImageButton" parent="." instance=ExtResource("4_u2igx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.07, 0)
+label = "close"
+icon = true
+toggleable = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)
+shape = SubResource("BoxShape3D_53oq0")

@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://dyktdg7ggiwl4"]
+[gd_scene load_steps=9 format=3 uid="uid://dyktdg7ggiwl4"]
 
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_8opk3"]
 [ext_resource type="Script" path="res://content/entities/media_player/media_player.gd" id="1_ame17"]
+[ext_resource type="Script" path="res://content/functions/camera_follower.gd" id="3_24ewx"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="3_bguto"]
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="4_w73hw"]
 [ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="5_koe28"]
+[ext_resource type="PackedScene" uid="uid://cm070pgl3s7gm" path="res://content/entities/media_player/settings.tscn" id="6_iuvm7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vi3eg"]
 size = Vector3(0.23, 0.142768, 0.01)
@@ -12,6 +14,14 @@ size = Vector3(0.23, 0.142768, 0.01)
 [node name="MediaPlayer" type="StaticBody3D"]
 collision_mask = 0
 script = ExtResource("1_ame17")
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("3_bguto")
+resizable = true
+
+[node name="CameraFollower" type="Node" parent="." node_paths=PackedStringArray("focus_point")]
+script = ExtResource("3_24ewx")
+focus_point = NodePath("../Settings")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0364514, -0.01)
@@ -56,10 +66,6 @@ pixel_size = 0.001
 
 [node name="HTTPRequest" type="HTTPRequest" parent="PlayingInfo"]
 
-[node name="Movable" type="Node" parent="."]
-script = ExtResource("3_bguto")
-resizable = true
-
 [node name="Slider" parent="." instance=ExtResource("4_w73hw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0562844, 0)
 max = 100.0
@@ -74,3 +80,6 @@ text = "volume_up"
 font = ExtResource("5_koe28")
 font_size = 18
 outline_size = 4
+
+[node name="Settings" parent="." instance=ExtResource("6_iuvm7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27, 0, 0)

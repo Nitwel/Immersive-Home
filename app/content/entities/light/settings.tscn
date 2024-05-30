@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_2gpr3"]
 [ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="4_upyp3"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_t0vpw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_00j7x"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("2_m4moa")
@@ -21,7 +21,7 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_s453u"]
+[sub_resource type="QuadMesh" id="QuadMesh_3236q"]
 size = Vector2(0.3, 0.25)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bu024"]
@@ -34,8 +34,8 @@ script = ExtResource("1_gw2gi")
 
 [node name="Panel" parent="." instance=ExtResource("1_78ups")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.45058e-09, 0)
-material_override = SubResource("ShaderMaterial_t0vpw")
-mesh = SubResource("QuadMesh_s453u")
+material_override = SubResource("ShaderMaterial_00j7x")
+mesh = SubResource("QuadMesh_3236q")
 skeleton = NodePath("../..")
 size = Vector2(0.3, 0.25)
 

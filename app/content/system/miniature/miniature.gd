@@ -1,6 +1,7 @@
 extends Node3D
 
 const ConstructRoomMesh = preload ("res://lib/utils/mesh/construct_room_mesh.gd")
+const ConstructDoorMesh = preload ("res://lib/utils/mesh/construct_door_mesh.gd")
 const wall_material = preload ("./mini_wall.tres")
 const humidity_gradient = preload ("./humid_gradient.tres")
 const temperature_gradient = preload ("./temp_gradient.tres")
@@ -78,6 +79,28 @@ func _ready():
 
 			walls_mesh.material_override=wall_material
 			floor_mesh.material_override=wall_material
+
+			walls_mesh.set_layer_mask_value(2, true)
+			floor_mesh.set_layer_mask_value(2, true)
+
+		for door in Store.house.state.doors:
+			var door_mesh=MeshInstance3D.new()
+
+			model.add_child(door_mesh)
+
+			if Geometry2D.is_polygon_clockwise([
+				Vector2(door.room1_position1.x, door.room1_position1.z),
+				Vector2(door.room2_position1.x, door.room2_position1.z),
+				Vector2(door.room2_position2.x, door.room2_position2.z),
+				Vector2(door.room1_position2.x, door.room1_position2.z)
+			]):
+				door_mesh.mesh=ConstructDoorMesh.generate_door_mesh(door.room1_position2, door.room2_position2, door.room2_position1, door.room1_position1)
+			else:
+				door_mesh.mesh=ConstructDoorMesh.generate_door_mesh(door.room1_position1, door.room2_position1, door.room2_position2, door.room1_position2)
+
+			door_mesh.material_override=wall_material
+
+			door_mesh.set_layer_mask_value(2, true)
 	)
 
 	# Update Size

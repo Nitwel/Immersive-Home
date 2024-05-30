@@ -12,13 +12,39 @@ const Entity = preload ("../entity.gd")
 @onready var artist = $PlayingInfo/Artist
 @onready var http_request = $PlayingInfo/HTTPRequest
 @onready var slider = $Slider
+@onready var settings = $Settings
 
 var playing = false
 var volume = 50
 
+var show_volume = R.state(true)
+var show_image = R.state(true)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	super()
+
+	remove_child(settings)
+
+	R.effect(func(_arg):
+		if show_settings.value:
+			add_child(settings)
+		elif settings.is_inside_tree():
+			remove_child(settings)
+			camera_follower.reset()
+			App.house.save_all_entities()
+	)
+
+	R.effect(func(_arg):
+		if show_volume.value:
+			add_child(slider)
+		else:
+			remove_child(slider)
+	)
+
+	R.effect(func(_arg):
+		logo.visible=show_image.value
+	)
 
 	icon.value = "pause_circle"
 
@@ -94,3 +120,13 @@ func load_image(url: String):
 	var texture = ImageTexture.create_from_image(image)
 	logo.texture = texture
 	logo.pixel_size = pixel_size
+
+func get_options():
+	return {
+		"show_volume": show_volume.value,
+		"show_image": show_image.value
+	}
+
+func set_options(options):
+	if options.has("show_volume"): show_volume.value = options["show_volume"]
+	if options.has("show_image"): show_image.value = options["show_image"]

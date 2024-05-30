@@ -46,7 +46,8 @@ enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg")
 folder_colors={
 "res://assets/": "blue",
 "res://content/": "teal",
-"res://lib/": "yellow"
+"res://lib/": "yellow",
+"res://test/": "purple"
 }
 
 [filesystem]
