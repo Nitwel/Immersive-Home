@@ -68,10 +68,6 @@ pixel_size = 0.001
 
 [node name="Slider" parent="." instance=ExtResource("4_w73hw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0562844, 0)
-max = 100.0
-value = 30.0
-step = 1.0
-label_unit = "%"
 
 [node name="Label3D" type="Label3D" parent="Slider"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.088399, 0, 0.01)

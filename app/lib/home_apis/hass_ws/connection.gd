@@ -2,7 +2,6 @@ extends Node
 
 const HASS_API = preload ("hass.gd")
 const Auth = preload ("./auth.gd")
-const TimedSignal = preload ("res://lib/utils/timed_signal.gd")
 
 signal on_connect()
 signal on_disconnect()
@@ -64,7 +63,7 @@ func start(url: String, token: String) -> ConnectionError:
 
 	set_process(true)
 
-	error = await TimedSignal.timed_signal(self, _try_connect, connection_timeout)
+	error = await ProcessTools.timed_signal(_try_connect, connection_timeout)
 
 	if error == Error.ERR_TIMEOUT:
 		print("Failed to connect to %s: Exceeded %ss" % [url, connection_timeout])

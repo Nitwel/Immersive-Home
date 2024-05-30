@@ -28,6 +28,7 @@ Store="*res://lib/globals/main_store.gd"
 EventSystem="*res://lib/globals/event_system.gd"
 Request="*res://lib/globals/request.gd"
 TouchManager="*res://lib/utils/touch/touch.gd"
+ProcessTools="*res://lib/globals/process_tools.gd"
 
 [debug_draw_3d]
 

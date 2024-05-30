@@ -2,6 +2,12 @@
 extends Container3D
 class_name Slider3D
 
+signal on_value_changed(value: float)
+
+var throttled_value_changed = ProcessTools.throttle_bouce(func(value: float):
+	on_value_changed.emit(value)
+, 500)
+
 @export var min: float = 0.0:
 	set(new_value):
 		min = new_value
@@ -25,7 +31,7 @@ class_name Slider3D
 		if !is_inside_tree(): return
 
 		label.text = str(value) + " " + label_unit
-		if new_value != value: on_value_changed.emit(value)
+		if new_value != value: throttled_value_changed.call(value)
 		_update_slider()
 
 @export var step: float = 0.01
@@ -48,8 +54,6 @@ class_name Slider3D
 @onready var body_collision_shape: CollisionShape3D = $Body/CollisionShape3D
 @onready var area_collision_shape: CollisionShape3D = $Area3D/CollisionShape3D
 @onready var slider_knob: MeshInstance3D = $Knob
-
-signal on_value_changed(value: float)
 
 var move_plane: Plane
 

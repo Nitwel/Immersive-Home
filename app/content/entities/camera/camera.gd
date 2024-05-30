@@ -71,7 +71,6 @@ func set_state(stateInfo):
 
 func load_image(url: String):
 	if http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
-		print("HTTP client is busy, skipping")
 		return
 
 	http_request.request("http://192.168.33.33:8123" + url)
@@ -119,8 +118,6 @@ func load_image(url: String):
 	view.texture = texture
 	view.pixel_size = pixel_size
 	mesh.visible = false
-
-	print("Loaded image: ", url)
 
 func get_options():
 	return {
