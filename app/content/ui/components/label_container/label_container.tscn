@@ -1,17 +1,17 @@
 [gd_scene load_steps=3 format=3 uid="uid://blkfqa3ttk0d2"]
 
 [ext_resource type="Script" path="res://content/ui/components/label_container/label_container.gd" id="1_hqtij"]
-[ext_resource type="FontVariation" uid="uid://d2ofyimg5s65q" path="res://assets/fonts/ui_font_500.tres" id="2_6y3jl"]
+[ext_resource type="FontFile" uid="uid://cs508knjj1lnw" path="res://assets/fonts/Raleway-Medium.ttf" id="2_ygw17"]
 
 [node name="LabelContainer" type="Node3D"]
 script = ExtResource("1_hqtij")
-size = Vector3(0.08, 0.023, 0.1)
+size = Vector3(0.074, 0.022, 0.1)
 
 [node name="Label3D" type="Label3D" parent="."]
 pixel_size = 0.001
 render_priority = 15
 outline_render_priority = 14
 text = "Example"
-font = ExtResource("2_6y3jl")
+font = ExtResource("2_ygw17")
 font_size = 18
 outline_size = 0
