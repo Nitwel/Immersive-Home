@@ -65,7 +65,7 @@ func _ready():
 			remove_child(modes)
 	)
 
-	if stateInfo.has("attributes")&&stateInfo["attributes"].has("effect_list")&&stateInfo["attributes"]["effect_list"].size() > 0:
+	if stateInfo != null&&stateInfo.has("attributes")&&stateInfo["attributes"].has("effect_list")&&stateInfo["attributes"]["effect_list"].size() > 0:
 		modes_supported.value = true
 
 		if stateInfo["attributes"].has("effect")&&stateInfo["attributes"]["effect"] != null:
@@ -82,7 +82,7 @@ func _ready():
 			HomeApi.set_state(entity_id, "on", {"effect": option})
 		)
 
-	if stateInfo.has("attributes")&&stateInfo["attributes"].has("supported_color_modes")&&stateInfo["attributes"]["supported_color_modes"].has("rgb"):
+	if stateInfo != null&&stateInfo.has("attributes")&&stateInfo["attributes"].has("supported_color_modes")&&stateInfo["attributes"]["supported_color_modes"].has("rgb"):
 		color_wheel_supported.value = true
 
 	await HomeApi.watch_state(entity_id, func(new_state):

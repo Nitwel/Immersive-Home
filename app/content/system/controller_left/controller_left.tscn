@@ -23,8 +23,8 @@ shader_parameter/fade_offset = 0.0
 shader_parameter/fade_sharpness = 15.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_65k2y"]
-radius = 0.001
-height = 0.02
+radius = 0.00591771
+height = 0.04
 
 [node name="XRControllerLeft" type="XRController3D"]
 tracker = &"left_hand"
@@ -68,7 +68,7 @@ collision_mask = 4
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="IndexTip/TouchArea"]
-transform = Transform3D(1, 0, 0, 1.49012e-08, 1, 0, 1.86265e-09, -7.45058e-09, 1, 0, -0.01, 0)
+transform = Transform3D(1, 0, 0, 1.49012e-08, 1, 0, 1.86265e-09, -7.45058e-09, 1, 0, -0.02, 7.45058e-11)
 shape = SubResource("CapsuleShape3D_65k2y")
 
 [node name="ThumbTip" type="BoneAttachment3D" parent="."]
