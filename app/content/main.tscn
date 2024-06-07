@@ -22,8 +22,12 @@ environment = ExtResource("2_lsndp")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, -2.51787e-05, 0.000567105, -0.000567105, 4.3985e-08, 1, -2.51784e-05, -1, 2.97105e-08, -4.65661e-10, 7.21041, 2.06458)
-visible = false
 shadow_enabled = true
+directional_shadow_split_1 = 0.2
+directional_shadow_split_2 = 0.4
+directional_shadow_split_3 = 0.6
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 5.0
 
 [node name="StartXR" parent="." instance=ExtResource("1_i4c04")]
 render_target_size_multiplier = 1.5

@@ -110,6 +110,9 @@ func _ready():
 	)
 
 func set_state(stateInfo):
+	if stateInfo == null:
+		return
+
 	if active.value == false&&stateInfo["state"] == "off":
 		return
 

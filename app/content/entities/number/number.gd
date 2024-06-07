@@ -25,6 +25,9 @@ func _ready():
 	)
 
 func set_state(state):
+	if state == null:
+		return
+
 	slider.value = float(state["state"])
 	
 	var attributes = state["attributes"]

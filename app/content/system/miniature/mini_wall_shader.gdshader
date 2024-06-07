@@ -4,6 +4,8 @@ render_mode blend_mix, cull_back, diffuse_burley, specular_schlick_ggx;
 uniform vec4 data[100];
 uniform int data_size: hint_range(0, 100, 1);
 uniform float alpha: hint_range(0.0, 1.0, 0.1) = 0.3;
+uniform float border: hint_range(0.0, 1.0, 0.01) = 0.3;
+uniform bool smooth_border = false;
 uniform sampler2D color_gradient;
 
 uniform float roughness : hint_range(0.0, 1.0) = 0.85;
@@ -65,21 +67,28 @@ void fragment() {
 	ALBEDO = vec3(color.xyz);
 
 	vec2 pos = vec2(UV.x * aspect_ratio.x, UV.y * aspect_ratio.y);
-	float border = 0.05;
+
+	float blend = 0.0;
 
 	if (pos.x <= border) {
-		ALBEDO = mix(vec3(0.0), ALBEDO, pos.x / border);
+		blend = max(blend, 1.0 - pos.x / border);
 	}
-
+	
 	if (pos.x >= aspect_ratio.x - border) {
-		ALBEDO = mix(vec3(0.0), ALBEDO, 1.0 - (pos.x - (aspect_ratio.x - border)) / border);
+		blend = max(blend, (pos.x - (aspect_ratio.x - border)) / border);
 	}
 
 	if (pos.y <= border) {
-		ALBEDO = mix(vec3(0.0), ALBEDO, pos.y / border);
+		blend = max(blend, 1.0 - pos.y / border);
 	}
-
+	
 	if (pos.y >= aspect_ratio.y - border) {
-		ALBEDO = mix(vec3(0.0), ALBEDO, 1.0 - (pos.y - (aspect_ratio.y - border)) / border);
+		blend = max(blend, (pos.y - (aspect_ratio.y - border)) / border);
+	}
+	
+	if (smooth_border) {
+		ALBEDO = mix(ALBEDO, mix(ALBEDO, edge_color.rgb, edge_color.a), blend * blend);
+	} else if(blend > 0.0) {
+		ALBEDO = mix(ALBEDO, edge_color.rgb, edge_color.a);
 	}
 }
