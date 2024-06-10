@@ -24,7 +24,7 @@ float sphere_weight(int index, vec3 world_pos, float r) {
 }
 
 void vertex() {
-	color = vec3(0.9, 0.9, 0.9);
+	color = vec3(0.7, 0.7, 0.7);
 	aspect_ratio = CUSTOM0.rg;
 
 	if(data_size > 0) {

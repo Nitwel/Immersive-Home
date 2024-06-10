@@ -1,10 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://biu66ihmvmku3"]
+[gd_scene load_steps=11 format=3 uid="uid://biu66ihmvmku3"]
 
 [ext_resource type="Script" path="res://content/system/controller_right/controller_right.gd" id="1_1oh5j"]
 [ext_resource type="PackedScene" uid="uid://dscp8x0ari57n" path="res://content/system/raycast/raycast.tscn" id="1_3p68p"]
 [ext_resource type="PackedScene" uid="uid://ds1t8vc0kxoeo" path="res://addons/godot-xr-tools/hands/model/hand_r.gltf" id="2_kex6u"]
 [ext_resource type="PackedScene" uid="uid://bufelcry36rw1" path="res://addons/xr-autohandtracker/auto_handtracker.tscn" id="3_pjmb2"]
-[ext_resource type="Material" uid="uid://chu0upvkheqlb" path="res://content/system/controller_right/hands_material.tres" id="4_vhkya"]
+[ext_resource type="Shader" path="res://assets/materials/hands.gdshader" id="5_7vibq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58yb"]
 ao_enabled = true
@@ -13,9 +13,19 @@ ao_enabled = true
 material = SubResource("StandardMaterial3D_m58yb")
 size = Vector3(0.01, 0.01, 0.01)
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_66uu0"]
-radius = 0.006
-height = 0.04
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qplu1"]
+render_priority = 1
+shader = ExtResource("5_7vibq")
+shader_parameter/albedo = Color(1, 1, 1, 0.4)
+shader_parameter/fade_offset = 0.0
+shader_parameter/fade_sharpness = 15.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f766y"]
+next_pass = SubResource("ShaderMaterial_qplu1")
+blend_mode = 2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_53j8d"]
+radius = 0.00782707
 
 [node name="XRControllerRight" type="XRController3D"]
 tracker = &"right_hand"
@@ -38,7 +48,7 @@ enableautotracker = false
 [node name="hand_r" parent="." instance=ExtResource("2_kex6u")]
 
 [node name="mesh_Hand_R" parent="hand_r/Armature/Skeleton3D" index="0"]
-material_override = ExtResource("4_vhkya")
+material_override = SubResource("StandardMaterial3D_f766y")
 
 [node name="IndexTip" type="BoneAttachment3D" parent="."]
 transform = Transform3D(0.967526, -0.252326, 0.0150302, 0.0150302, 0.116784, 0.993043, -0.252326, -0.960569, 0.116784, 0.00665802, 0.0427913, -0.169868)
@@ -58,8 +68,9 @@ collision_mask = 4
 monitorable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="IndexTip/TouchArea"]
-transform = Transform3D(1, 0, 0, -1.49012e-08, 1, 0, 0, -7.45058e-09, 1, 0, -0.02, 7.45058e-11)
-shape = SubResource("CapsuleShape3D_66uu0")
+transform = Transform3D(1, 0, 0, -1.49012e-08, 1, 0, 0, -7.45058e-09, 1, 0.000309945, -0.00714676, 1.62485e-09)
+shape = SubResource("SphereShape3D_53j8d")
+disabled = true
 
 [node name="ThumbTip" type="BoneAttachment3D" parent="."]
 transform = Transform3D(0.967042, -0.24582, 0.0663439, 0.0663439, 0.494837, 0.866449, -0.24582, -0.833492, 0.494837, -0.0261569, 0.0891964, -0.0934418)
