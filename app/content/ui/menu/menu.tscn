@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=23 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_8coxu"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_w4i01"]
 [ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="6_7rntr"]
 [ext_resource type="PackedScene" uid="uid://ddpxthb414unp" path="res://content/ui/menu/view/view_menu.tscn" id="8_71pkg"]
+[ext_resource type="PackedScene" uid="uid://djv5mfv25g3et" path="res://content/ui/menu/automate/automate_menu.tscn" id="10_oycpv"]
 [ext_resource type="PackedScene" uid="uid://c01gkeldvjwtr" path="res://content/ui/menu/room/room_menu.tscn" id="10_u4i1x"]
 [ext_resource type="PackedScene" uid="uid://c6r4higceibif" path="res://content/ui/menu/settings/settings_menu.tscn" id="11_7wm6b"]
 [ext_resource type="AudioStream" uid="uid://nmm8y0xt5wyj" path="res://assets/sound/open_menu.wav" id="12_dsnuc"]
@@ -268,15 +269,14 @@ script = ExtResource("6_7rntr")
 tabs = NodePath("../Tabs")
 
 [node name="ViewMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("8_71pkg")]
+visible = false
 
 [node name="EditMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("4_r2raj")]
 visible = false
 
 [node name="RoomMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("10_u4i1x")]
-visible = false
 
-[node name="AutomateMenu" type="Node3D" parent="AnimationContainer/TabsContent"]
-visible = false
+[node name="AutomateMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("10_oycpv")]
 
 [node name="SettingsMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("11_7wm6b")]
 visible = false

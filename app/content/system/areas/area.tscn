@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://drx0fpy7f8xl3"]
+
+[ext_resource type="Script" path="res://content/system/areas/area.gd" id="1_d66b1"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="2_bbykk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_facyw"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3s51v"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="Area" type="StaticBody3D"]
+script = ExtResource("1_d66b1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_facyw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_3s51v")
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("2_bbykk")
+restricted = true

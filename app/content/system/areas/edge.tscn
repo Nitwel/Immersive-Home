@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://di006p8fgiyk3"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_sxjcd"]
+resource_local_to_scene = true
+lightmap_size_hint = Vector2i(4, 9)
+top_radius = 0.01
+bottom_radius = 0.01
+height = 1.0
+radial_segments = 8
+rings = 2
+cap_top = false
+cap_bottom = false
+
+[node name="Edge" type="MeshInstance3D"]
+mesh = SubResource("CylinderMesh_sxjcd")

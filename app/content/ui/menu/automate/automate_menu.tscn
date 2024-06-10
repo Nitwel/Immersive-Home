@@ -1,0 +1,57 @@
+[gd_scene load_steps=8 format=3 uid="uid://djv5mfv25g3et"]
+
+[ext_resource type="Script" path="res://content/ui/menu/automate/automate_menu.gd" id="1_0piv0"]
+[ext_resource type="Script" path="res://content/ui/components/tabs/tabs.gd" id="2_kdpx6"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_701lt"]
+[ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="4_7gwq5"]
+[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="8_cd0o6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2asng"]
+render_priority = -3
+shader = ExtResource("8_cd0o6")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.42, 0.32)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_16sg5"]
+size = Vector2(0.42, 0.32)
+
+[node name="AutomateMenu" type="Node3D"]
+script = ExtResource("1_0piv0")
+
+[node name="Interface" type="Node3D" parent="."]
+
+[node name="Tabs3D" type="Node3D" parent="Interface" node_paths=PackedStringArray("initial_selected")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.04, 0)
+script = ExtResource("2_kdpx6")
+initial_selected = NodePath("Areas")
+gap = 0.01
+
+[node name="Areas" parent="Interface/Tabs3D" instance=ExtResource("3_701lt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0, 0)
+label = "Areas"
+size = Vector3(0.06, 0.04, 0.01)
+
+[node name="TabsContent3D" type="Node3D" parent="Interface" node_paths=PackedStringArray("tabs")]
+script = ExtResource("4_7gwq5")
+tabs = NodePath("../Tabs3D")
+
+[node name="AreasMenu" type="Node3D" parent="Interface/TabsContent3D"]
+
+[node name="Areas" parent="Interface/TabsContent3D/AreasMenu" instance=ExtResource("3_701lt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.29, 0)
+label = "add"
+icon = true
+
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
+material_override = SubResource("ShaderMaterial_2asng")
+mesh = SubResource("QuadMesh_16sg5")
+skeleton = NodePath("../..")
