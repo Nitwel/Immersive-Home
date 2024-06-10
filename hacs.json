@@ -1,0 +1,8 @@
+{
+    "name": "Immersive Home",
+    "content_in_root": false,
+    "zip_release": true,
+    "filename": "Integration.zip",
+    "render_readme": true,
+    "hide_default_branch": true
+}
