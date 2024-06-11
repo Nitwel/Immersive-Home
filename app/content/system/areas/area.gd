@@ -14,11 +14,10 @@ var edges = []
 var corners = []
 var grabbing = null
 var id: int = 0
+var display_name: String = "Area"
 
 @export var size = Vector3(1, 1, 1):
 	set(value):
-		if size == value: return
-
 		size = value
 
 		if is_node_ready() == false:
@@ -30,8 +29,6 @@ var id: int = 0
 
 @export var edit: bool = false:
 	set(value):
-		if edit == value: return
-
 		edit = value
 
 		if is_node_ready() == false:
@@ -44,12 +41,10 @@ var id: int = 0
 			generate_nodes()
 			update_nodes()
 			if Engine.is_editor_hint() == false: add_child(name_input)
-		else:
-			save_to_store()
 
 func _ready():
 	remove_child(name_input)
-	name_input.text = name
+	name_input.text = display_name
 	Update.props(self, ["size", "edit"])
 
 func opposite_corner(corner):
@@ -89,7 +84,7 @@ func save_to_store():
 			"size": size
 		})
 	else:
-		areas[existing].name = name
+		areas[existing].name = display_name
 		areas[existing].position = global_position
 		areas[existing].rotation = global_rotation
 		areas[existing].size = size

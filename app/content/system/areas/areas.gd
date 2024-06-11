@@ -11,6 +11,7 @@ var editing = false:
 
 		for area in get_children():
 			area.edit = value
+			if value == false: area.save_to_store()
 
 		Store.house.save_local()
 
@@ -33,21 +34,21 @@ func load_areas():
 		var area_scene = AreaScene.instantiate()
 		area_scene.id = area.id
 		area_scene.edit = editing
-		area_scene.name = area.name
+		area_scene.display_name = area.name
 		add_child(area_scene)
 		area_scene.global_position = area.position
 		area_scene.global_rotation = area.rotation
 		area_scene.size = area.size
 
 		if HomeApi.has_integration() == false:
-			return
+			continue
 
-		HomeApi.api.integration_handler.create_area.call_deferred(area.id, area.name)
+		HomeApi.api.integration_handler.create_area.call_deferred(area.id, area.display_name)
 
 func create_area(name: String):
 	var area = AreaScene.instantiate()
 	area.id = next_valid_id()
-	area.name = name
+	area.display_name = name
 	area.position = App.camera.global_position + App.camera.global_transform.basis.z * - 1
 	area.size = Vector3(0.5, 0.5, 0.5)
 	area.edit = true
@@ -61,7 +62,7 @@ func create_area(name: String):
 func rename_area(id: int, name: String):
 	for area in get_children():
 		if area is AreaNode&&area.id == id:
-			area.name = name
+			area.display_name = name
 			area.save_to_store()
 			break
 

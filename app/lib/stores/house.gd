@@ -43,6 +43,8 @@ func _init():
 func clear():
 	self.state.rooms = []
 	self.state.entities = []
+	self.state.doors = []
+	self.state.areas = []
 
 func get_room(name):
 	for room in self.state.rooms:
