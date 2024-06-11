@@ -43,7 +43,7 @@ func load_areas():
 		if HomeApi.has_integration() == false:
 			continue
 
-		HomeApi.api.integration_handler.create_area.call_deferred(area.id, area.display_name)
+		HomeApi.api.integration_handler.create_area.call_deferred(area.id, area.name)
 
 func create_area(name: String):
 	var area = AreaScene.instantiate()

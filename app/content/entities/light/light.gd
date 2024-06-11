@@ -1,17 +1,19 @@
 extends Entity
 
 const Entity = preload ("../entity.gd")
+const GlassBulbMaterial = preload ("./glass_bulb.tres")
+const RodBulbMaterial = preload ("./rod_bulb.tres")
 
 @export var color_off = Color(0.23, 0.23, 0.23)
 @export var color_on = Color(1.0, 0.85, 0.0)
 
-@onready var lightbulb = $Lightbulb
 @onready var slider: Slider3D = $Slider
 @onready var color_wheel = $ColorWheel
 @onready var modes: Select3D = $Modes
 @onready var snap_sound = $SnapSound
 @onready var settings = $Settings
 @onready var movable = $Movable
+@onready var light_radiation = $light/LightRadiation
 
 var active = R.state(false)
 var brightness = R.state(0) # 0-255
@@ -130,6 +132,7 @@ func set_state(stateInfo):
 		color_wheel.color = color.value
 
 	var tween = create_tween()
+	tween.set_parallel(true)
 
 	var target_color = color_off
 
@@ -140,7 +143,9 @@ func set_state(stateInfo):
 			target_color = color_off.lerp(color.value if show_color_wheel.value else color_on, brightness.value / 255.0)
 
 	icon_color.value = target_color
-	tween.tween_property(lightbulb, "material_override:albedo_color", target_color, 0.3)
+	tween.tween_property(GlassBulbMaterial, "albedo_color", Color(target_color.r, target_color.g, target_color.b, 0.5), 0.3)
+	tween.tween_property(RodBulbMaterial, "albedo_color", target_color, 0.3)
+	tween.tween_property(light_radiation, "modulate", Color(target_color.r, target_color.g, target_color.b, 1.0 if active.value else 0.0), 0.3)
 
 func _on_click(event):
 	if event.target == self:

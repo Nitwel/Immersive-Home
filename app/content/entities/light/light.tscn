@@ -1,17 +1,33 @@
-[gd_scene load_steps=11 format=3 uid="uid://4smofj8ou0g7"]
+[gd_scene load_steps=16 format=3 uid="uid://4smofj8ou0g7"]
 
 [ext_resource type="Script" path="res://content/entities/light/light.gd" id="1_ykxy3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_4sfxb"]
-[ext_resource type="Material" uid="uid://vce66e7sbc3n" path="res://content/entities/light/light_on.tres" id="5_50gph"]
 [ext_resource type="PackedScene" uid="uid://chrjqr4l7atrc" path="res://content/ui/components/color_wheel/color_wheel.tscn" id="5_qj75k"]
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="6_mhjlm"]
 [ext_resource type="PackedScene" uid="uid://wgnowarejk5y" path="res://content/ui/components/select/select.tscn" id="7_wbegr"]
 [ext_resource type="AudioStream" uid="uid://du7ur0lu28cvn" path="res://assets/sound/finger-snap.mp3" id="8_3togy"]
 [ext_resource type="Script" path="res://content/functions/camera_follower.gd" id="9_a7u7m"]
+[ext_resource type="Material" uid="uid://0ojuvv6njowp" path="res://content/entities/light/glass_bulb.tres" id="10_km446"]
+[ext_resource type="PackedScene" uid="uid://d0wr17viu6o1d" path="res://assets/models/light/light.glb" id="10_r1hbr"]
 [ext_resource type="PackedScene" uid="uid://de34yde00ngkv" path="res://content/entities/light/settings.tscn" id="10_su84f"]
+[ext_resource type="Material" uid="uid://0damlhnr8fs8" path="res://content/entities/light/rod_bulb.tres" id="11_be3ic"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
 radius = 0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0kqsy"]
+albedo_color = Color(0.41598, 0.41598, 0.41598, 1)
+
+[sub_resource type="Gradient" id="Gradient_kd20m"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qnato"]
+gradient = SubResource("Gradient_kd20m")
+width = 512
+height = 512
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 1)
 
 [node name="Light" type="StaticBody3D"]
 collision_mask = 0
@@ -29,30 +45,15 @@ script = ExtResource("9_a7u7m")
 enabled = false
 focus_point = NodePath("../Settings")
 
-[node name="Lightbulb" type="CSGCombiner3D" parent="."]
-transform = Transform3D(1, 9.69949e-05, 0.000589194, -9.77749e-05, 0.999999, 0.00135802, -0.000589065, -0.00135808, 0.999999, 0, 0, 0)
-material_override = ExtResource("5_50gph")
-
-[node name="CSGSphere3D" type="CSGSphere3D" parent="Lightbulb"]
-radius = 0.05
-radial_segments = 36
-rings = 12
-
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Lightbulb"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0485739, 0)
-radius = 0.02
-height = 0.03
-sides = 36
-
 [node name="Slider" parent="." instance=ExtResource("6_mhjlm")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.08, 0, 0)
 max = 100.0
-value = 100.0
+value = 0.0
 step = 1.0
 
 [node name="ColorWheel" parent="." instance=ExtResource("5_qj75k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0, 0)
-color = Color(0, 0.616667, 1, 1)
+color = Color(0, 0, 0, 1)
 size = Vector3(0.15, 0.2, 0.01)
 
 [node name="Modes" parent="." instance=ExtResource("7_wbegr")]
@@ -64,3 +65,25 @@ volume_db = -20.0
 
 [node name="Settings" parent="." instance=ExtResource("10_su84f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29, 0, 0)
+
+[node name="light" parent="." instance=ExtResource("10_r1hbr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03, 0)
+
+[node name="Cylinder" parent="light" index="0"]
+material_override = SubResource("StandardMaterial3D_0kqsy")
+
+[node name="Sphere" parent="light" index="1"]
+sorting_offset = -0.1
+material_override = ExtResource("10_km446")
+
+[node name="Cylinder_001" parent="light" index="2"]
+material_override = ExtResource("11_be3ic")
+
+[node name="LightRadiation" type="Sprite3D" parent="light"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+modulate = Color(1, 1, 0, 1)
+pixel_size = 0.0002
+billboard = 1
+texture = SubResource("GradientTexture2D_qnato")
+
+[editable path="light"]
