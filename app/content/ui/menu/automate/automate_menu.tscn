@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://djv5mfv25g3et"]
+[gd_scene load_steps=9 format=3 uid="uid://djv5mfv25g3et"]
 
 [ext_resource type="Script" path="res://content/ui/menu/automate/automate_menu.gd" id="1_0piv0"]
 [ext_resource type="Script" path="res://content/ui/components/tabs/tabs.gd" id="2_kdpx6"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_701lt"]
 [ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="4_7gwq5"]
+[ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="5_r8hil"]
 [ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="8_cd0o6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2asng"]
@@ -45,10 +46,14 @@ tabs = NodePath("../Tabs3D")
 
 [node name="AreasMenu" type="Node3D" parent="Interface/TabsContent3D"]
 
-[node name="Areas" parent="Interface/TabsContent3D/AreasMenu" instance=ExtResource("3_701lt")]
+[node name="AddButton" parent="Interface/TabsContent3D/AreasMenu" instance=ExtResource("3_701lt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, -0.29, 0)
 label = "add"
 icon = true
+
+[node name="NameInput" parent="Interface/TabsContent3D/AreasMenu" instance=ExtResource("5_r8hil")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, -0.29, 0)
+text = "MyArea"
 
 [node name="Background" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)

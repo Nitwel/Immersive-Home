@@ -153,7 +153,7 @@ func has_integration():
 
 func update_room(room: String):
 	var response = await connection.send_request_packet({
-		"type": "immersive_home/update",
+		"type": "immersive_home/update_room",
 		"device_id": OS.get_unique_id(),
 		"room": room
 	})

@@ -33,6 +33,7 @@ func _init():
 		"align_position2": Vector3(),
 		## Type Area
 		##   id: int
+		##   name: String
 		##   position: Vec3
 		##   rotation: Vec3
 		##   size: Vec3

@@ -4,25 +4,95 @@ extends Node3D
 const CornerScene = preload ("./corner.tscn")
 const EdgeScene = preload ("./edge.tscn")
 
+@onready var area = $Area3D
+@onready var area_collision = $Area3D/CollisionShape3D
+@onready var mesh = $MeshInstance3D
+@onready var collision = $CollisionShape3D
+@onready var name_input = $Input
+
 var edges = []
 var corners = []
 var grabbing = null
+var id: int = 0
 
 @export var size = Vector3(1, 1, 1):
 	set(value):
+		if size == value: return
+
 		size = value
 
 		if is_node_ready() == false:
 			return
 
-		update_nodes()
+		update_area()
+		if edit:
+			update_nodes()
+
+@export var edit: bool = false:
+	set(value):
+		if edit == value: return
+
+		edit = value
+
+		if is_node_ready() == false:
+			return
+
+		clear_nodes()
+		if Engine.is_editor_hint() == false: remove_child(name_input)
+
+		if edit:
+			generate_nodes()
+			update_nodes()
+			if Engine.is_editor_hint() == false: add_child(name_input)
+		else:
+			save_to_store()
 
 func _ready():
-	generate_nodes()
-	update_nodes()
+	remove_child(name_input)
+	name_input.text = name
+	Update.props(self, ["size", "edit"])
 
 func opposite_corner(corner):
 	return corners[7 - corners.find(corner)]
+
+func clear_nodes():
+	for i in range(corners.size()):
+		remove_child(corners[i])
+		corners[i].queue_free()
+
+	for i in range(edges.size()):
+		remove_child(edges[i])
+		edges[i].queue_free()
+
+	corners.clear()
+	edges.clear()
+	mesh.visible = false
+	collision.disabled = true
+
+func save_to_store():
+	if Engine.is_editor_hint():
+		return
+	var areas = Store.house.state.areas
+	var existing = -1
+
+	for i in range(areas.size()):
+		if areas[i].id == id:
+			existing = i
+			break
+
+	if existing == - 1:
+		areas.append({
+			"id": id,
+			"name": name_input.text,
+			"position": global_position,
+			"rotation": global_rotation,
+			"size": size
+		})
+	else:
+		areas[existing].name = name
+		areas[existing].position = global_position
+		areas[existing].rotation = global_rotation
+		areas[existing].size = size
 
 func generate_nodes():
 	for i in range(8):
@@ -42,6 +112,12 @@ func generate_nodes():
 		var edge = EdgeScene.instantiate()
 		add_child(edge)
 		edges.append(edge)
+
+	mesh.visible = true
+	collision.disabled = false
+
+func update_area():
+	area_collision.shape.size = size
 
 func update_nodes():
 	if corners.size() == 0:

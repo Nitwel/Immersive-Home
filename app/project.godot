@@ -72,6 +72,7 @@ theme/custom_font="res://assets/fonts/Montserrat-Medium.ttf"
 3d_physics/layer_3="touch"
 3d_physics/layer_4="physics"
 3d_physics/layer_5="room"
+3d_physics/layer_6="area"
 
 [physics]
 
