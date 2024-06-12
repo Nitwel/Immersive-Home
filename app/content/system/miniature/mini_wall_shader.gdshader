@@ -73,7 +73,7 @@ void fragment() {
 	if (pos.x <= border) {
 		blend = max(blend, 1.0 - pos.x / border);
 	}
-	
+
 	if (pos.x >= aspect_ratio.x - border) {
 		blend = max(blend, (pos.x - (aspect_ratio.x - border)) / border);
 	}
@@ -81,11 +81,11 @@ void fragment() {
 	if (pos.y <= border) {
 		blend = max(blend, 1.0 - pos.y / border);
 	}
-	
+
 	if (pos.y >= aspect_ratio.y - border) {
 		blend = max(blend, (pos.y - (aspect_ratio.y - border)) / border);
 	}
-	
+
 	if (smooth_border) {
 		ALBEDO = mix(ALBEDO, mix(ALBEDO, edge_color.rgb, edge_color.a), blend * blend);
 	} else if(blend > 0.0) {

@@ -5,17 +5,18 @@ func debounce(callback: Callable, delay: int) -> Callable:
 	var timer = Timer.new()
 	timer.one_shot = true
 	timer.autostart = false
-	var args = []
 	add_child(timer)
 
 	timer.timeout.connect(func():
+		var args=timer.get_meta("args")
 		callback.callv(args)
-		args=[]
+		timer.set_meta("args", null)
 	)
 
 	# TODO: Implement variadic arguments when available https://github.com/godotengine/godot/pull/82808
 	var wrapper = func(arg1=null, arg2=null, arg3=null, arg4=null, arg5=null, arg6=null, arg7=null, arg8=null, arg9=null):
-		args = [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9].slice(0, callback.get_argument_count())
+		var args = [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9].slice(0, callback.get_argument_count())
+		timer.set_meta("args", args)
 		timer.stop()
 		timer.start(delay / 1000.0)
 
@@ -40,25 +41,26 @@ func throttle_bouce(callback: Callable, delay: int) -> Callable:
 	var timer = Timer.new()
 	timer.one_shot = true
 	timer.autostart = false
-	var args = null
 	add_child(timer)
 
 	timer.timeout.connect(func():
+		var args=timer.get_meta("args")
 		if args == null:
 			return
 
 		callback.callv(args)
-		args=null
+		timer.set_meta("args", null)
 	)
 
 	# TODO: Implement variadic arguments when available https://github.com/godotengine/godot/pull/82808
 	var wrapper = func(arg1=null, arg2=null, arg3=null, arg4=null, arg5=null, arg6=null, arg7=null, arg8=null, arg9=null):
-		args = [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9].slice(0, callback.get_argument_count())
+		var args = [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9].slice(0, callback.get_argument_count())
+		timer.set_meta("args", args)
 		
 		if timer.is_stopped():
 			callback.callv(args)
 			timer.start(delay / 1000.0)
-			args = null
+			timer.set_meta("args", null)
 
 	return wrapper
 

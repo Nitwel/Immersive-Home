@@ -48,7 +48,6 @@ focus_point = NodePath("../Settings")
 [node name="Slider" parent="." instance=ExtResource("6_mhjlm")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.08, 0, 0)
 max = 100.0
-value = 0.0
 step = 1.0
 
 [node name="ColorWheel" parent="." instance=ExtResource("5_qj75k")]
