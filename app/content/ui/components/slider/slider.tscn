@@ -51,9 +51,6 @@ size = Vector3(0.15, 0.02, 0.01)
 
 [node name="Slider" type="Node3D"]
 script = ExtResource("1_ylune")
-max = 0.0
-value = 0.0
-step = 0.0
 show_label = true
 size = Vector3(0.15, 0.02, 0.01)
 
@@ -75,13 +72,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0, 0.01)
 pixel_size = 0.001
 render_priority = 30
 outline_render_priority = 29
-text = "-0 "
+text = "0.2 "
 font_size = 10
 outline_size = 4
 horizontal_alignment = 0
 
 [node name="Knob" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, nan, 0, 0.012)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.065, 0, 0.012)
 material_override = SubResource("ShaderMaterial_mv0la")
 mesh = SubResource("QuadMesh_vw14o")
 skeleton = NodePath("../Body")

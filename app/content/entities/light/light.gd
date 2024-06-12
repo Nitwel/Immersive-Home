@@ -147,6 +147,10 @@ func set_state(stateInfo):
 	tween.tween_property(RodBulbMaterial, "albedo_color", target_color, 0.3)
 	tween.tween_property(light_radiation, "modulate", Color(target_color.r, target_color.g, target_color.b, 1.0 if active.value else 0.0), 0.3)
 
+func _on_touch_leave(_event):
+	snap_sound.play()
+	_toggle()
+
 func _on_click(event):
 	if event.target == self:
 		snap_sound.play()

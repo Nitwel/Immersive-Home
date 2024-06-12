@@ -31,7 +31,7 @@ directional_shadow_blend_splits = true
 directional_shadow_max_distance = 5.0
 
 [node name="StartXR" parent="." instance=ExtResource("1_i4c04")]
-render_target_size_multiplier = 1.5
+render_target_size_multiplier = 1.3
 enable_passthrough = true
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]

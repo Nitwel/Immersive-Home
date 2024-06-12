@@ -85,4 +85,11 @@ pixel_size = 0.0002
 billboard = 1
 texture = SubResource("GradientTexture2D_qnato")
 
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_ukj14")
+
 [editable path="light"]
