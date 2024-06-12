@@ -59,7 +59,7 @@ func _setup_hand():
 		hand_active=active&&_is_hand_simulated() == false
 
 		$IndexTip/TouchArea/CollisionShape3D.disabled=!hand_active
-		hand_mesh.visible=active
+		hand_mesh.visible=hand_active
 	)
 
 func _physics_process(_delta):
