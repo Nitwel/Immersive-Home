@@ -10,7 +10,7 @@ signal on_packed_received(packet: Dictionary)
 
 signal _try_connect(success: bool)
 
-const LOG_SENDING := true
+const LOG_SENDING := false
 const LOG_RECEIVING := false
 
 var socket := WebSocketPeer.new()

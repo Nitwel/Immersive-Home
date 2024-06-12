@@ -5,7 +5,6 @@ var integration_exists: bool = false
 
 func _init(hass: HASS_API):
 	self.api = hass
-	test_integration.call_deferred()
 
 func test_integration():
 	var response = await api.connection.send_request_packet({

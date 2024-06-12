@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://xsiy71rsqulj"]
 
 [ext_resource type="Script" path="res://content/entities/sensor/sensor.gd" id="1_57ac8"]
-[ext_resource type="FontFile" uid="uid://drsixxc4tmvjf" path="res://assets/fonts/Montserrat-Medium.ttf" id="2_3sfs5"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_fpq5q"]
+[ext_resource type="FontFile" uid="uid://cs508knjj1lnw" path="res://assets/fonts/Raleway-Medium.ttf" id="2_xk6mp"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_bmtkc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_phuot"]
@@ -21,7 +21,7 @@ transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 pixel_size = 0.001
 text = "some text
 "
-font = ExtResource("2_3sfs5")
+font = ExtResource("2_xk6mp")
 font_size = 80
 outline_size = 0
 

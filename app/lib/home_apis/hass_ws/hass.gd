@@ -36,6 +36,8 @@ func _init(url: String, token: String):
 	assist_handler = AssistHandler.new(self)
 	history_handler = HistoryHandler.new(self)
 
+	await integration_handler.test_integration()
+
 	start_subscriptions()
 
 	devices_template = devices_template.replace("\n", " ").replace("\t", "").replace("\r", " ")

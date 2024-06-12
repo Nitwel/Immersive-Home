@@ -19,6 +19,10 @@ func _ready():
 	Store.house.on_loaded.connect(func():
 		load_areas()
 	)
+
+	HomeApi.on_connect.connect(func():
+		sync_areas()
+	)
 	
 func load_areas():
 	var areas = Store.house.state.areas
@@ -27,9 +31,7 @@ func load_areas():
 	for child in get_children():
 		remove_child(child)
 		child.queue_free()
-
-	print("Loading areas: ", areas)
-
+		
 	for area in areas:
 		var area_scene = AreaScene.instantiate()
 		area_scene.id = area.id
@@ -40,10 +42,13 @@ func load_areas():
 		area_scene.global_rotation = area.rotation
 		area_scene.size = area.size
 
-		if HomeApi.has_integration() == false:
-			continue
+func sync_areas():
+	if HomeApi.has_integration() == false:
+		print("No integration found")
+		return
 
-		HomeApi.api.integration_handler.create_area.call_deferred(area.id, area.name)
+	for area in get_children():
+		HomeApi.api.integration_handler.create_area.call_deferred(area.id, area.display_name)
 
 func create_area(name: String):
 	var area = AreaScene.instantiate()
