@@ -5,6 +5,10 @@ class_name ColorPicker3D
 
 signal on_color_changed(color: Color)
 
+var throttled_color_changed = ProcessTools.throttle_bouce(func(color: Color):
+	on_color_changed.emit(color)
+, 500)
+
 @onready var puck = $Puck
 @onready var touch_area = $TouchArea
 @onready var touch_area_collision = $TouchArea/CollisionShape3D
@@ -16,7 +20,7 @@ var move_plane: Plane
 @export var color: Color = Color(1, 1, 1, 1):
 	set(value):
 		if color != value:
-			on_color_changed.emit(value)
+			throttled_color_changed.call(value)
 
 		color = value
 

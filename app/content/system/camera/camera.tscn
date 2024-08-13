@@ -1,9 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://b2kjh1fpjptdr"]
+[gd_scene load_steps=3 format=3 uid="uid://b2kjh1fpjptdr"]
 
 [ext_resource type="Script" path="res://content/system/camera/camera.gd" id="1_gapgs"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_wsvuf"]
+radius = 0.05
 
 [node name="XRCamera3D" type="XRCamera3D"]
 transform = Transform3D(0.999999, 0.00106283, -0.000420545, -0.00106267, 0.999999, 0.000379457, 0.000420948, -0.000378989, 1, 0.0356617, 0.71033, 0.00564247)
 cull_mask = 524287
 current = true
 script = ExtResource("1_gapgs")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 32
+collision_mask = 32
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_wsvuf")

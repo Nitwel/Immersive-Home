@@ -1,7 +1,7 @@
 extends RayCast3D
 
-const Pointer = preload ("res://lib/utils/pointer/pointer.gd")
-const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
+const Pointer = preload("res://lib/utils/pointer/pointer.gd")
+const Initiator = preload("res://lib/utils/pointer/initiator.gd")
 
 @onready var cursor: Node3D = $Cursor
 @onready var default_cursor: Sprite3D = $Cursor/DefaultCursor
@@ -53,10 +53,10 @@ func _ready():
 	)
 
 	R.effect(func(_arg):
-		var style=Store.settings.state.cursor_style
+		var style = Store.settings.state.cursor_style
 
-		default_cursor.visible=style == 0
-		retro_cursor.visible=style == 1
+		default_cursor.visible = style == 0
+		retro_cursor.visible = style == 1
 	)
 
 func _physics_process(_delta):
@@ -70,7 +70,7 @@ func _process(delta):
 func _handle_grid():
 	var collider = wall_collider.get_collider()
 
-	if collider == null:
+	if collider == null || wall_collider.get_collision_normal() == Vector3.ZERO:
 		grid.visible = false
 
 	grid.visible = with_grid

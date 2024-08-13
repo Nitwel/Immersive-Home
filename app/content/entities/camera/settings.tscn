@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="4_t8xp5"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_opf0y"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ikxbe"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g5kcg"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("2_wwobq")
@@ -22,7 +22,7 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_qfg01"]
+[sub_resource type="QuadMesh" id="QuadMesh_5ds4q"]
 size = Vector2(0.3, 0.2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ctomk"]
@@ -34,8 +34,8 @@ collision_mask = 0
 script = ExtResource("1_1ixy6")
 
 [node name="Panel" parent="." instance=ExtResource("1_myvk1")]
-material_override = SubResource("ShaderMaterial_ikxbe")
-mesh = SubResource("QuadMesh_qfg01")
+material_override = SubResource("ShaderMaterial_g5kcg")
+mesh = SubResource("QuadMesh_5ds4q")
 skeleton = NodePath("../..")
 size = Vector2(0.3, 0.2)
 
@@ -95,13 +95,13 @@ outline_size = 0
 horizontal_alignment = 0
 
 [node name="FPSSlider" parent="." instance=ExtResource("4_t8xp5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.05, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, -0.08, 0)
 min = 1.0
 max = 30.0
-value = 1.0
+value = 10.0
 step = 1.0
 label_unit = "FPS"
-size = Vector3(0.11, 0.02, 0.01)
+size = Vector3(0.2, 0.02, 0.01)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.01)

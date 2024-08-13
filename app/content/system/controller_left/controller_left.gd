@@ -128,7 +128,7 @@ func _setup_hand():
 		hand_active=active&&_is_hand_simulated() == false
 			
 		$IndexTip/TouchArea/CollisionShape3D.disabled=!hand_active
-		hand_mesh.visible=active
+		hand_mesh.visible=hand_active
 	)
 
 	mini_view_button.on_button_up.connect(func():
