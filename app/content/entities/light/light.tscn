@@ -48,6 +48,7 @@ focus_point = NodePath("../Settings")
 [node name="Slider" parent="." instance=ExtResource("6_mhjlm")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.08, 0, 0)
 max = 100.0
+value = 0.0
 step = 1.0
 
 [node name="ColorWheel" parent="." instance=ExtResource("5_qj75k")]
@@ -85,11 +86,11 @@ pixel_size = 0.0002
 billboard = 1
 texture = SubResource("GradientTexture2D_qnato")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="TouchArea" type="Area3D" parent="."]
 collision_layer = 4
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TouchArea"]
 shape = SubResource("SphereShape3D_ukj14")
 
 [editable path="light"]
