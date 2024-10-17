@@ -16,7 +16,7 @@ icon = true
 size = Vector3(0.03, 0.03, 0.01)
 
 [node name="LabelContainer" parent="." instance=ExtResource("3_vva3t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0615, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.059, 0, 0)
 text = "Button"
 font_size = 12
-size = Vector3(0.043, 0.015, 0.1)
+size = Vector3(0.038, 0.015, 0.1)

@@ -36,6 +36,8 @@ func _init(url: String, token: String):
 	assist_handler = AssistHandler.new(self)
 	history_handler = HistoryHandler.new(self)
 
+	await integration_handler.test_integration()
+
 	start_subscriptions()
 
 	devices_template = devices_template.replace("\n", " ").replace("\t", "").replace("\r", " ")
@@ -153,7 +155,7 @@ func has_integration():
 
 func update_room(room: String):
 	var response = await connection.send_request_packet({
-		"type": "immersive_home/update",
+		"type": "immersive_home/update_room",
 		"device_id": OS.get_unique_id(),
 		"room": room
 	})

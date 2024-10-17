@@ -12,6 +12,7 @@ const NumberEntity = preload ("res://content/entities/number/number.tscn")
 const LineGraphEntity = preload ("res://content/entities/line_chart/line_chart.tscn")
 const TimerEntity = preload ("res://content/entities/timer/timer.tscn")
 const WeatherEntity = preload ("res://content/entities/weather/weather.tscn")
+const BinarySensorEntity = preload ("res://content/entities/binary_sensor/binary_sensor.tscn")
 
 static func create_entity(id: String, type=null):
 	var entity = null
@@ -40,6 +41,8 @@ static func create_entity(id: String, type=null):
 			entity = TimerEntity.instantiate()
 		"weather":
 			entity = WeatherEntity.instantiate()
+		"binary_sensor":
+			entity = BinarySensorEntity.instantiate()
 		_:
 			return null
 			
@@ -53,6 +56,8 @@ static func get_entity_icon(type: String) -> String:
 		"light":
 			return "lightbulb"
 		"sensor":
+			return "sensors"
+		"binary_sensor":
 			return "sensors"
 		"media_player":
 			return "play_circle"

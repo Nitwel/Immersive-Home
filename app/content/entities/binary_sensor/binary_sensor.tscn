@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://bdnxxqng3s6l"]
+
+[ext_resource type="Script" path="res://content/entities/binary_sensor/binary_sensor.gd" id="1_ac2fh"]
+[ext_resource type="FontFile" uid="uid://cs508knjj1lnw" path="res://assets/fonts/Raleway-Medium.ttf" id="2_dqk35"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="3_mxubb"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="3_pen57"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mjnxo"]
+resource_local_to_scene = true
+size = Vector3(0.18, 0.03, 0.02)
+
+[node name="BinarySensor" type="StaticBody3D"]
+script = ExtResource("1_ac2fh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_mjnxo")
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0.02, 0)
+pixel_size = 0.001
+text = "some text
+"
+font = ExtResource("2_dqk35")
+font_size = 80
+outline_size = 0
+
+[node name="State" type="Label3D" parent="."]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, -0.02, 0)
+pixel_size = 0.001
+text = "check_box"
+font = ExtResource("3_pen57")
+font_size = 80
+outline_size = 0
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("3_mxubb")
+resizable = true

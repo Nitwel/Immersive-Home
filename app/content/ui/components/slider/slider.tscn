@@ -78,7 +78,7 @@ outline_size = 4
 horizontal_alignment = 0
 
 [node name="Knob" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.039, 0, 0.012)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.065, 0, 0.012)
 material_override = SubResource("ShaderMaterial_mv0la")
 mesh = SubResource("QuadMesh_vw14o")
 skeleton = NodePath("../Body")

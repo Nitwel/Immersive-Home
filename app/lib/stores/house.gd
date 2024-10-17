@@ -30,12 +30,21 @@ func _init():
 		##   room2_position2: Vec3
 		"doors": [],
 		"align_position1": Vector3(),
-		"align_position2": Vector3()
+		"align_position2": Vector3(),
+		## Type Area
+		##   id: int
+		##   name: String
+		##   position: Vec3
+		##   rotation: Vec3
+		##   size: Vec3
+		"areas": []
 	})
 
 func clear():
 	self.state.rooms = []
 	self.state.entities = []
+	self.state.doors = []
+	self.state.areas = []
 
 func get_room(name):
 	for room in self.state.rooms:

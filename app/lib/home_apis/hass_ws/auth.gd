@@ -1,7 +1,6 @@
 extends Node
 
 const Connection = preload ("connection.gd")
-const TimedSignal = preload ("res://lib/utils/timed_signal.gd")
 
 signal on_authenticated()
 signal _try_auth(success: bool)
@@ -25,7 +24,7 @@ func authenticate(token: String=self.token) -> AuthError:
 	self.token = token
 	connection.on_packed_received.connect(_handle_message)
 
-	var error = await TimedSignal.timed_signal(self, _try_auth, 10.0)
+	var error = await ProcessTools.timed_signal(_try_auth, 10.0)
 
 	if error == Error.ERR_TIMEOUT:
 		return AuthError.TIMEOUT

@@ -6,6 +6,7 @@ const Menu = preload ("res://content/ui/menu/menu.gd")
 const Miniature = preload ("res://content/system/miniature/miniature.gd")
 const ControllerLeft = preload ("res://content/system/controller_left/controller_left.gd")
 const ControllerRight = preload ("res://content/system/controller_right/controller_right.gd")
+const Areas = preload ("res://content/system/areas/areas.gd")
 
 @onready var main: Main = get_node_or_null("/root/Main")
 @onready var house: House = get_node_or_null("/root/Main/House")
@@ -14,3 +15,4 @@ const ControllerRight = preload ("res://content/system/controller_right/controll
 @onready var miniature: Miniature = get_node_or_null("/root/Main/Miniature")
 @onready var controller_left: ControllerLeft = get_node_or_null("/root/Main/XROrigin3D/XRControllerLeft")
 @onready var controller_right: ControllerRight = get_node_or_null("/root/Main/XROrigin3D/XRControllerRight")
+@onready var areas: Areas = get_node_or_null("/root/Main/Areas")

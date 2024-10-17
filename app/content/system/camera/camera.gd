@@ -1,6 +1,21 @@
 extends XRCamera3D
 
+@onready var area = $Area3D
+
 var last_room = null
+
+func _ready():
+	area.area_entered.connect(func(area: Area3D):
+		if HomeApi.has_integration() == false:
+			return
+		HomeApi.api.integration_handler.set_area_state(area.get_parent().id, true)
+	)
+
+	area.area_exited.connect(func(area: Area3D):
+		if HomeApi.has_integration() == false:
+			return
+		HomeApi.api.integration_handler.set_area_state(area.get_parent().id, false)
+	)
 
 func _physics_process(_delta):
 	if HomeApi.has_integration():

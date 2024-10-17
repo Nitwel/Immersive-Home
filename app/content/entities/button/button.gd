@@ -11,9 +11,6 @@ func _ready():
 
 	var stateInfo = await HomeApi.get_state(entity_id)
 
-	if stateInfo == null:
-		return
-
 	set_state(stateInfo)
 
 	await HomeApi.watch_state(entity_id, func(new_state):
@@ -25,6 +22,9 @@ func _ready():
 	)
 
 func set_state(state):
+	if state == null:
+		return
+
 	if state.attributes.has("friendly_name"):
 		var name = state.attributes["friendly_name"]
 

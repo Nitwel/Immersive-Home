@@ -28,6 +28,7 @@ Store="*res://lib/globals/main_store.gd"
 EventSystem="*res://lib/globals/event_system.gd"
 Request="*res://lib/globals/request.gd"
 TouchManager="*res://lib/utils/touch/touch.gd"
+ProcessTools="*res://lib/globals/process_tools.gd"
 
 [debug_draw_3d]
 
@@ -52,6 +53,7 @@ folder_colors={
 
 [filesystem]
 
+import/blender/enabled=false
 import/fbx/enabled=false
 
 [global_group]
@@ -71,18 +73,24 @@ theme/custom_font="res://assets/fonts/Montserrat-Medium.ttf"
 3d_physics/layer_3="touch"
 3d_physics/layer_4="physics"
 3d_physics/layer_5="room"
+3d_physics/layer_6="area"
 
 [physics]
 
-common/physics_ticks_per_second=30
+3d/run_on_separate_thread=true
+common/physics_ticks_per_second=80
+common/physics_jitter_fix=0.0
+common/physics_interpolation=true
 
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
+lights_and_shadows/directional_shadow/size.mobile=4096
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality.mobile=2
 environment/ssao/quality=0
-anti_aliasing/quality/msaa_3d=2
+anti_aliasing/quality/msaa_3d=1
 viewport/transparent_background=true
 
 [xr]

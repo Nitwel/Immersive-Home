@@ -2,7 +2,6 @@ extends Node
 
 const HASS_API = preload ("hass.gd")
 const Auth = preload ("./auth.gd")
-const TimedSignal = preload ("res://lib/utils/timed_signal.gd")
 
 signal on_connect()
 signal on_disconnect()
@@ -11,7 +10,8 @@ signal on_packed_received(packet: Dictionary)
 
 signal _try_connect(success: bool)
 
-const LOG_MESSAGES := false
+const LOG_SENDING := false
+const LOG_RECEIVING := false
 
 var socket := WebSocketPeer.new()
 var packet_callbacks := CallbackMap.new()
@@ -64,7 +64,7 @@ func start(url: String, token: String) -> ConnectionError:
 
 	set_process(true)
 
-	error = await TimedSignal.timed_signal(self, _try_connect, connection_timeout)
+	error = await ProcessTools.timed_signal(_try_connect, connection_timeout)
 
 	if error == Error.ERR_TIMEOUT:
 		print("Failed to connect to %s: Exceeded %ss" % [url, connection_timeout])
@@ -113,7 +113,7 @@ func _process(_delta):
 		on_disconnect.emit()
 
 func handle_packet(packet: Dictionary):
-	if LOG_MESSAGES: print("Received packet: %s" % str(packet).substr(0, 1000))
+	if LOG_RECEIVING: print("Received packet: %s" % str(packet).substr(0, 1000))
 
 	on_packed_received.emit(packet)
 
@@ -169,7 +169,7 @@ func send_request_packet(packet: Dictionary, ignore_initial:=false):
 	return await promise.settled
 
 func send_raw(packet: PackedByteArray):
-	if LOG_MESSAGES: print("Sending binary: %s" % packet.hex_encode())
+	if LOG_SENDING: print("Sending binary: %s" % packet.hex_encode())
 	socket.send(packet)
 
 func send_packet(packet: Dictionary, with_id:=false):
@@ -177,7 +177,7 @@ func send_packet(packet: Dictionary, with_id:=false):
 		packet.id = id
 		id += 1
 
-	if LOG_MESSAGES: print("Sending packet: %s" % _encode_packet(packet))
+	if LOG_SENDING: print("Sending packet: %s" % _encode_packet(packet))
 	socket.send_text(_encode_packet(packet))
 
 func _decode_packet(packet: PackedByteArray):

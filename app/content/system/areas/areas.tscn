@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://beafp6nhhcxaf"]
+
+[ext_resource type="Script" path="res://content/system/areas/areas.gd" id="1_w8efb"]
+
+[node name="Areas" type="Node3D"]
+script = ExtResource("1_w8efb")
