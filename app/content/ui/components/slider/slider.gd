@@ -20,12 +20,13 @@ class_name Slider3D
 			
 @export var value: float = 0.2:
 	set(new_value):
+		var old_value = value
 		value = roundi(clamp(new_value, min, max) / step) * step
 
 		if !is_inside_tree(): return
 
 		label.text = str(value) + " " + label_unit
-		if new_value != value: on_value_changed.emit(value)
+		if value != old_value: on_value_changed.emit(value)
 		_update_slider()
 
 @export var step: float = 0.01
