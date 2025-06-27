@@ -30,32 +30,40 @@ func add():
 	var next_index = 0
 	for i in range(doors.size()):
 		next_index = max(next_index, doors[i].id)
-	edit(next_index + 1)
+	edit_door(next_index + 1, true)
 
 	return next_index + 1
 
-func delete(door):
+func delete_door(door):
 	Store.house.state.doors = Store.house.state.doors.filter(func(d): return d.id != door)
+	App.house.update_house()
 	Store.house.save_local()
-
 	App.controller_left.show_grid = false
 	App.controller_right.show_grid = false
 
-func edit(door):
+func delete_all_doors():
+	Store.house.state.doors = [ ]
+	App.house.update_house()
+	Store.house.save_local()
+	App.controller_left.show_grid = false
+	App.controller_right.show_grid = false
+
+func edit_door(door, bnewdoor):
 	var doors = Store.house.state.doors
 	editing_door = door
 
 	var existing_door = null
-
 	for i in range(doors.size()):
 		if doors[i].id == door:
 			existing_door = doors[i]
 			break
 
+
 	App.controller_left.show_grid = true
 	App.controller_right.show_grid = true
 
 	if existing_door != null:
+		assert (not bnewdoor)
 		room1 = App.house.find_room(existing_door.room1)
 		room2 = App.house.find_room(existing_door.room2)
 
@@ -84,17 +92,20 @@ func edit(door):
 				room.get_node("WallCollision/Clickable").on_click.connect(_add_corner.bind(room))
 			else:
 				room.get_node("WallCollision/Clickable").on_click.disconnect(_add_corner.bind(room))
+	elif not bnewdoor:
+		printerr("Door not found: ", door)
 
 	for room in App.house.get_rooms():
 		if door != null:
 			room.get_node("WallCollision/Clickable").on_click.connect(_add_corner.bind(room))
 		else:
+			printerr("unexpected null door case?")
 			room.get_node("WallCollision/Clickable").on_click.disconnect(_add_corner.bind(room))
 
 func discard():
 	_clear()
 
-func save():
+func save_door():
 	var doors = Store.house.state.doors
 
 	if is_valid() == false:
@@ -103,7 +114,6 @@ func save():
 
 	var existing_door_index = -1
 	for i in range(doors.size()):
-
 		if doors[i].id == editing_door:
 			existing_door_index = i
 			break
@@ -118,7 +128,7 @@ func save():
 		"room2_position2": room2_corner2.global_position
 	}
 
-	if existing_door_index == - 1:
+	if existing_door_index == -1:
 		doors.append(door)
 	else:
 		doors[existing_door_index] = door
@@ -137,8 +147,8 @@ func _clear():
 	room1 = null
 	room2 = null
 
-	App.controller_left.show_grid = true
-	App.controller_right.show_grid = true
+	App.controller_left.show_grid = false
+	App.controller_right.show_grid = false
 
 	if room1_corner1 != null:
 		remove_child(room1_corner1)

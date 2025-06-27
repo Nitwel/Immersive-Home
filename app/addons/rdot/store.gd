@@ -15,6 +15,8 @@ func _init(initial_value: Dictionary={}):
 	)
 
 func _get(property):
+	if not _proxied_value.has(property):
+		return null
 	_access_property(property)
 
 	if _proxied_value[property] is RdotStore:

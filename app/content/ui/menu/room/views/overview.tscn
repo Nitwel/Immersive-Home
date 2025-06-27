@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://dd71loi64gnmp"]
 
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_fteh8"]
-[ext_resource type="Script" path="res://content/ui/menu/room/views/overview.gd" id="1_jesad"]
-[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_2yl2s"]
+[ext_resource type="Script" uid="uid://b0nicmus72wmj" path="res://content/ui/menu/room/views/overview.gd" id="1_jesad"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="3_2yl2s"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n3lbn"]
 render_priority = -3
@@ -24,18 +24,15 @@ size = Vector2(0.42, 0.32)
 [node name="Overview" type="Node3D"]
 script = ExtResource("1_jesad")
 
-[node name="EditButton" parent="." instance=ExtResource("1_fteh8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.12, 0)
-label = "edit"
-icon = true
-
-[node name="FixButton" parent="." instance=ExtResource("1_fteh8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, -0.12, 0)
-label = "healing"
-icon = true
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
+visible = false
+material_override = SubResource("ShaderMaterial_n3lbn")
+mesh = SubResource("QuadMesh_l1dos")
+skeleton = NodePath("../..")
 
 [node name="Label3D" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.08, 0.01)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0210605, -0.0862666, 0.0120744)
 pixel_size = 0.001
 render_priority = 15
 outline_render_priority = 14
@@ -44,9 +41,84 @@ font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
-[node name="Background" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
-visible = false
-material_override = SubResource("ShaderMaterial_n3lbn")
-mesh = SubResource("QuadMesh_l1dos")
-skeleton = NodePath("../..")
+[node name="WallsButton" parent="." instance=ExtResource("1_fteh8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.12, 0)
+label = "view_in_ar"
+icon = true
+toggleable = true
+
+[node name="Label3Dshow" type="Label3D" parent="WallsButton"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Show"
+font_size = 15
+outline_size = 0
+
+[node name="MoveAlignment" parent="." instance=ExtResource("1_fteh8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.11, -0.12, 0)
+label = "remove_done"
+icon = true
+disabled = true
+
+[node name="Label3DMove" type="Label3D" parent="MoveAlignment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Move"
+font_size = 15
+outline_size = 0
+
+[node name="ApplyAlignment" parent="." instance=ExtResource("1_fteh8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, -0.12, 0)
+label = "copy_all"
+icon = true
+disabled = true
+
+[node name="Label3DApply" type="Label3D" parent="ApplyAlignment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.04, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Apply"
+font_size = 15
+outline_size = 0
+
+[node name="BringClose" parent="." instance=ExtResource("1_fteh8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.248404, -0.12, 0)
+label = "subdirectory_arrow_left"
+icon = true
+disabled = true
+
+[node name="Label3DApply2" type="Label3D" parent="BringClose"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00305301, -0.047329, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Bring
+close"
+font_size = 15
+outline_size = 0
+
+[node name="RescanSpatial" parent="." instance=ExtResource("1_fteh8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.200143, 0)
+label = "view_in_ar"
+icon = true
+
+[node name="Label3D" type="Label3D" parent="RescanSpatial"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0470085, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Rescan
+Spatial"
+font_size = 15
+outline_size = 0
+
+[connection signal="on_toggled" from="WallsButton" to="." method="_on_walls_button_on_toggled"]
+[connection signal="on_button_down" from="MoveAlignment" to="." method="_on_move_alignment_on_button_down"]
+[connection signal="on_button_down" from="ApplyAlignment" to="." method="_on_apply_alignment_on_button_down"]
+[connection signal="on_button_down" from="BringClose" to="." method="_on_bring_close_on_button_down"]
+[connection signal="on_button_down" from="RescanSpatial" to="." method="_on_rescan_spatial_on_button_down"]

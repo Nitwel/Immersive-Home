@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b4n5e666v0gye"]
+
+[resource]
+transparency = 1
+blend_mode = 1
+no_depth_test = true
+albedo_color = Color(0.658824, 0, 0.65098, 0.568627)
+emission_enabled = true
+emission = Color(0.839207, 3.85046e-07, 0.417799, 1)
+rim_enabled = true
+rim_tint = 1.0

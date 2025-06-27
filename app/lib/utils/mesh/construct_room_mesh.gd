@@ -87,7 +87,7 @@ static func generate_wall_mesh_with_doors(corners, height, doors):
 			edges.append(k)
 			edges.append((k + 1) % points.size())
 
-		var cdt: ConstrainedTriangulation = ConstrainedTriangulation.new()
+		var cdt = CDTreplace.new()
 		cdt.init(true, true, 0.1)
 
 		cdt.insert_vertices(points)
@@ -124,7 +124,7 @@ static func generate_ceiling_mesh(corners):
 		edges.append(i)
 		edges.append((i + 1) % corners.size())
 
-	var cdt: ConstrainedTriangulation = ConstrainedTriangulation.new()
+	var cdt = CDTreplace.new()
 
 	cdt.init(true, true, 0.1)
 
@@ -213,13 +213,13 @@ static func generate_wall_mesh_with_doors_grid(corners, height, doors, grid:=0.2
 		# Subdivide inner polygon to grid
 		var steps = ceil(Vector2(corner.distance_to(next_corner) / grid, height / grid))
 
-		for y in range(1, steps.y):
-			for x in range(1, steps.x):
-				var point = Vector2(x * grid, y * grid)
+		if ClassDB.can_instantiate("ConstrainedTriangulation"):
+			for y in range(1, steps.y):
+				for x in range(1, steps.x):
+					var point = Vector2(x * grid, y * grid)
+					points.append(point)
 
-				points.append(point)
-
-		var cdt: ConstrainedTriangulation = ConstrainedTriangulation.new()
+		var cdt = CDTreplace.new()
 		cdt.init(true, true, 0.001)
 
 		cdt.insert_vertices(points)
@@ -315,54 +315,55 @@ static func generate_ceiling_mesh_grid(corners, grid: Vector2=Vector2(0.2, 0.2))
 	var size = max_val - min_val
 
 	# Subdivide edges to grid
-	for i in range(corners.size()):
-		var corner = corners[i]
-		var next_index = (i + 1) % corners.size()
-		var next_corner = corners[next_index]
-
-		var steps = ceil(Vector2((next_corner - corner).length() / grid.x, size.y / grid.y))
-
-		var forward_dir = (next_corner - corner).normalized() * grid.x
-
-		for x in range(1, steps.x):
-			var point = corner + forward_dir * x
-
-			points.append(Vector2(point.x, point.y))
-
-	## Fill points insde the polygon
-	for y in range(1, int(size.y / grid.y)):
-		var x_intersections: Array[float] = []
-
-		var y_start = Vector2(min_val.x, min_val.y + y * grid.y)
-		var y_end = Vector2(max_val.x, min_val.y + y * grid.y)
-
+	if ClassDB.can_instantiate("ConstraintTriangulation"):
 		for i in range(corners.size()):
-			var a = corners[i]
-			var b = corners[(i + 1) % corners.size()]
+			var corner = corners[i]
+			var next_index = (i + 1) % corners.size()
+			var next_corner = corners[next_index]
 
-			var result = Geometry2D.segment_intersects_segment(a, b, y_start, y_end)
+			var steps = ceil(Vector2((next_corner - corner).length() / grid.x, size.y / grid.y))
 
-			if result != null:
-				x_intersections.append(result.x)
+			var forward_dir = (next_corner - corner).normalized() * grid.x
 
-		var intersection_counter = 0
+			for x in range(1, steps.x):
+				var point = corner + forward_dir * x
 
-		x_intersections.sort()
+				points.append(Vector2(point.x, point.y))
 
-		for x in range(1, int(size.x / grid.x)):
-			var point = min_val + Vector2(x * grid.x, y * grid.y)
+		## Fill points insde the polygon
+		for y in range(1, int(size.y / grid.y)):
+			var x_intersections: Array[float] = []
 
-			for i in range(intersection_counter, x_intersections.size()):
-				if x_intersections[i] < point.x:
-					intersection_counter += 1
+			var y_start = Vector2(min_val.x, min_val.y + y * grid.y)
+			var y_end = Vector2(max_val.x, min_val.y + y * grid.y)
 
-			var color = Color(1, 1, 0)
+			for i in range(corners.size()):
+				var a = corners[i]
+				var b = corners[(i + 1) % corners.size()]
 
-			if intersection_counter % 2 == 1:
-				color = Color(1, 0, 1)
-				points.append(point)
+				var result = Geometry2D.segment_intersects_segment(a, b, y_start, y_end)
 
-	var cdt: ConstrainedTriangulation = ConstrainedTriangulation.new()
+				if result != null:
+					x_intersections.append(result.x)
+
+			var intersection_counter = 0
+
+			x_intersections.sort()
+
+			for x in range(1, int(size.x / grid.x)):
+				var point = min_val + Vector2(x * grid.x, y * grid.y)
+
+				for i in range(intersection_counter, x_intersections.size()):
+					if x_intersections[i] < point.x:
+						intersection_counter += 1
+
+				var color = Color(1, 1, 0)
+
+				if intersection_counter % 2 == 1:
+					color = Color(1, 0, 1)
+					points.append(point)
+
+	var cdt = CDTreplace.new()
 
 	cdt.init(true, true, 0.1)
 

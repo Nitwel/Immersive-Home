@@ -41,8 +41,9 @@ func _ready():
 			if mesh == null:
 				continue
 
-			var body=StaticBody3D.new()
-			body.name=str(door.id)
+			var body = StaticBody3D.new()
+			body.name = str(int(door.id))  # JSON reads this in as a float, which results in a *10 factor in the ideee
+			assert (door.id == int(body.name))
 			body.position.x=box_transform.origin.x
 			body.position.z=box_transform.origin.y
 			body.set_collision_layer_value(1, false)
@@ -58,7 +59,6 @@ func _ready():
 			var collision_shape=CollisionShape3D.new()
 			collision_shape.shape=mesh.create_trimesh_shape()
 			body.add_child(collision_shape)
-
 			add_child(body)
 
 		var box_scale=box_transform.get_scale()

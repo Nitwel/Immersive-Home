@@ -39,6 +39,7 @@ func call_key(key: Variant, args: Array) -> void:
 			callback.callv(args)
 
 			if single_callbacks.has(callback):
+				print("remoginv callback ", key)
 				remove(key, callback)
 
 func _validate_key(key: Variant):

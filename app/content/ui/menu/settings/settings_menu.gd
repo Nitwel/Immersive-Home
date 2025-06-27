@@ -11,7 +11,7 @@ func _ready():
 	background.visible = false
 
 	report_bug_button.on_button_up.connect(func():
-		OS.shell_open("https://github.com/Nitwel/Immersive-Home/issues")
+		OS.shell_open("https://github.com/DynamicDevices/Immersive-Home/issues")
 	)
 
 func _load_game_version():

@@ -1,0 +1,26 @@
+[gd_scene load_steps=6 format=3 uid="uid://dkmtvip3pjwpm"]
+
+[ext_resource type="Script" uid="uid://bn1m0u0yj5a4o" path="res://content/entities/button/button.gd" id="1_e4620"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_krlx3"]
+[ext_resource type="Script" uid="uid://tquknum0fs5j" path="res://content/functions/movable.gd" id="3_xmm5f"]
+[ext_resource type="PackedScene" uid="uid://g6yboe2ccwrv" path="res://assets/models/chevron/chevron.glb" id="4_x51mr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_um5pa"]
+size = Vector3(0.05, 0.05, 0.012)
+
+[node name="Chevron" type="StaticBody3D"]
+script = ExtResource("1_e4620")
+
+[node name="Button" parent="." instance=ExtResource("2_krlx3")]
+visible = false
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("3_xmm5f")
+resizable = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(4.09061, 4.09061, -1.78806e-07, 0, -2.5287e-07, -5.785, -4.09061, 4.09061, -1.78806e-07, 0, 0, -0.005)
+shape = SubResource("BoxShape3D_um5pa")
+
+[node name="chevron" parent="." instance=ExtResource("4_x51mr")]
+transform = Transform3D(0.0707107, 0, -0.0707107, 0, 0.1, 0, 0.0707107, 0, 0.0707107, 0, 0, 0)

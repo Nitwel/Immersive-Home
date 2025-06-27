@@ -17,16 +17,16 @@ func _ready():
 		entities_page.page.value=0
 	)
 
-	entities_page.on_select_entity.connect(func(entity_name):
+	entities_page.on_select_entity.connect(func(entity):
 		spawn_sound.play()
-
-		var entity=App.house.create_entity(entity_name, global_position)
-
-		if typeof(entity) == TYPE_BOOL&&entity == false:
-			EventSystem.notify("Entity is not in Room", EventNotify.Type.INFO)
-
-		if entity == null:
+		var entity_instance = App.house.create_entity(entity["id"], global_position)
+		if entity_instance == null:
 			EventSystem.notify("This Entity is not supported yet", EventNotify.Type.INFO)
+		elif typeof(entity_instance) == TYPE_BOOL&&entity_instance == false:
+			EventSystem.notify("Entity is not in Room", EventNotify.Type.INFO)
+		elif entity["id"].split(".")[0] == "text": # station entity
+			entity_instance.station_name = entity.name
+			entity_instance.station_text_R.value = entity.name
 	)
 
 	entities_page.on_back.connect(func():

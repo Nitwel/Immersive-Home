@@ -15,7 +15,7 @@
 {%- set ns_group = namespace(entities = []) %}
 {%- for state in states %}
   {%- if device_id(state.entity_id) == None %}
-    {%- set ns_group.entities = ns_group.entities + [{"id": state.entity_id, "name": state.entity_id}] %}
+    {%- set ns_group.entities = ns_group.entities + [{"id": state.entity_id, "name": state.name}] %}
   {%- endif %}
 {%- endfor %}
 {%- set ns.devices = ns.devices +  [ {"id": "other.other", "name": "Other", "entities": ns_group.entities } ] %}

@@ -132,7 +132,7 @@ static func add_quad_grid(st: SurfaceTool, p1: Vector3, p2: Vector3, p3: Vector3
 			points.push_back(p)
 
 	# Triangulate
-	var cdt: ConstrainedTriangulation = ConstrainedTriangulation.new()
+	var cdt = CDTreplace.new()
 	cdt.init(true, true, 0.01)
 
 	cdt.insert_vertices(points)

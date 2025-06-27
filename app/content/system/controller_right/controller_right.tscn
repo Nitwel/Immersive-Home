@@ -1,10 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://biu66ihmvmku3"]
+[gd_scene load_steps=16 format=3 uid="uid://biu66ihmvmku3"]
 
-[ext_resource type="Script" path="res://content/system/controller_right/controller_right.gd" id="1_1oh5j"]
+[ext_resource type="Script" uid="uid://cp61qbj5s6es0" path="res://content/system/controller_right/controller_right.gd" id="1_1oh5j"]
 [ext_resource type="PackedScene" uid="uid://dscp8x0ari57n" path="res://content/system/raycast/raycast.tscn" id="1_3p68p"]
 [ext_resource type="PackedScene" uid="uid://ds1t8vc0kxoeo" path="res://addons/godot-xr-tools/hands/model/hand_r.gltf" id="2_kex6u"]
 [ext_resource type="PackedScene" uid="uid://bufelcry36rw1" path="res://addons/xr-autohandtracker/auto_handtracker.tscn" id="3_pjmb2"]
 [ext_resource type="Material" uid="uid://chu0upvkheqlb" path="res://content/system/controller_right/hands_material.tres" id="4_vhkya"]
+[ext_resource type="Material" uid="uid://o8w5p7epfdqt" path="res://content/system/controller_right/arrow_material.tres" id="6_uvqnh"]
+[ext_resource type="ArrayMesh" uid="uid://6yhpwpunb5su" path="res://assets/models/cone/cone.obj" id="7_nhbbm"]
+[ext_resource type="Script" uid="uid://bkikg2adess7s" path="res://content/system/controller_right/compass.gd" id="7_qdcm5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m58yb"]
 ao_enabled = true
@@ -12,6 +15,93 @@ ao_enabled = true
 [sub_resource type="BoxMesh" id="BoxMesh_ir3co"]
 material = SubResource("StandardMaterial3D_m58yb")
 size = Vector3(0.01, 0.01, 0.01)
+
+[sub_resource type="SphereMesh" id="SphereMesh_nhbbm"]
+
+[sub_resource type="Animation" id="Animation_qdcm5"]
+resource_name = "Appear"
+length = 0.2333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.01, 0.1, 0.166667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.03888, 0.03888, 0.03888), Vector3(0.03, 0.03, 0.03)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 0.2, 0.233333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0.3, 0), Vector3(0.4, 0.3, 0.4), Vector3(0.3, 0.3, 0.3)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.01),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_htyew"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("..:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.03, 0.03, 0.03)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.3, 0.3, 0.3)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_56shl"]
+_data = {
+&"Appear": SubResource("Animation_qdcm5"),
+&"RESET": SubResource("Animation_htyew")
+}
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_66uu0"]
 radius = 0.001
@@ -29,9 +119,7 @@ mesh = SubResource("BoxMesh_ir3co")
 
 [node name="AutoHandtracker" parent="." instance=ExtResource("3_pjmb2")]
 visible = false
-applymiddlefingerfix = null
-applyscaling = null
-coincidewristorknuckle = null
+coincidemiddleknuckle = false
 visiblehandtrackskeleton = false
 enableautotracker = false
 
@@ -40,8 +128,24 @@ enableautotracker = false
 [node name="mesh_Hand_R" parent="hand_r/Armature/Skeleton3D" index="0"]
 material_override = ExtResource("4_vhkya")
 
+[node name="Compass Base" type="MeshInstance3D" parent="hand_r"]
+transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0.0549355, -0.0100591, -0.0295457)
+material_override = ExtResource("6_uvqnh")
+mesh = SubResource("SphereMesh_nhbbm")
+script = ExtResource("7_qdcm5")
+
+[node name="Compass Arrow" type="MeshInstance3D" parent="hand_r/Compass Base"]
+transform = Transform3D(0.3, 0, 0, 0, -1.31134e-08, 0.3, 0, -0.3, -1.31134e-08, 0, 0, -1)
+material_override = ExtResource("6_uvqnh")
+mesh = ExtResource("7_nhbbm")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="hand_r/Compass Base/Compass Arrow"]
+libraries = {
+&"": SubResource("AnimationLibrary_56shl")
+}
+
 [node name="IndexTip" type="BoneAttachment3D" parent="."]
-transform = Transform3D(0.967526, -0.252326, 0.0150302, 0.0150302, 0.116784, 0.993043, -0.252326, -0.960569, 0.116784, 0.00665802, 0.0427913, -0.169868)
+transform = Transform3D(0.967526, -0.252326, 0.0150302, 0.0150301, 0.116784, 0.993043, -0.252326, -0.960569, 0.116784, 0.00665801, 0.0427913, -0.169868)
 bone_name = "Index_Tip_R"
 bone_idx = 9
 use_external_skeleton = true
@@ -62,7 +166,7 @@ transform = Transform3D(1, 0, 0, -1.49012e-08, 1, 0, 0, -7.45058e-09, 1, 0, -0.0
 shape = SubResource("CapsuleShape3D_66uu0")
 
 [node name="ThumbTip" type="BoneAttachment3D" parent="."]
-transform = Transform3D(0.967042, -0.24582, 0.0663439, 0.0663439, 0.494837, 0.866449, -0.24582, -0.833492, 0.494837, -0.0261569, 0.0891964, -0.0934418)
+transform = Transform3D(0.967042, -0.24582, 0.0663439, 0.0663439, 0.494837, 0.86645, -0.24582, -0.833492, 0.494837, -0.0261569, 0.0891963, -0.0934418)
 bone_name = "Thumb_Tip_R"
 bone_idx = 4
 use_external_skeleton = true

@@ -37,7 +37,7 @@ func _ready():
 	R.bind(search_input, "text", search, search_input.on_text_changed)
 
 	search_input.on_text_changed.connect(func(_arg):
-		page.value=0
+		page.value=0#
 	)
 
 	R.effect(func(_arg):
@@ -46,7 +46,6 @@ func _ready():
 			child.free()
 
 		for device in visible_devices.value:
-
 			var button_instance=ButtonScene.instantiate()
 			button_instance.label=device["name"]
 			button_instance.font_size=8

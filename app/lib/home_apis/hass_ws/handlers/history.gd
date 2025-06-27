@@ -1,7 +1,6 @@
 const HASS_API = preload ("../hass.gd")
 
 var api: HASS_API
-var integration_exists: bool = false
 
 func _init(hass: HASS_API):
 	self.api = hass

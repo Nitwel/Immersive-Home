@@ -11,7 +11,7 @@ signal on_packed_received(packet: Dictionary)
 
 signal _try_connect(success: bool)
 
-const LOG_MESSAGES := false
+const LOG_MESSAGES := true
 
 var socket := WebSocketPeer.new()
 var packet_callbacks := CallbackMap.new()
@@ -55,8 +55,10 @@ func start(url: String, token: String) -> ConnectionError:
 
 	connecting = true
 
-	print("Connecting to %s" % url + "/api/websocket")
-	var error = socket.connect_to_url(url + "/api/websocket", TLSOptions.client_unsafe())
+	var wurl = url + "/api/websocket"
+	print("Connecting to %s" % wurl)
+	#var error = socket.connect_to_url(wurl, TLSOptions.client_unsafe())
+	var error = socket.connect_to_url(wurl)
 
 	if error != OK:
 		print("Error connecting to %s: %s" % [url, error])
@@ -81,10 +83,14 @@ func start(url: String, token: String) -> ConnectionError:
 	on_connect.emit()
 	return ConnectionError.OK
 
+var prevwebsocketstate = -1
 func _process(_delta):
 	socket.poll()
 	
 	var state = socket.get_ready_state()
+	if state != prevwebsocketstate:
+		print("Websocket state ", state)
+		prevwebsocketstate = state
 	if state == WebSocketPeer.STATE_OPEN:
 		if connecting:
 			connecting = false
@@ -113,7 +119,7 @@ func _process(_delta):
 		on_disconnect.emit()
 
 func handle_packet(packet: Dictionary):
-	if LOG_MESSAGES: print("Received packet: %s" % str(packet).substr(0, 1000))
+	if LOG_MESSAGES: print("Received packet: %s" % str(packet).substr(0, 50))
 
 	on_packed_received.emit(packet)
 
@@ -177,7 +183,8 @@ func send_packet(packet: Dictionary, with_id:=false):
 		packet.id = id
 		id += 1
 
-	if LOG_MESSAGES: print("Sending packet: %s" % _encode_packet(packet))
+	if LOG_MESSAGES:
+		print("Sending packet: %s" % _encode_packet(packet).substr(0, 30))
 	socket.send_text(_encode_packet(packet))
 
 func _decode_packet(packet: PackedByteArray):

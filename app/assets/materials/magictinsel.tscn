@@ -1,0 +1,79 @@
+[gd_scene load_steps=13 format=3 uid="uid://ytah1xlxtsv0"]
+
+[ext_resource type="Shader" uid="uid://dcvb01ytocctb" path="res://assets/materials/magictinsel.gdshader" id="1_hv8oc"]
+[ext_resource type="Script" uid="uid://7b8fsrj5iu51" path="res://assets/materials/magictinsel.gd" id="2_8iu3a"]
+[ext_resource type="PackedScene" uid="uid://dalvbkvg0yqv2" path="res://assets/low_poly_tesla_cybertruck.glb" id="3_25k5d"]
+
+[sub_resource type="Gradient" id="Gradient_ck1xm"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1a2cq"]
+gradient = SubResource("Gradient_ck1xm")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_svamx"]
+lifetime_randomness = 0.15
+particle_flag_align_y = true
+angle_min = 1.07288e-05
+angle_max = 180.0
+direction = Vector3(-1, 0, 0)
+spread = 180.0
+flatness = 0.308
+initial_velocity_min = 0.01
+initial_velocity_max = 0.01
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_1a2cq")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_71ah4"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_s0brt"]
+as_normal_map = true
+noise = SubResource("FastNoiseLite_71ah4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ks7yv"]
+render_priority = 0
+shader = ExtResource("1_hv8oc")
+shader_parameter/albedo = Vector4(1, 0, 0, 0)
+shader_parameter/point_size = 1.0
+shader_parameter/position_noise = SubResource("NoiseTexture2D_s0brt")
+shader_parameter/streamrad = 0.16
+shader_parameter/sparkrad = 0.01
+shader_parameter/sparktrailrad = 0.003
+shader_parameter/noisedisplacementfac = 0.04
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_o7sgv"]
+material = SubResource("ShaderMaterial_ks7yv")
+size = Vector2(0, 0)
+subdivide_depth = 5
+
+[sub_resource type="SphereMesh" id="SphereMesh_vw2ul"]
+radius = 0.09
+height = 0.18
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vw2ul"]
+transparency = 1
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 0.431373)
+
+[node name="MagicTinsel" type="GPUParticles3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0181408)
+cast_shadow = 0
+amount = 100
+amount_ratio = 0.4067
+lifetime = 0.57
+process_material = SubResource("ParticleProcessMaterial_svamx")
+draw_pass_1 = SubResource("PlaneMesh_o7sgv")
+script = ExtResource("2_8iu3a")
+
+[node name="NoDepthSphere" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_vw2ul")
+surface_material_override/0 = SubResource("StandardMaterial3D_vw2ul")
+
+[node name="CyberTruck" parent="." instance=ExtResource("3_25k5d")]
+transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.08, 0, -0.0697054, 0.478317)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.527856, 0.702421, 0.477465, -0.112854, -0.615185, 0.780264, 0.841803, 0.357983, 0.404, 0.319851, 0.380004, 0)
+light_energy = 4.519
+light_specular = 2.394
+
+[editable path="CyberTruck"]

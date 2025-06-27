@@ -1,13 +1,14 @@
-[gd_scene load_steps=22 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=23 format=3 uid="uid://c3kdssrmv84kv"]
 
-[ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
-[ext_resource type="Script" path="res://content/functions/movable.gd" id="2_8coxu"]
-[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_htaoi"]
-[ext_resource type="Script" path="res://content/ui/components/tabs/tabs.gd" id="4_eavfx"]
+[ext_resource type="Script" uid="uid://ce5bx0ikwfbkt" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
+[ext_resource type="Script" uid="uid://tquknum0fs5j" path="res://content/functions/movable.gd" id="2_8coxu"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="3_htaoi"]
+[ext_resource type="Script" uid="uid://b8gg8bn86jbd4" path="res://content/ui/components/tabs/tabs.gd" id="4_eavfx"]
 [ext_resource type="PackedScene" uid="uid://crrb0l3ekuotj" path="res://content/ui/menu/edit/edit_menu.tscn" id="4_r2raj"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_w4i01"]
-[ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="6_7rntr"]
+[ext_resource type="Script" uid="uid://bel3ondid6mxb" path="res://content/ui/components/tabs/tabs_content.gd" id="6_7rntr"]
 [ext_resource type="PackedScene" uid="uid://ddpxthb414unp" path="res://content/ui/menu/view/view_menu.tscn" id="8_71pkg"]
+[ext_resource type="PackedScene" uid="uid://10l8vxnddff2" path="res://content/ui/menu/experimental/experimental_menu.tscn" id="10_fspci"]
 [ext_resource type="PackedScene" uid="uid://c01gkeldvjwtr" path="res://content/ui/menu/room/room_menu.tscn" id="10_u4i1x"]
 [ext_resource type="PackedScene" uid="uid://c6r4higceibif" path="res://content/ui/menu/settings/settings_menu.tscn" id="11_7wm6b"]
 [ext_resource type="AudioStream" uid="uid://nmm8y0xt5wyj" path="res://assets/sound/open_menu.wav" id="12_dsnuc"]
@@ -184,8 +185,8 @@ tracks/6/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_s30cd"]
 _data = {
-"RESET": SubResource("Animation_61md4"),
-"hide_menu": SubResource("Animation_lkh72")
+&"RESET": SubResource("Animation_61md4"),
+&"hide_menu": SubResource("Animation_lkh72")
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_emmtq"]
@@ -218,7 +219,14 @@ material_override = SubResource("ShaderMaterial_mhqg4")
 mesh = SubResource("QuadMesh_7q1en")
 skeleton = NodePath("../..")
 
-[node name="Tabs" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("initial_selected")]
+[node name="StateButton" parent="AnimationContainer/Background2" instance=ExtResource("5_w4i01")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.196937, -3.37794e-15)
+label = "person"
+icon = true
+toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
+
+[node name="DebugTabs" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("initial_selected")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.005, 0)
 script = ExtResource("4_eavfx")
 initial_selected = NodePath("View")
@@ -226,7 +234,7 @@ vertical = true
 gap = 0.01
 size = Vector3(0.05, 0.4, 1)
 
-[node name="View" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
+[node name="View" parent="AnimationContainer/DebugTabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, 0)
 label = "visibility"
 icon = true
@@ -234,51 +242,51 @@ toggleable = true
 disabled = true
 size = Vector3(0.05, 0.05, 0.01)
 
-[node name="Edit" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
+[node name="Edit" parent="AnimationContainer/DebugTabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.085, 0)
 label = "widgets"
 icon = true
 toggleable = true
 size = Vector3(0.05, 0.05, 0.01)
 
-[node name="Room" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
+[node name="Room" parent="AnimationContainer/DebugTabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.145, 0)
 label = "view_in_ar"
 icon = true
 toggleable = true
 size = Vector3(0.05, 0.05, 0.01)
 
-[node name="Automate" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
+[node name="Experimental" parent="AnimationContainer/DebugTabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.205, 0)
-label = "schema"
+label = "experiment"
 icon = true
 toggleable = true
 size = Vector3(0.05, 0.05, 0.01)
 
-[node name="Settings" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
+[node name="Settings" parent="AnimationContainer/DebugTabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.265, 0)
 label = "settings"
 icon = true
 toggleable = true
 size = Vector3(0.05, 0.05, 0.01)
 
-[node name="TabsContent" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("tabs")]
+[node name="DebugTabsContent" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("tabs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.00999999, 0)
 script = ExtResource("6_7rntr")
-tabs = NodePath("../Tabs")
+tabs = NodePath("../DebugTabs")
 
-[node name="ViewMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("8_71pkg")]
+[node name="ViewMenu" parent="AnimationContainer/DebugTabsContent" instance=ExtResource("8_71pkg")]
 
-[node name="EditMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("4_r2raj")]
+[node name="EditMenu" parent="AnimationContainer/DebugTabsContent" instance=ExtResource("4_r2raj")]
 visible = false
 
-[node name="RoomMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("10_u4i1x")]
+[node name="RoomMenu" parent="AnimationContainer/DebugTabsContent" instance=ExtResource("10_u4i1x")]
 visible = false
 
-[node name="AutomateMenu" type="Node3D" parent="AnimationContainer/TabsContent"]
+[node name="ExperimentalMenu" parent="AnimationContainer/DebugTabsContent" instance=ExtResource("10_fspci")]
 visible = false
 
-[node name="SettingsMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("11_7wm6b")]
+[node name="SettingsMenu" parent="AnimationContainer/DebugTabsContent" instance=ExtResource("11_7wm6b")]
 visible = false
 
 [node name="NotifyPlace" type="Marker3D" parent="AnimationContainer"]
@@ -291,7 +299,7 @@ gizmo_extents = 0.02
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_s30cd")
+&"": SubResource("AnimationLibrary_s30cd")
 }
 
 [node name="Area3D" type="Area3D" parent="."]
@@ -310,3 +318,6 @@ volume_db = -6.0
 [node name="CloseSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("13_nnnln")
 volume_db = -6.0
+
+[connection signal="on_toggled" from="AnimationContainer/Background2/StateButton" to="." method="_on_state_button_on_toggled"]
+[connection signal="on_toggled" from="AnimationContainer/Background2/StateButton" to="AnimationContainer/DebugTabs" method="_on_state_button_on_toggled"]

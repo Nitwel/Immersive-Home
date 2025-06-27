@@ -58,6 +58,7 @@ func _ready() -> void:
 		initialize()
 
 
+
 ## Initialize the XR interface
 func initialize() -> bool:
 	# Check for OpenXR interface
@@ -67,6 +68,7 @@ func initialize() -> bool:
 
 	# Check for WebXR interface
 	xr_interface = XRServer.find_interface('WebXR')
+	$Main.xr_interface = xr_interface
 	if xr_interface:
 		return _setup_for_webxr()
 
@@ -106,6 +108,8 @@ func _setup_for_openxr() -> bool:
 	xr_interface.connect("session_begun", _on_openxr_session_begun)
 	xr_interface.connect("session_visible", _on_openxr_visible_state)
 	xr_interface.connect("session_focussed", _on_openxr_focused_state)
+	
+	
 
 	# Check for passthrough
 	if enable_passthrough and xr_interface.is_passthrough_supported():

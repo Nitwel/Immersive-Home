@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://dlj5chj7ndgua"]
 
-[ext_resource type="Script" path="res://content/system/house/room/wall_edge.gd" id="1_0c5rj"]
+[ext_resource type="Script" uid="uid://che4q3h0pcqim" path="res://content/system/house/room/wall_edge.gd" id="1_0c5rj"]
 [ext_resource type="Material" uid="uid://j12e5wwthtaa" path="res://content/system/house/room/edge.tres" id="1_hs3tw"]
-[ext_resource type="Script" path="res://content/functions/clickable.gd" id="2_cfvx2"]
+[ext_resource type="Script" uid="uid://c2ur1xdspcq5t" path="res://content/functions/clickable.gd" id="2_cfvx2"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_a2dct"]
 material = ExtResource("1_hs3tw")

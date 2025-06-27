@@ -40,6 +40,7 @@ func update():
 
 func get_aabb():
 	var room_store = Store.house.get_room(name)
+	
 
 	if room_store == null:
 		return AABB()

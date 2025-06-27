@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://d26xg5okbaen6"]
 
-[ext_resource type="Script" path="res://test/content/grid_shader.gd" id="1_jgxlt"]
+[ext_resource type="Script" uid="uid://cxthi0i4yujyu" path="res://test/content/grid_shader.gd" id="1_jgxlt"]
 [ext_resource type="Material" uid="uid://bb4kgiocswfv7" path="res://assets/materials/grid.tres" id="2_siin6"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_atwo6"]

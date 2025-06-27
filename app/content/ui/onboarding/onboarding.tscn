@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://bhyddd1f0ry1x"]
 
-[ext_resource type="Script" path="res://content/ui/onboarding/onboarding.gd" id="1_k4yvw"]
-[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_87aan"]
+[ext_resource type="Script" uid="uid://doog8gdhwoca4" path="res://content/ui/onboarding/onboarding.gd" id="1_k4yvw"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="2_87aan"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_hlpow"]
-[ext_resource type="Script" path="res://content/functions/camera_follower.gd" id="4_u1o74"]
+[ext_resource type="Script" uid="uid://bg6vc81m8fuka" path="res://content/functions/camera_follower.gd" id="4_u1o74"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nfwtf"]
 size = Vector3(0.5, 0.3, 0.01)

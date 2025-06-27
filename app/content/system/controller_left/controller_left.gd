@@ -17,8 +17,8 @@ const Entity = preload ("res://content/entities/entity.gd")
 @onready var middle_tip = $MiddleTip
 
 @onready var mini_view_button = $Palm/QuickActions/MiniView
-@onready var temperature_button = $Palm/QuickActions/Temperature
-@onready var humidity_button = $Palm/QuickActions/Humidity
+@onready var reset_button = $Palm/QuickActions/Reset
+@onready var compass_button = $Palm/QuickActions/Compass
 
 @onready var palm = $Palm
 @onready var ray: RayCast3D = $Raycast
@@ -135,19 +135,10 @@ func _setup_hand():
 		App.miniature.small.value=!App.miniature.small.value
 	)
 
-	temperature_button.on_button_up.connect(func():
-		if App.miniature.heatmap_type.value == Miniature.HeatmapType.TEMPERATURE:
-			App.miniature.heatmap_type.value=Miniature.HeatmapType.NONE
-		else:
-			App.miniature.heatmap_type.value=Miniature.HeatmapType.TEMPERATURE
+	reset_button.on_button_up.connect(func():
+		get_node("/root/Main").reset.emit()
 	)
 
-	humidity_button.on_button_up.connect(func():
-		if App.miniature.heatmap_type.value == Miniature.HeatmapType.HUMIDITY:
-			App.miniature.heatmap_type.value=Miniature.HeatmapType.NONE
-		else:
-			App.miniature.heatmap_type.value=Miniature.HeatmapType.HUMIDITY
-	)
 
 	initiator.type = Initiator.Type.HAND_LEFT
 	initiator.node = self

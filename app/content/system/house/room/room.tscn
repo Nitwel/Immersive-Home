@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=3 uid="uid://bswgmclohuqui"]
 
-[ext_resource type="Script" path="res://content/system/house/room/room.gd" id="1_fccq0"]
-[ext_resource type="Script" path="res://content/functions/clickable.gd" id="1_ugebq"]
+[ext_resource type="Script" uid="uid://bdjurnrwitgl6" path="res://content/system/house/room/room.gd" id="1_fccq0"]
+[ext_resource type="Script" uid="uid://c2ur1xdspcq5t" path="res://content/functions/clickable.gd" id="1_ugebq"]
 [ext_resource type="Material" uid="uid://d0i5oae6evn08" path="res://content/system/house/room/states/room.tres" id="3_fmi1g"]
-[ext_resource type="Script" path="res://lib/utils/state_machine/state_machine.gd" id="4_nbbo6"]
-[ext_resource type="Script" path="res://content/system/house/room/states/view.gd" id="6_g066t"]
-[ext_resource type="Script" path="res://content/system/house/room/states/edit.gd" id="7_ap14h"]
+[ext_resource type="Script" uid="uid://cwtkn611olcn3" path="res://lib/utils/state_machine/state_machine.gd" id="4_nbbo6"]
+[ext_resource type="Script" uid="uid://cekb740bd2d33" path="res://content/system/house/room/states/view.gd" id="6_g066t"]
+[ext_resource type="Script" uid="uid://db15s6t2xuxm3" path="res://content/system/house/room/states/edit.gd" id="7_ap14h"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_08sv0"]
 

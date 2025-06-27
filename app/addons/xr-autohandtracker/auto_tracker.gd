@@ -7,6 +7,7 @@ extends Node3D
 var xr_autotracker : XRPositionalTracker = null
 var xr_autopose : XRPose = null
 var autotrackeractive = false
+var xr_camera_node = null  # for relative thumbstick motion calculations
 
 var graspsqueezer = SqueezeButton.new()
 var pinchsqueezer = SqueezeButton.new()
@@ -21,12 +22,12 @@ func _ready():
 	$ThumbstickBoundaries/UpDisc.transform.origin.y = updowndistbutton
 	$ThumbstickBoundaries/DownDisc.transform.origin.y = -updowndistbutton
 
-func setupautotracker(tracker_nhand, islefthand, xr_controller_node):
+func setupautotracker(xr_controller_node, islefthand):
 	xr_autotracker = XRPositionalTracker.new()
-	xr_autotracker.hand = tracker_nhand
+	xr_autotracker.hand = XRPositionalTracker.TRACKER_HAND_LEFT if islefthand else XRPositionalTracker.TRACKER_HAND_RIGHT
 	xr_autotracker.name = "left_autohand" if islefthand else "right_autohand"
 	xr_autotracker.profile = "/interaction_profiles/autohand" # "/interaction_profiles/none"
-	xr_autotracker.type = 2
+	xr_autotracker.type = XRServer.TRACKER_CONTROLLER
 
 	xr_autotracker.set_pose(xr_controller_node.pose, Transform3D(), Vector3(), Vector3(), XRPose.TrackingConfidence.XR_TRACKING_CONFIDENCE_NONE)
 	xr_autopose = xr_autotracker.get_pose(xr_controller_node.pose)
@@ -40,28 +41,29 @@ func activateautotracker(xr_controller_node):
 	xr_controller_node.set_tracker(xr_autotracker.name)
 	autotrackeractive = true
 	
-func deactivateautotracker(xr_controller_node, xr_tracker):
+func deactivateautotracker(xr_controller_node, xr_controllertracker):
+	visible = false
 	setaxbybuttonstatus(0)
 	graspsqueezer.applysqueeze(graspsqueezer.touchbuttondistance + 1)	
 	pinchsqueezer.applysqueeze(pinchsqueezer.touchbuttondistance + 1)	
-	xr_controller_node.set_tracker(xr_tracker.name)
+	xr_controller_node.set_tracker(xr_controllertracker.name)
 	autotrackeractive = false
 
-func autotrackgestures(oxrjps, xrt, xr_camera_node):
-	thumbsticksimulation(oxrjps, xrt, xr_camera_node)
+func autotrackgestures(oxrktrans, xrt):
+	thumbsticksimulation(oxrktrans, xrt)
 
 	# detect forming a fist
-	var middleknuckletip = (oxrjps[OpenXRInterface.HAND_JOINT_MIDDLE_TIP] - oxrjps[OpenXRInterface.HAND_JOINT_MIDDLE_PROXIMAL]).length()
-	var ringknuckletip = (oxrjps[OpenXRInterface.HAND_JOINT_RING_TIP] - oxrjps[OpenXRInterface.HAND_JOINT_RING_PROXIMAL]).length()
-	var littleknuckletip = (oxrjps[OpenXRInterface.HAND_JOINT_LITTLE_TIP] - oxrjps[OpenXRInterface.HAND_JOINT_LITTLE_PROXIMAL]).length()
+	var middleknuckletip = (oxrktrans[OpenXRInterface.HAND_JOINT_MIDDLE_TIP].origin - oxrktrans[OpenXRInterface.HAND_JOINT_MIDDLE_PROXIMAL].origin).length()
+	var ringknuckletip = (oxrktrans[OpenXRInterface.HAND_JOINT_RING_TIP].origin - oxrktrans[OpenXRInterface.HAND_JOINT_RING_PROXIMAL].origin).length()
+	var littleknuckletip = (oxrktrans[OpenXRInterface.HAND_JOINT_LITTLE_TIP].origin - oxrktrans[OpenXRInterface.HAND_JOINT_LITTLE_PROXIMAL].origin).length()
 	var avgknuckletip = (middleknuckletip + ringknuckletip + littleknuckletip)/3
 	graspsqueezer.applysqueeze(avgknuckletip)
 
 	# detect the finger pinch
-	var pinchdist = (oxrjps[OpenXRInterface.HAND_JOINT_INDEX_TIP] - oxrjps[OpenXRInterface.HAND_JOINT_THUMB_TIP]).length()
+	var pinchdist = (oxrktrans[OpenXRInterface.HAND_JOINT_INDEX_TIP].origin - oxrktrans[OpenXRInterface.HAND_JOINT_THUMB_TIP].origin).length()
 	pinchsqueezer.applysqueeze(pinchdist*2)
 
-	#$GraspMarker.global_transform.origin = xrt*oxrjps[OpenXRInterface.HAND_JOINT_MIDDLE_TIP] 
+	#$GraspMarker.global_transform.origin = xrt*oxrktrans[OpenXRInterface.HAND_JOINT_MIDDLE_TIP].origin 
 	#$GraspMarker.visible = buttoncurrentlyclicked
 	
 	
@@ -97,19 +99,20 @@ func setaxbybuttonstatus(newaxbybuttonstatus):
 	xr_autotracker.set_input("ax_button" if newaxbybuttonstatus > 0 else "by_button", true)
 	axbybuttonstatus = newaxbybuttonstatus
 
-func thumbsticksimulation(oxrjps, xrt, xr_camera_node):
-	var middletip = oxrjps[OpenXRInterface.HAND_JOINT_MIDDLE_TIP]
-	var thumbtip = oxrjps[OpenXRInterface.HAND_JOINT_THUMB_TIP]
-	var ringtip = oxrjps[OpenXRInterface.HAND_JOINT_RING_TIP]
+func thumbsticksimulation(oxrktrans, xrt):
+	var middletip = oxrktrans[OpenXRInterface.HAND_JOINT_MIDDLE_TIP].origin
+	var thumbtip = oxrktrans[OpenXRInterface.HAND_JOINT_THUMB_TIP].origin
+	var ringtip = oxrktrans[OpenXRInterface.HAND_JOINT_RING_TIP].origin
 	var tipcen = (middletip + thumbtip + ringtip)/3.0
-	var middleknuckle = oxrjps[OpenXRInterface.HAND_JOINT_MIDDLE_PROXIMAL]
+	var middleknuckle = oxrktrans[OpenXRInterface.HAND_JOINT_MIDDLE_PROXIMAL].origin
 	var thumbdistance = max((middletip - tipcen).length(), (thumbtip - tipcen).length(), (ringtip - tipcen).length())
 	if thumbstickstartpt == null:
 		if thumbdistance < thumbdistancecontact and middleknuckle.y < tipcen.y - 0.029:
 			thumbstickstartpt = tipcen
 			visible = true
-			global_transform.origin = xrt*tipcen
-			$ThumbstickBoundaries.global_transform.origin = xrt*thumbstickstartpt
+			#global_transform.origin = xrt*tipcen
+			#$ThumbstickBoundaries.global_transform.origin = xrt*thumbstickstartpt
+			#global_transform.origin = xrt*thumbstickstartpt
 	else:
 		if thumbdistance > thumbdistancerelease:
 			thumbstickstartpt = null
@@ -120,11 +123,15 @@ func thumbsticksimulation(oxrjps, xrt, xr_camera_node):
 			setaxbybuttonstatus(0)
 
 	visible = (thumbstickstartpt != null)
-	if thumbstickstartpt != null:
+	if thumbstickstartpt != null and xr_camera_node != null:
+		global_transform.origin = xrt*thumbstickstartpt
 		$DragRod.global_transform = sticktransformB(xrt*thumbstickstartpt, xrt*tipcen)
-		var facingangle = Vector2(xr_camera_node.transform.basis.z.x, xr_camera_node.transform.basis.z.z).angle() if xr_camera_node != null else 0.0
-		var hvec = Vector2(tipcen.x - thumbstickstartpt.x, tipcen.z - thumbstickstartpt.z)
-		var hv = hvec.rotated(deg_to_rad(90) - facingangle)
+		var cameratransform = xr_camera_node.global_transform # could use xr_origin*XRServer.get_hmd_transform
+		var cameravector = Vector2(-cameratransform.basis.z.x, cameratransform.basis.z.z)
+		var facingangle = cameravector.angle()
+		var hhvec = xrt*tipcen - xrt*thumbstickstartpt
+		var hvec = Vector2(hhvec.x, -hhvec.z)
+		var hv = hvec.rotated(deg_to_rad(90) - facingangle) # deg_to_rad(90) - facingangle)
 		var hvlen = hv.length()
 		if not thumbsticktouched:
 			var frat = hvlen/max(hvlen, innerringrad)
@@ -137,7 +144,7 @@ func thumbsticksimulation(oxrjps, xrt, xr_camera_node):
 			
 		if thumbsticktouched:
 			var hvN = hv/max(hvlen, outerringrad)
-			xr_autotracker.set_input("primary", Vector2(hvN.x, -hvN.y))
+			xr_autotracker.set_input("primary", Vector2(hvN.x, hvN.y))
 
 		var ydist = (tipcen.y - thumbstickstartpt.y)
 		var rawnewaxbybuttonstatus = 0

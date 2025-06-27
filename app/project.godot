@@ -10,9 +10,10 @@ config_version=5
 
 [application]
 
-config/name="ImmersiveHome"
+config/name="QuestWalk"
 run/main_scene="res://content/main.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+config/features=PackedStringArray("4.4", "GL Compatibility")
+run/max_fps=90
 config/icon="res://assets/logo.png"
 
 [audio]
@@ -39,7 +40,7 @@ window/vsync/vsync_mode=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg", "res://addons/godot_exoplayer/plugin.cfg")
 
 [file_customization]
 
@@ -52,6 +53,7 @@ folder_colors={
 
 [filesystem]
 
+import/blender/enabled=false
 import/fbx/enabled=false
 
 [global_group]
@@ -59,6 +61,7 @@ import/fbx/enabled=false
 ui_focus="Makes the node foucsable"
 ui_focus_skip="Skip the focus check on this node"
 ui_focus_stop="Stops checking for focus entirely"
+DD_TutorialItems="Items used for the Dynamic Devices walk-through tutorial"
 
 [gui]
 
@@ -91,4 +94,8 @@ openxr/enabled=true
 openxr/foveation_level=3
 openxr/foveation_dynamic=true
 openxr/startup_alert=false
+openxr/extensions/hand_tracking=true
+openxr/extensions/hand_tracking_unobstructed_data_source=true
+openxr/extensions/hand_tracking_controller_data_source=true
 shaders/enabled=true
+openxr/extensions/hand_tracking_aim=true

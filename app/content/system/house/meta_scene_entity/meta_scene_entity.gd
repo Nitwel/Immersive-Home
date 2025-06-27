@@ -4,7 +4,7 @@ const Wall = preload ("res://assets/materials/wall.tres")
 
 var wall_mesh
 
-func setup_scene(entity: OpenXRFbSpatialEntity):
+func setup_scene(entity):
 	var name = entity.get_semantic_labels()[0]
 
 	if name == "invisible_wall_face":

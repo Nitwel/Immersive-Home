@@ -1,10 +1,10 @@
 [gd_scene load_steps=4351 format=3 uid="uid://bkoybnltrq5uq"]
 
-[ext_resource type="Script" path="res://content/entities/weather/weather.gd" id="1_f8t6i"]
+[ext_resource type="Script" uid="uid://btdtjmcomof6n" path="res://content/entities/weather/weather.gd" id="1_f8t6i"]
 [ext_resource type="Texture2D" uid="uid://caqghtbin4b02" path="res://assets/weather/lottie/clear-day.png" id="2_l4uh1"]
 [ext_resource type="Texture2D" uid="uid://h1cl8ixk3d7p" path="res://assets/weather/lottie/clear-night.png" id="3_5h3tr"]
 [ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="3_nddfm"]
-[ext_resource type="Script" path="res://content/functions/movable.gd" id="4_5wwtr"]
+[ext_resource type="Script" uid="uid://tquknum0fs5j" path="res://content/functions/movable.gd" id="4_5wwtr"]
 [ext_resource type="Texture2D" uid="uid://bn4tjmnvn16k2" path="res://assets/weather/lottie/code-red.png" id="4_573nf"]
 [ext_resource type="Texture2D" uid="uid://ca1dib2528x55" path="res://assets/weather/lottie/drizzle.png" id="5_h0ch3"]
 [ext_resource type="Texture2D" uid="uid://b8ts1h5ketlht" path="res://assets/weather/lottie/fog.png" id="6_7yln5"]

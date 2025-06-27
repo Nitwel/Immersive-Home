@@ -1,11 +1,11 @@
 [gd_scene load_steps=13 format=3 uid="uid://blrhy2uccrdn4"]
 
-[ext_resource type="Script" path="res://content/ui/components/input/input.gd" id="1_uml3t"]
-[ext_resource type="Script" path="res://content/ui/components/panel/panel.gd" id="3_3bvrj"]
-[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="3_nl02b"]
+[ext_resource type="Script" uid="uid://c4f1a587jr2l3" path="res://content/ui/components/input/input.gd" id="1_uml3t"]
+[ext_resource type="Script" uid="uid://5r3w6kxf2rlw" path="res://content/ui/components/panel/panel.gd" id="3_3bvrj"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="3_nl02b"]
 [ext_resource type="FontFile" uid="uid://drsixxc4tmvjf" path="res://assets/fonts/Montserrat-Medium.ttf" id="4_yukbj"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4vor6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_138r4"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("3_nl02b")
@@ -20,7 +20,7 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_dndsq"]
+[sub_resource type="QuadMesh" id="QuadMesh_84mfg"]
 size = Vector2(0.15, 0.03)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x4yp8"]
@@ -66,8 +66,8 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1sy4t"]
 _data = {
-"RESET": SubResource("Animation_65tpe"),
-"blink": SubResource("Animation_8ny1h")
+&"RESET": SubResource("Animation_65tpe"),
+&"blink": SubResource("Animation_8ny1h")
 }
 
 [node name="Input" type="Node3D" groups=["ui_focus"]]
@@ -83,8 +83,8 @@ collision_mask = 6
 
 [node name="Panel3D" type="MeshInstance3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.005)
-material_override = SubResource("ShaderMaterial_4vor6")
-mesh = SubResource("QuadMesh_dndsq")
+material_override = SubResource("ShaderMaterial_138r4")
+mesh = SubResource("QuadMesh_84mfg")
 script = ExtResource("3_3bvrj")
 size = Vector2(0.15, 0.03)
 
@@ -126,7 +126,7 @@ horizontal_alignment = 0
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Body")
 libraries = {
-"": SubResource("AnimationLibrary_1sy4t")
+&"": SubResource("AnimationLibrary_1sy4t")
 }
 
 [node name="SnapSound" type="AudioStreamPlayer" parent="."]

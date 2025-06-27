@@ -74,6 +74,8 @@ func _ready():
 		trash_bin_visible=false
 
 		App.house.save_all_entities()
+		
+		get_node("/root/Main/MQTT").publish("stfc/to_delete", var_to_str(to_delete))
 	)
 
 func _get_entity(node: Node):

@@ -1,13 +1,13 @@
 [gd_scene load_steps=5 format=3 uid="uid://brf6mm2gxj7y2"]
 
-[ext_resource type="Script" path="res://content/functions/clickable.gd" id="1_e5awq"]
+[ext_resource type="Script" uid="uid://c2ur1xdspcq5t" path="res://content/functions/clickable.gd" id="1_e5awq"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_86rci"]
 radius = 0.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i1w3w"]
 transparency = 1
-albedo_color = Color(1, 1, 1, 0.270588)
+albedo_color = Color(1, 1, 0.419608, 0.568627)
 
 [sub_resource type="SphereMesh" id="SphereMesh_7586u"]
 material = SubResource("StandardMaterial3D_i1w3w")

@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dnam3fe36gg62"]
 
 [ext_resource type="Script" path="res://content/ui/components/panel/panel.gd" id="1_2jq4a"]
-[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="1_mpdsy"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="1_mpdsy"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_koby5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ei5ok"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("1_mpdsy")
@@ -18,11 +18,11 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_1r1mq"]
+[sub_resource type="QuadMesh" id="QuadMesh_32k5v"]
 size = Vector2(0.04, 0.04)
 
 [node name="Panel" type="MeshInstance3D"]
-material_override = SubResource("ShaderMaterial_koby5")
-mesh = SubResource("QuadMesh_1r1mq")
+material_override = SubResource("ShaderMaterial_ei5ok")
+mesh = SubResource("QuadMesh_32k5v")
 script = ExtResource("1_2jq4a")
 size = Vector2(0.04, 0.04)

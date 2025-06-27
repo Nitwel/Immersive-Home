@@ -1,18 +1,67 @@
-[gd_scene load_steps=14 format=3 uid="uid://eecv28y6jxk4"]
+[gd_scene load_steps=34 format=3 uid="uid://eecv28y6jxk4"]
 
 [ext_resource type="PackedScene" uid="uid://clc5dre31iskm" path="res://addons/godot-xr-tools/xr/start_xr.tscn" id="1_i4c04"]
-[ext_resource type="Script" path="res://content/main.gd" id="1_uvrd4"]
+[ext_resource type="Script" uid="uid://bw2xmng3ynp6g" path="res://content/main.gd" id="1_uvrd4"]
 [ext_resource type="PackedScene" uid="uid://b30w6tywfj4fp" path="res://content/system/controller_left/controller_left.tscn" id="2_2lraw"]
 [ext_resource type="Environment" uid="uid://cfm0g4r0h2n1p" path="res://assets/environment.tres" id="2_lsndp"]
 [ext_resource type="PackedScene" uid="uid://b2kjh1fpjptdr" path="res://content/system/camera/camera.tscn" id="3_rj4ac"]
 [ext_resource type="PackedScene" uid="uid://ctltchlf2j2r4" path="res://addons/xr-simulator/XRSimulator.tscn" id="5_3qc8g"]
 [ext_resource type="PackedScene" uid="uid://biu66ihmvmku3" path="res://content/system/controller_right/controller_right.tscn" id="7_0b3tc"]
+[ext_resource type="Material" uid="uid://b4n5e666v0gye" path="res://content/Materials/NoDepthTest.tres" id="7_r22o6"]
 [ext_resource type="PackedScene" uid="uid://c3kdssrmv84kv" path="res://content/ui/menu/menu.tscn" id="8_du83w"]
 [ext_resource type="PackedScene" uid="uid://cbemihbxkd4ll" path="res://content/system/house/house.tscn" id="9_np6mw"]
-[ext_resource type="Script" path="res://lib/utils/screenshot.gd" id="12_e13ym"]
+[ext_resource type="Script" uid="uid://cwse6tumx7sd4" path="res://lib/utils/screenshot.gd" id="12_e13ym"]
 [ext_resource type="PackedScene" uid="uid://ds60i5n211hi3" path="res://content/system/miniature/miniature.tscn" id="12_lmxhs"]
 [ext_resource type="PackedScene" uid="uid://bhyddd1f0ry1x" path="res://content/ui/onboarding/onboarding.tscn" id="12_uq2nj"]
 [ext_resource type="PackedScene" uid="uid://lrehk38exd5n" path="res://content/system/keyboard/keyboard.tscn" id="13_kylpi"]
+[ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="13_tu1bw"]
+[ext_resource type="PackedScene" uid="uid://ktm7k0co2o7l" path="res://addons/mqtt/mqtt.tscn" id="15_tu1bw"]
+[ext_resource type="PackedScene" uid="uid://ytah1xlxtsv0" path="res://assets/materials/magictinsel.tscn" id="16_lmrq8"]
+[ext_resource type="Script" uid="uid://cta77qg7aqv04" path="res://content/mediabrowserobjects.gd" id="18_531rh"]
+[ext_resource type="AudioStream" uid="uid://cqjbct8g0ajb8" path="res://assets/sound/wispTemp2.wav" id="18_htvu5"]
+[ext_resource type="PackedScene" uid="uid://dh774jqd7tuy7" path="res://content/mediabrowserbox.tscn" id="19_50h8v"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="20_6f830"]
+[ext_resource type="Material" uid="uid://crycqex1ucj04" path="res://content/ui/components/panel/panel.material" id="20_htvu5"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_tu1bw"]
+material = ExtResource("7_r22o6")
+size = Vector3(0.01, 0.01, 20)
+
+[sub_resource type="QuadMesh" id="QuadMesh_ce7ft"]
+resource_local_to_scene = true
+size = Vector2(1.5, 1)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_htvu5"]
+viewport_path = NodePath("Viewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efkdf"]
+transparency = 1
+cull_mode = 2
+albedo_texture = SubResource("ViewportTexture_htvu5")
+texture_filter = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_531rh"]
+resource_local_to_scene = true
+size = Vector3(1.5, 1, 0.02)
+
+[sub_resource type="QuadMesh" id="QuadMesh_6f830"]
+size = Vector2(0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_htvu5"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(1, 0.968627, 0.243137, 0.823529)
+
+[sub_resource type="QuadMesh" id="QuadMesh_htvu5"]
+size = Vector2(0.6, 0.02)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r22o6"]
+albedo_color = Color(0.670588, 1, 1, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_aywjo"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t8h65"]
+cull_mode = 2
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_uvrd4")
@@ -33,6 +82,12 @@ enable_passthrough = true
 
 [node name="XRCamera3D" parent="XROrigin3D" instance=ExtResource("3_rj4ac")]
 unique_name_in_owner = true
+doppler_tracking = 2
+fov = 37.8493
+
+[node name="HMD_Label" type="Label3D" parent="XROrigin3D/XRCamera3D"]
+transform = Transform3D(0.1, 0, 0, 0, 0.0967709, -0.0252069, 0, 0.0252069, 0.0967709, -0.071, -0.061, -0.151)
+text = "gyfg"
 
 [node name="XRControllerLeft" parent="XROrigin3D" instance=ExtResource("2_2lraw")]
 unique_name_in_owner = true
@@ -41,6 +96,19 @@ transform = Transform3D(0.999999, -1.39633e-11, 0, 9.48075e-12, 1, 0, 0, 0, 1, -
 [node name="XRControllerRight" parent="XROrigin3D" instance=ExtResource("7_0b3tc")]
 unique_name_in_owner = true
 transform = Transform3D(0.999999, -1.39635e-11, 0, 1.31553e-10, 1, 0, 0, 0, 1, 0.336726, 0.575093, -0.437942)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 10, 0)
+mesh = SubResource("PrismMesh_tu1bw")
+
+[node name="OpenXRCompositionLayerQuad" type="OpenXRCompositionLayerQuad" parent="XROrigin3D"]
+transform = Transform3D(0.929493, 0, -0.368838, 0, 1, 0, 0.368838, 0, 0.929493, 0.287905, 0.778984, -1.64049)
+visible = false
+use_android_surface = true
+sort_order = -1
+enable_hole_punch = true
+XR_FB_composition_layer_image_layout/vertical_flip = true
+quad_size = Vector2(0.4, 0.4)
 
 [node name="XRSimulator" parent="." instance=ExtResource("5_3qc8g")]
 disable_xr_in_editor = false
@@ -60,5 +128,117 @@ transform = Transform3D(1, -1.39636e-11, 0, 4.42413e-11, 1, 0, 0, 0, 1, -0.57679
 [node name="Screenshot" type="Node" parent="."]
 script = ExtResource("12_e13ym")
 
+[node name="TextArea2D" parent="." instance=ExtResource("13_tu1bw")]
+transform = Transform3D(0.5, 0, 0, 0, 0.496488, 0.0591589, 0, -0.0591589, 0.496488, -0.0782674, 1.29463, -0.531271)
+visible = false
+screen_size = Vector2(1.5, 1)
+enabled = false
+collision_layer = 5242887
+
+[node name="ColorRect" type="ColorRect" parent="TextArea2D/Viewport" index="0"]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.243137, 1, 1, 1)
+
+[node name="TextEdit" type="TextEdit" parent="TextArea2D/Viewport/ColorRect"]
+custom_minimum_size = Vector2(300, 200)
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+theme_override_colors/background_color = Color(0, 0.470588, 0, 1)
+placeholder_text = "asdasdasdasdasd
+1123123123123123123
+34234234234234234
+dfhdfhfghfghfghfghfgh
+sdfsfwefwefwefwefwef
+asdasdasdasdasda
+tytykyukyukykyukyuk
+8990890890890890890
+h;;l;l;l;l;l;l;l;l
+cvbcvbcvbcvbcvbcvb
+sdfsdfsdf
+r
+te
+rt
+ertertertertertertert"
+
+[node name="Screen" parent="TextArea2D" index="1"]
+mesh = SubResource("QuadMesh_ce7ft")
+surface_material_override/0 = SubResource("StandardMaterial3D_efkdf")
+
+[node name="StaticBody3D" parent="TextArea2D" index="2"]
+collision_layer = 5242887
+screen_size = Vector2(1.5, 1)
+
+[node name="CollisionShape3D" parent="TextArea2D/StaticBody3D" index="0"]
+shape = SubResource("BoxShape3D_531rh")
+
 [node name="Keyboard" parent="." instance=ExtResource("13_kylpi")]
 transform = Transform3D(0.5, 0, 0, 0, 0.237697, 0.439887, 0, -0.439887, 0.237697, -0.0241798, 0.452996, -0.531271)
+
+[node name="MQTT" parent="." instance=ExtResource("15_tu1bw")]
+verbose_level = 0
+
+[node name="MagicTinsel" parent="." instance=ExtResource("16_lmrq8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.129365, -0.821449)
+amount = 1000
+amount_ratio = 0.4475
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="MagicTinsel"]
+stream = ExtResource("18_htvu5")
+volume_db = -19.741
+doppler_tracking = 2
+
+[node name="MediaBrowserObjects" type="Node3D" parent="."]
+script = ExtResource("18_531rh")
+
+[node name="VideoFrame" type="Node3D" parent="MediaBrowserObjects"]
+transform = Transform3D(0.921009, 0, -0.389542, 0, 1, 0, 0.389542, 0, 0.921009, 1.13626, 0.340048, -1.20125)
+
+[node name="BackgroundMesh" type="MeshInstance3D" parent="MediaBrowserObjects/VideoFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.02)
+material_override = ExtResource("20_htvu5")
+mesh = SubResource("QuadMesh_6f830")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_htvu5")
+
+[node name="CompositionLayerPosition" type="Marker3D" parent="MediaBrowserObjects/VideoFrame"]
+
+[node name="MessageLabel" type="Label3D" parent="MediaBrowserObjects/VideoFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.02)
+visible = false
+pixel_size = 0.002
+text = "Error"
+
+[node name="VidLengthBar" type="MeshInstance3D" parent="MediaBrowserObjects/VideoFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34, 0)
+mesh = SubResource("QuadMesh_htvu5")
+surface_material_override/0 = SubResource("StandardMaterial3D_r22o6")
+
+[node name="Timer" type="Timer" parent="MediaBrowserObjects/VideoFrame/VidLengthBar"]
+process_callback = 0
+autostart = true
+
+[node name="PlayVideoButton" parent="MediaBrowserObjects/VideoFrame" instance=ExtResource("20_6f830")]
+font_size = 16
+label = "resume"
+icon = true
+disabled = true
+size = Vector3(0.1, 0.1, 0.01)
+
+[node name="PhotoMesh" type="MeshInstance3D" parent="MediaBrowserObjects/VideoFrame"]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -0.0145928, 0, -0.0345023)
+visible = false
+mesh = SubResource("QuadMesh_aywjo")
+surface_material_override/0 = SubResource("StandardMaterial3D_t8h65")
+
+[node name="StaticBody3D" parent="MediaBrowserObjects" instance=ExtResource("19_50h8v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.66995, 1.50879, -5.0189)
+
+[connection signal="button_pressed" from="XROrigin3D/XRControllerLeft" to="." method="_on_xr_controller_left_button_pressed"]
+[connection signal="broker_connected" from="MQTT" to="." method="_on_mqtt_broker_connected"]
+[connection signal="received_message" from="MQTT" to="." method="_on_mqtt_received_message"]
+[connection signal="timeout" from="MediaBrowserObjects/VideoFrame/VidLengthBar/Timer" to="MediaBrowserObjects" method="updateplaybackposition"]
+[connection signal="on_button_down" from="MediaBrowserObjects/VideoFrame/PlayVideoButton" to="MediaBrowserObjects" method="_on_play_video_on_button_down"]
+
+[editable path="TextArea2D"]

@@ -15,6 +15,8 @@ func test_integration():
 		"version": OS.get_version(),
 		"platform": OS.get_name(),
 	})
-
-	if response.status == Promise.Status.RESOLVED:
+	if response.status == Promise.Status.RESOLVED and response.payload.get("success"):
 		integration_exists = true
+		print("HASS integration_exists")
+	else:
+		print("HASS not integration_exists")

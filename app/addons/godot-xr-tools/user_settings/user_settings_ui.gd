@@ -65,4 +65,3 @@ func _on_y_axis_dead_zone_slider_value_changed(value):
 
 func _on_x_axis_dead_zone_slider_value_changed(value):
 	XRToolsUserSettings.x_axis_dead_zone = x_deadzone_slider.value
-

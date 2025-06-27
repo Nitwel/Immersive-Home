@@ -13,17 +13,17 @@ void vertex() {
 void fragment() {
 	ALBEDO = vec3(0.5, 0.5, 0.5);
 	vec2 parts = 1.0 / steps;
-	
+
 	float y_mod = mod(UV.y + offset.y, parts.y);
 	float x_mod = mod(UV.x + offset.x, parts.x);
-	
+
 	if (x_mod < size.x / 2.0 || x_mod > parts.x - size.x / 2.0 || y_mod < size.y || y_mod > parts.y - size.y / 2.0) {
-		
+
 		ALPHA = 0.7;
 	} else {
 		ALPHA = 0.3;
 	}
-	
+
 }
 
 //void light() {

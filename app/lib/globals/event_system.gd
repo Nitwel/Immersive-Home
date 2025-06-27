@@ -82,6 +82,7 @@ func notify(message: String, type:=EventNotify.Type.INFO):
 	var event = EventNotify.new()
 	event.message = message
 	event.type = type
+	prints("Notification: ", event.type, event.message)
 	emit("notify", event)
 
 ## Helper for emitting controller actions

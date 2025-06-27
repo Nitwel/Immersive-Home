@@ -1,0 +1,149 @@
+[
+    {
+        "id": "1fc7b0190a9c731d",
+        "type": "tab",
+        "label": "QuestWalk",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "eb8e2330d2479177",
+        "type": "template",
+        "z": "1fc7b0190a9c731d",
+        "name": "start here",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "Welcome to the first station of your QuestTour\nThis will guide you around the DoESLiverpool \nhackspace.\n\n",
+        "output": "str",
+        "x": 100,
+        "y": 100,
+        "wires": [
+            [
+                "09fa3d523675e490"
+            ]
+        ],
+        "icon": "node-red/comment.svg"
+    },
+    {
+        "id": "09fa3d523675e490",
+        "type": "template",
+        "z": "1fc7b0190a9c731d",
+        "name": "display",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the display case of stuff we've done\n\nAnd a lot more coming from there\n",
+        "output": "str",
+        "x": 320,
+        "y": 140,
+        "wires": [
+            [
+                "9f848a9a817387d0"
+            ]
+        ],
+        "icon": "node-red/comment.svg"
+    },
+    {
+        "id": "9f848a9a817387d0",
+        "type": "template",
+        "z": "1fc7b0190a9c731d",
+        "name": "heat press",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "Here is the heat press\nfor making T-shirts\nand there is also a mug press\n\n",
+        "output": "str",
+        "x": 490,
+        "y": 140,
+        "wires": [
+            [
+                "4cd95aa1054bcd64"
+            ]
+        ],
+        "icon": "node-red/comment.svg"
+    },
+    {
+        "id": "4cd95aa1054bcd64",
+        "type": "template",
+        "z": "1fc7b0190a9c731d",
+        "name": "coffee",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the coffee machine\n\n",
+        "output": "str",
+        "x": 630,
+        "y": 140,
+        "wires": [
+            [
+                "5ad57becefdc770b",
+                "a7d5a4f05d6917dc"
+            ]
+        ],
+        "icon": "node-red/comment.svg"
+    },
+    {
+        "id": "5ad57becefdc770b",
+        "type": "template",
+        "z": "1fc7b0190a9c731d",
+        "name": "make coffee",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "make coffee\n",
+        "output": "str",
+        "x": 850,
+        "y": 140,
+        "wires": [
+            [
+                "a7d5a4f05d6917dc"
+            ]
+        ],
+        "icon": "node-red/comment.svg"
+    },
+    {
+        "id": "a7d5a4f05d6917dc",
+        "type": "template",
+        "z": "1fc7b0190a9c731d",
+        "name": "donations",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the donations box\n",
+        "output": "str",
+        "x": 760,
+        "y": 280,
+        "wires": [
+            [
+                "4b17b99690fd021d"
+            ]
+        ],
+        "icon": "node-red/comment.svg"
+    },
+    {
+        "id": "4b17b99690fd021d",
+        "type": "template",
+        "z": "1fc7b0190a9c731d",
+        "name": "end",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "You are at the end\nThank you for participating\nWe hope you enjoyed this adventure\n",
+        "output": "str",
+        "x": 950,
+        "y": 280,
+        "wires": [
+            []
+        ],
+        "icon": "node-red/comment.svg"
+    }
+]

@@ -1,14 +1,14 @@
 [gd_scene load_steps=8 format=3 uid="uid://87utftwh8lr6"]
 
 [ext_resource type="PackedScene" uid="uid://dnam3fe36gg62" path="res://content/ui/components/panel/panel.tscn" id="1_3t6cp"]
-[ext_resource type="Script" path="res://content/ui/ui_console.gd" id="1_ullcc"]
-[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="2_dbrjx"]
-[ext_resource type="Script" path="res://content/functions/movable.gd" id="3_2a4np"]
+[ext_resource type="Script" uid="uid://b7gk2whernrj5" path="res://content/ui/ui_console.gd" id="1_ullcc"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="2_dbrjx"]
+[ext_resource type="Script" uid="uid://tquknum0fs5j" path="res://content/functions/movable.gd" id="3_2a4np"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mfp33"]
 size = Vector3(1, 1, 0.01)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_p0lm6"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_03dey"]
 resource_local_to_scene = true
 render_priority = 10
 shader = ExtResource("2_dbrjx")
@@ -23,7 +23,7 @@ shader_parameter/corner_radius = 0.2
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
-[sub_resource type="QuadMesh" id="QuadMesh_drxk8"]
+[sub_resource type="QuadMesh" id="QuadMesh_6nxub"]
 
 [node name="Console" type="StaticBody3D"]
 collision_layer = 2
@@ -48,6 +48,6 @@ width = 980.0
 script = ExtResource("3_2a4np")
 
 [node name="Panel" parent="." instance=ExtResource("1_3t6cp")]
-material_override = SubResource("ShaderMaterial_p0lm6")
-mesh = SubResource("QuadMesh_drxk8")
+material_override = SubResource("ShaderMaterial_03dey")
+mesh = SubResource("QuadMesh_6nxub")
 size = Vector2(1, 1)

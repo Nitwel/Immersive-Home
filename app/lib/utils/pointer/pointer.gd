@@ -44,12 +44,13 @@ func _handle_move():
 func _handle_enter_leave():
 	var collider = ray.get_collider()
 
-	if collider == last_collided||is_grabbed||is_pressed:
+	if (collider == last_collided)||is_grabbed||is_pressed:
 		return
 
 	_emit_event("ray_enter", collider)
+	if not is_instance_valid(last_collided):
+		last_collided = null  # Force an freed object to be actually null for otherwise the emit_event assignment failes
 	_emit_event("ray_leave", last_collided)
-
 	last_collided = collider
 
 func pressed(type: Initiator.EventType):
@@ -87,9 +88,10 @@ func released(type: Initiator.EventType):
 				moved = false
 
 func _emit_event(type: String, target):
-	var event = EventPointer.new()
-	event.initiator = initiator
-	event.target = target
-	event.ray = ray
+	if is_instance_valid(target):
+		var event = EventPointer.new()
+		event.initiator = initiator
+		event.target = target
+		event.ray = ray
 
-	EventSystem.emit(type, event)
+		EventSystem.emit(type, event)

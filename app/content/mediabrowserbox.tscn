@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://dh774jqd7tuy7"]
+
+[ext_resource type="Texture2D" uid="uid://ddkdqduooyt5e" path="res://assets/ComfyUI_00480_2.png" id="1_bbmfi"]
+[ext_resource type="Script" uid="uid://tquknum0fs5j" path="res://content/functions/movable.gd" id="2_w4pee"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aywjo"]
+resource_local_to_scene = true
+size = Vector3(1, 1, 0.1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_r22o6"]
+resource_local_to_scene = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efkdf"]
+resource_local_to_scene = true
+albedo_texture = ExtResource("1_bbmfi")
+
+[node name="StaticBody3D" type="StaticBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_aywjo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("QuadMesh_r22o6")
+surface_material_override/0 = SubResource("StandardMaterial3D_efkdf")
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("2_w4pee")
+resizable = true

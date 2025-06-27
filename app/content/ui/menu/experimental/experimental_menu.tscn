@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://10l8vxnddff2"]
+
+[ext_resource type="Script" uid="uid://cufwis4rtl6vp" path="res://content/ui/menu/experimental/experimental_menu.gd" id="1_sebm4"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_opbud"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="5_scslh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3iv64"]
+render_priority = -3
+shader = ExtResource("5_scslh")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(0.42, 0.32)
+shader_parameter/border_size = 0.001
+shader_parameter/border_fade_in = 0.005
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 0.02
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_d0l0p"]
+size = Vector2(0.42, 0.32)
+
+[node name="ExperimentalMenu" type="Node3D"]
+script = ExtResource("1_sebm4")
+
+[node name="Background" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 1.06581e-14, 0, -1.06581e-14, 1, 0.21, -0.16, 0)
+material_override = SubResource("ShaderMaterial_3iv64")
+mesh = SubResource("QuadMesh_d0l0p")
+skeleton = NodePath("../..")
+
+[node name="JulianButton1" parent="." instance=ExtResource("4_opbud")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111, -0.155, 0)
+font_size = 17
+label = "Julian Button 1"
+size = Vector3(0.17, 0.255, 0.01)
+
+[node name="JulianButton2" parent="." instance=ExtResource("4_opbud")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.307, -0.155, 0)
+font_size = 17
+label = "Julian Button 2"
+size = Vector3(0.17, 0.255, 0.01)

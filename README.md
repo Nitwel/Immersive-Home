@@ -1,60 +1,37 @@
-![logo](app/assets/banner.png)
+# Important Introduction
 
-#  🏠 Introduction
+This project is called **SafeAR** (also known as **QuestWalk**), an app deployed on the stand-alone [Meta Quest 3](https://en.wikipedia.org/wiki/Meta_Quest_3) to easily create on-boarding, safety training and instructed procedures that can be used on-site in Augmented Reality.  Similar projects include [The Ghent Alterpiece](https://www.alfavision.be/project/ghent-altarpiece) by AlfaVision.
 
-Immersive Home is project to bring Smart Home and Mixed Reality technologies together for an intuitive and immersive experience.
+It is the result of work done between [18 February 2025](https://www.ukri.org/news/daresbury-laboratory-welcomes-first-businesses-to-new-5g-ecosystem/) and 21 March 2025 (not including time spent writing the bid application) for the [5G Ecosystem - Proof of Concept call](https://iuk-business-connect.org.uk/opportunities/5g-ecosystem-proof-of-concept-call/).
 
-<a href="https://immersive-home.org" target="_blank" style="text-decoration: none !important">
-	<img height="32" src="app/assets/badges/website.png" alt="Badge linking to our website" />
-</a>
+We could not have attempted this project in such a short time frame without starting from the incredible open source work of [**Immersive-Home**](https://github.com/Nitwel/Immersive-Home) and [Solar-XR](https://github.com/TU-Dublin-Computer-Science/Solar-XR). 
 
-<a href="https://discord.gg/DWWtDfVeus" target="_blank" style="text-decoration: none !important">
-	<img height="32" src="app/assets/badges/discord.png" alt="Badge linking to our discord" />
-</a>
+# Demonstration Video
 
-<a href="https://www.oculus.com/experiences/quest/7533875049973382/" target="_blank" style="text-decoration: none !important">
-	<img height="32" src="app/assets/badges/meta.png" alt="Badge linking to Meta App Lab" />
-</a>
+This is an example of guiding someone to refill the coffee machine in the [DoESLiverpool hackspace](https://doesliverpool.com/).
 
-<a href="https://github.com/Nitwel/Immersive-Home/releases/latest/download/Android.zip" target="_blank" style="text-decoration: none !important">
-	<img height="32" src="app/assets/badges/github.png" alt="Badge linking to GitHub" />
-</a>
+[![Making Coffee in AR](https://github.com/user-attachments/assets/c20b158d-0c3e-4a36-b9cd-3a809a6a7bd1)](http://www.youtube.com/watch?v=QzLRFOMqT2g "SafeAR mixed reality training demonstration: How to make coffee at DoES Liverpool")
 
-<a href="https://nitwel.itch.io/immersive-home" target="_blank" style="text-decoration: none !important">
-	<img height="32" src="app/assets/badges/itch.png" alt="Badge linking to itch.io" />
-</a>
+# Technical components
 
-<a href="https://sidequestvr.com/app/26827/immersive-home" target="_blank" style="text-decoration: none !important">
-	<img height="32" src="app/assets/badges/sidequest.png" alt="Badge linking to sidequest" />
-</a>
+## Home Assistant
 
-## Documentation
+[Home Assistant](https://www.home-assistant.io/) is a huge modular home automation system that runs on an RaspberryPI.  [Immersive-Home](https://immersive-home.org/) is able to log into it to access its location-based sensors and controls and overlay them into Augmented Reality.
 
-For users: [https://docs.immersive-home.org/](https://docs.immersive-home.org/)
-For developers: [https://docs.immersive-home.org/development/](https://docs.immersive-home.org/development/)
+## Godot engine
 
+The [Godot](https://godotengine.org/) engine is a free, lightweight open source Game Engine that supports Virtual Reality features such as pass-through cameras and hand-tracking.
 
-## Features
+## Exoplayer plugin
 
-- **Fast and Intuitive control over IoT devices**
-- **Live overview over your smart home**
-- **Build in Voice Assistant for more control**
-- **Miniature view to manage your whole house**
-- **Natural interactions with hands**
-- **Advanced automations based on position in room**
+The Meta Quest 3 Virtual Reality headset runs Android which means that many the of the internal features of this operating system potentially available to an application running on it.  Partway through the project the [Godot-ExoPlayer](https://github.com/bnjmntmm/godot-exoplayer/) feature appeared, which made it suddenly very easy to download and playback videos.
 
-## Support the Project
+## Node-RED
 
-💕 If you like to see the project grow to support more devices and interaction methods, consider supporting the project using these methods:
+[Node-RED](https://nodered.org/) is an optional component of Home Assistant that provides a visual flow-based coding system.  It turns out to be pretty useful for planning and drawing flow charts for walk-throughs to be deployed to the Augmented Reality app.  The ability to make and plan content is in some ways more important than the software to show it.  
 
-- Donate using [PayPal]( https://paypal.me/nitwel) or [GitHub Sponsors](https://github.com/sponsors/Nitwel)
-- Buying the app on [Meta App Lab](https://www.oculus.com/experiences/quest/7533875049973382/) or [itch.io](https://nitwel.itch.io/immersive-home)
-- Contributing to the project by creating issues or pull requests
+![image](https://github.com/user-attachments/assets/367fcd70-ede1-41b4-a6de-bee537beb455)
 
-## Supported Devices
+# Future work
 
-**Smart Home Platforms**
-- [Home Assistant](https://www.home-assistant.io/)
-
-**Mixed Reality Headsets**
-- Meta Quest 2 / Pro / 3
+SafeAR/QuestWalk is looking for real world uses and applications that could pay for and drive its future development.  You could theoretically download it and try it out yourself, but given the necessary sketchiness of the prototype product made on this time scale, you will need our help. Please contact [Dynamic Devices](https://www.dynamicdevices.co.uk/) for details.

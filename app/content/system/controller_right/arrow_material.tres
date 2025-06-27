@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://o8w5p7epfdqt"]
+
+[ext_resource type="Shader" uid="uid://dcot5nai3uxa5" path="res://3DGlass.gdshader" id="1_gsnyp"]
+
+[resource]
+render_priority = 50
+shader = ExtResource("1_gsnyp")
+shader_parameter/albedo = Color(1, 0.435294, 0.568627, 0.4)

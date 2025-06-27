@@ -12,6 +12,8 @@ static func key_to_string(key: Key, caps: bool=false, apply_to: String="") -> St
 	match key:
 		KEY_INSERT: apply_to += DisplayServer.clipboard_get()
 		KEY_BACKSPACE: apply_to = apply_to.substr(0, apply_to.length() - 1)
+		KEY_ENTER: apply_to += "
+		"
 		KEY_SPACE: apply_to += " "
 		KEY_ASCIITILDE: apply_to += "~"
 		KEY_SLASH: apply_to += "/"

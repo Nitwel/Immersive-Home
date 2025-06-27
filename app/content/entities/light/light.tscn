@@ -1,13 +1,13 @@
 [gd_scene load_steps=11 format=3 uid="uid://4smofj8ou0g7"]
 
-[ext_resource type="Script" path="res://content/entities/light/light.gd" id="1_ykxy3"]
-[ext_resource type="Script" path="res://content/functions/movable.gd" id="4_4sfxb"]
+[ext_resource type="Script" uid="uid://btp4885l2n5q5" path="res://content/entities/light/light.gd" id="1_ykxy3"]
+[ext_resource type="Script" uid="uid://tquknum0fs5j" path="res://content/functions/movable.gd" id="4_4sfxb"]
 [ext_resource type="Material" uid="uid://vce66e7sbc3n" path="res://content/entities/light/light_on.tres" id="5_50gph"]
 [ext_resource type="PackedScene" uid="uid://chrjqr4l7atrc" path="res://content/ui/components/color_wheel/color_wheel.tscn" id="5_qj75k"]
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="6_mhjlm"]
 [ext_resource type="PackedScene" uid="uid://wgnowarejk5y" path="res://content/ui/components/select/select.tscn" id="7_wbegr"]
 [ext_resource type="AudioStream" uid="uid://du7ur0lu28cvn" path="res://assets/sound/finger-snap.mp3" id="8_3togy"]
-[ext_resource type="Script" path="res://content/functions/camera_follower.gd" id="9_a7u7m"]
+[ext_resource type="Script" uid="uid://bg6vc81m8fuka" path="res://content/functions/camera_follower.gd" id="9_a7u7m"]
 [ext_resource type="PackedScene" uid="uid://de34yde00ngkv" path="res://content/entities/light/settings.tscn" id="10_su84f"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]

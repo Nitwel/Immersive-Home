@@ -12,10 +12,10 @@ func _ready():
 	photo_sound.stream = photo_sound_stream
 	photo_sound.volume_db = -10
 
-	EventSystem.on_action_down.connect(func(action):
-		if action.name == "ax_button":
-			timer.start()
-	)
+	#EventSystem.on_action_down.connect(func(action):
+	#	if action.name == "ax_button":
+	#		timer.start()
+	#)
 
 	timer.timeout.connect(func():
 		EventSystem.notify("Screenshot taken", EventNotify.Type.INFO)

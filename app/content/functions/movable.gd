@@ -28,10 +28,10 @@ var distances = Vector2()
 # For Resetting
 var initial_global_transform = Transform3D()
 
-func _process(delta):
-	if get_tree().debug_collisions_hint&&initiator2 != null:
-		DebugDraw3D.draw_line(initial_position, initial_position + initial_direction, Color(1, 0, 0))
-		DebugDraw3D.draw_line(initial_position, initial_position + initial_up, Color(0, 1, 0))
+#func _process(delta):
+#	if get_tree().debug_collisions_hint&&initiator2 != null:
+#		DebugDraw3D.draw_line(initial_position, initial_position + initial_direction, Color(1, 0, 0))
+#		DebugDraw3D.draw_line(initial_position, initial_position + initial_up, Color(0, 1, 0))
 
 func reset():
 	get_parent().global_transform = initial_global_transform
@@ -92,9 +92,9 @@ func _on_grab_move(event: EventPointer):
 		if resizable == false:
 			new_direction = new_direction.normalized() * initial_direction.length()
 
-		if get_tree().debug_collisions_hint:
-			DebugDraw3D.draw_line(new_position, new_position + new_direction, Color(1, 0, 0))
-			DebugDraw3D.draw_line(new_position, new_position + new_up, Color(0, 1, 0))
+		#if get_tree().debug_collisions_hint:
+		#	DebugDraw3D.draw_line(new_position, new_position + new_direction, Color(1, 0, 0))
+		#	DebugDraw3D.draw_line(new_position, new_position + new_up, Color(0, 1, 0))
 
 		get_parent().global_transform = TransformTools.calc_delta_transform(initial_position, initial_direction, initial_up, new_position, new_direction, new_up) * initial_transform
 		return

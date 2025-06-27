@@ -7,6 +7,8 @@ const button_scene = preload ("res://content/ui/components/button/button.tscn")
 @onready var caps_button = $Caps
 @onready var backspace_button = $Backspace
 @onready var paste_button = $Paste
+@onready var return_button = $Return
+@onready var space_button = $Space
 var key_list = [
 	[KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, KEY_ASCIITILDE],
 	[KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I, KEY_O, KEY_P, KEY_SLASH],
@@ -38,7 +40,13 @@ func _prepare_keyboard_spawn():
 			return
 
 		App.main.add_child(self)
-		global_transform=App.menu.get_node("AnimationContainer/KeyboardPlace").global_transform
+		var aat = event.target.find_parent("AnimationContainer")
+		var pat = App.menu.get_node("AnimationContainer") if aat != null else event.target.get_parent()
+		var kp = pat.get_node_or_null("KeyboardPlace")
+		if kp:
+			global_transform = kp.global_transform
+			get_node("../TextArea2D").global_transform = kp.global_transform
+			get_node("../TextArea2D").global_transform.origin.y += 0.5
 	)
 
 	EventSystem.on_focus_out.connect(func(event):
@@ -96,6 +104,24 @@ func _connect_key_events():
 	paste_button.on_button_up.connect(func():
 		_emit_event("key_up", KEY_INSERT)
 	)
+	
+	# Enter & Space added for station editing
+	
+	return_button.on_button_down.connect(func():
+		_emit_event("key_down", KEY_ENTER)
+		)
+		
+	return_button.on_button_up.connect(func():
+		_emit_event("key_up", KEY_ENTER)
+		)
+		
+	space_button.on_button_down.connect(func():
+		_emit_event("key_down", KEY_SPACE)
+	)
+	
+	space_button.on_button_up.connect(func():
+		_emit_event("key_up", KEY_SPACE)
+	)
 
 func _create_key(key: Key):
 	var key_node = button_scene.instantiate()
@@ -120,5 +146,4 @@ func _emit_event(type: String, key: Key):
 	var event = EventKey.new()
 	event.key = key
 	event.shift_pressed = caps
-	
 	EventSystem.emit(type, event)

@@ -1,10 +1,10 @@
 [gd_scene load_steps=9 format=3 uid="uid://biwinf4360f10"]
 
-[ext_resource type="Script" path="res://content/ui/menu/room/views/doors.gd" id="1_22w4h"]
-[ext_resource type="Script" path="res://content/ui/menu/room/views/rooms_map.gd" id="2_to21g"]
+[ext_resource type="Script" uid="uid://6iomxbkg3j40" path="res://content/ui/menu/room/views/doors.gd" id="1_22w4h"]
+[ext_resource type="Script" uid="uid://bwnayln517rw" path="res://content/ui/menu/room/views/rooms_map.gd" id="2_to21g"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_v01ty"]
-[ext_resource type="Script" path="res://content/ui/menu/room/views/doors_map.gd" id="3_0k2cc"]
-[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="4_eorpn"]
+[ext_resource type="Script" uid="uid://cty1wf6myqlc6" path="res://content/ui/menu/room/views/doors_map.gd" id="3_0k2cc"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="4_eorpn"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_lkxbm"]
 size = Vector2(0.2, 0.2)
@@ -49,6 +49,11 @@ icon = true
 [node name="DeleteButton" parent="." instance=ExtResource("2_v01ty")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.28, 0)
 label = "delete"
+icon = true
+
+[node name="DeleteAll" parent="." instance=ExtResource("2_v01ty")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.257, -0.28, 0)
+label = "delete_sweep"
 icon = true
 
 [node name="Background" type="MeshInstance3D" parent="."]

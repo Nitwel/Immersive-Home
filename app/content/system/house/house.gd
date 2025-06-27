@@ -11,7 +11,6 @@ const AlignReference = preload ("./align_reference.gd")
 @onready var align_reference: AlignReference = $AlignReference
 @onready var doors: Doors = $Doors
 
-var fixing_reference: bool = false
 var editing_room: RoomType = null
 var loaded = R.state(false)
 
@@ -19,40 +18,35 @@ func _ready():
 	Store.house.on_loaded.connect(func():
 		update_house()
 	)
+	if Store.house.state.rooms.size() != 0:
+		print("emitting update_house after signal connected")
+		Store.house.on_loaded.emit()
 
 func update_house():
+	print("*** Creating entities from Store.house.state.rooms to $Rooms")
 	loaded.value = false
 	for old_room in get_rooms():
 		old_room.get_parent().remove_child(old_room)
 		old_room.queue_free()
 
-	align_reference.update_align_reference()
-
+	print("disabled update_align_reference")
+	# align_reference.update_align_reference()
 	for index in range(Store.house.state.rooms.size()):
 		var new_room = Store.house.state.rooms[index]
-
 		if new_room.corners.size() == 0:
 			Store.house.state.rooms.remove_at(index)
-			Store.house.save_local()
 			continue
-
 		create_room(new_room.name)
-
 	for entity_index in range(Store.house.state.entities.size()):
 		var entity = Store.house.state.entities[entity_index]
-
 		var entity_instance = create_entity_in(entity.id, entity.room, entity.get("interface", null))
-
 		if entity_instance == null:
 			continue
-
 		entity_instance.global_position = entity.position
 		entity_instance.global_rotation = entity.rotation
 		entity_instance.scale = Vector3(entity.scale, entity.scale, entity.scale) if entity.has("scale") else Vector3(1, 1, 1)
-
-		if entity.has("options")&&entity_instance.has_method("set_options"):
+		if entity.has("options") and entity_instance.has_method("set_options"):
 			entity_instance.set_options(entity.options)
-
 	loaded.value = true
 
 func create_room(room_name: String) -> RoomType:
@@ -112,7 +106,6 @@ func delete_room(room_name):
 	room.queue_free()
 
 	Store.house.state.rooms = Store.house.state.rooms.filter(func(r): return r.name != room_name)
-
 	Store.house.save_local()
 
 func is_editiong(room_name):
@@ -189,6 +182,33 @@ func create_entity(entity_id: String, entity_position: Vector3, type=null):
 
 	return entity
 
+func allstationsoptions():
+	var res = [ ]
+	for room in get_rooms():
+		for entity in room.get_node("Entities").get_children():
+			if entity and entity.has_method("get_options"):
+				var options = entity.get_options()
+				if options.has("station_id"):
+					res.append(options)
+	return res
+	
+func find_station_byname(ns):
+	for room in get_rooms():
+		for entity in room.get_node("Entities").get_children():
+			if entity.entity_id.split(".")[0] == "text":
+				if entity.station_name == ns:
+					return entity
+	return null
+
+func find_station_byid(stationid):
+	for room in get_rooms():
+		for entity in room.get_node("Entities").get_children():
+			if entity and entity.has_method("get_options"):
+				var options = entity.get_options()
+				if options.has("station_id") and options["station_id"] == stationid:
+					return entity
+	return null
+
 func create_entity_in(entity_id: String, room_name: String, type=null):
 	var room = find_room(room_name)
 
@@ -205,44 +225,54 @@ func create_entity_in(entity_id: String, room_name: String, type=null):
 
 	return entity
 
-func edit_reference():
-	fixing_reference = false
-	align_reference.visible = true
-	align_reference.disabled = false
 
-func fix_reference():
-	fixing_reference = true
-	align_reference.disabled = false
-	align_reference.visible = true
+func blueborder_alignment(bshow):
+	align_reference.disabled = not bshow
+	align_reference.visible = bshow
+	$AlignRefShadow.visible = bshow
+	if bshow:
+		align_reference.update_initial_positions()
+		$AlignRefShadow.global_transform = 	align_reference.get_marker_transform()
+	RoomMaterial.set_shader_parameter("show_border", bshow)
+	
+func move_alignment():
+	align_reference.update_stored_align_reference()
 	align_reference.update_initial_positions()
-	RoomMaterial.set_shader_parameter("show_border", true)
-
-func save_reference():
-	if fixing_reference:
-		for room in get_rooms():
-			room.editable = true
-
-		var align_transform = align_reference.global_transform
-		transform = align_reference.get_new_transform()
-		align_reference.global_transform = align_transform
-
-		align_reference.update_store()
-
-		for room in get_rooms():
-			room.editable = false
-
-		save_all_entities()
-
-	align_reference.disabled = true
-	align_reference.visible = false
-	align_reference.update_initial_positions()
-
+	$AlignRefShadow.global_transform = 	align_reference.get_marker_transform()
 	Store.house.save_local()
-	RoomMaterial.set_shader_parameter("show_border", false)
+
+func bring_alignment_close():
+	align_reference.bring_alignment_close()
+
+func apply_alignment():
+	var align_transform = align_reference.global_transform
+	var applytransform = align_reference.get_marker_transform()*$AlignRefShadow.global_transform.inverse()
+	applytransform.origin.y = 0
+	for door in Store.house.state.doors:
+		door.room1_position1 = applytransform*door.room1_position1
+		door.room1_position2 = applytransform*door.room1_position2
+		door.room2_position1 = applytransform*door.room2_position1
+		door.room2_position2 = applytransform*door.room2_position2
+	for room in Store.house.state.rooms:
+		var acorners = [ ]
+		for corner in room.corners:
+			var p = Vector3(corner.x, room.height, corner.y)
+			var ap = applytransform*p
+			acorners.append(Vector2(ap.x, ap.z))
+		room.corners = acorners
+
+	transform = applytransform
+	save_all_entities() # reads them all through the set transform
+	transform = Transform3D()
+	move_alignment()
+
+	# force update
+	Store.house.state.rooms = Store.house.state.rooms
+	App.house.update_house()
 
 func save_all_entities():
+	print("*** Copying entities from $Rooms to Store.house.state")
 	Store.house.state.entities.clear()
-
 	for room in get_rooms():
 		for entity in room.get_node("Entities").get_children():
 			var entity_data = {
@@ -250,7 +280,8 @@ func save_all_entities():
 				"position": entity.global_position,
 				"rotation": entity.global_rotation,
 				"scale": entity.scale.x,
-				"room": String(room.name)
+				"room": String(room.name),
+				"_node_iid":entity.get_instance_id()
 			}
 
 			if entity.has_method("get_interface"):
@@ -261,5 +292,6 @@ func save_all_entities():
 
 			Store.house.state.entities.append(entity_data)
 
+	# this is the refresh
 	Store.house.state.entities = Store.house.state.entities
 	Store.house.save_local()

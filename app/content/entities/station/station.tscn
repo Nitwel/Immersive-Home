@@ -1,0 +1,141 @@
+[gd_scene load_steps=14 format=3 uid="uid://cs4ytsxrm4kjw"]
+
+[ext_resource type="Script" uid="uid://ep12y2470fcm" path="res://content/entities/station/station.gd" id="1_ohljc"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="2_vbvi2"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="3_qj8vf"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="3_vbvi2"]
+[ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="4_7n2ns"]
+[ext_resource type="Script" uid="uid://bg6vc81m8fuka" path="res://content/functions/camera_follower.gd" id="5_u4dbc"]
+[ext_resource type="Script" uid="uid://tquknum0fs5j" path="res://content/functions/movable.gd" id="6_vtooc"]
+[ext_resource type="PackedScene" uid="uid://52r38nw3mvfh" path="res://content/ui/components/next_button/next_button_container.tscn" id="8_qj8vf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qj8vf"]
+transparency = 1
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(1, 0.34902, 1, 0.705882)
+
+[sub_resource type="QuadMesh" id="QuadMesh_7n2ns"]
+material = SubResource("StandardMaterial3D_qj8vf")
+size = Vector2(0.5, 0.03)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m3w2u"]
+resource_local_to_scene = true
+render_priority = 10
+shader = ExtResource("2_vbvi2")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(12.5, 7.5)
+shader_parameter/border_size = 0.0333333
+shader_parameter/border_fade_in = 0.166667
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 10.0
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_i1guj"]
+size = Vector2(0.5, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nfwtf"]
+size = Vector3(0.5, 0.3, 0.01)
+
+[node name="Station" type="StaticBody3D" groups=["DD_TutorialItems"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00218351, 0.000727355, -5.97239e-05)
+collision_layer = 7
+collision_mask = 0
+script = ExtResource("1_ohljc")
+
+[node name="Devmarker" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.180436, 0)
+mesh = SubResource("QuadMesh_7n2ns")
+
+[node name="TextEditButton" parent="." instance=ExtResource("3_qj8vf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.228175, 0.181337, 0.001)
+visible = false
+label = "edit"
+icon = true
+disabled = true
+
+[node name="Input" parent="." instance=ExtResource("4_7n2ns")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.126, 0.181, 0)
+visible = false
+
+[node name="ActivateButton" parent="." instance=ExtResource("3_qj8vf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00295657, 0.179655, 0)
+label = "Activate"
+
+[node name="FriendlyName" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0963441, 0.182963, 0)
+pixel_size = 0.001
+text = "Station name"
+font_size = 18
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000690326, 0)
+material_override = SubResource("ShaderMaterial_m3w2u")
+mesh = SubResource("QuadMesh_i1guj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_nfwtf")
+
+[node name="StationIcon" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.161207, 0.002)
+pixel_size = 0.001
+double_sided = false
+render_priority = 30
+outline_render_priority = 29
+text = "tooltip"
+font = ExtResource("3_vbvi2")
+font_size = 200
+outline_size = 0
+vertical_alignment = 2
+autowrap_mode = 3
+width = 470.0
+
+[node name="StationText" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23, 0.13, 0.001)
+pixel_size = 0.001
+double_sided = false
+render_priority = 30
+outline_render_priority = 29
+text = "Here is a blank tooltip!
+
+Fill me with words ooo i'm so hungry and verbose but mainly really hungry.
+
+To be clear I eat words that's what this worldbuilding suggests. All of these words are in my stomach that you are currently reading me from right now even."
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+vertical_alignment = 0
+autowrap_mode = 3
+width = 470.0
+
+[node name="CameraFollower" type="Node" parent="."]
+script = ExtResource("5_u4dbc")
+enabled = null
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("6_vtooc")
+resizable = true
+
+[node name="KeyboardPlace" type="Marker3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.433012, 0.25, 0, -0.25, 0.433012, 0, -0.228365, 0.045)
+gizmo_extents = 0.02
+
+[node name="VideoPlaceTop" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.995639, -0.0932916, 0, 0.0932916, 0.995639, 0, 0.321922, 0)
+
+[node name="VideoPlaceRight" type="Marker3D" parent="."]
+transform = Transform3D(0.975296, 0, -0.220902, 0, 1, 0, 0.220902, 0, 0.975296, 0.47049, 0, 0)
+
+[node name="NextButtons" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.221684, -0.192436, 0)
+
+[node name="NextButtonContainer" parent="NextButtons" instance=ExtResource("8_qj8vf")]
+
+[node name="NextButtonContainer2" parent="NextButtons" instance=ExtResource("8_qj8vf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.188749, 0, 0)
+
+[connection signal="on_text_changed" from="Input" to="." method="_on_input_on_text_changed"]
+[connection signal="on_button_down" from="ActivateButton" to="." method="_on_activate_button_on_button_down"]

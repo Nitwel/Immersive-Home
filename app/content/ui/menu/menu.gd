@@ -6,12 +6,14 @@ const Notification = preload ("res://content/ui/components/notification/notifica
 @onready var open_sound = $OpenSound
 @onready var close_sound = $CloseSound
 @onready var notify_place = $AnimationContainer/NotifyPlace
+@onready var state_button = $AnimationContainer/Background2/StateButton
 
 var show_menu = R.state(false)
+@export var dev_menu = false
 
 func _ready():
 	App.main.remove_child.call_deferred(self)
-
+	dev_menu = Store.settings.state.dev_state
 	R.effect(func(_arg):
 		if show_menu.value:
 			App.main.add_child(self)
@@ -54,3 +56,16 @@ func move_into_view():
 	camera_transform.origin -= camera_transform.basis.z * 0.5
 
 	global_transform = camera_transform
+
+
+func _on_state_button_on_toggled(active: bool) -> void:
+	dev_menu = active
+	Store.settings.state.dev_state = dev_menu
+	get_parent().dev_state_changed.emit(active)
+	if active:
+		state_button.label = "developer_mode"
+	else:
+		state_button.label = "person"
+		App.house.RoomMaterial.set_shader_parameter("show_border", false)
+		
+	

@@ -91,16 +91,19 @@ func load_local(path=_save_path):
 		return false
 
 	var save_file = FileAccess.open(path, FileAccess.READ)
-
+	#save_file= null
+	
 	# In case that there is no store file yet
 	if save_file == null:
 		_loaded = true
 		on_loaded.emit()
+		print("Load file ", path, " does not exist yet")
 		return true
 
+	print("Loading file ", path)
 	var json_text = save_file.get_as_text()
 	var save_data = VariantSerializer.parse_value(JSON.parse_string(json_text))
-
+	print(save_data)
 	if save_data == null:
 		return false
 

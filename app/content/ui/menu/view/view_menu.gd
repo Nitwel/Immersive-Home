@@ -3,7 +3,6 @@ extends Node3D
 const Miniature = preload ("res://content/system/miniature/miniature.gd")
 
 @onready var mini_view_button = $Content/MiniView
-@onready var heat_map_button = $Content/HeatMap
 @onready var humudity_map_button = $Content/HumidityMap
 @onready var min_slider = $Content/MinSlider
 @onready var max_slider = $Content/MaxSlider
@@ -20,14 +19,7 @@ func _ready():
 		App.miniature.small.value=active
 	)
 
-	heat_map_button.on_toggled.connect(func(active):
-		if active == false:
-			if App.miniature.heatmap_type.value == Miniature.HeatmapType.TEMPERATURE:
-				App.miniature.heatmap_type.value=Miniature.HeatmapType.NONE
-			return
 
-		App.miniature.heatmap_type.value=Miniature.HeatmapType.TEMPERATURE
-	)
 
 	humudity_map_button.on_toggled.connect(func(active):
 		if active == false:
@@ -39,7 +31,6 @@ func _ready():
 	)
 
 	R.effect(func(_arg):
-		heat_map_button.active=App.miniature.heatmap_type.value == Miniature.HeatmapType.TEMPERATURE
 		humudity_map_button.active=App.miniature.heatmap_type.value == Miniature.HeatmapType.HUMIDITY
 	)
 

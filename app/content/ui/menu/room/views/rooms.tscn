@@ -1,10 +1,10 @@
 [gd_scene load_steps=9 format=3 uid="uid://bpta22fahai46"]
 
-[ext_resource type="Script" path="res://content/ui/menu/room/views/rooms.gd" id="1_3a1oa"]
+[ext_resource type="Script" uid="uid://d2whhb4b2oekd" path="res://content/ui/menu/room/views/rooms.gd" id="1_3a1oa"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_y3lty"]
-[ext_resource type="Script" path="res://content/ui/menu/room/views/rooms_map.gd" id="2_2t24u"]
+[ext_resource type="Script" uid="uid://bwnayln517rw" path="res://content/ui/menu/room/views/rooms_map.gd" id="2_2t24u"]
 [ext_resource type="PackedScene" uid="uid://blrhy2uccrdn4" path="res://content/ui/components/input/input.tscn" id="2_hstw7"]
-[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="4_jx6i3"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="4_jx6i3"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_ehu5x"]
 size = Vector2(0.2, 0.2)

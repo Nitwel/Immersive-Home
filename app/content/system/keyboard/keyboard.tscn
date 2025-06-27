@@ -1,10 +1,10 @@
 [gd_scene load_steps=9 format=3 uid="uid://lrehk38exd5n"]
 
-[ext_resource type="Script" path="res://content/system/keyboard/keyboard.gd" id="1_maojw"]
+[ext_resource type="Script" uid="uid://k4cuamm20dum" path="res://content/system/keyboard/keyboard.gd" id="1_maojw"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_xdpwr"]
-[ext_resource type="Script" path="res://content/ui/components/grid_container/grid_container.gd" id="3_mx544"]
-[ext_resource type="Script" path="res://content/functions/movable.gd" id="4_86fct"]
-[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="5_0dbg6"]
+[ext_resource type="Script" uid="uid://dvgwob5ypsycy" path="res://content/ui/components/grid_container/grid_container.gd" id="3_mx544"]
+[ext_resource type="Script" uid="uid://tquknum0fs5j" path="res://content/functions/movable.gd" id="4_86fct"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="5_0dbg6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k5ib7"]
 size = Vector3(0.86, 0.27, 0.02)
@@ -47,6 +47,20 @@ focusable = false
 label = "keyboard_capslock"
 icon = true
 toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
+
+[node name="Space" parent="." instance=ExtResource("1_xdpwr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.320617, -0.0898065, 0)
+focusable = false
+label = "space_bar"
+icon = true
+size = Vector3(0.05, 0.05, 0.01)
+
+[node name="Return" parent="." instance=ExtResource("1_xdpwr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, -0.0293817, 0)
+focusable = false
+label = "keyboard_return"
+icon = true
 size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Paste" parent="." instance=ExtResource("1_xdpwr")]

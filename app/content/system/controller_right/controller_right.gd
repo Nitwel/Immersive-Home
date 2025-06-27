@@ -15,6 +15,7 @@ const Miniature = preload ("res://content/system/miniature/miniature.gd")
 @onready var index_tip = $IndexTip
 @onready var thumb_tip = $ThumbTip
 @onready var middle_tip = $MiddleTip
+@onready var compass = $"hand_r/Compass Base"
 
 @export var show_grid = false:
 	set(value):

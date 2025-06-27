@@ -1,12 +1,12 @@
 [gd_scene load_steps=11 format=3 uid="uid://c01gkeldvjwtr"]
 
-[ext_resource type="Script" path="res://content/ui/menu/room/room_menu.gd" id="1_ch4jb"]
+[ext_resource type="Script" uid="uid://dt2cg3svlgp05" path="res://content/ui/menu/room/room_menu.gd" id="1_ch4jb"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="4_cghmp"]
-[ext_resource type="Script" path="res://content/ui/components/tabs/tabs.gd" id="5_ddrep"]
+[ext_resource type="Script" uid="uid://b8gg8bn86jbd4" path="res://content/ui/components/tabs/tabs.gd" id="5_ddrep"]
 [ext_resource type="PackedScene" uid="uid://dd71loi64gnmp" path="res://content/ui/menu/room/views/overview.tscn" id="6_206ad"]
-[ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="6_ba00g"]
+[ext_resource type="Script" uid="uid://bel3ondid6mxb" path="res://content/ui/components/tabs/tabs_content.gd" id="6_ba00g"]
 [ext_resource type="PackedScene" uid="uid://bpta22fahai46" path="res://content/ui/menu/room/views/rooms.tscn" id="7_2f8e0"]
-[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="7_bxp1w"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="7_bxp1w"]
 [ext_resource type="PackedScene" uid="uid://biwinf4360f10" path="res://content/ui/menu/room/views/doors.tscn" id="7_fl4l8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2asng"]
@@ -60,6 +60,7 @@ tabs = NodePath("../Tabs3D")
 visible = false
 
 [node name="Rooms" parent="Interface/TabsContent3D" instance=ExtResource("7_2f8e0")]
+visible = false
 
 [node name="Doors" parent="Interface/TabsContent3D" instance=ExtResource("7_fl4l8")]
 visible = false

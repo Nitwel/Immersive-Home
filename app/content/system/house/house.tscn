@@ -1,13 +1,27 @@
-[gd_scene load_steps=4 format=3 uid="uid://cbemihbxkd4ll"]
+[gd_scene load_steps=6 format=3 uid="uid://cbemihbxkd4ll"]
 
-[ext_resource type="Script" path="res://content/system/house/house.gd" id="1_p8amj"]
+[ext_resource type="Script" uid="uid://dvowu4o4ihgc" path="res://content/system/house/house.gd" id="1_p8amj"]
 [ext_resource type="PackedScene" uid="uid://jls16btb8nko" path="res://content/system/house/align_reference.tscn" id="3_e1tcn"]
 [ext_resource type="PackedScene" uid="uid://c8nh8582vwc8u" path="res://content/system/house/doors/doors.tscn" id="4_bb3c2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uwvis"]
+shading_mode = 0
+albedo_color = Color(0.439216, 0.356863, 0.352941, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_j8k22"]
+material = SubResource("StandardMaterial3D_uwvis")
+radius = 0.008
+height = 1.0
 
 [node name="House" type="Node3D"]
 script = ExtResource("1_p8amj")
 
 [node name="Rooms" type="Node3D" parent="."]
+
+[node name="AlignRefShadow" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.5, 0, 0)
+visible = false
+mesh = SubResource("CapsuleMesh_j8k22")
 
 [node name="AlignReference" parent="." instance=ExtResource("3_e1tcn")]
 visible = false

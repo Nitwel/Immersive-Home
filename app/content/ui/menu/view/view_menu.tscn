@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://ddpxthb414unp"]
 
-[ext_resource type="Script" path="res://content/ui/menu/view/view_menu.gd" id="1_hxajx"]
+[ext_resource type="Script" uid="uid://js4iev37r8e5" path="res://content/ui/menu/view/view_menu.gd" id="1_hxajx"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_qan1b"]
 [ext_resource type="PackedScene" uid="uid://pk5k1q8bx0rj" path="res://content/ui/components/slider/slider.tscn" id="4_d3xhb"]
-[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="5_cjxo5"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="5_cjxo5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e5hvo"]
 render_priority = 10
@@ -29,7 +29,8 @@ script = ExtResource("1_hxajx")
 
 [node name="MiniView" parent="Content" instance=ExtResource("2_qan1b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.04, 0)
-label = "view_comfy"
+font_size = 20
+label = "nest_multi_room"
 icon = true
 toggleable = true
 
@@ -44,31 +45,33 @@ font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
-[node name="HeatMap" parent="Content" instance=ExtResource("2_qan1b")]
+[node name="Compass" parent="Content" instance=ExtResource("2_qan1b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.1, 0)
-label = "device_thermostat"
+label = "explore"
 icon = true
 toggleable = true
 
-[node name="HeatMapLabel" type="Label3D" parent="Content"]
+[node name="CompassLabel" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, -0.1, 0)
 pixel_size = 0.001
 double_sided = false
 render_priority = 15
 outline_render_priority = 14
-text = "Heat Map"
+text = "Compass"
 font_size = 18
 outline_size = 0
 horizontal_alignment = 0
 
 [node name="HumidityMap" parent="Content" instance=ExtResource("2_qan1b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, -0.16, 0)
+visible = false
 label = "humidity_mid"
 icon = true
 toggleable = true
 
 [node name="HumidityMapLabel" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, -0.16, 0)
+visible = false
 pixel_size = 0.001
 double_sided = false
 render_priority = 15
@@ -80,11 +83,13 @@ horizontal_alignment = 0
 
 [node name="MinSlider" parent="Content" instance=ExtResource("4_d3xhb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, -0.21, 0)
+visible = false
 value = 0.0
 step = 1.0
 
 [node name="MinValue" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.21, 0)
+visible = false
 pixel_size = 0.001
 double_sided = false
 render_priority = 15
@@ -96,11 +101,13 @@ horizontal_alignment = 0
 
 [node name="MaxSlider" parent="Content" instance=ExtResource("4_d3xhb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, -0.25, 0)
+visible = false
 value = 0.0
 step = 1.0
 
 [node name="MaxValue" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.25, 0)
+visible = false
 pixel_size = 0.001
 double_sided = false
 render_priority = 15
@@ -112,6 +119,7 @@ horizontal_alignment = 0
 
 [node name="OpacitySlider" parent="Content" instance=ExtResource("4_d3xhb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, -0.29, 0)
+visible = false
 max = 100.0
 value = 30.0
 step = 10.0
@@ -119,6 +127,7 @@ label_unit = "%"
 
 [node name="OpacityLabel" type="Label3D" parent="Content"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.29, 0)
+visible = false
 pixel_size = 0.001
 double_sided = false
 render_priority = 15

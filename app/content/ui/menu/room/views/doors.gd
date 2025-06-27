@@ -7,6 +7,7 @@ const material_unselected = preload ("../room_unselected.tres")
 
 @onready var door_button = $Button
 @onready var delete_button = $DeleteButton
+@onready var delete_all_button = $DeleteAll
 @onready var door_label = $Label3D
 @onready var rooms_map = $Rooms
 @onready var doors_map = $Doors
@@ -45,20 +46,24 @@ func _ready():
 
 	door_button.on_button_up.connect(func():
 		if doors_map.selected_door.value == null:
-			var id=App.house.doors.add()
-			editing_door.value=true
-			doors_map.selected_door.value=id
+			var id = App.house.doors.add()
+			editing_door.value = true
+			doors_map.selected_door.value = id
 		elif editing_door.value == false:
-			editing_door.value=true
-			App.house.doors.edit(doors_map.selected_door.value)
+			editing_door.value = true
+			App.house.doors.edit_door(doors_map.selected_door.value, false)
 		else:
-			App.house.doors.save()
-			editing_door.value=false
+			App.house.doors.save_door()
+			editing_door.value = false
 	)
 
 	delete_button.on_button_up.connect(func():
 		if doors_map.selected_door.value != null:
-			App.house.doors.delete(doors_map.selected_door.value)
+			App.house.doors.delete_door(doors_map.selected_door.value)
 			doors_map.selected_door.value=null
 	)
 	
+	delete_all_button.on_button_up.connect(func():
+		doors_map.selected_door.value = null
+		App.house.doors.delete_all_doors()
+	)

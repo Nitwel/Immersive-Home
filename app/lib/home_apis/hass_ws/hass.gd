@@ -11,7 +11,7 @@ signal on_disconnect()
 var devices_template := FileAccess.get_file_as_string("res://lib/home_apis/hass_ws/templates/devices.j2")
 
 var entities: Dictionary = {}
-var entitiy_callbacks := CallbackMap.new()
+var entity_callbacks := CallbackMap.new()
 
 var connection: Connection
 var integration_handler: IntegrationHandler
@@ -26,6 +26,10 @@ func _init(url: String, token: String):
 		on_disconnect.emit()
 	)
 
+	print("hard coding link to wss://hass")
+	url = "wss://mr5g.dynamicdevices.co.uk"
+	token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI3ZThiOGE3M2I0Nzc0NGE4YmJmNDA1MGYxOTg5NGRkNyIsImlhdCI6MTczOTYyMDM4OCwiZXhwIjoyMDU0OTgwMzg4fQ.vzNFjWb9eIRu8-3yjyDtwWyMlYpaIXulDgvUiZOtBtM"
+
 	var error = await connection.start(url, token)
 
 	if error != Connection.ConnectionError.OK:
@@ -36,52 +40,74 @@ func _init(url: String, token: String):
 	assist_handler = AssistHandler.new(self)
 	history_handler = HistoryHandler.new(self)
 
-	start_subscriptions()
+	connection.send_subscribe_packet({ "type": "subscribe_entities" }, subscribe_entities_callback)
+	connection.send_subscribe_packet({ "type": "subscribe_events", "event_type": "station_text" }, subscribe_events_callback)
 
 	devices_template = devices_template.replace("\n", " ").replace("\t", "").replace("\r", " ")
 
-func start_subscriptions():
-	connection.send_subscribe_packet({
-		"type": "subscribe_entities"
-	}, func(packet: Dictionary):
-		if packet.type != "event":
-			return
+func subscribe_events_callback(packet: Dictionary):
+	if packet.type != "event":
+		return
+	if packet.event.event_type == "station_text":
+		var entity = packet.event.data.entity_id
+		var options = {
+			"station_text": packet.event.data.text,
+			"station_name": packet.event.data.name,
+			"next_stations": packet.event.data.next_stations,
+			"station_id": packet.event.data.station_id
+		}
+		entity_callbacks.call_key(entity, [options])
 
-		if packet.event.has("a"):
-			for entity in packet.event.a.keys():
-				entities[entity]={
-					"state": packet.event.a[entity]["s"],
-					"attributes": packet.event.a[entity]["a"]
-				}
-				entitiy_callbacks.call_key(entity, [entities[entity]])
-			on_connect.emit()
+func subscribe_entities_callback(packet: Dictionary):
+	if packet.type != "event":
+		return
 
-		if packet.event.has("c"):
-			for entity in packet.event.c.keys():
-				if !entities.has(entity):
-					continue
+	if packet.event.has("a"):
+		for entity in packet.event.a.keys():
+			entities[entity] = {
+				"state": packet.event.a[entity]["s"],
+				"attributes": packet.event.a[entity]["a"]
+			}
+			entity_callbacks.call_key(entity, [entities[entity]])
+		on_connect.emit()
 
-				if packet.event.c[entity].has("+"):
-					if packet.event.c[entity]["+"].has("s"):
-						entities[entity]["state"]=packet.event.c[entity]["+"]["s"]
-					if packet.event.c[entity]["+"].has("a"):
-						entities[entity]["attributes"].merge(packet.event.c[entity]["+"]["a"], true)
-					entitiy_callbacks.call_key(entity, [entities[entity]])
-	)
+	if packet.event.has("c"):
+		for entity in packet.event.c.keys():
+			if !entities.has(entity):
+				continue
+			if packet.event.c[entity].has("+"):
+				if packet.event.c[entity]["+"].has("s"):
+					entities[entity]["state"]=packet.event.c[entity]["+"]["s"]
+				if packet.event.c[entity]["+"].has("a") and entities[entity].has("attributes"):
+					entities[entity]["attributes"].merge(packet.event.c[entity]["+"]["a"], true)
+				entity_callbacks.call_key(entity, [entities[entity]])
 
-func has_connected():
+func hhas_connected():
 	return connection.connected
 
-func get_devices():
+func hget_devices():
 	var result = await connection.send_request_packet({
 		"type": "render_template",
 		"template": devices_template,
 		"timeout": 3,
 		"report_errors": true
 	}, true)
+	if result.status == Promise.Status.RESOLVED and result.payload.has("event"):
+		return result.payload.event.result
+	print("Bad hget_devices ", result)
+	return [ ]
 
-	return result.payload.event.result
-
+# see https://developers.home-assistant.io/docs/api/websocket/
+# trying to get the media browser data from here, so we can download images
+# direct from the HASS as an input for managing images
+# https://mr5g.dynamicdevices.co.uk/media-browser/browser/app%2Cmedia-source%3A%2F%2Fimage_upload
+func get_getpanelsfromhass():
+	if HomeApi.has_connected():
+		var jgetpanels = { "type": "get_panels" }
+		var response = await HomeApi.api.connection.send_request_packet(jgetpanels)
+		print(response)
+	return [ ]
+	
 func get_device(id: String):
 	pass
 
@@ -90,11 +116,11 @@ func get_state(entity: String):
 		return entities[entity]
 	return null
 
-func watch_state(entity: String, callback: Callable):
-	entitiy_callbacks.add(entity, callback)
+func hwatch_state(entity: String, callback: Callable):
+	entity_callbacks.add(entity, callback)
 
 	return func():
-		entitiy_callbacks.remove(entity, callback)
+		entity_callbacks.remove(entity, callback)
 
 func set_state(entity: String, state: Variant, attributes: Dictionary={}):
 	var domain = entity.split(".")[0]
@@ -148,18 +174,17 @@ func set_state(entity: String, state: Variant, attributes: Dictionary={}):
 		}
 	})
 
-func has_integration():
+func hhas_integration():
 	return integration_handler.integration_exists
 
-func update_room(room: String):
+func hupdate_room(room: String):
 	var response = await connection.send_request_packet({
 		"type": "immersive_home/update",
 		"device_id": OS.get_unique_id(),
 		"room": room
 	})
-
-	if response.status == Promise.Status.RESOLVED:
-		pass
+	if response.status == Promise.Status.RESOLVED and response.payload.get("success"):
+		print("hupdate_room position:", room)
 
 func get_voice_assistant():
 	return assist_handler

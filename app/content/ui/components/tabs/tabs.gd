@@ -31,4 +31,28 @@ func _ready():
 			option.disabled=option.get_index() == selected.value
 		)
 		
+		if Store.settings.state.dev_state == false:
+			for Button3D in get_children():
+				if Button3D.name == "Edit" or Button3D.name == "Room" or Button3D.name == "Experimental":
+					Button3D.get_child(0).visible = false
+					Button3D.get_child(0).get_child(1).disabled = true
+					Button3D.get_child(1).get_child(0).disabled = true
+		
 		option.toggleable = true
+
+
+
+func _on_state_button_on_toggled(active: bool) -> void:
+	if active:
+		for Button3D in get_children():
+			if Button3D.name == "Edit" or Button3D.name == "Room" or Button3D.name == "Experimental":
+				Button3D.get_child(0).visible = true
+				Button3D.get_child(0).get_child(1).disabled = false
+				Button3D.get_child(1).get_child(0).disabled = false
+		
+	else:
+		for Button3D in get_children():
+			if Button3D.name == "Edit" or Button3D.name == "Room" or Button3D.name == "Experimental":
+				Button3D.get_child(0).visible = false
+				Button3D.get_child(0).get_child(1).disabled = true
+				Button3D.get_child(1).get_child(0).disabled = true

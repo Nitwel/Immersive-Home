@@ -171,11 +171,11 @@ func _draw_debug_text_gaps():
 
 	for i in range(text_handler.gap_offsets.size()):
 		var offset = text_handler.gap_offsets[i] - text_handler.gap_offsets[text_handler.char_offset]
-		DebugDraw3D.draw_line(
-			label.to_global(Vector3(offset, -0.01, 0)),
-			label.to_global(Vector3(offset, 0.01, 0)),
-			Color(1, 0, 0) if i != text_handler.overflow_index else Color(0, 1, 0)
-		)
+#		DebugDraw3D.draw_line(
+#			label.to_global(Vector3(offset, -0.01, 0)),
+#			label.to_global(Vector3(offset, 0.01, 0)),
+#			Color(1, 0, 0) if i != text_handler.overflow_index else Color(0, 1, 0)
+#		)
 
 func _update_placeholder():
 	var show_placeholder = text == ""&&panel.active == false

@@ -1,0 +1,138 @@
+[gd_scene load_steps=11 format=3 uid="uid://wk1pj4yst3tk"]
+
+[ext_resource type="Script" uid="uid://c67b4w5nhom4o" path="res://content/entities/custom_label/custom_label.gd" id="1_qddjs"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="2_hbtf7"]
+[ext_resource type="Script" uid="uid://tquknum0fs5j" path="res://content/functions/movable.gd" id="3_ifrgi"]
+[ext_resource type="PackedScene" uid="uid://blkfqa3ttk0d2" path="res://content/ui/components/label_container/label_container.tscn" id="3_ve37m"]
+[ext_resource type="PackedScene" uid="uid://dnam3fe36gg62" path="res://content/ui/components/panel/panel.tscn" id="5_wltig"]
+[ext_resource type="Shader" uid="uid://dggseju3g4for" path="res://content/ui/components/panel/glass.gdshader" id="6_crarn"]
+[ext_resource type="FontVariation" uid="uid://sshfnckriqxn" path="res://assets/icons/icons.tres" id="7_fjkex"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_um5pa"]
+size = Vector3(0.05, 0.05, 0.012)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fjkex"]
+resource_local_to_scene = true
+render_priority = 10
+shader = ExtResource("6_crarn")
+shader_parameter/color = Color(1, 1, 1, 0.3)
+shader_parameter/border_color = Color(1, 1, 1, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/size = Vector2(10.625, 6.5)
+shader_parameter/border_size = 0.0275
+shader_parameter/border_fade_in = 0.1375
+shader_parameter/border_fade_out = 0.0
+shader_parameter/corner_radius = 1.155
+shader_parameter/roughness = 0.3
+shader_parameter/grain_amount = 0.02
+
+[sub_resource type="QuadMesh" id="QuadMesh_gww6i"]
+size = Vector2(0.425, 0.26)
+
+[node name="Custom Label" type="StaticBody3D"]
+script = ExtResource("1_qddjs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0556091, -0.005)
+shape = SubResource("BoxShape3D_um5pa")
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("3_ifrgi")
+
+[node name="Label" parent="." instance=ExtResource("3_ve37m")]
+visible = false
+text = "Here's a thing!"
+font_size = 24
+size = Vector3(0.175, 0.03, 0.1)
+
+[node name="Button" parent="." instance=ExtResource("2_hbtf7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.134319, 0.0695834, 0)
+visible = false
+label = "Edit"
+disabled = true
+
+[node name="Title" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.192753, 0.0643789, 0)
+pixel_size = 0.001
+text = "Title"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="entityId" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.181038, 0.0657119, 0)
+pixel_size = 0.001
+text = "text.xxxx"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 2
+
+[node name="LongText" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.163034, 0.0343588, 0.001)
+pixel_size = 0.001
+render_priority = 30
+outline_render_priority = 29
+text = "blank
+Blank station thing
+
+"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+vertical_alignment = 0
+autowrap_mode = 3
+width = 370.0
+
+[node name="NextStations" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0277444, -0.086, 0)
+
+[node name="Next1" parent="NextStations" instance=ExtResource("2_hbtf7")]
+label = "next"
+disabled = true
+
+[node name="Label3D" type="Label3D" parent="NextStations/Next1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0287315, -0.0610956, 0)
+pixel_size = 0.001
+text = "Next"
+font_size = 18
+outline_size = 0
+
+[node name="Next2" parent="NextStations" instance=ExtResource("2_hbtf7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0541832, 0, 0)
+label = "next2"
+disabled = true
+
+[node name="Label3D" type="Label3D" parent="NextStations/Next2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.029272, -0.0610956, 0)
+pixel_size = 0.001
+text = "Next"
+font_size = 18
+outline_size = 0
+
+[node name="KeyboardPlace" type="Marker3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.433012, 0.25, 0, -0.25, 0.433012, 0, -0.228365, 0.045)
+gizmo_extents = 0.02
+
+[node name="Panel" parent="." instance=ExtResource("5_wltig")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.042, 0)
+material_override = SubResource("ShaderMaterial_fjkex")
+mesh = SubResource("QuadMesh_gww6i")
+size = Vector2(0.425, 0.26)
+corner_radius = 1.155
+border = 1.65
+
+[node name="DragBottom" type="StaticBody3D" parent="."]
+
+[node name="DragLabel" type="Label3D" parent="DragBottom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.165234, 0)
+pixel_size = 0.001
+text = "drag_handle"
+font = ExtResource("7_fjkex")
+font_size = 18
+outline_size = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DragBottom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.164341, 0.00976297)
+shape = SubResource("BoxShape3D_um5pa")
+
+[connection signal="input_event" from="DragBottom" to="." method="_on_drag_bottom_input_event"]

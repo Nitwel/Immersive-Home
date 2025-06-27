@@ -1,8 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://bufelcry36rw1"]
+[gd_scene load_steps=21 format=3 uid="uid://bufelcry36rw1"]
 
-[ext_resource type="Script" path="res://addons/xr-autohandtracker/auto_handtracker.gd" id="1_kokq6"]
-[ext_resource type="Script" path="res://addons/xr-autohandtracker/visible_handtrack_skeleton.gd" id="2_51p5j"]
-[ext_resource type="Script" path="res://addons/xr-autohandtracker/auto_tracker.gd" id="3_6kyde"]
+[ext_resource type="Script" uid="uid://x8bypytrodfl" path="res://addons/xr-autohandtracker/auto_handtracker.gd" id="1_kokq6"]
+[ext_resource type="Script" uid="uid://pjb8j1c0u81v" path="res://addons/xr-autohandtracker/visible_handtrack_skeleton.gd" id="2_51p5j"]
+[ext_resource type="Script" uid="uid://saoaf58nvwtp" path="res://addons/xr-autohandtracker/auto_tracker.gd" id="3_6kyde"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_lsd0h"]
 size = Vector3(0.1, 0.8, 0.1)
@@ -15,6 +15,9 @@ size = Vector3(0.8, 0.8, 0.8)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kb47o"]
 albedo_color = Color(0.188235, 0.6, 0.00392157, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_v1hx4"]
+size = Vector3(0.1, 0.1, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_ga8xh"]
 top_radius = 0.2
@@ -67,12 +70,11 @@ albedo_color = Color(1, 0.0431373, 0, 1)
 material = SubResource("StandardMaterial3D_fvumm")
 size = Vector3(0.005, 0.19, 0.005)
 
-[node name="AutoHandtracker" type="Node3D"]
+[node name="AutoHandtracker" type="Node3D" groups=["AutoHandGroup"]]
 top_level = true
 script = ExtResource("1_kokq6")
 
 [node name="VisibleHandTrackSkeleton" type="Node3D" parent="."]
-visible = false
 script = ExtResource("2_51p5j")
 
 [node name="ExampleStick" type="Node3D" parent="VisibleHandTrackSkeleton"]
@@ -87,7 +89,12 @@ surface_material_override/0 = SubResource("StandardMaterial3D_dawss")
 mesh = SubResource("BoxMesh_h2ysa")
 surface_material_override/0 = SubResource("StandardMaterial3D_kb47o")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="VisibleHandTrackSkeleton/ExampleJoint/Box"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.629714)
+mesh = SubResource("BoxMesh_v1hx4")
+
 [node name="AutoTracker" type="Node3D" parent="."]
+visible = false
 script = ExtResource("3_6kyde")
 
 [node name="DragRod" type="MeshInstance3D" parent="AutoTracker"]

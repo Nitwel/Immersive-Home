@@ -1,13 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://cxom4iapa02bb"]
 
-[ext_resource type="Script" path="res://content/ui/menu/settings/menus/save_menu.gd" id="1_7j7hb"]
+[ext_resource type="Script" uid="uid://mk0ciyeg23k2" path="res://content/ui/menu/settings/menus/save_menu.gd" id="1_7j7hb"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_y2t0y"]
 
 [node name="SaveMenu" type="Node3D"]
 script = ExtResource("1_7j7hb")
 
 [node name="SaveLabel" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.08, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.222675, 0)
 pixel_size = 0.001
 render_priority = 15
 outline_render_priority = 14
@@ -17,12 +17,12 @@ outline_size = 0
 horizontal_alignment = 0
 
 [node name="Save" parent="." instance=ExtResource("1_y2t0y")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, -0.08, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, -0.222675, 0)
 label = "save"
 icon = true
 
 [node name="clearSaveLabel" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.13, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.272675, 0)
 pixel_size = 0.001
 render_priority = 15
 outline_render_priority = 14
@@ -32,12 +32,12 @@ outline_size = 0
 horizontal_alignment = 0
 
 [node name="ClearSave" parent="." instance=ExtResource("1_y2t0y")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, -0.14, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, -0.282675, 0)
 label = "close"
 icon = true
 
 [node name="clearSaveWarning" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.15, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.292675, 0)
 pixel_size = 0.001
 render_priority = 15
 outline_render_priority = 14
@@ -48,3 +48,42 @@ outline_size = 0
 horizontal_alignment = 0
 autowrap_mode = 3
 width = 150.0
+
+[node name="clearEntitiesLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.20863, -0.272675, 0)
+pixel_size = 0.001
+render_priority = 15
+outline_render_priority = 14
+text = "Clear Ents:"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 0
+
+[node name="ClearEntities" parent="." instance=ExtResource("1_y2t0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.334189, -0.282675, 0)
+label = "close"
+icon = true
+
+[node name="SaveSlot1" parent="." instance=ExtResource("1_y2t0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0739233, -0.126, 0)
+label = "EMPTY"
+toggleable = true
+size = Vector3(0.085, 0.105, 0.01)
+
+[node name="SaveSlot2" parent="." instance=ExtResource("1_y2t0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.163868, -0.126, 0)
+label = "EMPTY"
+toggleable = true
+size = Vector3(0.085, 0.105, 0.01)
+
+[node name="SaveSlot3" parent="." instance=ExtResource("1_y2t0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.253923, -0.126, 0)
+label = "EMPTY"
+toggleable = true
+size = Vector3(0.085, 0.105, 0.01)
+
+[node name="SaveSlot4" parent="." instance=ExtResource("1_y2t0y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.343923, -0.126, 0)
+label = "EMPTY"
+toggleable = true
+size = Vector3(0.085, 0.105, 0.01)

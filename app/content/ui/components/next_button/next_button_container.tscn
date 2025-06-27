@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://52r38nw3mvfh"]
+
+[ext_resource type="Script" uid="uid://4xnjw5xd1evb" path="res://content/ui/components/next_button/next_button_container.gd" id="1_2ijs3"]
+[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_3jdak"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vbvi2"]
+transparency = 1
+no_depth_test = true
+albedo_color = Color(0.733333, 0.701961, 0.32549, 0.635294)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qj8vf"]
+material = SubResource("StandardMaterial3D_vbvi2")
+size = Vector3(0.02, 0.02, 1)
+
+[node name="NextButtonContainer" type="Node3D"]
+script = ExtResource("1_2ijs3")
+
+[node name="NextButton" parent="." instance=ExtResource("1_3jdak")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.001)
+label = "arrow_forward"
+icon = true
+
+[node name="NextLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, 0.001)
+pixel_size = 0.001
+render_priority = 30
+outline_render_priority = 29
+text = "Next"
+font_size = 18
+outline_size = 0
+horizontal_alignment = 2
+autowrap_mode = 3
+width = 470.0
+
+[node name="NextPreviewTrail" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("BoxMesh_qj8vf")

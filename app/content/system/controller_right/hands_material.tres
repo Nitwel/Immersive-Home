@@ -1,10 +1,10 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://chu0upvkheqlb"]
 
-[ext_resource type="Shader" path="res://assets/materials/hands.gdshader" id="1_kyekt"]
+[ext_resource type="Shader" uid="uid://bcs8j0shm7js5" path="res://hands.gdshader" id="1_n7yj8"]
 
 [resource]
 render_priority = 50
-shader = ExtResource("1_kyekt")
+shader = ExtResource("1_n7yj8")
 shader_parameter/albedo = Color(1, 1, 1, 0.4)
 shader_parameter/fade_offset = 0.0
 shader_parameter/fade_sharpness = 15.0

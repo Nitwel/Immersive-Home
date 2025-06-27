@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://blkfqa3ttk0d2"]
 
-[ext_resource type="Script" path="res://content/ui/components/label_container/label_container.gd" id="1_hqtij"]
+[ext_resource type="Script" uid="uid://dlsmkgjtumly3" path="res://content/ui/components/label_container/label_container.gd" id="1_hqtij"]
 [ext_resource type="FontVariation" uid="uid://d2ofyimg5s65q" path="res://assets/fonts/ui_font_500.tres" id="2_6y3jl"]
 
 [node name="LabelContainer" type="Node3D"]
