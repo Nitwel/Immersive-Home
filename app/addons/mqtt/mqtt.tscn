@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://ktm7k0co2o7l"]
-
-[ext_resource type="Script" path="res://addons/mqtt/mqtt.gd" id="1_unkqx"]
-
-[node name="MQTT" type="Node"]
-script = ExtResource("1_unkqx")

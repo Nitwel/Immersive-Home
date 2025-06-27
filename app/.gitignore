@@ -16,3 +16,6 @@ export.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# plug-gd ignores
+.plugged/

@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://d20xy80xd171g"]
-
-[ext_resource type="Script" uid="uid://ckuroj3p8xtuv" path="res://addons/xr-autohandtracker/openxr_handdata.gd" id="1_fax3q"]
-
-[node name="OpenXRHandData" type="Node"]
-process_priority = -1
-script = ExtResource("1_fax3q")
