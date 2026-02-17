@@ -1,5 +1,6 @@
 extends Node3D
 
+const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
 const Notification = preload ("res://content/ui/components/notification/notification.tscn")
 
 @onready var animation_player = $AnimationPlayer
@@ -8,6 +9,7 @@ const Notification = preload ("res://content/ui/components/notification/notifica
 @onready var notify_place = $AnimationContainer/NotifyPlace
 
 var show_menu = R.state(false)
+var is_menu_gesture_ready = false
 
 func _ready():
 	App.main.remove_child.call_deferred(self)
@@ -31,8 +33,14 @@ func _ready():
 	)
 
 	EventSystem.on_action_down.connect(func(action):
-		if action.name == "menu_button":
-			toggle_open()
+		if OS.has_feature("androidxr"):
+			if action.name == "select_button" \
+					and action.initiator.type == Initiator.Type.CONTROLLER_LEFT \
+					and is_menu_gesture_ready:
+				toggle_open()
+		else:
+			if action.name == "menu_button":
+				toggle_open()
 	)
 
 	EventSystem.on_notify.connect(func(event: EventNotify):

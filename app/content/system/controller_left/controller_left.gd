@@ -19,6 +19,7 @@ const Entity = preload ("res://content/entities/entity.gd")
 @onready var mini_view_button = $Palm/QuickActions/MiniView
 @onready var temperature_button = $Palm/QuickActions/Temperature
 @onready var humidity_button = $Palm/QuickActions/Humidity
+@onready var menu_icon = $Palm/QuickActions/MenuIcon
 
 @onready var palm = $Palm
 @onready var ray: RayCast3D = $Raycast
@@ -44,7 +45,9 @@ var initiator: Initiator = Initiator.new()
 var collide: Collide
 var pointer: Pointer
 var press_distance = 0.02
+var release_distance = 0.03
 var grip_distance = 0.02
+var grip_release_distance = 0.03
 
 var pressed = false
 var grabbed = false
@@ -52,6 +55,12 @@ var grabbed = false
 var moving_entity = null
 
 func _ready():
+	var xr = XRServer.find_interface("OpenXR")
+	if xr and xr.is_initialized():
+		var info = xr.get_system_info()
+		if not OS.has_feature("androidxr"):
+			menu_icon.queue_free()
+	
 	_setup_hand()
 
 	palm.remove_child(entity_settings)
@@ -89,9 +98,13 @@ func _process(_delta):
 		return
 
 	if App.camera.global_transform.basis.z.dot(palm.global_transform.basis.x) > 0.85:
+		App.menu.is_menu_gesture_ready = true
 		if quick_actions.is_inside_tree() == false: palm.add_child(quick_actions)
+		if ray.is_inside_tree(): remove_child(ray)
 	else:
+		App.menu.is_menu_gesture_ready = false
 		if quick_actions.is_inside_tree(): palm.remove_child(quick_actions)
+		if not ray.is_inside_tree(): add_child(ray)
 
 func _physics_process(_delta):
 	if !hand_active: return
@@ -100,19 +113,21 @@ func _physics_process(_delta):
 	var distance_grab = middle_tip.global_position.distance_to(thumb_tip.global_position)
 
 	var trigger_close = distance_trigger <= press_distance
+	var trigger_open = distance_trigger >= release_distance
 	var grab_close = distance_grab <= grip_distance
+	var grab_open = distance_grab >= grip_release_distance
 
 	if trigger_close&&!pressed:
 		pointer.pressed(Initiator.EventType.TRIGGER)
 		pressed = true
-	elif !trigger_close&&pressed:
+	elif trigger_open&&pressed:
 		pointer.released(Initiator.EventType.TRIGGER)
 		pressed = false
 
 	if grab_close&&!grabbed:
 		pointer.pressed(Initiator.EventType.GRIP)
 		grabbed = true
-	elif !grab_close&&grabbed:
+	elif grab_open&&grabbed:
 		pointer.released(Initiator.EventType.GRIP)
 		grabbed = false
 

@@ -1,6 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://biu66ihmvmku3"]
+[gd_scene format=3 uid="uid://biu66ihmvmku3"]
 
-[ext_resource type="Script" path="res://content/system/controller_right/controller_right.gd" id="1_1oh5j"]
+[ext_resource type="Script" uid="uid://dxeym4d1t4240" path="res://content/system/controller_right/controller_right.gd" id="1_1oh5j"]
 [ext_resource type="PackedScene" uid="uid://dscp8x0ari57n" path="res://content/system/raycast/raycast.tscn" id="1_3p68p"]
 [ext_resource type="PackedScene" uid="uid://ds1t8vc0kxoeo" path="res://addons/godot-xr-tools/hands/model/hand_r.gltf" id="2_kex6u"]
 [ext_resource type="PackedScene" uid="uid://bufelcry36rw1" path="res://addons/xr-autohandtracker/auto_handtracker.tscn" id="3_pjmb2"]
@@ -17,17 +17,17 @@ size = Vector3(0.01, 0.01, 0.01)
 radius = 0.001
 height = 0.02
 
-[node name="XRControllerRight" type="XRController3D"]
+[node name="XRControllerRight" type="XRController3D" unique_id=1981063165]
 tracker = &"right_hand"
 pose = &"aim"
 script = ExtResource("1_1oh5j")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=203784194]
 mesh = SubResource("BoxMesh_ir3co")
 
-[node name="Raycast" parent="." instance=ExtResource("1_3p68p")]
+[node name="Raycast" parent="." unique_id=749029057 instance=ExtResource("1_3p68p")]
 
-[node name="AutoHandtracker" parent="." instance=ExtResource("3_pjmb2")]
+[node name="AutoHandtracker" parent="." unique_id=1051417200 instance=ExtResource("3_pjmb2")]
 visible = false
 applymiddlefingerfix = null
 applyscaling = null
@@ -35,50 +35,57 @@ coincidewristorknuckle = null
 visiblehandtrackskeleton = false
 enableautotracker = false
 
-[node name="hand_r" parent="." instance=ExtResource("2_kex6u")]
+[node name="hand_r" parent="." unique_id=568842998 instance=ExtResource("2_kex6u")]
 
-[node name="mesh_Hand_R" parent="hand_r/Armature/Skeleton3D" index="0"]
+[node name="mesh_Hand_R" parent="hand_r/Armature/Skeleton3D" parent_id_path=PackedInt32Array(568842998, 58017375) index="0" unique_id=662290862]
 material_override = ExtResource("4_vhkya")
 
-[node name="IndexTip" type="BoneAttachment3D" parent="."]
-transform = Transform3D(0.967526, -0.252326, 0.0150302, 0.0150302, 0.116784, 0.993043, -0.252326, -0.960569, 0.116784, 0.00665802, 0.0427913, -0.169868)
+[node name="IndexTip" type="BoneAttachment3D" parent="." unique_id=168029548]
+transform = Transform3D(0.96752554, -0.25232607, 0.015030187, 0.015030141, 0.1167842, 0.9930434, -0.25232598, -0.96056914, 0.11678411, 0.006658015, 0.042791262, -0.16986834)
 bone_name = "Index_Tip_R"
 bone_idx = 9
 use_external_skeleton = true
 external_skeleton = NodePath("../hand_r/Armature/Skeleton3D")
 
-[node name="Marker3D" type="Marker3D" parent="IndexTip"]
+[node name="Marker3D" type="Marker3D" parent="IndexTip" unique_id=364222255]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
 gizmo_extents = 0.02
 
-[node name="TouchArea" type="Area3D" parent="IndexTip"]
+[node name="TouchArea" type="Area3D" parent="IndexTip" unique_id=332183160]
 transform = Transform3D(1, 0, 0, -1.49012e-08, 1, 0, -1.86265e-09, 0, 1, 0, 0, 0)
 collision_layer = 0
 collision_mask = 4
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="IndexTip/TouchArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="IndexTip/TouchArea" unique_id=1694587480]
 transform = Transform3D(1, 0, 0, -1.49012e-08, 1, 0, 0, -7.45058e-09, 1, 0, -0.01, 0)
 shape = SubResource("CapsuleShape3D_66uu0")
 
-[node name="ThumbTip" type="BoneAttachment3D" parent="."]
-transform = Transform3D(0.967042, -0.24582, 0.0663439, 0.0663439, 0.494837, 0.866449, -0.24582, -0.833492, 0.494837, -0.0261569, 0.0891964, -0.0934418)
+[node name="ThumbTip" type="BoneAttachment3D" parent="." unique_id=221589278]
+transform = Transform3D(0.96704245, -0.24582031, 0.06634387, 0.0663439, 0.494837, 0.8664496, -0.24582022, -0.833492, 0.494837, -0.026156932, 0.08919635, -0.09344184)
 bone_name = "Thumb_Tip_R"
 bone_idx = 4
 use_external_skeleton = true
 external_skeleton = NodePath("../hand_r/Armature/Skeleton3D")
 
-[node name="Marker3D" type="Marker3D" parent="ThumbTip"]
+[node name="Marker3D" type="Marker3D" parent="ThumbTip" unique_id=525760812]
 gizmo_extents = 0.02
 
-[node name="MiddleTip" type="BoneAttachment3D" parent="."]
-transform = Transform3D(0.98042, -0.196912, -0.00149799, -0.001498, -0.015065, 0.999885, -0.196912, -0.980305, -0.0150651, 0.00327212, -0.00771424, -0.176318)
+[node name="MiddleTip" type="BoneAttachment3D" parent="." unique_id=276533745]
+transform = Transform3D(0.9804201, -0.19691232, -0.0014979914, -0.001497997, -0.015065027, 0.9998854, -0.1969123, -0.98030525, -0.015065055, 0.0032721236, -0.0077142436, -0.1763176)
 bone_name = "Middle_Tip_R"
 bone_idx = 14
 use_external_skeleton = true
 external_skeleton = NodePath("../hand_r/Armature/Skeleton3D")
 
-[node name="Marker3D" type="Marker3D" parent="MiddleTip"]
+[node name="Marker3D" type="Marker3D" parent="MiddleTip" unique_id=1608438368]
 gizmo_extents = 0.02
+
+[node name="Palm" type="BoneAttachment3D" parent="." unique_id=319803972]
+transform = Transform3D(1, -3.123641e-06, 3.13861e-06, 3.1237046e-06, 0.99999994, -1.9788626e-05, -3.1385441e-06, 1.9788858e-05, 0.9999999, -0.03078075, -0.04197209, -0.039950535)
+bone_name = "Palm_R"
+bone_idx = 25
+use_external_skeleton = true
+external_skeleton = NodePath("../hand_r/Armature/Skeleton3D")
 
 [editable path="hand_r"]
