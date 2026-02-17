@@ -47,8 +47,10 @@ func _handle_enter_leave():
 	if collider == last_collided||is_grabbed||is_pressed:
 		return
 
-	_emit_event("ray_enter", collider)
-	_emit_event("ray_leave", last_collided)
+	if is_instance_valid(collider):
+		_emit_event("ray_enter", collider)
+	if is_instance_valid(last_collided):
+		_emit_event("ray_leave", last_collided)
 
 	last_collided = collider
 

@@ -44,7 +44,9 @@ var initiator: Initiator = Initiator.new()
 var collide: Collide
 var pointer: Pointer
 var press_distance = 0.02
+var release_distance = 0.03
 var grip_distance = 0.02
+var grip_release_distance = 0.03
 
 var pressed = false
 var grabbed = false
@@ -100,19 +102,21 @@ func _physics_process(_delta):
 	var distance_grab = middle_tip.global_position.distance_to(thumb_tip.global_position)
 
 	var trigger_close = distance_trigger <= press_distance
+	var trigger_open = distance_trigger >= release_distance
 	var grab_close = distance_grab <= grip_distance
+	var grab_open = distance_grab >= grip_release_distance
 
 	if trigger_close&&!pressed:
 		pointer.pressed(Initiator.EventType.TRIGGER)
 		pressed = true
-	elif !trigger_close&&pressed:
+	elif trigger_open&&pressed:
 		pointer.released(Initiator.EventType.TRIGGER)
 		pressed = false
 
 	if grab_close&&!grabbed:
 		pointer.pressed(Initiator.EventType.GRIP)
 		grabbed = true
-	elif !grab_close&&grabbed:
+	elif grab_open&&grabbed:
 		pointer.released(Initiator.EventType.GRIP)
 		grabbed = false
 

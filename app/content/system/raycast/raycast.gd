@@ -68,10 +68,11 @@ func _process(delta):
 		grid.material_override.set_shader_parameter("dot_offset", TransformTools.plane_2d_coords(grid.global_transform) / grid.mesh.size.x)
 
 func _handle_grid():
-	var collider = wall_collider.get_collider()
-
-	if collider == null:
+	if not wall_collider.is_colliding():
 		grid.visible = false
+		return
+
+	var collider = wall_collider.get_collider()
 
 	grid.visible = with_grid
 
