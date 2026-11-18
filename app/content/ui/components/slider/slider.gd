@@ -2,11 +2,18 @@
 extends Container3D
 class_name Slider3D
 
+## Emitted when the user changes the value. Setting [member value] from code does not emit it.
 signal on_value_changed(value: float)
 
-var throttled_value_changed = ProcessTools.throttle_bouce(func(value: float):
-	on_value_changed.emit(value)
-, 500)
+## Minimum time in milliseconds between two [signal on_value_changed] emits while dragging.
+## The last value is always emitted. Set to 0 to emit on every change.
+@export var emit_interval: int = 500:
+	set(new_value):
+		emit_interval = new_value
+		_throttled_value_changed = Callable()
+
+# Created on first use so it picks up the configured emit_interval.
+var _throttled_value_changed: Callable
 
 @export var min: float = 0.0:
 	set(new_value):
@@ -26,13 +33,11 @@ var throttled_value_changed = ProcessTools.throttle_bouce(func(value: float):
 			
 @export var value: float = 0.2:
 	set(new_value):
-		var old_value = value
 		value = roundi(clamp(new_value, min, max) / step) * step
 
 		if !is_inside_tree(): return
 
 		label.text = str(value) + " " + label_unit
-		if value != old_value: throttled_value_changed.call(value)
 		_update_slider()
 
 @export var step: float = 0.01
@@ -95,7 +100,7 @@ func _handle_press(event: EventPointer):
 
 	var click_percent = inverse_lerp(min_max.x, min_max.y, pos_x)
 
-	value = lerp(min, max, click_percent)
+	_set_value_from_input(lerp(min, max, click_percent))
 
 func _handle_touch(event: EventTouch):
 
@@ -107,7 +112,24 @@ func _handle_touch(event: EventTouch):
 
 	var click_percent = inverse_lerp(min_max.x, min_max.y, pos_x)
 
-	value = lerp(min, max, click_percent)
+	_set_value_from_input(lerp(min, max, click_percent))
+
+func _set_value_from_input(new_value: float):
+	var old_value = value
+	value = new_value
+
+	if value == old_value: return
+
+	if emit_interval <= 0:
+		on_value_changed.emit(value)
+		return
+
+	if !_throttled_value_changed.is_valid():
+		_throttled_value_changed = ProcessTools.throttle(func(throttled_value: float):
+			on_value_changed.emit(throttled_value)
+		, emit_interval)
+
+	_throttled_value_changed.call(value)
 
 func _update_slider():
 	var min_max = _get_slider_min_max()

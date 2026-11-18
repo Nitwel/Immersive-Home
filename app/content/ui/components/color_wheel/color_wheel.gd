@@ -3,10 +3,12 @@
 extends Container3D
 class_name ColorPicker3D
 
+## Emitted when the user picks a color, at most every 500 ms while dragging (the last color is always emitted).
+## Setting [member color] from code does not emit it.
 signal on_color_changed(color: Color)
 
-var throttled_color_changed = ProcessTools.throttle_bouce(func(color: Color):
-	on_color_changed.emit(color)
+var _throttled_color_changed = ProcessTools.throttle(func(new_color: Color):
+	on_color_changed.emit(new_color)
 , 500)
 
 @onready var puck = $Puck
@@ -19,9 +21,6 @@ var move_plane: Plane
 
 @export var color: Color = Color(1, 1, 1, 1):
 	set(value):
-		if color != value:
-			throttled_color_changed.call(value)
-
 		color = value
 
 		if is_node_ready() == false: return
@@ -65,15 +64,21 @@ func _handle_press(event: EventPointer):
 	if click_pos == null:
 		return
 
-	color = _coords_to_color(Vector2(click_pos.x, click_pos.y) / (size.x / 2.0))
+	_set_color_from_input(_coords_to_color(Vector2(click_pos.x, click_pos.y) / (size.x / 2.0)))
 
 func _handle_touch(event: EventTouch):
 	var click_pos = to_local(event.fingers[0].area.global_position)
-	
+
 	if click_pos == null:
 		return
 
-	color = _coords_to_color(Vector2(click_pos.x, click_pos.y) / (size.x / 2.0))
+	_set_color_from_input(_coords_to_color(Vector2(click_pos.x, click_pos.y) / (size.x / 2.0)))
+
+func _set_color_from_input(new_color: Color):
+	if color == new_color: return
+
+	color = new_color
+	_throttled_color_changed.call(new_color)
 
 func _coords_to_color(coords: Vector2) -> Color:
 	if coords.length() > 1:

@@ -1,81 +1,67 @@
 @tool
 extends Node
 
-## Calls the latest callback if the function is not called again within the delay
-func debounce(callback: Callable, delay: int) -> Callable:
-	var timer = Timer.new()
-	timer.one_shot = true
-	timer.autostart = false
-	add_child(timer)
-
-	timer.timeout.connect(func():
-		var args=timer.get_meta("args")
-		callback.callv(args)
-		timer.set_meta("args", null)
-	)
-
-	# TODO: Implement variadic arguments when available https://github.com/godotengine/godot/pull/82808
-	var wrapper = func(arg1=null, arg2=null, arg3=null, arg4=null, arg5=null, arg6=null, arg7=null, arg8=null, arg9=null):
-		var args = [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9].slice(0, callback.get_argument_count())
-		timer.set_meta("args", args)
-		timer.stop()
-		timer.start(delay / 1000.0)
-
-	return wrapper
-
-## Calls the latest callback each time the time since the last call is greater than the delay
+## Calls the callback at most once every [param delay] milliseconds.
+## The first call runs right away. Calls that arrive inside the window are
+## collapsed, and the latest one runs when the window ends, so the final value
+## is never lost.
+## Pending calls are dropped if the callback's object has been freed.
 func throttle(callback: Callable, delay: int) -> Callable:
-	var last_called = 0
+	# Dictionaries are shared by reference, so changes made inside the lambdas persist between calls.
+	var state = {
+		"last_called": -delay,
+		"pending_args": null,
+		"scheduled": false,
+	}
 
-	var wrapper = func(arg1=null, arg2=null, arg3=null, arg4=null, arg5=null, arg6=null, arg7=null, arg8=null, arg9=null):
-		var args = [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9].slice(0, callback.get_argument_count())
+	var flush = func():
+		state.scheduled = false
+		var args = state.pending_args
+		state.pending_args = null
 
-		var now = Time.get_ticks_msec()
-		if now - last_called > delay:
-			last_called = now
-			callback.callv(args)
-
-	return wrapper
-
-## Combines debounce and throttle
-func throttle_bouce(callback: Callable, delay: int) -> Callable:
-	var timer = Timer.new()
-	timer.one_shot = true
-	timer.autostart = false
-	add_child(timer)
-
-	timer.timeout.connect(func():
-		var args=timer.get_meta("args")
-		if args == null:
+		if args == null || !callback.is_valid():
 			return
 
+		state.last_called = Time.get_ticks_msec()
 		callback.callv(args)
-		timer.set_meta("args", null)
-	)
 
-	# TODO: Implement variadic arguments when available https://github.com/godotengine/godot/pull/82808
-	var wrapper = func(arg1=null, arg2=null, arg3=null, arg4=null, arg5=null, arg6=null, arg7=null, arg8=null, arg9=null):
-		var args = [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9].slice(0, callback.get_argument_count())
-		timer.set_meta("args", args)
-		
-		if timer.is_stopped():
+	var wrapper = func(...args: Array):
+		var elapsed = Time.get_ticks_msec() - state.last_called
+
+		if elapsed >= delay && !state.scheduled:
+			state.last_called = Time.get_ticks_msec()
 			callback.callv(args)
-			timer.start(delay / 1000.0)
-			timer.set_meta("args", null)
+			return
+
+		state.pending_args = args
+
+		if !state.scheduled:
+			state.scheduled = true
+			# SceneTreeTimers are freed by the tree after they fire, so nothing leaks.
+			get_tree().create_timer(max(delay - elapsed, 0) / 1000.0).timeout.connect(flush)
 
 	return wrapper
 
-func timed_signal(target_signal: Signal, timeout: int):
+## Waits for [param target_signal] and returns its argument, or [constant ERR_TIMEOUT]
+## if it doesn't emit within [param timeout] seconds.
+func timed_signal(target_signal: Signal, timeout: float):
+	# Lambdas capture locals by value, so `resolve` is handed over through a shared dictionary.
+	var holder = {"resolve": null}
+	var on_signal = func(result):
+		if holder.resolve != null:
+			holder.resolve.call(result)
+
 	var promise = Promise.new(func(resolve, _reject):
-		var timer=get_tree().create_timer(timeout)
-		
-		timer.timeout.connect(func():
+		holder.resolve=resolve
+		get_tree().create_timer(timeout).timeout.connect(func():
 			resolve.call(Error.ERR_TIMEOUT)
 		)
-
-		target_signal.connect(func(result):
-			resolve.call(result))
+		target_signal.connect(on_signal)
 	)
 
 	var result = await promise.settled
+
+	if target_signal.is_connected(on_signal):
+		target_signal.disconnect(on_signal)
+
 	return result.payload

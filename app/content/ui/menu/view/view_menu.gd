@@ -13,6 +13,11 @@ const Miniature = preload ("res://content/system/miniature/miniature.gd")
 func _ready():
 	background.visible = false
 
+	# These sliders only drive local state, and the min/max clamping below needs to run right away.
+	min_slider.emit_interval = 0
+	max_slider.emit_interval = 0
+	opacity_slider.emit_interval = 0
+
 	if App.miniature.is_node_ready() == false:
 		await App.miniature.ready
 
