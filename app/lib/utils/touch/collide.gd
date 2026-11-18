@@ -7,9 +7,9 @@ const TipCollider = preload ("res://content/system/hands/tip_collider.tscn")
 var tip: Node3D
 var tip_body: RigidBody3D
 var hand: Node3D
-var hand_mesh: MeshInstance3D
+var hand_mesh: Node3D
 
-func _init(hand: Node3D, hand_mesh: MeshInstance3D, tip: Node3D):
+func _init(hand: Node3D, hand_mesh: Node3D, tip: Node3D):
 	self.tip = tip
 	self.hand = hand
 	self.hand_mesh = hand_mesh

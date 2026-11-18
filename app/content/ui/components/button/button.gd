@@ -215,5 +215,5 @@ func _update():
 	label_node.width = size.x / label_node.pixel_size
 	label_node.position = Vector3(0, 0, size.z / 2 + 0.001)
 
-	finger_area.position = Vector3(0, 0, size.z * 0.75)
-	finger_area_collision.shape.size = Vector3(size.x, size.y, size.z / 2)
+	finger_area.position = Vector3(0, 0, -0.025 + size.z / 2)
+	finger_area_collision.shape.size = Vector3(size.x, size.y, size.z + 0.05)
