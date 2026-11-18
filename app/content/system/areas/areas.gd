@@ -62,7 +62,7 @@ func create_area(name: String):
 	if HomeApi.has_integration() == false:
 			return
 
-	HomeApi.api.integration_handler.create_area.call_deferred(area.id, area.name)
+	HomeApi.api.integration_handler.create_area.call_deferred(area.id, area.display_name)
 
 func rename_area(id: int, name: String):
 	for area in get_children():

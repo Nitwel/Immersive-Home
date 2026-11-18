@@ -136,7 +136,7 @@ def handle_remove_area(
         connection.send_error(msg["id"], "device_not_found", "Device not found")
         return
 
-    device.remove_area(msg["name"])
+    device.remove_area(msg["area_id"])
 
     connection.send_result(msg["id"], {"result": "success"})
 

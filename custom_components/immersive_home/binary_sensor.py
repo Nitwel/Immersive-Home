@@ -52,8 +52,8 @@ class AreaSensor(BinarySensorEntity):
         }
 
     @property
-    def state(self):
-        return self._device.areas[self._id]
+    def is_on(self) -> bool:
+        return self._device.areas.get(self._id, False)
 
     @property
     def available(self):
