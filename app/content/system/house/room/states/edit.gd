@@ -52,10 +52,10 @@ func create_from_corners(corners, height):
 	room.room_ceiling.get_node("CollisionShape3D").disabled = (floor_corner == null&&height_corner == null)
 	room.room_floor.get_node("CollisionShape3D").disabled = false
 
-func get_corner(index: int) -> MeshInstance3D:
+func get_corner(index: int) -> StaticBody3D:
 	return room.wall_corners.get_child(index % room.wall_corners.get_child_count())
 
-func get_edge(index: int) -> MeshInstance3D:
+func get_edge(index: int) -> StaticBody3D:
 	return room.wall_edges.get_child(index % room.wall_edges.get_child_count())
 
 func remove_corner(index: int):

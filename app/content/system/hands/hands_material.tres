@@ -1,6 +1,6 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://chu0upvkheqlb"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://chu0upvkheqlb"]
 
-[ext_resource type="Shader" path="res://assets/materials/hands.gdshader" id="1_kyekt"]
+[ext_resource type="Shader" uid="uid://bcfqw5iconik6" path="res://assets/materials/hands.gdshader" id="1_kyekt"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hands"]
 render_priority = 51
