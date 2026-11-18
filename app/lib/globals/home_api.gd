@@ -151,3 +151,11 @@ func get_history(entity_id, start, interval, end=null):
 		return null
 
 	return await api.get_history(entity_id, start, interval, end)
+
+## Returns the HTTP(S) base URL of the home automation server, without a trailing slash,
+## or an empty string if the adapter does not expose one.
+func get_http_url() -> String:
+	if api == null||api.has_method("get_http_url") == false:
+		return ""
+
+	return api.get_http_url()

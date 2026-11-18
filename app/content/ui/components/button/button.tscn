@@ -29,7 +29,7 @@ size = Vector3(0.04, 0.04, 0.01)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bqjii"]
 resource_local_to_scene = true
-size = Vector3(0.04, 0.04, 0.005)
+size = Vector3(0.04, 0.04, 0.06)
 
 [node name="Button" type="Node3D" groups=["ui_focus"]]
 script = ExtResource("1_74x7g")
@@ -64,7 +64,7 @@ autowrap_mode = 3
 width = 40.0
 
 [node name="FingerArea" type="Area3D" parent="." groups=["ui_focus_skip"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0075)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.02)
 collision_layer = 4
 collision_mask = 0
 monitoring = false

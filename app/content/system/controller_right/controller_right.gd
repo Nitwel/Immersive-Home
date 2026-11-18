@@ -44,7 +44,7 @@ func _ready():
 func _setup_hand():
 	TouchManager.add_finger(Finger.Type.INDEX_RIGHT, $IndexTip/TouchArea)
 
-	collide = Collide.new(hand, hand_mesh, index_tip.get_node("Marker3D"))
+	collide = Collide.new(hand, hand_mesh, index_tip.get_node("Marker3D"), Finger.Type.INDEX_RIGHT)
 	add_child(collide)
 
 	initiator.type = Initiator.Type.HAND_RIGHT
@@ -55,12 +55,27 @@ func _setup_hand():
 
 	auto_hand.hand_active_changed.connect(func(hand: int, active: bool):
 		if hand != 1: return
-			
-		hand_active=active&&_is_hand_simulated() == false
 
-		$IndexTip/TouchArea/CollisionShape3D.disabled=!hand_active
-		hand_mesh.visible=active
+		hand_tracked=active
+		_apply_hand_active(hand_tracked&&_is_hand_simulated() == false)
 	)
+
+## Whether the hand tracker reports the hand as active, regardless of its source.
+var hand_tracked = false
+
+func _apply_hand_active(value: bool):
+	hand_active = value
+	$IndexTip/TouchArea/CollisionShape3D.disabled = !value
+	hand_mesh.visible = value
+
+func _process(_delta):
+	# The tracking source can switch between optical and controller data
+	# without hand_active_changed firing, so re-check it every frame.
+	if !hand_tracked: return
+
+	var value = _is_hand_simulated() == false
+	if value != hand_active:
+		_apply_hand_active(value)
 
 func _physics_process(_delta):
 	if !hand_active: return
