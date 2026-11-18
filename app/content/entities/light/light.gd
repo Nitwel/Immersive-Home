@@ -5,13 +5,29 @@ const Entity = preload ("../entity.gd")
 @export var color_off = Color(0.23, 0.23, 0.23)
 @export var color_on = Color(1.0, 0.85, 0.0)
 
-@onready var lightbulb = $Lightbulb
 @onready var slider: Slider3D = $Slider
 @onready var color_wheel = $ColorWheel
 @onready var modes: Select3D = $Modes
 @onready var snap_sound = $SnapSound
 @onready var settings = $Settings
 @onready var movable = $Movable
+@onready var light_radiation = $light/LightRadiation
+@onready var glass_mesh: MeshInstance3D = $light/Sphere
+@onready var rod_mesh: MeshInstance3D = $light/Cylinder_001
+
+# Per-instance copies so tweening one light doesn't recolour every bulb sharing the .tres
+var glass_material: StandardMaterial3D
+var rod_material: StandardMaterial3D
+var visual_tween: Tween
+
+# A tap is a finger poking into the bulb and backing out the way it came, within a short window.
+# Passing through the bulb (e.g. reaching for the slider) exits on the far side and is ignored.
+const TAP_MIN_MS = 40.0
+const TAP_MAX_MS = 600.0
+var touch_start_time = 0.0
+var touch_entry_dir = Vector3.ZERO
+var touch_last_dir = Vector3.ZERO
+var touch_active = false
 
 var active = R.state(false)
 var brightness = R.state(0) # 0-255
@@ -25,6 +41,14 @@ var modes_supported = R.state(false)
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	super()
+
+	glass_material = glass_mesh.material_override.duplicate()
+	glass_mesh.material_override = glass_material
+	rod_material = rod_mesh.material_override.duplicate()
+	rod_mesh.material_override = rod_material
+
+	# Start in the "off" look; set_state skips off->off updates, so this must be applied up front.
+	_apply_visuals(color_off, false, false)
 
 	if HomeApi.has_connected() == false:
 		await HomeApi.on_connect
@@ -99,9 +123,6 @@ func set_state(stateInfo):
 
 	update_capabilities(attributes)
 
-	if active.value == false&&stateInfo["state"] == "off":
-		return
-
 	active.value = stateInfo["state"] == "on"
 
 	if attributes.has("brightness")&&attributes["brightness"] != null:
@@ -113,8 +134,6 @@ func set_state(stateInfo):
 		print("got color", color.value, attributes["rgb_color"])
 		color_wheel.color = color.value
 
-	var tween = create_tween()
-
 	var target_color = color_off
 
 	if active.value:
@@ -123,8 +142,78 @@ func set_state(stateInfo):
 		else:
 			target_color = color_off.lerp(color.value if show_color_wheel.value else color_on, brightness.value / 255.0)
 
+	_apply_visuals(target_color, active.value, true)
+
+func _apply_visuals(target_color: Color, is_on: bool, animate: bool):
 	icon_color.value = target_color
-	tween.tween_property(lightbulb, "material_override:albedo_color", target_color, 0.3)
+
+	var glass_color = Color(target_color.r, target_color.g, target_color.b, 0.5)
+	var radiation_color = Color(target_color.r, target_color.g, target_color.b, 1.0 if is_on else 0.0)
+
+	if visual_tween != null && visual_tween.is_valid():
+		visual_tween.kill()
+
+	if not animate:
+		glass_material.albedo_color = glass_color
+		rod_material.albedo_color = target_color
+		light_radiation.modulate = radiation_color
+		return
+
+	visual_tween = create_tween()
+	visual_tween.set_parallel(true)
+	visual_tween.tween_property(glass_material, "albedo_color", glass_color, 0.3)
+	visual_tween.tween_property(rod_material, "albedo_color", target_color, 0.3)
+	visual_tween.tween_property(light_radiation, "modulate", radiation_color, 0.3)
+
+func _touch_dir(event: EventTouch) -> Vector3:
+	var center = $TouchArea/CollisionShape3D.global_position
+	if event.fingers.is_empty():
+		return Vector3.ZERO
+	var sum = Vector3.ZERO
+	for finger in event.fingers:
+		sum += finger.area.global_position - center
+	return sum / event.fingers.size()
+
+func _on_touch_enter(event: EventTouch):
+	if event.target != $TouchArea:
+		return
+	event.bubbling = false
+
+	if touch_active:
+		return
+
+	touch_active = true
+	touch_start_time = Time.get_ticks_msec()
+	touch_entry_dir = _touch_dir(event)
+	touch_last_dir = touch_entry_dir
+
+func _on_touch_move(event: EventTouch):
+	if event.target != $TouchArea:
+		return
+	event.bubbling = false
+
+	if event.fingers.size() > 0:
+		touch_last_dir = _touch_dir(event)
+
+func _on_touch_leave(event: EventTouch):
+	if event.target != $TouchArea:
+		return
+	event.bubbling = false
+
+	if not touch_active:
+		return
+	touch_active = false
+
+	var duration = Time.get_ticks_msec() - touch_start_time
+	if duration < TAP_MIN_MS||duration > TAP_MAX_MS:
+		return
+
+	# Exited on the opposite side from where it entered -> finger passed through, not a tap.
+	if touch_entry_dir.dot(touch_last_dir) < 0:
+		return
+
+	snap_sound.play()
+	_toggle()
 
 ## Detects effect and colour support from the entity attributes. Runs on every state update
 ## so lights whose state arrives after spawn still get their modes and colour wheel.
