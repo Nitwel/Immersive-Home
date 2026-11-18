@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://4smofj8ou0g7"]
+[gd_scene load_steps=17 format=3 uid="uid://4smofj8ou0g7"]
 
 [ext_resource type="Script" path="res://content/entities/light/light.gd" id="1_ykxy3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_4sfxb"]
@@ -14,6 +14,9 @@
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ukj14"]
 radius = 0.05
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_touch"]
+radius = 0.035
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0kqsy"]
 albedo_color = Color(0.41598, 0.41598, 0.41598, 1)
@@ -48,12 +51,12 @@ focus_point = NodePath("../Settings")
 [node name="Slider" parent="." instance=ExtResource("6_mhjlm")]
 transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.08, 0, 0)
 max = 100.0
-value = 0.0
+value = 100.0
 step = 1.0
 
 [node name="ColorWheel" parent="." instance=ExtResource("5_qj75k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0, 0)
-color = Color(0, 0, 0, 1)
+color = Color(0, 0.616667, 1, 1)
 size = Vector3(0.15, 0.2, 0.01)
 
 [node name="Modes" parent="." instance=ExtResource("7_wbegr")]
@@ -81,7 +84,7 @@ material_override = ExtResource("11_be3ic")
 
 [node name="LightRadiation" type="Sprite3D" parent="light"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
-modulate = Color(1, 1, 0, 1)
+modulate = Color(0.23, 0.23, 0.23, 0)
 pixel_size = 0.0002
 billboard = 1
 texture = SubResource("GradientTexture2D_qnato")
@@ -91,6 +94,7 @@ collision_layer = 4
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="TouchArea"]
-shape = SubResource("SphereShape3D_ukj14")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+shape = SubResource("SphereShape3D_touch")
 
 [editable path="light"]
