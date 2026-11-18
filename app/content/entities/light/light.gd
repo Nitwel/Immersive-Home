@@ -65,25 +65,7 @@ func _ready():
 			remove_child(modes)
 	)
 
-	if stateInfo.has("attributes")&&stateInfo["attributes"].has("effect_list")&&stateInfo["attributes"]["effect_list"].size() > 0:
-		modes_supported.value = true
-
-		if stateInfo["attributes"].has("effect")&&stateInfo["attributes"]["effect"] != null:
-			modes.selected = stateInfo["attributes"]["effect"]
-
-		var options = {}
-
-		for effect in stateInfo["attributes"]["effect_list"]:
-			options[effect] = effect
-
-		modes.options = options
-
-		modes.on_select.connect(func(option):
-			HomeApi.set_state(entity_id, "on", {"effect": option})
-		)
-
-	if stateInfo.has("attributes")&&stateInfo["attributes"].has("supported_color_modes")&&stateInfo["attributes"]["supported_color_modes"].has("rgb"):
-		color_wheel_supported.value = true
+	modes.on_select.connect(_on_mode_selected)
 
 	await HomeApi.watch_state(entity_id, func(new_state):
 		set_state(new_state)
@@ -110,10 +92,15 @@ func _ready():
 	)
 
 func set_state(stateInfo):
-	if active.value == false&&stateInfo["state"] == "off":
+	if stateInfo == null:
 		return
 
-	var attributes = stateInfo["attributes"]
+	var attributes = stateInfo.get("attributes", {})
+
+	update_capabilities(attributes)
+
+	if active.value == false&&stateInfo["state"] == "off":
+		return
 
 	active.value = stateInfo["state"] == "on"
 
@@ -138,6 +125,36 @@ func set_state(stateInfo):
 
 	icon_color.value = target_color
 	tween.tween_property(lightbulb, "material_override:albedo_color", target_color, 0.3)
+
+## Detects effect and colour support from the entity attributes. Runs on every state update
+## so lights whose state arrives after spawn still get their modes and colour wheel.
+func update_capabilities(attributes: Dictionary):
+	# Only write on change: writes always notify effects, which would re-add/remove child nodes.
+	var effect_list = attributes.get("effect_list")
+	var has_modes = effect_list is Array&&effect_list.size() > 0
+	if modes_supported.value != has_modes:
+		modes_supported.value = has_modes
+
+	if has_modes:
+		var options = {}
+		for effect in effect_list:
+			options[effect] = effect
+
+		if modes.options != options:
+			modes.options = options
+
+		# Setting `selected` emits on_select, which would send a state change,
+		# so only preselect the current effect before the handler is connected.
+		if attributes.get("effect") != null&&not modes.on_select.is_connected(_on_mode_selected):
+			modes.selected = attributes["effect"]
+
+	var color_modes = attributes.get("supported_color_modes")
+	var has_rgb = color_modes is Array&&color_modes.has("rgb")
+	if color_wheel_supported.value != has_rgb:
+		color_wheel_supported.value = has_rgb
+
+func _on_mode_selected(option):
+	HomeApi.set_state(entity_id, "on", {"effect": option})
 
 func _on_click(event):
 	if event.target == self:
