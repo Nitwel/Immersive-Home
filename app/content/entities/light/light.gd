@@ -82,7 +82,7 @@ func _ready():
 			HomeApi.set_state(entity_id, "on", {"effect": option})
 		)
 
-	if stateInfo.has("attributes")&&stateInfo["attributes"].has("supported_color_modes")&&stateInfo["attributes"]["supported_color_modes"].has("rgb"):
+	if stateInfo.has("attributes")&&stateInfo["attributes"]["supported_color_modes"].has("hs")&&stateInfo["attributes"].has("supported_color_modes")&&stateInfo["attributes"]["supported_color_modes"].has("rgb"):
 		color_wheel_supported.value = true
 
 	await HomeApi.watch_state(entity_id, func(new_state):
