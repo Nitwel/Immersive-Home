@@ -92,7 +92,7 @@ use_external_skeleton = true
 external_skeleton = NodePath("../hand_l/Armature/Skeleton3D")
 
 [node name="QuickActions" type="Node3D" parent="Palm"]
-transform = Transform3D(-0.0922588, -0.0922553, 0.482677, -0.353553, 0.353553, -2.63596e-06, -0.341303, -0.341304, -0.130471, -0.041355, 0.0405823, 0.000968351)
+transform = Transform3D(-0.0922588, -0.0922553, 0.482677, -0.353553, 0.353553, -2.63596e-06, -0.341303, -0.341304, -0.130471, 0.015, 0.0405823, 0.000968351)
 
 [node name="MiniView" parent="Palm/QuickActions" instance=ExtResource("6_x5vuc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0600001, 0, 0)

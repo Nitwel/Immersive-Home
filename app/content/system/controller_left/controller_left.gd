@@ -51,8 +51,15 @@ var grabbed = false
 
 var moving_entity = null
 
+## The hand material (render priority 50/51) erases transparent geometry drawn
+## before it. Offset added to the palm buttons' priorities so they draw after the hand.
+const PALM_UI_PRIORITY_OFFSET = 50
+
 func _ready():
 	_setup_hand()
+
+	_draw_after_hand(quick_actions)
+	_draw_after_hand(entity_settings)
 
 	palm.remove_child(entity_settings)
 
@@ -167,6 +174,17 @@ func _setup_hand():
 
 	pointer = Pointer.new(initiator, ray)
 	add_child(pointer)
+
+func _draw_after_hand(node: Node):
+	if node is Label3D:
+		node.render_priority += PALM_UI_PRIORITY_OFFSET
+		node.outline_render_priority += PALM_UI_PRIORITY_OFFSET
+	elif node is GeometryInstance3D and node.material_override != null:
+		# Button panel materials are local to scene, so this only affects these buttons.
+		node.material_override.render_priority += PALM_UI_PRIORITY_OFFSET
+
+	for child in node.get_children():
+		_draw_after_hand(child)
 
 func _is_hand_simulated():
 	var hand_trackers = XRServer.get_trackers(XRServer.TRACKER_HAND)
