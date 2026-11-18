@@ -18,7 +18,13 @@ var integration_handler: IntegrationHandler
 var assist_handler: AssistHandler
 var history_handler: HistoryHandler
 
+var url: String
+var token: String
+
 func _init(url: String, token: String):
+	self.url = url
+	self.token = token
+
 	connection = Connection.new(self)
 	add_child(connection)
 
@@ -68,6 +74,18 @@ func start_subscriptions():
 						entities[entity]["attributes"].merge(packet.event.c[entity]["+"]["a"], true)
 					entitiy_callbacks.call_key(entity, [entities[entity]])
 	)
+
+## Converts the websocket URL (ws:// or wss://) to its HTTP(S) equivalent without a trailing slash.
+func get_http_url() -> String:
+	var base = url.strip_edges().rstrip("/")
+	var lower = base.to_lower()
+
+	if lower.begins_with("wss://"):
+		return "https://" + base.substr(6)
+	if lower.begins_with("ws://"):
+		return "http://" + base.substr(5)
+
+	return base
 
 func has_connected():
 	return connection.connected

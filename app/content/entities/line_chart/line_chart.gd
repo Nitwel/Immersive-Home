@@ -38,8 +38,9 @@ func _ready():
 		await HomeApi.on_connect
 
 	var stateInfo = await HomeApi.get_state(entity_id)
-	if stateInfo != null&&stateInfo.has("attributes")&&stateInfo["attributes"].has("friendly_name")&&stateInfo["attributes"]["friendly_name"] != null:
-		label.text = stateInfo["attributes"]["friendly_name"]
+	var friendly_name = stateInfo.get("attributes", {}).get("friendly_name") if stateInfo != null else null
+	if friendly_name != null:
+		label.text = friendly_name
 
 	request_history()
 

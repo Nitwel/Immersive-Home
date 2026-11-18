@@ -17,6 +17,11 @@ func get_history(entity_id: String, start: String, interval: String="5minute", e
 	if meta_response.status != OK:
 		return null
 
+	var metadata = meta_response.payload.get("result")
+
+	if not (metadata is Array)||metadata.is_empty():
+		return null
+
 	var data_response = await api.connection.send_request_packet({
 		"type": "recorder/statistics_during_period",
 		"start_time": start,
@@ -33,12 +38,9 @@ func get_history(entity_id: String, start: String, interval: String="5minute", e
 	if data_response.status != OK:
 		return null
 
-	if meta_response.payload.result.size() == 0:
-		return null
-
 	return {
-		"unit": meta_response.payload.result[0]["display_unit_of_measurement"],
-		"has_mean": meta_response.payload.result[0]["has_mean"],
-		"unit_class": meta_response.payload.result[0]["unit_class"],
+		"unit": metadata[0]["display_unit_of_measurement"],
+		"has_mean": metadata[0]["has_mean"],
+		"unit_class": metadata[0]["unit_class"],
 		"data": data_response.payload.result[entity_id] if data_response.payload.result.has(entity_id) else []
 	}

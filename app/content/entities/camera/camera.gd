@@ -13,6 +13,9 @@ const Entity = preload ("../entity.gd")
 var cam_active = R.state(false)
 var cam_fps = R.state(10)
 
+# Latest entity_picture path; refreshed on every state update since it carries a rotating access token.
+var image_url := ""
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	super()
@@ -32,8 +35,9 @@ func _ready():
 			App.house.save_all_entities()
 	)
 
+	refresh_timer.timeout.connect(load_image)
+
 	R.effect(func(_arg):
-		print("Cam active: ", cam_active.value)
 		if cam_active.value:
 			refresh_timer.start()
 		else:
@@ -51,31 +55,26 @@ func _ready():
 	)
 
 func set_state(stateInfo):
-	if stateInfo == null:
-		view.texture = null
-		mesh.visible = true
-		return
-
-	var state = stateInfo["state"]
-
-	if state == "unavailable":
+	if stateInfo == null||stateInfo["state"] == "unavailable":
+		image_url = ""
 		view.texture = null
 		mesh.visible = true
 		return
 
 	if stateInfo["attributes"].has("entity_picture"):
-		var url = stateInfo["attributes"]["entity_picture"]
-		load_image(url)
-		refresh_timer.timeout.disconnect(load_image.bind(url))
-		refresh_timer.timeout.connect(load_image.bind(url))
+		image_url = stateInfo["attributes"]["entity_picture"]
+		load_image()
 
-func load_image(url: String):
+func load_image():
+	if image_url == "":
+		return
+
 	if http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
 		return
 
-	var pre_url = Store.settings.state.url.replace("ws://", "http://").replace("wss://", "https://")
+	var url = image_url
 
-	http_request.request(pre_url + url)
+	http_request.request(HomeApi.get_http_url() + url)
 
 	var result = await http_request.request_completed
 

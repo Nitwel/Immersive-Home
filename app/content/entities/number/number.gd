@@ -11,9 +11,6 @@ func _ready():
 	icon.value = "sliders"
 
 	var stateInfo = await HomeApi.get_state(entity_id)
-	if stateInfo == null:
-		return
-
 	set_state(stateInfo)
 
 	await HomeApi.watch_state(entity_id, func(new_state):
