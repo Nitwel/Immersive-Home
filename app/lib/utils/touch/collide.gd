@@ -8,11 +8,13 @@ var tip: Node3D
 var tip_body: RigidBody3D
 var hand: Node3D
 var hand_mesh: Node3D
+var finger_type: Finger.Type
 
-func _init(hand: Node3D, hand_mesh: Node3D, tip: Node3D):
+func _init(hand: Node3D, hand_mesh: Node3D, tip: Node3D, finger_type: Finger.Type):
 	self.tip = tip
 	self.hand = hand
 	self.hand_mesh = hand_mesh
+	self.finger_type = finger_type
 
 func _ready():
 	var body_container = Node3D.new()
@@ -34,7 +36,7 @@ func _move_tip_rigidbody_to_bone(tip_rigidbody: RigidBody3D, tip_bone: Node3D):
 	if tip_rigidbody.is_inside_tree() == false:
 		return
 
-	if TouchManager.is_touching() == false:
+	if TouchManager.is_touching(finger_type) == false:
 		hand_mesh.position = Vector3.ZERO
 		last_run_active = false
 		return

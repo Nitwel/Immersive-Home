@@ -19,6 +19,9 @@ const ECHO_WAIT_REPEAT = 0.1
 @onready var finger_area_collision: CollisionShape3D = $FingerArea/CollisionShape3D
 @onready var click_sound = $ClickSound
 
+## True while a touch that started at the front of the button is held.
+var _touch_pressed := false
+
 @export var focusable: bool = true:
 	set(value):
 		focusable = value
@@ -161,6 +164,13 @@ func _on_touch_enter(event: EventTouch):
 		event.bubbling = false
 		return
 
+	# The finger area extends behind the button so a deep push keeps it held.
+	# Only accept touches that start at the front half, so fingers behind
+	# the button (e.g. behind a panel or inside the palm) don't press it.
+	if _finger_z(event) < size.z / 2:
+		return
+
+	_touch_pressed = true
 	click_sound.play()
 
 	if toggleable:
@@ -182,7 +192,7 @@ func _on_touch_move(event: EventTouch):
 		event.bubbling = false
 		return
 
-	if toggleable:
+	if toggleable or not _touch_pressed:
 		return
 
 	_touch_change(event)
@@ -192,18 +202,26 @@ func _on_touch_leave(event: EventTouch):
 		event.bubbling = false
 		return
 
+	if not _touch_pressed:
+		return
+
+	_touch_pressed = false
+
 	if toggleable:
 		return
 
 	active = false
 	on_button_up.emit()
 
-func _touch_change(event: EventTouch):
-	var click_pos = to_local(event.fingers[0].area.global_position)
+func _finger_z(event: EventTouch) -> float:
+	return to_local(event.fingers[0].area.global_position).z
 
-	var percent = (click_pos.z - size.z / 2) / (size.z / 2)
+func _touch_change(event: EventTouch):
+	# 0 at the front face, 1 once the finger reaches the pressed depth (size.z / 2).
+	# Pushing deeper keeps the button fully pressed.
+	var percent = (size.z - _finger_z(event)) / (size.z / 2)
 	percent = clamp(percent, 0.0, 1.0)
-		
+
 	update_animation(percent)
 
 func _update():

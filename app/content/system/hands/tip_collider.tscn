@@ -4,7 +4,6 @@
 radius = 0.011
 
 [node name="TipCollider" type="RigidBody3D"]
-top_level = true
 collision_layer = 4
 collision_mask = 4
 axis_lock_angular_x = true

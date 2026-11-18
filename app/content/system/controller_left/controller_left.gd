@@ -83,7 +83,22 @@ func _ready():
 		moving_entity.toggle_settings()
 	)
 
+## Whether the hand tracker reports the hand as active, regardless of its source.
+var hand_tracked = false
+
+func _apply_hand_active(value: bool):
+	hand_active = value
+	$IndexTip/TouchArea/CollisionShape3D.disabled = !value
+	hand_mesh.visible = value
+
 func _process(_delta):
+	# The tracking source can switch between optical and controller data
+	# without hand_active_changed firing, so re-check it every frame.
+	if hand_tracked:
+		var value = _is_hand_simulated() == false
+		if value != hand_active:
+			_apply_hand_active(value)
+
 	if !hand_active:
 		if quick_actions.is_inside_tree(): palm.remove_child(quick_actions)
 		return
@@ -119,16 +134,14 @@ func _physics_process(_delta):
 func _setup_hand():
 	TouchManager.add_finger(Finger.Type.INDEX_LEFT, $IndexTip/TouchArea)
 
-	collide = Collide.new(hand, hand_mesh, index_tip.get_node("Marker3D"))
+	collide = Collide.new(hand, hand_mesh, index_tip.get_node("Marker3D"), Finger.Type.INDEX_LEFT)
 	add_child(collide)
 
 	auto_hand.hand_active_changed.connect(func(hand: int, active: bool):
 		if hand != 0: return
 
-		hand_active=active&&_is_hand_simulated() == false
-			
-		$IndexTip/TouchArea/CollisionShape3D.disabled=!hand_active
-		hand_mesh.visible=hand_active
+		hand_tracked=active
+		_apply_hand_active(hand_tracked&&_is_hand_simulated() == false)
 	)
 
 	mini_view_button.on_button_up.connect(func():
