@@ -106,7 +106,7 @@ func handle_message(message: Dictionary):
 				return
 
 			var headers = PackedStringArray(["Authorization: Bearer %s" % api.token, "Content-Type: application/json"])
-			var url = "%s://%s%s" % ["https" if api.url.begins_with("wss") else "http", api.url.split("//")[1],event["data"]["tts_output"]["url"]]
+			var url = api.get_http_url() + event["data"]["tts_output"]["url"]
 
 			Request.request(url, headers, HTTPClient.METHOD_GET)
 
