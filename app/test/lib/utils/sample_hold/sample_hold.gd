@@ -1,17 +1,20 @@
 @tool
 extends Node2D
 
-const sample_hold = preload ("res://lib/utils/sample_hold.gd")
+const Downsampler = preload ("res://lib/utils/downsampler.gd")
 
 var data = PackedVector2Array()
-var result: PackedFloat32Array
+var result := PackedFloat32Array()
 
 func _ready():
 	for i in range(0, 44100):
 		var value = sin(i * 2 * PI / 44100.0)
 		data.push_back(Vector2(value, value))
 
-	result = sample_hold.sample_and_hold(data, 44100.0 / 16000.0 * 1.5)
+	var pcm: PackedByteArray = Downsampler.new(44100.0, 16000.0).process(data).data
+
+	for i in range(pcm.size() / 2):
+		result.push_back(pcm.decode_s16(i * 2) / 32767.0)
 
 func _draw():
 	var size = get_viewport().get_visible_rect().size

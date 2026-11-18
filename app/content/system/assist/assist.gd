@@ -1,14 +1,14 @@
 extends Node3D
 
 const VoiceAssistant = preload ("res://lib/home_apis/voice_handler.gd")
-const sample_hold = preload ("res://lib/utils/sample_hold.gd")
+const Downsampler = preload ("res://lib/utils/downsampler.gd")
 const Chat = preload ("./chat.gd")
 
-const audio_freq = 44100
+## Sample rate Home Assistant expects (see the assist handler's pipeline input).
 const target_freq = 16000
-const sample_rate_ratio: float = audio_freq / target_freq * 1.5
 
 var effect: AudioEffectCapture
+var downsampler: Downsampler
 @export var input_threshold: float = 0.05
 @onready var audio_recorder: AudioStreamPlayer = $AudioStreamRecord
 @onready var audio_timer: Timer = $AudioTimer
@@ -24,6 +24,8 @@ var voice_assistant: VoiceAssistant
 func _ready():
 	var index = AudioServer.get_bus_index("Record")
 	effect = AudioServer.get_bus_effect(index, 0)
+	# The capture effect delivers frames at the engine's mix rate, which differs per device.
+	downsampler = Downsampler.new(AudioServer.get_mix_rate(), target_freq)
 
 	chat_assistant.visible = false
 	chat_user.visible = false
@@ -102,22 +104,10 @@ func _process(_delta):
 	if sterioData.size() == 0:
 		return
 
-	var monoSampled := sample_hold.sample_and_hold(sterioData, sample_rate_ratio)
+	var result := downsampler.process(sterioData)
+	var data: PackedByteArray = result.data
 
-	# 16 bit PCM
-	var data := PackedByteArray()
-	data.resize(monoSampled.size() * 2)
-
-	var max_amplitude = 0.0
-
-	for i in range(monoSampled.size()):
-		
-		var value = monoSampled[i]
-		max_amplitude = max(max_amplitude, value)
-
-		data.encode_s16(i * 2, int(value * 32767))
-
-	if max_amplitude > input_threshold:
+	if result.peak > input_threshold:
 		if audio_timer.is_stopped():
 			voice_assistant.start_wakeword()
 
