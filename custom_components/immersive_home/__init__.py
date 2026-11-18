@@ -11,7 +11,11 @@ from homeassistant.helpers.typing import ConfigType
 from . import hub, websocket_api
 from .const import DOMAIN
 
-PLATFORMS: list[Platform] = [Platform.SENSOR]
+import logging
+
+_LOGGER = logging.getLogger(__name__)
+
+PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.BINARY_SENSOR]
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
@@ -27,6 +31,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up ImmersiveHome from a config entry."""
+    _LOGGER.info("Setting up entry %s", entry.entry_id)
     registration = entry.data
 
     hass.data.setdefault(DOMAIN, {})
@@ -49,7 +54,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
-    if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
-        hass.data[DOMAIN].pop(entry.entry_id)
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
     return unload_ok
