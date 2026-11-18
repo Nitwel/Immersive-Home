@@ -5,6 +5,9 @@ android/build/
 builds/
 reference/
 
+# Temporary copies of GDExtension libraries Godot makes on Windows (incl. ~RF*.TMP leftovers)
+~*.dll*
+
 # Godot-specific ignores
 .import/
 export.cfg
