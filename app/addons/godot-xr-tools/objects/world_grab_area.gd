@@ -20,8 +20,8 @@ var grab_locations := {}
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsWorldGrabArea"
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsWorldGrabArea"
 
 
 # Called by XRToolsFunctionPickup
@@ -40,7 +40,7 @@ func request_highlight(_from, _on) -> void:
 	pass
 
 # Called by XRToolsFunctionPickup when this is picked up by a controller
-func pick_up(by: Node3D, _with_controller: XRController3D) -> void:
+func pick_up(by: Node3D) -> void:
 	# Get the ID to save the grab handle under
 	var id = by.get_instance_id()
 

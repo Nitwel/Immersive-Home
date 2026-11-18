@@ -116,9 +116,6 @@ texture = ExtResource("6_ypel5")
 [node name="CollisionShape3D" parent="CursorOptions/CircleCursor/FingerArea" index="0"]
 shape = SubResource("BoxShape3D_surd4")
 
-[node name="CollisionShape3D" parent="CursorOptions/CircleCursor/TouchBody" index="0"]
-shape = SubResource("BoxShape3D_01skh")
-
 [node name="RetroCursor" parent="CursorOptions" instance=ExtResource("1_52ufi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07, 0, 0)
 label = ""
@@ -148,9 +145,6 @@ texture = ExtResource("7_un12x")
 
 [node name="CollisionShape3D" parent="CursorOptions/RetroCursor/FingerArea" index="0"]
 shape = SubResource("BoxShape3D_surd4")
-
-[node name="CollisionShape3D" parent="CursorOptions/RetroCursor/TouchBody" index="0"]
-shape = SubResource("BoxShape3D_01skh")
 
 [editable path="CursorOptions/CircleCursor"]
 [editable path="CursorOptions/RetroCursor"]

@@ -1,7 +1,7 @@
 @tool
 @icon("res://addons/godot-xr-tools/editor/icons/function.svg")
 class_name XRToolsFunctionPickup
-extends Node3D
+extends XRToolsHandPalmOffset
 
 
 ## XR Tools Function Pickup Script
@@ -30,6 +30,10 @@ const DEFAULT_RANGE_MASK := 0b0000_0000_0000_0000_0000_0000_0000_0100
 # Constant for worst-case grab distance
 const MAX_GRAB_DISTANCE2: float = 1000000.0
 
+# Class for storing copied collision data
+class CopiedCollision extends RefCounted:
+	var collision_shape : CollisionShape3D
+	var org_transform : Transform3D
 
 ## Pickup enabled property
 @export var enabled : bool = true
@@ -81,18 +85,18 @@ var _grab_area : Area3D
 var _grab_collision : CollisionShape3D
 var _ranged_area : Area3D
 var _ranged_collision : CollisionShape3D
+var _active_copied_collisions : Array[CopiedCollision]
 
-
-## Controller
-@onready var _controller := XRHelpers.get_xr_controller(self)
+## Collision hand (if applicable)
+@onready var _collision_hand : XRToolsCollisionHand
 
 ## Grip threshold (from configuration)
 @onready var _grip_threshold : float = XRTools.get_grip_threshold()
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsFunctionPickup"
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsFunctionPickup"
 
 
 # Called when the node enters the scene tree for the first time.
@@ -140,13 +144,35 @@ func _ready():
 	# Update the colliders
 	_update_colliders()
 
+
+# Called when we're added to the tree
+func _enter_tree():
+	super._enter_tree()
+
+	_collision_hand = XRToolsCollisionHand.find_ancestor(self)
+
 	# Monitor Grab Button
-	_controller.connect("button_pressed", _on_button_pressed)
-	_controller.connect("button_released", _on_button_released)
+	if _controller:
+		_controller.button_pressed.connect(_on_button_pressed)
+		_controller.button_released.connect(_on_button_released)
+
+# Called when we exit the tree
+func _exit_tree():
+	if _controller:
+		_controller.button_pressed.disconnect(_on_button_pressed)
+		_controller.button_released.disconnect(_on_button_released)
+
+	if _collision_hand:
+		_remove_copied_collisions()
+		_collision_hand = null
+
+	super._exit_tree()
 
 
 # Called on each frame to update the pickup
 func _process(delta):
+	super._process(delta)
+
 	# Do not process if in the editor
 	if Engine.is_editor_hint():
 		return
@@ -172,6 +198,7 @@ func _process(delta):
 		# Average velocity of this pickup
 		_velocity_averager.add_transform(delta, global_transform)
 
+	_update_copied_collisions()
 	_update_closest_object()
 
 
@@ -223,8 +250,8 @@ func _set_grab_distance(new_value: float) -> void:
 # Called when the grab collision mask has been modified
 func _set_grab_collision_mask(new_value: int) -> void:
 	grab_collision_mask = new_value
-	if is_inside_tree() and _grab_collision:
-		_grab_collision.collision_mask = new_value
+	if is_inside_tree() and _grab_area:
+		_grab_area.collision_mask = new_value
 
 
 # Called when the ranged-grab distance has been modified
@@ -244,8 +271,8 @@ func _set_ranged_angle(new_value: float) -> void:
 # Called when the ranged-grab collision mask has been modified
 func _set_ranged_collision_mask(new_value: int) -> void:
 	ranged_collision_mask = new_value
-	if is_inside_tree() and _ranged_collision:
-		_ranged_collision.collision_mask = new_value
+	if is_inside_tree() and _ranged_area:
+		_ranged_area.collision_mask = new_value
 
 
 # Update the colliders geometry
@@ -371,12 +398,20 @@ func drop_object() -> void:
 	if not is_instance_valid(picked_up_object):
 		return
 
+	# Remove any copied collision objects
+	_remove_copied_collisions()
+
 	# let go of this object
 	picked_up_object.let_go(
 		self,
 		_velocity_averager.linear_velocity() * impulse_factor,
 		_velocity_averager.angular_velocity())
 	picked_up_object = null
+
+	if _collision_hand:
+		# Reset the held weight
+		_collision_hand.set_held_weight(0.0)
+
 	emit_signal("has_dropped")
 
 
@@ -406,18 +441,72 @@ func _pick_up_object(target: Node3D) -> void:
 
 	# If object picked up then emit signal
 	if is_instance_valid(picked_up_object):
+		_copy_collisions()
+
 		picked_up_object.request_highlight(self, false)
 		emit_signal("has_picked_up", picked_up_object)
 
 
+# Copy collision shapes on the held object to our collision hand (if applicable).
+# If we're two handing an object, both collision hands will get copies.
+func _copy_collisions():
+	if not is_instance_valid(_collision_hand):
+		return
+
+	if not is_instance_valid(picked_up_object) or not picked_up_object is RigidBody3D:
+		return
+
+	for child in picked_up_object.get_children():
+		if child is CollisionShape3D and not child.disabled:
+
+			var copied_collision : CopiedCollision = CopiedCollision.new()
+			copied_collision.collision_shape = CollisionShape3D.new()
+			copied_collision.collision_shape.shape = child.shape
+			copied_collision.org_transform = child.transform
+
+			_collision_hand.add_child(copied_collision.collision_shape, false, Node.INTERNAL_MODE_BACK)
+			copied_collision.collision_shape.global_transform = picked_up_object.global_transform * \
+				copied_collision.org_transform
+
+			_active_copied_collisions.push_back(copied_collision)
+
+
+# Adjust positions of our collisions to match actual location of object
+func _update_copied_collisions():
+	if is_instance_valid(_collision_hand) and is_instance_valid(picked_up_object):
+		for copied_collision : CopiedCollision in _active_copied_collisions:
+			if is_instance_valid(copied_collision.collision_shape):
+				copied_collision.collision_shape.global_transform = picked_up_object.global_transform * \
+					copied_collision.org_transform
+
+
+# Remove copied collision shapes
+func _remove_copied_collisions():
+	if is_instance_valid(_collision_hand):
+		for copied_collision : CopiedCollision in _active_copied_collisions:
+			if is_instance_valid(copied_collision.collision_shape):
+				_collision_hand.remove_child(copied_collision.collision_shape)
+				copied_collision.collision_shape.queue_free()
+
+	_active_copied_collisions.clear()
+
+
 func _on_button_pressed(p_button) -> void:
-	if p_button == action_button_action:
-		if is_instance_valid(picked_up_object) and picked_up_object.has_method("action"):
+	if p_button == action_button_action and is_instance_valid(picked_up_object):
+		if picked_up_object.has_method("action"):
 			picked_up_object.action()
 
+		if picked_up_object.has_method("controller_action"):
+			picked_up_object.controller_action(_controller)
 
-func _on_button_released(_p_button) -> void:
-	pass
+
+func _on_button_released(p_button) -> void:
+	if p_button == action_button_action and is_instance_valid(picked_up_object):
+		if picked_up_object.has_method("action_release"):
+			picked_up_object.action_release()
+
+		if picked_up_object.has_method("controller_action_release"):
+			picked_up_object.controller_action_release(_controller)
 
 
 func _on_grip_pressed() -> void:

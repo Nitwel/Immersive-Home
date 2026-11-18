@@ -62,13 +62,20 @@ var _object_in_grab_area = Array()
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsSnapZone"
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsSnapZone"
 
 
 func _ready():
 	# Set collision shape radius
-	$CollisionShape3D.shape.radius = grab_distance
+	if has_node("CollisionShape3D") and "radius" in $CollisionShape3D.shape:
+		$CollisionShape3D.shape.radius = grab_distance
+
+	# Add important connections
+	if not body_entered.is_connected(_on_snap_zone_body_entered):
+		body_entered.connect(_on_snap_zone_body_entered)
+	if not body_exited.is_connected(_on_snap_zone_body_exited):
+		body_exited.connect(_on_snap_zone_body_exited)
 
 	# Perform updates
 	_update_snap_mode()
@@ -173,6 +180,13 @@ func _initial_object_check() -> void:
 		# Show highlight when empty and enabled
 		highlight_updated.emit(self, enabled)
 
+	# Stop any audio from initial pickup
+	var audio := get_node("AudioStreamPlayer3D") if has_node("AudioStreamPlayer3D") else null
+
+	# Only stop if the user doesn't intend to auto-play
+	if audio is AudioStreamPlayer3D and !audio.autoplay:
+		audio.stop()
+
 
 # Called when a body enters the snap zone
 func _on_snap_zone_body_entered(target: Node3D) -> void:
@@ -244,12 +258,13 @@ func pick_up_object(target: Node3D) -> void:
 
 	# Pick up our target. Note, target may do instant drop_and_free
 	picked_up_object = target
-	var player = get_node("AudioStreamPlayer3D")
-	if is_instance_valid(player):
-		if player.playing:
-			player.stop()
-		player.stream = stash_sound
-		player.play()
+	if has_node("AudioStreamPlayer3D"):
+		var player = get_node("AudioStreamPlayer3D")
+		if is_instance_valid(player):
+			if player.playing:
+				player.stop()
+			player.stream = stash_sound
+			player.play()
 
 	target.pick_up(self)
 

@@ -46,8 +46,8 @@ var _tween: Tween
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsInteractableAreaButton"
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsInteractableAreaButton"
 
 
 # Called when the node enters the scene tree for the first time.
@@ -78,7 +78,7 @@ func _on_button_entered(item: Node3D) -> void:
 			_tween.kill()
 
 		# Construct the button animation tween
-		_tween = get_tree().create_tween()
+		_tween = create_tween()
 		_tween.set_trans(Tween.TRANS_LINEAR)
 		_tween.set_ease(Tween.EASE_IN_OUT)
 		_tween.tween_property(_button, "position", _button_down, duration)
@@ -102,7 +102,7 @@ func _on_button_exited(item: Node3D) -> void:
 			_tween.kill()
 
 		# Construct the button animation tween
-		_tween = get_tree().create_tween()
+		_tween = create_tween()
 		_tween.set_trans(Tween.TRANS_LINEAR)
 		_tween.set_ease(Tween.EASE_IN_OUT)
 		_tween.tween_property(_button, "position", _button_up, duration)

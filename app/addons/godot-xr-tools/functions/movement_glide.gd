@@ -91,8 +91,8 @@ var _has_controller_positions : bool = false
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsMovementGlide" or super(name)
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsMovementGlide" or super(xr_name)
 
 
 func physics_movement(delta: float, player_body: XRToolsPlayerBody, disabled: bool):
@@ -190,7 +190,7 @@ func physics_movement(delta: float, player_body: XRToolsPlayerBody, disabled: bo
 
 	# Perform the glide
 	var glide_velocity := horizontal_velocity + vertical_velocity * player_body.up_gravity
-	player_body.velocity = player_body.move_body(glide_velocity)
+	player_body.velocity = player_body.move_player(glide_velocity)
 
 	# Report exclusive motion performed (to bypass gravity)
 	return true
@@ -203,7 +203,7 @@ func _set_gliding(active: bool) -> void:
 		return
 
 	# Update the is_gliding flag
-	is_active = active;
+	is_active = active
 
 	# Report transition
 	if is_active:

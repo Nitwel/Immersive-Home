@@ -1,4 +1,5 @@
 @tool
+class_name XRToolsViewport2DIn3D
 extends Node3D
 
 
@@ -96,7 +97,7 @@ const DEFAULT_LAYER := 0b0000_0000_0101_0000_0000_0000_0000_0001
 @export var material : StandardMaterial3D = null: set = set_material
 
 ## Transparent property
-@export var transparent : TransparancyMode = TransparancyMode.TRANSPARENT: set = set_transparent
+var transparent : TransparancyMode = TransparancyMode.TRANSPARENT: set = set_transparent
 
 ## Alpha Scissor Threshold property (ignored when custom material provided)
 var alpha_scissor_threshold : float = 0.25: set = set_alpha_scissor_threshold
@@ -110,10 +111,20 @@ var filter : bool = true: set = set_filter
 
 var is_ready : bool = false
 var scene_node : Node
+var scene_properties_keys: PackedStringArray = []
+var scene_properties : Array[Dictionary] = []
+# Needed to apply custom properties of the scene before it is instanced, as these are set on ready,
+# But at this point in time the scene is not instanced yet
+var scene_proxy_configuration: Dictionary = {}
 var viewport_texture : ViewportTexture
 var time_since_last_update : float = 0.0
 var _screen_material : StandardMaterial3D
 var _dirty := _DIRTY_ALL
+
+
+# Add support for is_xr_class on XRTools classes
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsViewport2DIn3D"
 
 
 # Called when the node enters the scene tree for the first time.
@@ -122,6 +133,9 @@ func _ready():
 
 	# Listen for pointer events on the screen body
 	$StaticBody3D.connect("pointer_event", _on_pointer_event)
+
+	# Update enabled based on visibility
+	visibility_changed.connect(_on_visibility_changed)
 
 	# Apply physics properties
 	_update_screen_size()
@@ -135,16 +149,21 @@ func _ready():
 # Provide custom property information
 func _get_property_list() -> Array[Dictionary]:
 	# Select visibility of properties
+	var show_transparency := not material
 	var show_alpha_scissor := not material and transparent == TransparancyMode.SCISSOR
 	var show_unshaded := not material
 	var show_filter := not material
 
-	# Return extra properties
-	return [
+	var extra_properties : Array[Dictionary] = [
 		{
 			name = "Rendering",
 			type = TYPE_NIL,
 			usage = PROPERTY_USAGE_GROUP
+		},
+		{
+			name = "transparent",
+			type = TYPE_BOOL,
+			usage = PROPERTY_USAGE_DEFAULT if show_transparency else PROPERTY_USAGE_NO_EDITOR
 		},
 		{
 			name = "alpha_scissor_threshold",
@@ -162,8 +181,65 @@ func _get_property_list() -> Array[Dictionary]:
 			name = "filter",
 			type = TYPE_BOOL,
 			usage = PROPERTY_USAGE_DEFAULT if show_filter else PROPERTY_USAGE_NO_EDITOR
+		},
+		# Store the scene property keys on the disk, so that even before the scene is loaded we
+		# know about the custom properties
+		{
+			name = "scene_properties_keys",
+			type = TYPE_PACKED_STRING_ARRAY,
+			usage = PROPERTY_USAGE_NO_EDITOR | PROPERTY_USAGE_STORAGE
 		}
 	]
+
+	# Add all the custom properties of the subscene so they show up in the editor
+	if scene_properties_keys.size() > 0:
+		extra_properties.append_array(scene_properties)
+
+	return extra_properties
+
+
+# Forward setting and getting of custom properties of the child scene
+func _get(property: StringName) -> Variant:
+	if scene_properties_keys.has(property):
+
+		var return_value: Variant = null
+
+		# If our scene is already instanced then get the property directly
+		if is_instance_valid(scene_node):
+			return_value = scene_node.get(property)
+		# If it is not instanced, we use the proxy configuration
+		elif scene_proxy_configuration.has(property):
+			return_value = scene_proxy_configuration[property]
+
+		# Special handling is required for NodePaths, as they are relative to the scene
+		if return_value is NodePath and !return_value.is_absolute():
+			var path_string : String = str(return_value)
+			# Remove the additional leading ../../
+			return_value = NodePath(path_string.substr(6, -1))
+
+		return return_value
+	# Keep normal behaviour
+	return null
+
+
+func _set(property: StringName, value: Variant):
+	if scene_properties_keys.has(property):
+
+		# Special handling is required for NodePaths, as they are relative to the scene
+		if value is NodePath and !value.is_absolute():
+			# Add the additional leading ../../
+			value = NodePath("../../" + str(value))
+
+		# If our scene is already instanced then set the property directly
+		if is_instance_valid(scene_node):
+			scene_node.set(property, value)
+		# If it is not instanced yet, store it to the proxy configuration,
+		# which will get applied on scene load
+		else:
+			scene_proxy_configuration[property] = value
+		return true
+	# Keep normal behaviour
+	return false
 
 
 # Allow revert of custom properties
@@ -180,7 +256,7 @@ func _property_can_revert(property : StringName) -> bool:
 
 
 # Provide revert values for custom properties
-func _property_get_revert(property : StringName): # Variant
+func _property_get_revert(property : StringName) -> Variant:
 	match property:
 		"alpha_scissor_threshold":
 			return 0.25
@@ -188,6 +264,37 @@ func _property_get_revert(property : StringName): # Variant
 			return false
 		"filter":
 			return true
+		_:
+			return null
+
+
+# When the scene_node changes, update the property list
+func _update_scene_property_list():
+	scene_properties = []
+	scene_properties_keys = []
+	if is_instance_valid(scene_node):
+
+		# If the scene is queued for deletion, clear the scene proxy configuration
+		if scene_node.is_queued_for_deletion():
+			scene_proxy_configuration = {}
+		else:
+			# Extract relevant properties of the provided scene to display in the editor (forwarded)
+			var node_script: Script = scene_node.get_script() as Script
+			if node_script:
+				var all_properties := node_script.get_script_property_list()
+
+				# Join this with the custom property list of the object created by the script
+				if scene_node.has_method("_get_property_list"):
+					all_properties.append_array(scene_node.call("_get_property_list"))
+
+				for property in all_properties:
+					# Filter out only the properties that are supposed to be stored, or are used for grouping
+					if property["usage"] & (PROPERTY_USAGE_STORAGE | PROPERTY_USAGE_GROUP \
+					| PROPERTY_USAGE_CATEGORY | PROPERTY_USAGE_SUBGROUP):
+						scene_properties.append(property)
+						scene_properties_keys.append(property["name"])
+
+	notify_property_list_changed()
 
 
 ## Get the 2D scene instance
@@ -244,6 +351,19 @@ func _process(delta):
 		set_process(false)
 
 
+# Handle visibility changed
+func _on_visibility_changed() -> void:
+	# Fire visibility changed in scene
+	if scene_node:
+		scene_node.propagate_notification(
+			CanvasItem.NOTIFICATION_VISIBILITY_CHANGED)
+
+	# Update collision and rendering based on visibility
+	_update_enabled()
+	_dirty |= _DIRTY_UPDATE
+	_update_render()
+
+
 ## Set screen size property
 func set_screen_size(new_size: Vector2) -> void:
 	screen_size = new_size
@@ -293,6 +413,10 @@ func set_update_mode(new_update_mode: UpdateMode) -> void:
 func set_material(new_material: StandardMaterial3D) -> void:
 	material = new_material
 	notify_property_list_changed()
+
+	# Discard our screen material, _update_render will create a new one.
+	_screen_material = null
+
 	_dirty |= _DIRTY_MATERIAL
 	if is_ready:
 		_update_render()
@@ -346,7 +470,7 @@ func _update_enabled() -> void:
 	if Engine.is_editor_hint():
 		return
 
-	$StaticBody3D/CollisionShape3D.disabled = !enabled
+	$StaticBody3D/CollisionShape3D.disabled = !enabled or not is_visible_in_tree()
 
 
 # Collision layer update handler
@@ -361,11 +485,23 @@ func _update_render() -> void:
 	if _dirty & _DIRTY_MATERIAL:
 		_dirty &= ~_DIRTY_MATERIAL
 
-		# Construct the new screen material
 		if material:
-			# Copy custom material
-			_screen_material = material.duplicate()
-		else:
+			# We can't use our material directly because each instance uses
+			# it's own ViewportTexture. So we duplicate our material.
+			if not _screen_material:
+				_screen_material = material.duplicate()
+			else:
+				# We should only get here if we're in our editor.
+				# We can't detect when our material changes,
+				# so we need to check for changed properties.
+				for property in ClassDB.class_get_property_list("BaseMaterial3D", true):
+					# If any of the material properties we do not manage changed, update them.
+					if property.name != "albedo_texture":
+						var was_value = _screen_material.get(property.name)
+						var new_value = material.get(property.name)
+						if was_value != new_value:
+							_screen_material.set(property.name, new_value)
+		elif not _screen_material:
 			# Create new local material
 			_screen_material = StandardMaterial3D.new()
 
@@ -391,13 +527,25 @@ func _update_render() -> void:
 
 		# Out with the old
 		if is_instance_valid(scene_node):
+			if scene_node.property_list_changed.is_connected(_update_scene_property_list):
+				scene_node.property_list_changed.disconnect(_update_scene_property_list)
 			$Viewport.remove_child(scene_node)
 			scene_node.queue_free()
+			_update_scene_property_list()
 
 		# In with the new
 		if scene:
 			# Instantiate provided scene
 			scene_node = scene.instantiate()
+			_update_scene_property_list()
+			scene_node.property_list_changed.connect(_update_scene_property_list)
+
+			# Apply the scene proxy configuration on the first load
+			for key in scene_properties_keys:
+				if scene_proxy_configuration.has(key):
+					scene_node.set(key, scene_proxy_configuration[key])
+
+			# Finally add it to the scene, so values are available in _ready
 			$Viewport.add_child(scene_node)
 		elif $Viewport.get_child_count() == 1:
 			# Use already-provided scene
@@ -414,8 +562,8 @@ func _update_render() -> void:
 		$Viewport.size = viewport_size
 		$StaticBody3D.viewport_size = viewport_size
 
-		# Update our viewport texture, it will have changed
-		_dirty |= _DIRTY_ALBEDO
+		# Perform redraw to let viewport texture update correctly after changing the viewport's size
+		_dirty |= _DIRTY_REDRAW
 
 	# Handle albedo change:
 	if _dirty & _DIRTY_ALBEDO:
@@ -434,7 +582,7 @@ func _update_render() -> void:
 			# Update once. Process function used for editor refreshes
 			$Viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 			set_process(true)
-		elif update_mode == UpdateMode.UPDATE_ONCE:
+		elif update_mode == UpdateMode.UPDATE_ONCE or not is_visible_in_tree():
 			# Update once. Process function not used
 			$Viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 			set_process(false)

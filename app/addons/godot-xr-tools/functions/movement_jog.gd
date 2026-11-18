@@ -9,7 +9,7 @@ extends XRToolsMovementProvider
 ## works with the [XRToolsPlayerBody] attached to the players [XROrigin3D].
 ##
 ## The implementation uses filtering of the controller Y velocities to measure
-## the approximate frequency of jog arm-swings; and uses that to
+## the approximate frequency of jog arm-swings, and uses that to
 ## switch between stopped, slow, and fast movement speeds.
 
 
@@ -59,8 +59,8 @@ var _speed_mode := SpeedMode.STOPPED
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsMovementJog" or super(name)
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsMovementJog" or super(xr_name)
 
 
 # Perform jump movement
@@ -117,7 +117,7 @@ func _get_stroke_frequency(delta : float) -> float:
 	# Update confidence-hat. The confidence-hat signal has a fast-rise and
 	# slow-decay. Rising with each jog arm-swing "stroke" and then taking time
 	# to decay. The magnitude of the "confidence-hat" can be used as a good
-	# indicator of when the user is jogging; and the difference between the
+	# indicator of when the user is jogging, and the difference between the
 	# "confidence" and "confidence-hat" signals can be used to identify the
 	# duration of a jog arm-swing "stroke".
 	if valley:

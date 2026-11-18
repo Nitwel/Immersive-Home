@@ -8,30 +8,37 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="ImmersiveHome"
 run/main_scene="res://content/main.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://assets/logo.png"
 
 [audio]
 
+buses/default_bus_layout="uid://b0kqovxor03ip"
 driver/enable_input=true
 
 [autoload]
 
-XRToolsUserSettings="*res://addons/godot-xr-tools/user_settings/user_settings.gd"
+XRToolsUserSettings="*uid://bqgb8i74tm0t"
 App="*res://lib/globals/main.gd"
 HomeApi="*res://lib/globals/home_api.gd"
 Store="*res://lib/globals/main_store.gd"
 EventSystem="*res://lib/globals/event_system.gd"
 Request="*res://lib/globals/request.gd"
 TouchManager="*res://lib/utils/touch/touch.gd"
+XRToolsRumbleManager="*uid://by853dk86g1qw"
 
 [debug_draw_3d]
 
 settings/3d/volumetric_defaults/thickness=0.001
+settings/addon_root_folder="res://addons/debug_draw_3d"
 
 [display]
 
@@ -91,4 +98,8 @@ openxr/enabled=true
 openxr/foveation_level=3
 openxr/foveation_dynamic=true
 openxr/startup_alert=false
+openxr/extensions/hand_tracking=true
 shaders/enabled=true
+openxr/extensions/meta/passthrough=true
+openxr/extensions/meta/anchor_api=true
+openxr/extensions/meta/scene_api=true

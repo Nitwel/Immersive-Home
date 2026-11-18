@@ -31,8 +31,8 @@ var _held := false
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsReturnToSnapZone"
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsReturnToSnapZone"
 
 
 # Called when the node enters the scene tree for the first time.
@@ -51,6 +51,9 @@ func _ready() -> void:
 
 # Handle the return counter
 func _process(delta : float) -> void:
+	if Engine.is_editor_hint():
+		return
+
 	# Update return time and skip if still waiting
 	_return_counter += delta
 	if _return_counter < return_delay:

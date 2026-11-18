@@ -39,7 +39,7 @@ signal flight_finished()
 ## Enumeration of controller to use for flight
 enum FlightController {
 	LEFT,		## Use left controller
-	RIGHT,		## Use right controler
+	RIGHT,		## Use right controller
 }
 
 ## Enumeration of pitch control input
@@ -104,8 +104,8 @@ var _controller : XRController3D
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsMovementFlight" or super(name)
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsMovementFlight" or super(xr_name)
 
 
 func _ready():
@@ -186,7 +186,7 @@ func physics_movement(delta: float, player_body: XRToolsPlayerBody, disabled: bo
 
 	# If exclusive then perform the exclusive move-and-slide
 	if exclusive:
-		player_body.velocity = player_body.move_body(flight_velocity)
+		player_body.velocity = player_body.move_player(flight_velocity)
 		return true
 
 	# Update velocity and return for additional effects

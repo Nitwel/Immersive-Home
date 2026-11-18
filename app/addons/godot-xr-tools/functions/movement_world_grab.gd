@@ -52,8 +52,8 @@ var _right_handle : Node3D
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsMovementGrabWorld" or super(name)
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsMovementGrabWorld" or super(xr_name)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -139,7 +139,7 @@ func physics_movement(delta: float, player_body: XRToolsPlayerBody, disabled: bo
 
 	# Move the player by the offset
 	var old_position := player_body.global_position
-	player_body.move_body(-offset / delta)
+	player_body.move_player(-offset / delta)
 	player_body.velocity = Vector3.ZERO
 	#player_body.move_and_collide(-offset)
 
