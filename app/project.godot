@@ -59,6 +59,7 @@ folder_colors={
 
 [filesystem]
 
+import/blender/enabled=false
 import/fbx/enabled=false
 
 [global_group]
