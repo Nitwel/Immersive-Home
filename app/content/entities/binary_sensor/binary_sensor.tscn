@@ -18,8 +18,7 @@ shape = SubResource("BoxShape3D_mjnxo")
 [node name="Label" type="Label3D" parent="."]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0.02, 0)
 pixel_size = 0.001
-text = "some text
-"
+text = "Binary Sensor"
 font = ExtResource("2_dqk35")
 font_size = 80
 outline_size = 0

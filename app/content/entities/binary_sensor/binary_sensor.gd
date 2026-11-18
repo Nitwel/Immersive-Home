@@ -23,17 +23,30 @@ func set_text(stateInfo):
 	if stateInfo == null:
 		return
 
-	state.text = "check_box" if stateInfo["state"] == "on" else "check_box_outline_blank"
+	match stateInfo["state"]:
+		"on":
+			state.text = "check_box"
+		"off":
+			state.text = "check_box_outline_blank"
+		"unavailable":
+			state.text = "warning"
+		_:
+			state.text = "question_mark"
 
-	if stateInfo["attributes"].has("friendly_name")&&stateInfo["attributes"]["friendly_name"] != null:
-		label.text = stateInfo["attributes"]["friendly_name"]
+	var friendly_name = stateInfo["attributes"].get("friendly_name")
+	label.text = friendly_name if friendly_name != null else entity_id
 
-	var state_font = state.get_font()
-	var state_size = state_font.get_string_size(state.text, HORIZONTAL_ALIGNMENT_LEFT, -1, state.font_size) * state.pixel_size
-	var label_font = label.get_font()
-	var label_size = label_font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_RIGHT, -1, label.font_size) * label.pixel_size
+	var state_size = _get_label_size(state)
+	var label_size = _get_label_size(label)
 
-	var size = Vector2(max(state_size.x, label_size.x) * 0.5, (state_size.y + label_size.y) * 0.25)
+	# Labels are centered on their position, so compute the combined vertical bounds.
+	var top = label.position.y + label_size.y / 2
+	var bottom = state.position.y - state_size.y / 2
 
-	collision_shape.shape.size.x = size.x
-	collision_shape.shape.size.y = size.y
+	collision_shape.shape.size.x = max(state_size.x, label_size.x)
+	collision_shape.shape.size.y = top - bottom
+	collision_shape.position.y = (top + bottom) / 2
+
+func _get_label_size(node: Label3D) -> Vector2:
+	var font_size = node.get_font().get_string_size(node.text, HORIZONTAL_ALIGNMENT_CENTER, -1, node.font_size)
+	return font_size * node.pixel_size * node.scale.x
