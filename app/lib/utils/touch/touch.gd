@@ -8,8 +8,17 @@ var finger_areas: Dictionary
 
 var areas_entered = {}
 
-func is_touching() -> bool:
-	return areas_entered.keys().size() > 0
+## Returns true if any finger touches an area.
+## When finger_type is given, only that finger is checked.
+func is_touching(finger_type: int = -1) -> bool:
+	if finger_type == -1:
+		return areas_entered.keys().size() > 0
+
+	for fingers in areas_entered.values():
+		if fingers.has(finger_type):
+			return true
+
+	return false
 
 func add_finger(finger_type: Finger.Type, area: Area3D):
 	finger_areas[finger_type] = area

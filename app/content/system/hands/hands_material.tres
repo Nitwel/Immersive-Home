@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://chu0upvkheqlb"]
+
+[ext_resource type="Shader" path="res://assets/materials/hands.gdshader" id="1_kyekt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hands"]
+render_priority = 51
+shader = ExtResource("1_kyekt")
+shader_parameter/albedo = Color(1, 1, 1, 0.4)
+shader_parameter/fade_offset = 0.0
+shader_parameter/fade_sharpness = 15.0
+
+[resource]
+render_priority = 50
+next_pass = SubResource("ShaderMaterial_hands")
+blend_mode = 2
