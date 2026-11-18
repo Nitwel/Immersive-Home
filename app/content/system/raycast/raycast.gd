@@ -69,18 +69,21 @@ func _process(delta):
 
 func _handle_grid():
 	var collider = wall_collider.get_collider()
+	var normal = wall_collider.get_collision_normal()
 
-	if collider == null:
+	# No hit (or a hit from inside a shape) yields a zero normal, which can't be used to orient the grid.
+	if collider == null or normal.is_zero_approx():
 		grid.visible = false
+		return
 
 	grid.visible = with_grid
 
-	grid.global_position = wall_collider.get_collision_point() + wall_collider.get_collision_normal() * 0.01
+	grid.global_position = wall_collider.get_collision_point() + normal * 0.01
 
-	if abs(wall_collider.get_collision_normal().dot(Vector3.UP)) > 0.9:
-		grid.global_transform.basis = Basis.looking_at(wall_collider.get_collision_normal(), Vector3.FORWARD, true)
+	if abs(normal.dot(Vector3.UP)) > 0.9:
+		grid.global_transform.basis = Basis.looking_at(normal, Vector3.FORWARD, true)
 	else:
-		grid.global_transform.basis = Basis.looking_at(wall_collider.get_collision_normal(), Vector3.UP, true)
+		grid.global_transform.basis = Basis.looking_at(normal, Vector3.UP, true)
 
 func _handle_cursor():
 	var collider = get_collider()
@@ -104,7 +107,10 @@ func _handle_cursor():
 	
 	cursor.global_transform.origin = get_collision_point() + get_collision_normal() * 0.001 # offset to avoid z-fighting
 
-	if abs(get_collision_normal().dot(Vector3.UP)) > 0.9:
+	# A hit from inside a shape has a zero normal; keep the previous cursor orientation.
+	if get_collision_normal().is_zero_approx():
+		pass
+	elif abs(get_collision_normal().dot(Vector3.UP)) > 0.9:
 		var ray_dir_inv = global_transform.basis.z
 		cursor.global_transform.basis = Basis.looking_at(get_collision_normal().lerp(ray_dir_inv, 0.01), Vector3.UP, true)
 	else:
