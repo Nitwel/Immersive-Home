@@ -40,18 +40,28 @@ var _turn_step : float = 0.0
 
 
 # Controller node
-@onready var _controller := XRHelpers.get_xr_controller(self)
+var _controller : XRController3D
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsMovementTurn" or super(name)
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsMovementTurn" or super(xr_name)
+
+
+# Called when our node is added to our scene tree
+func _enter_tree():
+	_controller = XRHelpers.get_xr_controller(self)
+
+
+# Called when our node is removed from our scene tree
+func _exit_tree():
+	_controller = null
 
 
 # Perform jump movement
 func physics_movement(delta: float, player_body: XRToolsPlayerBody, _disabled: bool):
 	# Skip if the controller isn't active
-	if !_controller.get_is_active():
+	if not _controller or not _controller.get_is_active():
 		return
 
 	var deadzone = 0.1
@@ -83,6 +93,7 @@ func physics_movement(delta: float, player_body: XRToolsPlayerBody, _disabled: b
 	# Turn one step in the requested direction
 	if step_turn_delay != 0.0:
 		_turn_step = step_turn_delay
+
 	player_body.rotate_player(deg_to_rad(step_turn_angle) * sign(left_right))
 
 
@@ -91,7 +102,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := super()
 
 	# Check the controller node
-	if !XRHelpers.get_xr_controller(self):
+	if not XRHelpers.get_xr_controller(self):
 		warnings.append("Unable to find XRController3D node")
 
 	# Return warnings

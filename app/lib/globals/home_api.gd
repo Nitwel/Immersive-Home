@@ -55,16 +55,11 @@ func start_adapter(type: String, url: String, token: String):
 	api = apis[type].new(url, token)
 	add_child(api)
 
-	api.on_connect.connect(func():
-		Store.house.load_local()
-		on_connect.emit()
-	)
-
-	api.on_disconnect.connect(func():
-		on_disconnect.emit()
-	)
+	api.on_connect.connect(_on_connect)
+	api.on_disconnect.connect(_on_disconnect)
 
 func _on_connect():
+	Store.house.load_local()
 	on_connect.emit()
 
 func _on_disconnect():

@@ -6,8 +6,9 @@ class_name CameraFollower
 		enabled = value
 		if enabled:
 			_update_initial_transform()
-			EventSystem.on_slow_tick.connect(_slow_tick)
-		else:
+			if not EventSystem.on_slow_tick.is_connected(_slow_tick):
+				EventSystem.on_slow_tick.connect(_slow_tick)
+		elif EventSystem.on_slow_tick.is_connected(_slow_tick):
 			EventSystem.on_slow_tick.disconnect(_slow_tick)
 
 @export var focus_point: Node3D = null

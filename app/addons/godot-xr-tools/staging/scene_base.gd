@@ -30,8 +30,12 @@ signal request_load_scene(p_scene_path, user_data)
 ## The [param user_data] parameter is passed through staging to the new scenes.
 signal request_reset_scene(user_data)
 
+## This signal is used to request the staging quit the XR experience. Developers
+## should use [method quit] rather than emitting this signal directly.
+signal request_quit
 
-# This file contains methods with parameters that are unused; however they are
+
+# This file contains methods with parameters that are unused, however they are
 # documented and intended to be overridden in derived classes. As such unused
 # parameter warnings need to be disabled.
 #
@@ -46,8 +50,8 @@ func _ready() -> void:
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsSceneBase"
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsSceneBase"
 
 
 ## This method center the player on the [param p_transform] transform.
@@ -71,6 +75,11 @@ func center_player_on(p_transform : Transform3D):
 
 	# And now update our origin point
 	$XROrigin3D.global_transform = (p_transform * transform.inverse()).orthonormalized()
+
+	# If we have a player body, we need to set its starting position too.
+	var player_body : XRToolsPlayerBody = XRToolsPlayerBody.find_instance($XROrigin3D)
+	if player_body:
+		player_body.global_transform = p_transform
 
 
 ## This method is called when the scene is loaded, but before it becomes visible.
@@ -192,3 +201,12 @@ func load_scene(p_scene_path : String, user_data = null) -> void:
 ## Any [param user_data] provided is passed into the new scene.
 func reset_scene(user_data = null) -> void:
 	emit_signal("request_reset_scene", user_data)
+
+
+## This function is used to quit the XR experience. The default
+## implementation sends the [signal request_quit] which triggers
+## the XR experience to end.
+##
+## Custom scene classes can override this method to add their logic.
+func quit() -> void:
+	emit_signal("request_quit")

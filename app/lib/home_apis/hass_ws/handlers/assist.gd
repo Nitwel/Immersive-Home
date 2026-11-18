@@ -35,9 +35,9 @@ func _init(hass: HASS_API):
 
 	api.connection.on_packed_received.connect(handle_message)
 
-func start_wakeword():
+func start_wakeword() -> bool:
 	if pipe_running:
-		return
+		return false
 
 	api.connection.send_packet({
 		"type": "assist_pipeline/run",
@@ -50,7 +50,9 @@ func start_wakeword():
 		"timeout": 60
 	}, true)
 
-func send_data(data: PackedByteArray):
+	return true
+
+func send_data(data: PackedByteArray) -> void:
 	
 	# prepend the handler id to the data in 8 bits
 	if pipe_running:

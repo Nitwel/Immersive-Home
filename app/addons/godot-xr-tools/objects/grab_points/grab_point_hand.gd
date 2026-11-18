@@ -64,9 +64,20 @@ const RIGHT_HAND_PATH := "res://addons/godot-xr-tools/hands/scenes/lowpoly/right
 ## How much this grab-point drives the aim
 @export var drive_aim : float = 0.0
 
-
 ## Hand to use for editor preview
 var _editor_preview_hand : XRToolsHand
+
+# Adjust the grab point from our old aim positioning, to our palm positioning.
+func get_palm_transform(global : bool = false) -> Transform3D:
+	var adj_transform : Transform3D = global_transform if global else transform
+
+	# Historically our hands have always been positioned based on our aim,
+	# So we apply our old hardcoded offset, but adjusted for our palm center.
+	var aim_offset := Transform3D()
+	aim_offset.origin = Vector3(-0.02 if hand == Hand.LEFT else 0.02, -0.05, 0.10)
+	adj_transform = adj_transform * aim_offset
+
+	return adj_transform
 
 
 ## Called when the node enters the scene tree for the first time.
@@ -107,8 +118,16 @@ func _set_hand(new_value : Hand) -> void:
 
 
 func _set_hand_pose(new_value : XRToolsHandPoseSettings) -> void:
+	# Unsubscribe from the old hand-pose changed signal
+	if Engine.is_editor_hint() and hand_pose:
+		hand_pose.changed.disconnect(_update_editor_preview)
+
+	# Save the hand pose
 	hand_pose = new_value
-	if Engine.is_editor_hint():
+
+	# Update the editor preview
+	if Engine.is_editor_hint() and hand_pose:
+		hand_pose.changed.connect(_update_editor_preview)
 		_update_editor_preview()
 
 
@@ -133,6 +152,7 @@ func _update_editor_preview() -> void:
 
 	# Construct the model
 	_editor_preview_hand = hand_scene.instantiate()
+	_editor_preview_hand.hand_offset_mode = 4 # Disabled
 
 	# Set the pose
 	if hand_pose:
@@ -145,7 +165,15 @@ func _update_editor_preview() -> void:
 		_editor_preview_hand.force_grip_trigger(0.0, 0.0)
 
 	# Add the editor-preview hand as a child
-	add_child(_editor_preview_hand)
+	add_child(_editor_preview_hand, false, Node.INTERNAL_MODE_BACK)
+
+	# Keep this backwards compatible,
+	# position the hand according to the original aim logic
+	var hand_node : Node3D = _editor_preview_hand.get_child(0)
+	if hand_node:
+		var custom_offset := Transform3D()
+		custom_offset.origin = Vector3(-0.03 if hand == Hand.LEFT else 0.03, -0.05, 0.15)
+		hand_node.transform = custom_offset
 
 
 # Is the grabber for the correct hand
@@ -155,12 +183,15 @@ func _is_correct_hand(grabber : Node3D) -> bool:
 	if not controller:
 		return false
 
+	# Get the positional tracker
+	var tracker := XRServer.get_tracker(controller.tracker) as XRPositionalTracker
+
 	# If left hand then verify left controller
-	if hand == Hand.LEFT and controller.tracker != "left_hand":
+	if hand == Hand.LEFT and tracker.hand != XRPositionalTracker.TRACKER_HAND_LEFT:
 		return false
 
 	# If right hand then verify right controller
-	if hand == Hand.RIGHT and controller.tracker != "right_hand":
+	if hand == Hand.RIGHT and tracker.hand != XRPositionalTracker.TRACKER_HAND_RIGHT:
 		return false
 
 	# Controller matches hand

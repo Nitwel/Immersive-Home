@@ -33,5 +33,7 @@ func _access_property(property):
 	if (_proxied_value[property] is R.RdotState) == false:
 		_proxied_value[property] = R.state(_proxied_value[property])
 
-func _get_property_list():
-	return _property_list
+func _get_property_list() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	result.assign(_property_list)
+	return result

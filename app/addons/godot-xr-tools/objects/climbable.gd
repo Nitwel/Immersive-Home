@@ -27,8 +27,8 @@ var _grabs : Dictionary = {}
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsClimbable"
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsClimbable"
 
 
 # Called when the node becomes "ready"
@@ -81,7 +81,7 @@ func pick_up(by: Node3D) -> void:
 
 # Called by XRToolsFunctionPickup when this is let go by a controller
 func let_go(by: Node3D, _p_linear_velocity: Vector3, _p_angular_velocity: Vector3) -> void:
-	_grabs.erase(by);
+	_grabs.erase(by)
 
 
 # Get the grab handle

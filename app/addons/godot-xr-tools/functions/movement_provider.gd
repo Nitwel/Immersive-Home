@@ -1,7 +1,7 @@
 @tool
 @icon("res://addons/godot-xr-tools/editor/icons/movement_provider.svg")
 class_name XRToolsMovementProvider
-extends Node
+extends Node3D
 
 
 ## XR Tools Movement Provider base class
@@ -45,8 +45,8 @@ func _create_player_body_node():
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsMovementProvider"
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsMovementProvider"
 
 
 # Function run when node is added to scene

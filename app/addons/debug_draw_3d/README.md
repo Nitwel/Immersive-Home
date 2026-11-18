@@ -2,7 +2,7 @@
 
 # Debug drawing utility for Godot
 
-This is an add-on for debug drawing in 3D and for some 2D overlays, which is written in `C++` and can be used with `GDScript` or `C#`.
+This is an add-on for debug drawing in 3D and for some 2D overlays, which is written in `C++` and can be used with `GDScript`, `C++` or `C#`.
 
 Based on my previous addon, which was developed [only for C#](https://github.com/DmitriySalnikov/godot_debug_draw_cs), and which was inspired by [Zylann's GDScript addon](https://github.com/Zylann/godot_debug_draw)
 
@@ -14,9 +14,9 @@ Based on my previous addon, which was developed [only for C#](https://github.com
 
 Your support adds motivation to develop my public projects.
 
-<a href="https://boosty.to/dmitriysalnikov/donate"><img src="./docs/images/boosty.png" alt="Boosty" width=150px/></a>
+<a href="https://boosty.to/dmitriysalnikov/donate"><img src="/docs/images/boosty.png" alt="Boosty" width=150px/></a>
 
-<img src="./docs/images/USDT-TRC20.png" alt="USDT-TRC20" width=150px/>
+<a href="#"><img src="/docs/images/USDT-TRC20.png" alt="USDT-TRC20" width=150px/></a>
 
 <b>USDT-TRC20 TEw934PrsffHsAn5M63SoHYRuZo984EF6v</b>
 
@@ -28,6 +28,7 @@ Your support adds motivation to develop my public projects.
 * Billboard opaque square
 * Box
 * Camera Frustum
+* Capsule
 * Cylinder
 * Gizmo
 * Grid
@@ -38,39 +39,36 @@ Your support adds motivation to develop my public projects.
 * Points
 * Position 3D (3 crossing axes)
 * Sphere
-
-2D:
-
-* **[Work in progress]**
+* 3D Text
 
 Overlay:
 
 * Text (with grouping and coloring)
-* FPS Graph
-* Custom Graphs
 
 Precompiled for:
 
 * Windows
-* Linux (built on Ubuntu 20.04)
-* macOS (10.14+)
+* Linux (built on Ubuntu 22.04)
+* macOS (10.15+)
 * Android (5.0+)
 * iOS
-* Web (Firefox not supported)
+* Web (Firefox is supported by Godot 4.3+)
 
-This addon also supports working with several World3D and different Viewports.
+This addon supports working with several World3D and different Viewports. [More information](https://dd3d.dmitriysalnikov.ru/docs/?page=md_docs_2SubViewports.html).
+
+There is also a no depth test mode and other settings that can be changed for each instance.
+
+This addon supports double-precision builds, for more information, [see the documentation](https://dd3d.dmitriysalnikov.ru/docs/?page=md_docs_2DoublePrecision.html).
 
 ## [Interactive Web Demo](https://dd3d.dmitriysalnikov.ru/demo/)
 
 [![screenshot_web](/images/screenshot_web.png)](https://dd3d.dmitriysalnikov.ru/demo/)
 
-> [!WARNING]
->
-> * Firefox most likely can't run this demo
-
 ## Download
 
-To download, use the [Godot Asset Library](https://godotengine.org/asset-library/asset/1766) or download the archive by clicking the button at the top of the main repository page: `Code -> Download ZIP`, then unzip it to your project folder. Or use one of the stable versions from the [GitHub Releases](https://github.com/DmitriySalnikov/godot_debug_draw_3d/releases) page (just download one of the `Source Codes` in assets).
+To download, use the [Godot Asset Library](https://godotengine.org/asset-library/asset/1766) or use one of the stable versions from the [GitHub Releases](https://github.com/DmitriySalnikov/godot_debug_draw_3d/releases) page.
+
+For versions prior to `1.4.5`, just download one of the `source codes` in the assets. For newer versions, download `debug-draw-3d_[version].zip`.
 
 ### Installation
 
@@ -91,7 +89,7 @@ func _process(delta: float) -> void:
     var line_begin = Vector3(-1, sin(_time * 4), 0)
     var line_end = Vector3(1, cos(_time * 4), 0)
 
-    DebugDraw3D.draw_box(box_pos, Vector3(1, 2, 1), Color(0, 1, 0))
+    DebugDraw3D.draw_box(box_pos, Quaternion.IDENTITY, Vector3(1, 2, 1), Color(0, 1, 0))
     DebugDraw3D.draw_line(line_begin, line_end, Color(1, 1, 0))
     DebugDraw2D.set_text("Time", _time)
     DebugDraw2D.set_text("Frames drawn", Engine.get_frames_drawn())
@@ -100,6 +98,37 @@ func _process(delta: float) -> void:
 ```
 
 ![screenshot_1](/images/screenshot_1.png)
+
+An example of using scoped configs:
+
+```gdscript
+@tool
+extends Node3D
+
+func _ready():
+    # Set the base scoped_config.
+    # Each frame will be reset to these scoped values.
+    DebugDraw3D.scoped_config().set_thickness(0.1).set_center_brightness(0.6)
+
+func _process(delta):
+    # Draw using the base scoped config.
+    DebugDraw3D.draw_box(Vector3.ZERO, Quaternion.IDENTITY, Vector3.ONE * 2, Color.CORNFLOWER_BLUE)
+    if true:
+        # Create a scoped config that will exist until exiting this if.
+        var _s = DebugDraw3D.new_scoped_config().set_thickness(0).set_center_brightness(0.1)
+        # Draw with a thickness of 0
+        DebugDraw3D.draw_box(Vector3.ZERO, Quaternion.IDENTITY, Vector3.ONE, Color.RED)
+        # If necessary, the values inside this scope can be changed
+        # even before each call to draw_*.
+        _s.set_thickness(0.05)
+        DebugDraw3D.draw_box(Vector3(1,0,1), Quaternion.IDENTITY, Vector3.ONE * 1, Color.BLUE_VIOLET)
+```
+
+![screenshot_5](/images/screenshot_5.png)
+
+> [!TIP]
+>
+> If you want to use a non-standard Viewport for rendering a 3d scene, then do not forget to specify it in the scoped config!
 
 ## API
 
@@ -111,20 +140,24 @@ Also, a list of all functions is available in the documentation inside the edito
 
 ## Known issues and limitations
 
-Enabling occlusion culing can lower fps instead of increasing it. At the moment I do not know how to speed up the calculation of the visibility of objects.
-
 The text in the keys and values of a text group cannot contain multi-line strings.
 
-The entire text overlay can only be placed in one corner, unlike `DataGraphs`.
+The entire text overlay can only be placed in one corner.
 
 [Frustum of Camera3D does not take into account the window size from ProjectSettings](https://github.com/godotengine/godot/issues/70362).
 
-**The version for Godot 4.0 requires explicitly specifying the exact data types, otherwise errors may occur.**
+## Usage Analytics
+
+This addon collects anonymous statistics on **editor** usage time. The data includes the library version, engine version, operating system, system architecture, and locale. No personally identifiable information is gathered.
+
+Libraries without **editor** support do not collect statistics in any way. Also, previews running in the editor do not collect any usage statistics.
+
+You can disable this in the editor settings at: `debug_draw_3d/settings/telemetry_state`.
 
 ## More screenshots
 
-`DebugDrawDemoScene.tscn` in editor
+`DD3DDemo.tscn` in editor
 ![screenshot_2](/images/screenshot_2.png)
 
-`DebugDrawDemoScene.tscn` in play mode
+`DD3DDemo.tscn` in play mode
 ![screenshot_3](/images/screenshot_3.png)

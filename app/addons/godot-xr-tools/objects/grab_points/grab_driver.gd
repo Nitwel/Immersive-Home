@@ -3,14 +3,14 @@ extends RemoteTransform3D
 
 
 ## Grab state
-enum State {
+enum GrabState {
 	LERP,
 	SNAP,
 }
 
 
 ## Drive state
-var state : State = State.SNAP
+var state : GrabState = GrabState.SNAP
 
 ## Target pickable
 var target : XRToolsPickable
@@ -30,7 +30,6 @@ var lerp_duration : float = 1.0
 ## Lerp time
 var lerp_time : float = 0.0
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta : float) -> void:
 	# Skip if no primary node
@@ -38,7 +37,7 @@ func _physics_process(delta : float) -> void:
 		return
 
 	# Set destination from primary grab
-	var destination := primary.by.global_transform * primary.transform.inverse()
+	var destination := primary.by.global_transform * primary.transform.affine_inverse()
 
 	# If present, apply secondary-node contributions
 	if is_instance_valid(secondary):
@@ -48,7 +47,7 @@ func _physics_process(delta : float) -> void:
 
 		# Calculate the transform from secondary grab
 		var x1 := destination
-		var x2 := secondary.by.global_transform * secondary.transform.inverse()
+		var x2 := secondary.by.global_transform * secondary.transform.affine_inverse()
 
 		# Independently lerp the angle and position
 		destination = Transform3D(
@@ -58,7 +57,7 @@ func _physics_process(delta : float) -> void:
 		# Test if we need to apply aiming
 		if secondary.drive_aim > 0.0:
 			# Convert destination from global to primary-local
-			destination = primary.by.global_transform.inverse() * destination
+			destination = primary.by.global_transform.affine_inverse() * destination
 
 			# Calculate the from and to vectors in primary-local space
 			var secondary_from := destination * secondary.transform.origin
@@ -78,7 +77,7 @@ func _physics_process(delta : float) -> void:
 
 	# Handle update
 	match state:
-		State.LERP:
+		GrabState.LERP:
 			# Progress the lerp
 			lerp_time += delta
 			if lerp_time < lerp_duration:
@@ -88,9 +87,13 @@ func _physics_process(delta : float) -> void:
 					lerp_time / lerp_duration)
 			else:
 				# Lerp completed
-				state = State.SNAP
+				state = GrabState.SNAP
+				_update_weight()
 				if primary: primary.set_arrived()
 				if secondary: secondary.set_arrived()
+
+	if global_transform.is_equal_approx(destination):
+		return
 
 	# Apply the destination transform
 	global_transform = destination
@@ -111,7 +114,8 @@ func add_grab(p_grab : Grab) -> void:
 		secondary = p_grab
 
 	# If snapped then report arrived at the new grab
-	if state == State.SNAP:
+	if state == GrabState.SNAP:
+		_update_weight()
 		p_grab.set_arrived()
 
 
@@ -138,6 +142,9 @@ func remove_grab(p_grab : Grab) -> void:
 		print_verbose("%s> %s (secondary) released" % [target.name, p_grab.by.name])
 		secondary = null
 
+	if state == GrabState.SNAP:
+		_update_weight()
+
 
 # Discard the driver
 func discard():
@@ -159,7 +166,7 @@ static func create_lerp(
 	driver.name = p_target.name + "_driver"
 	driver.top_level = true
 	driver.process_physics_priority = -80
-	driver.state = State.LERP
+	driver.state = GrabState.LERP
 	driver.target = p_target
 	driver.primary = p_grab
 	driver.global_transform = p_target.global_transform
@@ -191,10 +198,10 @@ static func create_snap(
 	driver.name = p_target.name + "_driver"
 	driver.top_level = true
 	driver.process_physics_priority = -80
-	driver.state = State.SNAP
+	driver.state = GrabState.SNAP
 	driver.target = p_target
 	driver.primary = p_grab
-	driver.global_transform = p_grab.by.global_transform * p_grab.transform.inverse()
+	driver.global_transform = p_grab.by.global_transform * p_grab.transform.affine_inverse()
 
 	# Snapped to grab-point so report arrived
 	p_grab.set_arrived()
@@ -203,6 +210,8 @@ static func create_snap(
 	# cannot be descendands of the targets they drive.
 	p_target.get_parent().add_child(driver)
 	driver.remote_path = driver.get_path_to(p_target)
+
+	driver._update_weight()
 
 	# Return the driver
 	return driver
@@ -214,3 +223,17 @@ static func _vote(a : float, b : float) -> float:
 		return 0.0
 
 	return b / (a + b)
+
+
+# Update the weight on collision hands
+func _update_weight():
+	if primary:
+		var weight : float = target.mass
+		if secondary:
+			# Each hand carries half the weight
+			weight = weight / 2.0
+			if secondary.collision_hand:
+				secondary.collision_hand.set_held_weight(weight)
+
+		if primary.collision_hand:
+			primary.collision_hand.set_held_weight(weight)

@@ -30,6 +30,9 @@ signal released(pickable, by)
 # Signal emitted when the user presses the action button while holding this object
 signal action_pressed(pickable)
 
+# Signal emitted when the user releases the action button while holding this object
+signal action_released(pickable)
+
 # Signal emitted when the highlight state changes
 signal highlight_updated(pickable, enable)
 
@@ -114,8 +117,8 @@ var _highlighted : bool = false
 
 
 # Add support for is_xr_class on XRTools classes
-func is_xr_class(name : String) -> bool:
-	return name == "XRToolsPickable"
+func is_xr_class(xr_name:  String) -> bool:
+	return xr_name == "XRToolsPickable"
 
 
 # Called when the node enters the scene tree for the first time.
@@ -172,7 +175,43 @@ func is_picked_up() -> bool:
 # action is called when user presses the action button while holding this object
 func action():
 	# let interested parties know
-	emit_signal("action_pressed", self)
+	action_pressed.emit(self)
+
+
+func controller_action(controller : XRController3D):
+	# Let the grab points know about the action
+	if (
+		_grab_driver.primary and _grab_driver.primary.point
+		and _grab_driver.primary.controller == controller
+	):
+		_grab_driver.primary.point.action(self)
+
+	if (
+		_grab_driver.secondary and _grab_driver.secondary.point
+		and _grab_driver.secondary.controller == controller
+	):
+		_grab_driver.secondary.point.action(self)
+
+
+# action_release is called when user releases the action button while holding this object
+func action_release():
+	# let interested parties know
+	action_released.emit(self)
+
+
+func controller_action_release(controller : XRController3D):
+	# Let the grab points know about the action release
+	if (
+		_grab_driver.primary and _grab_driver.primary.point
+		and _grab_driver.primary.controller == controller
+	):
+		_grab_driver.primary.point.action_release(self)
+
+	if (
+		_grab_driver.secondary and _grab_driver.secondary.point
+		and _grab_driver.secondary.controller == controller
+	):
+		_grab_driver.secondary.point.action_release(self)
 
 
 ## This method requests highlighting of the [XRToolsPickable].
@@ -195,7 +234,7 @@ func request_highlight(from : Node, on : bool = true) -> void:
 
 	# Report any changes
 	if _highlighted != old_highlighted:
-		emit_signal("highlight_updated", self, _highlighted)
+		highlight_updated.emit(self, _highlighted)
 
 
 func drop():
