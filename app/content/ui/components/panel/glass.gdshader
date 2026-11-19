@@ -62,12 +62,20 @@ void fragment() {
 	float radius = min(corner_radius, min(half_size.x, half_size.y));
 	float d = rounded_rectangle((UV - 0.5) * uv_size, half_size, radius);
 
+	// Anti-aliasing: meters covered by one screen pixel across the edge. The
+	// outer edge fades over that pixel instead of cutting off, and the border
+	// line is kept at least one pixel wide (a hairline), so corners and the
+	// line stay smooth and visible at a distance. Up close nothing changes.
+	float pixel = max(length(vec2(dFdx(d), dFdy(d))), 1e-6);
+	float edge_coverage = clamp(0.5 - d / pixel, 0.0, 1.0);
+	float line_width = max(border_size, pixel);
+
 	float VdotN = dot(VIEW, NORMAL);
 	float fresnel = clamp(SchlickFresnel(VdotN), 0.0, 1.0);
 
 	ALBEDO = border_color.xyz;
 	ALPHA = 0.0;
-	float border_width = border_size + border_fade_in + border_fade_out;
+	float border_width = line_width + border_fade_in + border_fade_out;
 
 	bool inside = false;
 
@@ -76,7 +84,7 @@ void fragment() {
 		float fade_in = border_fade_in > 0.0 ? (d + border_width) / border_fade_in : 1.0;
 		float fade_out = border_fade_out > 0.0 ? -d / border_fade_out : 1.0;
 		float alpha = clamp(min(fade_in, fade_out), 0.0, 1.0);
-		if (d < -(border_size + border_fade_out)) {
+		if (d < -(line_width + border_fade_out)) {
 			// Inner Fade
 			ALBEDO = mix(color, border_color, alpha).xyz;
 			ALPHA = mix(color.w, border_color.w, alpha);
@@ -105,4 +113,6 @@ void fragment() {
 
 	    ALBEDO += noise * grain_amount;
 	}
+
+	ALPHA *= edge_coverage;
 }
