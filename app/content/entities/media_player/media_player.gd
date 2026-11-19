@@ -37,8 +37,9 @@ func _ready():
 
 	R.effect(func(_arg):
 		if show_volume.value:
-			add_child(slider)
-		else:
+			if slider.get_parent() == null:
+				add_child(slider)
+		elif slider.get_parent() == self:
 			remove_child(slider)
 	)
 
@@ -81,16 +82,26 @@ func set_state(stateInfo):
 		return
 
 	var state = stateInfo["state"]
+	# Players don't always report every attribute (e.g. no title for a stream)
+	var attributes = stateInfo.get("attributes", {})
+	if attributes == null:
+		attributes = {}
 
 	if state == "playing":
-		if stateInfo["attributes"].has("entity_picture_local"):
-			load_image(stateInfo["attributes"]["entity_picture_local"])
-		title.text = stateInfo["attributes"]["media_title"]
-		artist.text = stateInfo["attributes"]["media_artist"]
+		# entity_picture_local only exists when entity_picture points to an outside
+		# address; otherwise entity_picture already is the Home Assistant proxy path.
+		var picture = attributes.get("entity_picture_local")
+		if picture == null:
+			picture = attributes.get("entity_picture")
+		if picture != null:
+			load_image(str(picture))
+		title.text = str(attributes["media_title"]) if attributes.get("media_title") != null else ""
+		artist.text = str(attributes["media_artist"]) if attributes.get("media_artist") != null else ""
 
-		volume = float(stateInfo["attributes"]["volume_level"]) * 100
-		slider.value = volume
-		
+		if attributes.get("volume_level") != null:
+			volume = float(attributes["volume_level"]) * 100
+			slider.value = volume
+
 		playing = true
 		play.label = "pause"
 		icon.value = "play_circle"
@@ -99,27 +110,45 @@ func set_state(stateInfo):
 		play.label = "play_arrow"
 		icon.value = "pause_circle"
 
+var _image_url = ""
+
 func load_image(url: String):
-	http_request.request("http://192.168.33.33:8123" + url)
+	if url.begins_with("/"):
+		url = HomeApi.get_http_url() + url
+
+	# State updates arrive often while playing; only fetch when the cover changes
+	if url == _image_url:
+		return
+	_image_url = url
+
+	http_request.cancel_request()
+	http_request.request(url)
 
 	var result = await http_request.request_completed
 
-	if result[0] != HTTPRequest.RESULT_SUCCESS:
+	if url != _image_url:
+		return # a newer cover was requested meanwhile
+
+	if result[0] != HTTPRequest.RESULT_SUCCESS||result[1] != 200:
 		print("Error loading image: ", result[0], " ", result[1])
+		_image_url = ""
 		return
 
 	var image = Image.new()
 	var error = image.load_jpg_from_buffer(result[3])
-
-	var pixel_size = image_width / image.get_size().x
-
 	if error != OK:
+		error = image.load_png_from_buffer(result[3])
+	if error != OK:
+		error = image.load_webp_from_buffer(result[3])
+
+	if error != OK||image.get_size().x == 0:
 		print("Error loading image: ", error)
+		_image_url = ""
 		return
 
 	var texture = ImageTexture.create_from_image(image)
 	logo.texture = texture
-	logo.pixel_size = pixel_size
+	logo.pixel_size = image_width / image.get_size().x
 
 func get_options():
 	return {
