@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://ds60i5n211hi3" path="res://content/system/miniature/miniature.tscn" id="12_lmxhs"]
 [ext_resource type="PackedScene" uid="uid://bhyddd1f0ry1x" path="res://content/ui/onboarding/onboarding.tscn" id="12_uq2nj"]
 [ext_resource type="PackedScene" uid="uid://lrehk38exd5n" path="res://content/system/keyboard/keyboard.tscn" id="13_kylpi"]
+[ext_resource type="PackedScene" uid="uid://beafp6nhhcxaf" path="res://content/system/areas/areas.tscn" id="14_0s0u7"]
 
 [node name="Main" type="Node3D" unique_id=94932262]
 script = ExtResource("1_uvrd4")
@@ -64,3 +65,5 @@ script = ExtResource("12_e13ym")
 
 [node name="Keyboard" parent="." unique_id=358804043 instance=ExtResource("13_kylpi")]
 transform = Transform3D(0.5, 0, 0, 0, 0.237697, 0.439887, 0, -0.439887, 0.237697, -0.0241798, 0.452996, -0.531271)
+
+[node name="Areas" parent="." instance=ExtResource("14_0s0u7")]
