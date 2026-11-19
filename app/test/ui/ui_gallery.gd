@@ -42,8 +42,6 @@ const LineChartScene = preload ("res://content/ui/components/line_chart/line_cha
 const NotificationScene = preload ("res://content/ui/components/notification/notification.tscn")
 const LabelContainerScene = preload ("res://content/ui/components/label_container/label_container.tscn")
 const PanelScene = preload ("res://content/ui/components/panel/panel.tscn")
-const EditMenuScene = preload ("res://content/ui/menu/edit/edit_menu.tscn")
-const FakeHomeApi = preload ("res://test/ui/fake_home_api.gd")
 
 const CELL_SIZE = Vector2(0.6, 0.4)
 const COLUMNS = 3
@@ -449,22 +447,6 @@ func _build_gallery():
 			["Convex", _glass_instance(_curved_mesh(Vector2(0.08, 0.1), 0.06, false), 0.006), 0.08],
 			["Rainbow", rainbow_root, 0.14],
 		])
-	)
-
-	# Full menu page fed by an in-memory Home Assistant (test/ui/fake_home_api.gd).
-	_add_cell("EditMenu", func(root: Node3D):
-		FakeHomeApi.install()
-		# Pretend the ceiling light is already placed in the house
-		Store.house.state.entities = [ {"id": "light.living_room_ceiling", "position": Vector3(), "rotation": Vector3(), "scale": 1.0, "room": "Living Room"}]
-
-		var background = PanelScene.instantiate()
-		background.size = Vector2(0.42, 0.32)
-		background.position = Vector3(0, 0, -0.005)
-		root.add_child(background)
-
-		var menu = EditMenuScene.instantiate()
-		menu.position = Vector3(-0.21, 0.16, 0)
-		root.add_child(menu)
 	)
 
 func _add_cell(cell_name: String, build: Callable):
