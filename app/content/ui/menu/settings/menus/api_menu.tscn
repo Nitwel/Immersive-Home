@@ -23,6 +23,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, -0.08, 0)
 text = "ws://192.168.0.1:8123"
 size = Vector3(0.2, 0.03, 0.01)
 
+[node name="Discover" parent="." instance=ExtResource("2_kmvrs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.315, -0.08, 0)
+label = "travel_explore"
+icon = true
+size = Vector3(0.03, 0.03, 0.01)
+
 [node name="LabelToken" type="Label3D" parent="." unique_id=588344823]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.12, 0)
 pixel_size = 0.001

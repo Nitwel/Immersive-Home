@@ -59,6 +59,14 @@ label = "assignment"
 icon = true
 size = Vector3(0.05, 0.05, 0.01)
 
+[node name="QrScan" parent="." instance=ExtResource("1_xdpwr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, -0.03, 0)
+focusable = false
+label = "qr_code_scanner"
+icon = true
+toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
+
 [node name="Keys" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.325, 0.09, 0)
 script = ExtResource("3_mx544")

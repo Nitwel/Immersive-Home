@@ -7,6 +7,7 @@ const button_scene = preload ("res://content/ui/components/button/button.tscn")
 @onready var caps_button = $Caps
 @onready var backspace_button = $Backspace
 @onready var paste_button = $Paste
+@onready var qr_button = $QrScan
 var key_list = [
 	[KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, KEY_ASCIITILDE],
 	[KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I, KEY_O, KEY_P, KEY_SLASH],
@@ -96,6 +97,56 @@ func _connect_key_events():
 	paste_button.on_button_up.connect(func():
 		_emit_event("key_up", KEY_INSERT)
 	)
+
+	_connect_qr_scanner()
+
+func _connect_qr_scanner():
+	qr_button.on_button_down.connect(_start_qr_scan)
+	qr_button.on_button_up.connect(QrScanner.stop)
+
+	QrScanner.on_scanning_changed.connect(func(scanning):
+		qr_button.active=scanning
+	)
+
+	QrScanner.on_timeout.connect(func():
+		EventSystem.notify("No QR code found.", EventNotify.Type.WARNING)
+	)
+
+	QrScanner.on_scanned.connect(_on_qr_scanned)
+
+	# The keyboard is taken out of the tree when the input loses focus.
+	tree_exiting.connect(QrScanner.stop)
+
+func _start_qr_scan():
+	var error = await QrScanner.start()
+
+	match error:
+		QrScanner.ScanError.OK:
+			EventSystem.notify("Look at a QR code to scan it.")
+		QrScanner.ScanError.UNSUPPORTED:
+			EventSystem.notify("QR code scanning isn't supported on this device. Meta Quest needs Horizon OS v83 or newer.", EventNotify.Type.WARNING)
+		QrScanner.ScanError.PERMISSION_DENIED:
+			EventSystem.notify("QR code scanning needs the spatial data permission.", EventNotify.Type.WARNING)
+
+	if error != QrScanner.ScanError.OK:
+		qr_button.active = false
+
+func _on_qr_scanned(text: String):
+	var focused = EventSystem.get_focused()
+
+	if focused == null:
+		return
+
+	# Let the focused input or one of its parents handle the content first,
+	# e.g. the API settings fill in URL and token at once.
+	var event = EventQr.new()
+	event.text = text
+	event.target = focused
+
+	EventSystem.emit("qr_scan", event)
+
+	if event.bubbling&&focused.has_method("insert_text"):
+		focused.insert_text(text)
 
 func _create_key(key: Key):
 	var key_node = button_scene.instantiate()

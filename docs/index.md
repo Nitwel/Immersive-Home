@@ -51,6 +51,15 @@ You can use a pastebin like [immho.me](https://immho.me) to access your token fr
     - Pressing the **Menu** button on the left controller.
     - making the pinch gesture with the left hand while you palm points into your direction.
 4. Enter the URL of your Home Assistant instance and the token you just created. Make sure to change `http` -> `ws` or `https` -> `wss` in the URL.
+    - The app searches your network for Home Assistant when the URL is empty. Press the search button next to the URL field to search again. If more than one install is found, press it again to go through them.
+
+::: tip Scan the token as a QR code (Meta Quest)
+Turn the token into a QR code, e.g. with a QR code generator on your computer, and show it on your screen. In the app, select the token field and press the QR code button on the keyboard, then look at the QR code. The app fills in the token and connects right away. If the URL is still empty, it searches your network for Home Assistant first.
+
+The QR code can also hold the URL of your instance (e.g. `http://homeassistant.local:8123`), or both as `{"url": "http://homeassistant.local:8123", "token": "..."}`.
+
+QR code scanning needs Horizon OS v83 or newer and asks for the spatial data permission the first time.
+:::
 
 ::: tip
 If you have used a pastebin to store your token, open the Browser on your headset and enter your pastebin URL. You can then copy the token from there.

@@ -35,6 +35,7 @@ Request="*res://lib/globals/request.gd"
 TouchManager="*res://lib/utils/touch/touch.gd"
 ProcessTools="*res://lib/globals/process_tools.gd"
 XRToolsRumbleManager="*uid://by853dk86g1qw"
+QrScanner="*res://lib/globals/qr_scanner.gd"
 
 [debug_draw_3d]
 
@@ -105,3 +106,5 @@ shaders/enabled=true
 openxr/extensions/meta/passthrough=true
 openxr/extensions/meta/anchor_api=true
 openxr/extensions/meta/scene_api=true
+openxr/extensions/spatial_entity/enabled=true
+openxr/extensions/spatial_entity/enable_marker_tracking=true
