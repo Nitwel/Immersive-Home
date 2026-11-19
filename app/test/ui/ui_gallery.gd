@@ -24,6 +24,9 @@ extends Node3D
 ##   --type=<text>             after the clicks, type this text with virtual
 ##                             keyboard events (click an Input first to focus it);
 ##                             "{backspace}" sends a backspace
+##   --grab=<x>,<y>><x>,<y>    after the clicks, press grip at the first pixel and
+##                             drag to the second, still holding it for the
+##                             screenshot (add --release to let go first)
 
 const Pointer = preload ("res://lib/utils/pointer/pointer.gd")
 const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
@@ -39,6 +42,8 @@ const LineChartScene = preload ("res://content/ui/components/line_chart/line_cha
 const NotificationScene = preload ("res://content/ui/components/notification/notification.tscn")
 const LabelContainerScene = preload ("res://content/ui/components/label_container/label_container.tscn")
 const PanelScene = preload ("res://content/ui/components/panel/panel.tscn")
+const EditMenuScene = preload ("res://content/ui/menu/edit/edit_menu.tscn")
+const FakeHomeApi = preload ("res://test/ui/fake_home_api.gd")
 
 const CELL_SIZE = Vector2(0.6, 0.4)
 const COLUMNS = 3
@@ -222,6 +227,10 @@ func _take_screenshot_and_quit(path: String, delay: float):
 	if _args.has("type"):
 		await _scripted_type(_args["type"])
 
+	if _args.has("grab"):
+		var points = String(_args["grab"]).split(">")
+		await _scripted_grab(_pixel(points[0]), _pixel(points[1]), _args.has("release"))
+
 	# Let tweens/animations (button press depth, notification fade-in) settle.
 	await get_tree().create_timer(delay).timeout
 	await RenderingServer.frame_post_draw
@@ -239,6 +248,24 @@ func _scripted_click(pos: Vector2):
 	await get_tree().physics_frame
 	pointer.released(Initiator.EventType.TRIGGER)
 	for i in 3: await get_tree().physics_frame
+
+func _pixel(text: String) -> Vector2:
+	var xy = text.split(",")
+	return Vector2(float(xy[0]), float(xy[1]))
+
+## Presses grip at [param from] and drags the pointer to [param to].
+## The mouse stays scripted afterwards so the ray keeps pointing at [param to].
+func _scripted_grab(from: Vector2, to: Vector2, release: bool):
+	_scripted_mouse = from
+	for i in 3: await get_tree().physics_frame
+	_aim_ray_at_mouse()
+	pointer.pressed(Initiator.EventType.GRIP)
+	for i in 20:
+		_scripted_mouse = from.lerp(to, (i + 1) / 20.0)
+		await get_tree().physics_frame
+	if release:
+		pointer.released(Initiator.EventType.GRIP)
+		for i in 3: await get_tree().physics_frame
 
 ## Types [param text] the way the virtual keyboard does (EventKey via EventSystem).
 ## "{backspace}" in the text sends a backspace key.
@@ -422,6 +449,22 @@ func _build_gallery():
 			["Convex", _glass_instance(_curved_mesh(Vector2(0.08, 0.1), 0.06, false), 0.006), 0.08],
 			["Rainbow", rainbow_root, 0.14],
 		])
+	)
+
+	# Full menu page fed by an in-memory Home Assistant (test/ui/fake_home_api.gd).
+	_add_cell("EditMenu", func(root: Node3D):
+		FakeHomeApi.install()
+		# Pretend the ceiling light is already placed in the house
+		Store.house.state.entities = [ {"id": "light.living_room_ceiling", "position": Vector3(), "rotation": Vector3(), "scale": 1.0, "room": "Living Room"}]
+
+		var background = PanelScene.instantiate()
+		background.size = Vector2(0.42, 0.32)
+		background.position = Vector3(0, 0, -0.005)
+		root.add_child(background)
+
+		var menu = EditMenuScene.instantiate()
+		menu.position = Vector3(-0.21, 0.16, 0)
+		root.add_child(menu)
 	)
 
 func _add_cell(cell_name: String, build: Callable):
