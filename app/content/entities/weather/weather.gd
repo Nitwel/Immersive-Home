@@ -25,13 +25,21 @@ func set_state(stateInfo):
 	var state = stateInfo["state"]
 	var attributes = stateInfo["attributes"]
 
-	if attributes.has("temperature")&&attributes.has("temperature_unit"):
-		temp_label.text = str(attributes["temperature"]) + " " + attributes["temperature_unit"]
+	# Missing values must replace the placeholder text from the scene.
+	if attributes.get("temperature") != null:
+		temp_label.text = str(attributes["temperature"]) + " " + str(attributes.get("temperature_unit", "")).strip_edges()
+	else:
+		temp_label.text = "–"
 
-	if attributes.has("humidity"):
+	if attributes.get("humidity") != null:
 		humid_label.text = str(attributes["humidity"]) + "%"
+	else:
+		humid_label.text = "–"
 
 	match state:
+		"unavailable", "unknown":
+			weather_label.text = state.capitalize()
+			animation.play("code-red")
 		"clear-night":
 			weather_label.text = "Clear Night"
 			animation.play("clear-night")
@@ -77,3 +85,5 @@ func set_state(stateInfo):
 		"exceptional":
 			weather_label.text = "Exceptional"
 			animation.play("code-red")
+		_:
+			weather_label.text = str(state).capitalize()

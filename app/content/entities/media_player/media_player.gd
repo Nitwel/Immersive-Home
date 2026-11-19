@@ -87,21 +87,30 @@ func set_state(stateInfo):
 	if attributes == null:
 		attributes = {}
 
-	if state == "playing":
-		# entity_picture_local only exists when entity_picture points to an outside
-		# address; otherwise entity_picture already is the Home Assistant proxy path.
-		var picture = attributes.get("entity_picture_local")
-		if picture == null:
-			picture = attributes.get("entity_picture")
-		if picture != null:
-			load_image(str(picture))
-		title.text = str(attributes["media_title"]) if attributes.get("media_title") != null else ""
+	# Update the media info in every state: a paused player still has a track loaded,
+	# and an idle/off one has none, which must clear the previous (or placeholder) info.
+	# entity_picture_local only exists when entity_picture points to an outside
+	# address; otherwise entity_picture already is the Home Assistant proxy path.
+	var picture = attributes.get("entity_picture_local")
+	if picture == null:
+		picture = attributes.get("entity_picture")
+	if picture != null:
+		load_image(str(picture))
+	else:
+		_clear_image()
+
+	if attributes.get("media_title") != null:
+		title.text = str(attributes["media_title"])
 		artist.text = str(attributes["media_artist"]) if attributes.get("media_artist") != null else ""
+	else:
+		title.text = str(attributes["friendly_name"]) if attributes.get("friendly_name") != null else entity_id
+		artist.text = str(state).capitalize()
 
-		if attributes.get("volume_level") != null:
-			volume = float(attributes["volume_level"]) * 100
-			slider.value = volume
+	if attributes.get("volume_level") != null:
+		volume = float(attributes["volume_level"]) * 100
+		slider.value = volume
 
+	if state == "playing":
 		playing = true
 		play.label = "pause"
 		icon.value = "play_circle"
@@ -111,6 +120,13 @@ func set_state(stateInfo):
 		icon.value = "pause_circle"
 
 var _image_url = ""
+
+func _clear_image():
+	if _image_url == "" and logo.texture == null:
+		return
+	_image_url = ""
+	http_request.cancel_request()
+	logo.texture = null
 
 func load_image(url: String):
 	if url.begins_with("/"):

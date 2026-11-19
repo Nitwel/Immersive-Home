@@ -6,6 +6,7 @@ const Entity = preload ("../entity.gd")
 @onready var snap_sound = $SnapSound
 
 var active = R.state(false)
+var available = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -27,9 +28,15 @@ func set_state(stateInfo):
 		return
 
 	active.value = stateInfo["state"] == "on"
-	icon.value = "toggle_" + stateInfo["state"]
+	available = stateInfo["state"] != "unavailable"&&stateInfo["state"] != "unknown"
+	# Only "on" and "off" have a toggle icon; anything else would be an unknown icon name.
+	icon.value = "toggle_on" if active.value else "toggle_off"
+	# Fade an unavailable switch so it doesn't look like it's simply off.
+	sprite.modulate.a = 1.0 if available else 0.3
 
 func _on_click(_event):
+	if not available:
+		return
 	snap_sound.play()
 	_toggle()
 

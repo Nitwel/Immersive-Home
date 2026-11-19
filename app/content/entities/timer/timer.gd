@@ -83,6 +83,12 @@ func set_state(stateInfo):
 			play_button.label = "play_arrow"
 		"paused":
 			running = false
+			finishes_at = null
+			# Home Assistant stores the time left in "remaining" while a timer is paused.
+			if attributes.get("remaining") != null:
+				time_label.text = str(attributes["remaining"])
+			else:
+				time_label.text = duration
 			play_button.position.x = -0.03
 			play_button.label = "resume"
 		"active":

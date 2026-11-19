@@ -25,15 +25,24 @@ func set_state(state):
 	if state == null:
 		return
 
-	slider.value = float(state["state"])
-	
-	var attributes = state["attributes"]
+	var attributes = state.get("attributes", {})
+	if attributes == null:
+		attributes = {}
 
-	if attributes.has("min"):
+	# The slider clamps its value to the current range, so the range has to be set first.
+	if attributes.get("step") != null:
+		slider.step = float(attributes["step"])
+
+	if attributes.get("min") != null:
 		slider.min = float(attributes["min"])
-	
-	if attributes.has("max"):
+
+	if attributes.get("max") != null:
 		slider.max = float(attributes["max"])
 
-	if attributes.has("step"):
-		slider.step = float(attributes["step"])
+	if attributes.get("unit_of_measurement") != null:
+		slider.label_unit = str(attributes["unit_of_measurement"])
+
+	# "unavailable" / "unknown" keep the last known value
+	var value = str(state["state"])
+	if value.is_valid_float():
+		slider.value = float(value)
