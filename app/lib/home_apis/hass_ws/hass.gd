@@ -98,7 +98,13 @@ func get_devices():
 		"report_errors": true
 	}, true)
 
-	return result.payload.event.result
+	# With report_errors, template warnings and errors arrive as an event without a result
+	var event = result.payload.event
+	if !event.has("result"):
+		push_error("Home Assistant could not render the devices template: %s" % event.get("error", event))
+		return []
+
+	return event.result
 
 func get_device(id: String):
 	pass
@@ -113,6 +119,10 @@ func watch_state(entity: String, callback: Callable):
 
 	return func():
 		entitiy_callbacks.remove(entity, callback)
+
+## Stops all state watches whose callback belongs to [param target].
+func unwatch_owner(target: Object):
+	entitiy_callbacks.remove_owner(target)
 
 func set_state(entity: String, state: Variant, attributes: Dictionary={}):
 	var domain = entity.split(".")[0]

@@ -113,9 +113,19 @@ func watch_state(entity: String, callback: Callable):
 	var group = groups.get_group(entity)
 
 	if group != null:
-		api.watch_state(group[0], callback)
+		var unwatch_group = api.watch_state(group[0], callback)
+		var unwatch_entity = api.watch_state(entity, callback)
+		return func():
+			unwatch_group.call()
+			unwatch_entity.call()
 
 	return api.watch_state(entity, callback)
+
+## Stops every state watch whose callback belongs to [param target]. Entities call
+## this when they are freed, so Home Assistant updates never reach a freed node.
+func unwatch_owner(target: Object):
+	if api != null&&api.has_method("unwatch_owner"):
+		api.unwatch_owner(target)
 
 ## Returns true if the adapter has an integration in the home automation system
 ## allowing to send the room position of the headset.

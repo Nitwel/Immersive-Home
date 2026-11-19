@@ -31,11 +31,20 @@ func remove(key: Variant, callback: Callable) -> void:
 	if single_callbacks.has(callback):
 		single_callbacks.erase(callback)
 
+## Removes every callback bound to [param target], e.g. lambdas created inside a node
+## that is about to be freed. Call it before the target is gone.
+func remove_owner(target: Object) -> void:
+	for key in callbacks.keys():
+		callbacks[key] = callbacks[key].filter(func(callback: Callable): return callback.get_object() != target)
+
+	single_callbacks = single_callbacks.filter(func(callback: Callable): return callback.get_object() != target)
+
 func call_key(key: Variant, args: Array) -> void:
 	_validate_key(key)
 
 	if callbacks.has(key):
-		for callback in callbacks[key]:
+		# Iterate a copy, callbacks may add or remove callbacks while running
+		for callback in callbacks[key].duplicate():
 			callback.callv(args)
 
 			if single_callbacks.has(callback):
