@@ -151,6 +151,14 @@ func _initial_states() -> Dictionary:
 		"time.alarm": {"state": "06:45:00", "attributes": {"friendly_name": "Alarm"}},
 		"datetime.next_service": {"state": "2026-12-01T08:30:00+00:00", "attributes": {"friendly_name": "Next service"}},
 		"date.unknown": {"state": "unknown", "attributes": {"friendly_name": "Unset date"}},
+
+		# Made-up positions around a public landmark (Brandenburg Gate, Berlin)
+		"zone.home": {"state": "1", "attributes": {"friendly_name": "Home", "latitude": 52.5163, "longitude": 13.3777, "radius": 120, "icon": "mdi:home"}},
+		"person.alice": {"state": "home", "attributes": {"friendly_name": "Alice Example", "latitude": 52.5164, "longitude": 13.3781, "gps_accuracy": 25, "source": "device_tracker.alice_phone"}},
+		"person.bob": {"state": "not_home", "attributes": {"friendly_name": "Bob", "latitude": 52.5215, "longitude": 13.4110, "gps_accuracy": 60, "source": "device_tracker.bob_phone"}},
+		"device_tracker.work_phone": {"state": "Work", "attributes": {"friendly_name": "Work phone", "source_type": "gps", "latitude": 52.5096, "longitude": 13.3760, "gps_accuracy": 15, "battery_level": 80}},
+		"device_tracker.router": {"state": "home", "attributes": {"friendly_name": "Laptop", "source_type": "router", "ip": "192.0.2.10"}},
+		"person.no_location": {"state": "not_home", "attributes": {"friendly_name": "Carol"}},
 	}
 
 func _weather(state: String, temperature: float, humidity: int) -> Dictionary:
@@ -171,6 +179,8 @@ func _push_random_updates():
 	for id in ["weather.sunny", "weather.rainy", "weather.lightning", "weather.snowy"]:
 		mock.update_entity(id, WEATHER_STATES.pick_random(), {"temperature": snappedf(randf_range(-5, 30), 0.1), "humidity": randi_range(20, 99)})
 	mock.update_entity("light.dimmable", "on", {"brightness": randi_range(10, 255)})
+	var bob = mock.entities["person.bob"].attributes
+	mock.update_entity("person.bob", "not_home", {"latitude": bob.latitude + randf_range(-0.002, 0.002), "longitude": bob.longitude + randf_range(-0.003, 0.003)})
 	status_label.text = "Pushed random state updates"
 	await get_tree().create_timer(0.4).timeout
 	_layout()
@@ -210,6 +220,8 @@ func _build_gallery():
 	_entity_cell("Select", [["select", "select.fan_mode"], ["input_select", "input_select.house_mode"], ["Unavailable", "select.unavailable"]])
 	_entity_cell("Text", [["text", "text.message"], ["input_text (empty)", "input_text.note"]])
 	_entity_cell("Date and time", [["date", "date.birthday"], ["time", "time.alarm"], ["datetime (local)", "datetime.next_service"], ["Unknown", "date.unknown"]])
+	_entity_cell("Person and tracker", [["Home", "person.alice"], ["Away", "person.bob"], ["GPS tracker in zone", "device_tracker.work_phone"],
+		["Router tracker (no GPS)", "device_tracker.router"], ["No location", "person.no_location"]])
 	_entity_cell("Reused widgets", [["input_boolean", "input_boolean.guest_mode"], ["automation", "automation.night_lights"],
 		["input_number", "input_number.volume"], ["input_button", "input_button.doorbell"], ["scene", "scene.movie"],
 		["script", "script.good_night"], ["counter", "counter.coffees"]])

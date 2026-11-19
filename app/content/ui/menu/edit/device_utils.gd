@@ -5,7 +5,7 @@ const UiFont = preload ("res://assets/fonts/ui_font_500.tres")
 const IconFont = preload ("res://assets/icons/icons.tres")
 
 ## Domains in order of how well they describe a device, used to pick its icon.
-const DOMAIN_PRIORITY = ["light", "climate", "media_player", "camera", "lock", "switch", "weather", "number", "select",
+const DOMAIN_PRIORITY = ["light", "climate", "media_player", "person", "device_tracker", "camera", "lock", "switch", "weather", "number", "select",
 	"text", "datetime", "date", "time", "timer", "binary_sensor", "sensor", "button",
 	"input_boolean", "input_number", "input_select", "input_text", "input_button", "counter", "automation", "scene", "script"]
 
@@ -40,6 +40,8 @@ const DOMAIN_NAMES = {
 	"automation": "Automations",
 	"scene": "Scenes",
 	"script": "Scripts",
+	"person": "People",
+	"device_tracker": "Device trackers",
 }
 
 static func domain_of(entity_id: String) -> String:
@@ -144,6 +146,8 @@ static func format_state(entity_id: String, data) -> String:
 				return state.capitalize() + " · " + str(attributes["temperature"]) + " °"
 		"select", "input_select", "text", "input_text", "date", "time", "datetime":
 			return state
+		"person", "device_tracker":
+			return {"home": "Home", "not_home": "Away"}.get(state, state)
 		"scene", "script", "input_button":
 			return domain_of(entity_id).capitalize().replace("Input ", "")
 		"media_player":
