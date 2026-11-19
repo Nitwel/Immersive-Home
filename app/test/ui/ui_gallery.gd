@@ -27,6 +27,12 @@ extends Node3D
 ##   --grab=<x>,<y>><x>,<y>    after the clicks, press grip at the first pixel and
 ##                             drag to the second, still holding it for the
 ##                             screenshot (add --release to let go first)
+##   --drag=<x>,<y>><x>,<y>    the same with the trigger (e.g. to pan a map)
+##   --pinch=<x>,<y>><x>,<y>;<x>,<y>><x>,<y>
+##                             two hands: trigger drags of a second pointer (left
+##                             controller) and the main one at the same time, e.g. to
+##                             zoom a map (add --release to let go first)
+##   --input-delay=<seconds>   wait before the scripted input, default 0.3
 
 const Pointer = preload ("res://lib/utils/pointer/pointer.gd")
 const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
@@ -215,8 +221,10 @@ func _save_screenshot(path: String):
 		push_error("ui_gallery: failed to save screenshot to %s (%s)" % [abs_path, error_string(err)])
 
 func _take_screenshot_and_quit(path: String, delay: float):
+	# Scripted input waits for the layout to settle (--input-delay, seconds).
+	if _args.has("click") or _args.has("grab") or _args.has("drag") or _args.has("pinch"):
+		await get_tree().create_timer(float(_args.get("input-delay", "0.3"))).timeout
 	if _args.has("click"):
-		await get_tree().create_timer(0.3).timeout
 		for pair in String(_args["click"]).split(";"):
 			var xy = pair.split(",")
 			await _scripted_click(Vector2(float(xy[0]), float(xy[1])))
@@ -228,6 +236,16 @@ func _take_screenshot_and_quit(path: String, delay: float):
 	if _args.has("grab"):
 		var points = String(_args["grab"]).split(">")
 		await _scripted_grab(_pixel(points[0]), _pixel(points[1]), _args.has("release"))
+
+	if _args.has("drag"):
+		var points = String(_args["drag"]).split(">")
+		await _scripted_grab(_pixel(points[0]), _pixel(points[1]), _args.has("release"), Initiator.EventType.TRIGGER)
+
+	if _args.has("pinch"):
+		var hands = String(_args["pinch"]).split(";")
+		var a = hands[0].split(">")
+		var b = hands[1].split(">")
+		await _scripted_pinch(_pixel(a[0]), _pixel(a[1]), _pixel(b[0]), _pixel(b[1]), _args.has("release"))
 
 	# Let tweens/animations (button press depth, notification fade-in) settle.
 	await get_tree().create_timer(delay).timeout
@@ -251,18 +269,53 @@ func _pixel(text: String) -> Vector2:
 	var xy = text.split(",")
 	return Vector2(float(xy[0]), float(xy[1]))
 
-## Presses grip at [param from] and drags the pointer to [param to].
+## Presses grip (or [param type]) at [param from] and drags the pointer to [param to].
 ## The mouse stays scripted afterwards so the ray keeps pointing at [param to].
-func _scripted_grab(from: Vector2, to: Vector2, release: bool):
+func _scripted_grab(from: Vector2, to: Vector2, release: bool, type := Initiator.EventType.GRIP):
 	_scripted_mouse = from
 	for i in 3: await get_tree().physics_frame
 	_aim_ray_at_mouse()
-	pointer.pressed(Initiator.EventType.GRIP)
+	print("ui_gallery: pressing on %s (%s) at %s" % [ray.get_collider(), ray.get_collider().get_parent().name if ray.get_collider() else "", ray.get_collision_point()])
+	pointer.pressed(type)
 	for i in 20:
 		_scripted_mouse = from.lerp(to, (i + 1) / 20.0)
 		await get_tree().physics_frame
 	if release:
-		pointer.released(Initiator.EventType.GRIP)
+		pointer.released(type)
+		for i in 3: await get_tree().physics_frame
+
+## Drags a second pointer from [param a_from] to [param a_to] and the main one from
+## [param b_from] to [param b_to], both holding the trigger.
+func _scripted_pinch(a_from: Vector2, a_to: Vector2, b_from: Vector2, b_to: Vector2, release: bool):
+	var ray2 = RayCast3D.new()
+	ray2.collision_mask = ray.collision_mask
+	ray2.collide_with_areas = ray.collide_with_areas
+	add_child(ray2)
+	var initiator2 = Initiator.new()
+	initiator2.type = Initiator.Type.CONTROLLER_LEFT
+	initiator2.node = ray2
+	var pointer2 = Pointer.new(initiator2, ray2)
+	ray2.add_child(pointer2)
+
+	var aim2 = func(pos: Vector2):
+		ray2.global_transform = Transform3D(Basis.looking_at(camera.project_ray_normal(pos), Vector3.UP), camera.project_ray_origin(pos))
+		ray2.target_position = Vector3(0, 0, -20)
+		ray2.force_raycast_update()
+
+	_scripted_mouse = b_from
+	aim2.call(a_from)
+	for i in 3: await get_tree().physics_frame
+	_aim_ray_at_mouse()
+	aim2.call(a_from)
+	pointer2.pressed(Initiator.EventType.TRIGGER)
+	pointer.pressed(Initiator.EventType.TRIGGER)
+	for i in 30:
+		_scripted_mouse = b_from.lerp(b_to, (i + 1) / 30.0)
+		aim2.call(a_from.lerp(a_to, (i + 1) / 30.0))
+		await get_tree().physics_frame
+	if release:
+		pointer2.released(Initiator.EventType.TRIGGER)
+		pointer.released(Initiator.EventType.TRIGGER)
 		for i in 3: await get_tree().physics_frame
 
 ## Types [param text] the way the virtual keyboard does (EventKey via EventSystem).

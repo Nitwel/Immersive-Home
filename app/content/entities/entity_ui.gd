@@ -11,16 +11,21 @@ const IconFont = preload ("res://assets/icons/icons.tres")
 ## Glass card of [param size] centred on the parent; also sizes the entity's collision
 ## shape so the whole card can be grabbed and moved.
 static func card(entity: Node3D, size: Vector2) -> Panel3D:
-	var panel: Panel3D = PanelScene.instantiate()
-	panel.size = size
-	panel.corner_radius = 0.012
-	entity.add_child(panel)
+	var panel = glass(entity, size)
 
 	var collision: CollisionShape3D = entity.get_node("CollisionShape3D")
 	var shape = BoxShape3D.new()
 	shape.size = Vector3(size.x, size.y, 0.02)
 	collision.shape = shape
 	collision.position = Vector3(0, 0, -0.01)
+	return panel
+
+## Glass panel of [param size] centred on [param parent], e.g. for a settings panel.
+static func glass(parent: Node3D, size: Vector2) -> Panel3D:
+	var panel: Panel3D = PanelScene.instantiate()
+	panel.size = size
+	panel.corner_radius = 0.012
+	parent.add_child(panel)
 	return panel
 
 static func label(parent: Node3D, text: String, font_size: int, position: Vector3, alignment := HORIZONTAL_ALIGNMENT_LEFT, icon := false) -> Label3D:

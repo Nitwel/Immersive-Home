@@ -6,7 +6,15 @@ render_mode unshaded, cull_back;
 uniform sampler2D map_texture : source_color, filter_linear;
 uniform vec2 size_px = vec2(448.0, 304.0); // map size in map pixels
 uniform float corner_radius_px = 12.0;
-uniform bool dark_mode = true;
+uniform bool dark_mode = false; // the vector map is drawn in Home Assistant's light colours
+
+// The drawing can be for a slightly different view than the one shown (while it is
+// dragged or zoomed and the next drawing is on its way): a view pixel p is at
+// p * texture_scale + texture_offset in the drawing. Outside it, plain land shows.
+uniform vec2 texture_offset = vec2(0.0);
+uniform float texture_scale = 1.0;
+uniform vec2 texture_size_px = vec2(448.0, 304.0);
+uniform vec3 background : source_color = vec3(0.965, 0.949, 0.925);
 
 // xy: centre in map pixels, z: radius in map pixels
 uniform vec4 circles[8];
@@ -22,7 +30,11 @@ void fragment() {
 		discard;
 	}
 
-	vec3 color = texture(map_texture, UV).rgb;
+	vec2 uv = (p * texture_scale + texture_offset) / texture_size_px;
+	vec3 color = background;
+	if (uv.x >= 0.0 && uv.y >= 0.0 && uv.x <= 1.0 && uv.y <= 1.0) {
+		color = texture(map_texture, uv).rgb;
+	}
 
 	// Dark map: invert the brightness but keep the hue (blue water, green parks),
 	// a common way to theme light map tiles dark. Uses YIQ: Y is brightness.
