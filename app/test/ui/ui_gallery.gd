@@ -22,7 +22,8 @@ extends Node3D
 ##   --click=<x>,<y>[;<x>,<y>] left-click these window pixels before the
 ##                             screenshot (e.g. to capture an open Select)
 ##   --type=<text>             after the clicks, type this text with virtual
-##                             keyboard events (click an Input first to focus it)
+##                             keyboard events (click an Input first to focus it);
+##                             "{backspace}" sends a backspace
 
 const Pointer = preload ("res://lib/utils/pointer/pointer.gd")
 const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
@@ -139,7 +140,8 @@ func _unhandled_input(event):
 
 	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_MIDDLE:
 		if event.shift_pressed:
-			var pan = orbit_distance * 0.0015
+			# World units per pixel at the orbit target, so the content tracks the cursor.
+			var pan = 2.0 * orbit_distance * tan(deg_to_rad(camera.fov) / 2.0) / get_viewport().get_visible_rect().size.y
 			orbit_target += camera.global_transform.basis * Vector3(-event.relative.x * pan, event.relative.y * pan, 0)
 		else:
 			orbit_yaw -= event.relative.x * 0.005
@@ -239,15 +241,22 @@ func _scripted_click(pos: Vector2):
 	for i in 3: await get_tree().physics_frame
 
 ## Types [param text] the way the virtual keyboard does (EventKey via EventSystem).
+## "{backspace}" in the text sends a backspace key.
 func _scripted_type(text: String):
-	for c in text:
+	for c in text.replace("{backspace}", "\b"):
+		var key: Key
+		match c:
+			" ": key = KEY_SPACE
+			"\b": key = KEY_BACKSPACE
+			_: key = OS.find_keycode_from_string(c.to_upper())
+
 		var event = EventKey.new()
-		event.key = KEY_SPACE if c == " " else OS.find_keycode_from_string(c.to_upper())
+		event.key = key
 		event.shift_pressed = c != c.to_lower()
 		EventSystem.emit("key_down", event)
 		await get_tree().process_frame
 		event = EventKey.new()
-		event.key = KEY_SPACE if c == " " else OS.find_keycode_from_string(c.to_upper())
+		event.key = key
 		EventSystem.emit("key_up", event)
 		await get_tree().process_frame
 
@@ -388,6 +397,33 @@ func _build_gallery():
 		root.add_child(l)
 	)
 
+	# Glass/border shader on different sizes and non-quad meshes. The border and
+	# corners should look identical (same width in meters) on every shape.
+	_add_cell("Shapes", func(root: Node3D):
+		# Real Panel3D components at different sizes
+		var squares: Array = []
+		for s in [0.02, 0.04, 0.08, 0.12]:
+			var p = PanelScene.instantiate()
+			p.size = Vector2(s, s)
+			squares.append(["%d cm" % roundi(s * 100), p, s])
+		var wide = PanelScene.instantiate()
+		wide.size = Vector2(0.16, 0.04)
+		squares.append(["Wide", wide, 0.16])
+		_shape_row(root, 0.085, 0.06, squares)
+
+		# Custom meshes with the glass material
+		var rainbow = _glass_instance(_rainbow_mesh(0.07, 0.035), 0.006)
+		rainbow.position.y = -0.035 # centre its bounding box
+		var rainbow_root = Node3D.new()
+		rainbow_root.add_child(rainbow)
+		_shape_row(root, -0.09, 0.05, [
+			["Round", _glass_instance(_disc_mesh(0.05), 1.0), 0.1],
+			["Concave", _glass_instance(_curved_mesh(Vector2(0.08, 0.1), 0.06, true), 0.006), 0.08],
+			["Convex", _glass_instance(_curved_mesh(Vector2(0.08, 0.1), 0.06, false), 0.006), 0.08],
+			["Rainbow", rainbow_root, 0.14],
+		])
+	)
+
 func _add_cell(cell_name: String, build: Callable):
 	var index = cells.size()
 	var cell = Node3D.new()
@@ -437,6 +473,101 @@ func _row(root: Node3D, y: float) -> Node3D:
 	row.position.y = y
 	root.add_child(row)
 	return row
+
+## Lays out [param items] ([label, node, width]) centred on a row at [param y],
+## with a caption under each. [param half_height] is the tallest item's half height.
+func _shape_row(root: Node3D, y: float, half_height: float, items: Array, gap := 0.025):
+	var row = _row(root, y)
+	var total = gap * (items.size() - 1)
+	for item in items: total += item[2]
+	var x = -total / 2.0
+	for item in items:
+		x += item[2] / 2.0
+		item[1].position.x = x
+		row.add_child(item[1])
+
+		var label = Label3D.new()
+		label.text = item[0]
+		label.font_size = 14
+		label.pixel_size = 0.001
+		label.modulate = Color(1, 1, 1, 0.6)
+		label.position = Vector3(x, -half_height - 0.012, 0)
+		row.add_child(label)
+		x += item[2] / 2.0 + gap
+
+## MeshInstance3D with the glass material set up like a default Panel3D.
+func _glass_instance(mesh: Mesh, corner_radius: float) -> MeshInstance3D:
+	var mat: ShaderMaterial = Panel3D.PanelMaterial.duplicate()
+	mat.set_shader_parameter("color", Panel3D.COLOR)
+	mat.set_shader_parameter("border_color", Panel3D.BORDER_COLOR)
+	mat.set_shader_parameter("corner_radius", corner_radius)
+	mat.set_shader_parameter("border_size", 0.6 * Panel3D.BORDER_SIZE)
+	mat.set_shader_parameter("border_fade_in", 0.6 * Panel3D.BORDER_FADE_IN)
+	var m = MeshInstance3D.new()
+	m.mesh = mesh
+	m.material_override = mat
+	return m
+
+## Flat disc facing +Z with planar UVs (0..1 across the diameter).
+func _disc_mesh(radius: float, segments := 48) -> ArrayMesh:
+	var st = SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var point = func(angle: float):
+		var p = Vector2(cos(angle), sin(angle)) * radius
+		st.set_normal(Vector3.BACK)
+		st.set_uv(Vector2(p.x / (2.0 * radius) + 0.5, 0.5 - p.y / (2.0 * radius)))
+		st.add_vertex(Vector3(p.x, p.y, 0))
+	for i in segments:
+		var a0 = TAU * i / segments
+		var a1 = TAU * (i + 1) / segments
+		# Clockwise winding seen from +Z (Godot front face)
+		st.set_normal(Vector3.BACK)
+		st.set_uv(Vector2(0.5, 0.5))
+		st.add_vertex(Vector3.ZERO)
+		point.call(a1)
+		point.call(a0)
+	return st.commit()
+
+## Half-ring arc ("rainbow") in the XY plane, centred on the origin. U runs
+## along the arc (left to right), V across the band (outer to inner).
+func _rainbow_mesh(outer_radius: float, band: float, segments := 64, rings := 8) -> ArrayMesh:
+	var st = SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var vert = func(u: float, v: float):
+		var angle = PI * (1.0 - u)
+		var r = outer_radius - v * band
+		st.set_normal(Vector3.BACK)
+		st.set_uv(Vector2(u, v))
+		st.add_vertex(Vector3(cos(angle) * r, sin(angle) * r, 0))
+	for i in segments:
+		var u0 = float(i) / segments
+		var u1 = float(i + 1) / segments
+		for j in rings:
+			var v0 = float(j) / rings
+			var v1 = float(j + 1) / rings
+			# Clockwise winding seen from +Z: TL, TR, BR / TL, BR, BL
+			vert.call(u0, v0); vert.call(u1, v0); vert.call(u1, v1)
+			vert.call(u0, v0); vert.call(u1, v1); vert.call(u0, v1)
+	return st.commit()
+
+## Panel of [param size] (arc length x height) bent around a vertical cylinder
+## of [param radius]. Concave bends the sides towards the viewer (+Z).
+func _curved_mesh(size: Vector2, radius: float, concave: bool, segments := 24) -> ArrayMesh:
+	var st = SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var bend = 1.0 if concave else -1.0
+	var vert = func(u: float, v: float):
+		var angle = (u - 0.5) * size.x / radius
+		st.set_normal(Vector3(-sin(angle) * bend, 0, cos(angle)))
+		st.set_uv(Vector2(u, v))
+		st.add_vertex(Vector3(sin(angle) * radius, (0.5 - v) * size.y, bend * radius * (1.0 - cos(angle))))
+	for i in segments:
+		var u0 = float(i) / segments
+		var u1 = float(i + 1) / segments
+		# Clockwise winding seen from +Z: TL, TR, BR / TL, BR, BL
+		vert.call(u0, 0.0); vert.call(u1, 0.0); vert.call(u1, 1.0)
+		vert.call(u0, 0.0); vert.call(u1, 1.0); vert.call(u0, 1.0)
+	return st.commit()
 
 ## Centres the Container3D children of [param row] horizontally.
 func _layout_row(row: Node3D, gap: float):

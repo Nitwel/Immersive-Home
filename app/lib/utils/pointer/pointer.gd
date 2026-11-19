@@ -89,7 +89,9 @@ func released(type: Initiator.EventType):
 func _emit_event(type: String, target):
 	var event = EventPointer.new()
 	event.initiator = initiator
-	event.target = target
+	# last_collided can be freed while hovered/pressed (e.g. UI rebuilt on click);
+	# EventPointer.target is typed Node and rejects freed instances.
+	event.target = target if is_instance_valid(target) else null
 	event.ray = ray
 
 	EventSystem.emit(type, event)

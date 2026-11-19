@@ -1,12 +1,15 @@
 extends Node
 ## Handles touch events and emits them to the EventSystem
 
-const Finger = preload ("res://lib/utils/touch/finger.gd")
+const Finger = preload("res://lib/utils/touch/finger.gd")
 
 ## Record<Finger.Type, Area3D>
 var finger_areas: Dictionary
 
 var areas_entered = {}
+
+## Record<Finger.Type, [previous: Vector3, current: Vector3]>, sampled every physics tick.
+var _positions = {}
 
 ## Returns true if any finger touches an area.
 ## When finger_type is given, only that finger is checked.
@@ -34,8 +37,35 @@ func add_finger(finger_type: Finger.Type, area: Area3D):
 func remove_finger(finger_type: Finger.Type):
 	if finger_areas.has(finger_type):
 		finger_areas.erase(finger_type)
+	_positions.erase(finger_type)
+
+func _record_positions():
+	for finger_type in finger_areas:
+		var area: Area3D = finger_areas[finger_type]
+		if not is_instance_valid(area) or not area.is_inside_tree():
+			continue
+
+		var position = area.global_position
+		var entry = _positions.get(finger_type)
+
+		if entry == null:
+			_positions[finger_type] = [position, position]
+		elif not entry[1].is_equal_approx(position):
+			_positions[finger_type] = [entry[1], position]
+
+func _previous_position(finger_type: Finger.Type) -> Vector3:
+	var area: Area3D = finger_areas[finger_type]
+	var entry = _positions.get(finger_type)
+
+	if entry == null:
+		return area.global_position
+	if entry[1].is_equal_approx(area.global_position):
+		return entry[0]
+	return entry[1]
 
 func _physics_process(_delta):
+	_record_positions()
+
 	for area in areas_entered.keys():
 		if areas_entered.has(area) == false:
 			return
@@ -67,6 +97,7 @@ func _emit_event(type: String, target):
 		var finger = Finger.new()
 		finger.type = finger_type
 		finger.area = finger_areas[finger_type]
+		finger.previous_position = _previous_position(finger_type)
 		fingers.append(finger)
 
 	event.fingers = fingers

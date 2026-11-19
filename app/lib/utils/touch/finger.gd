@@ -16,3 +16,7 @@ enum Type {
 
 var type: Type
 var area: Area3D
+## Global position of [member area] at the last physics tick where it was
+## somewhere else. Lets receivers tell which side a touch came from, which the
+## current position can't do when the finger moves far in a single tick.
+var previous_position: Vector3

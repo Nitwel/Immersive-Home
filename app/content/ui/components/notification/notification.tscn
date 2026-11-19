@@ -11,11 +11,10 @@ shader = ExtResource("2_b68od")
 shader_parameter/color = Color(1, 1, 1, 0.3)
 shader_parameter/border_color = Color(1, 1, 1, 1)
 shader_parameter/edge_color = Color(0, 0, 0, 1)
-shader_parameter/size = Vector2(0.25, 0.05)
-shader_parameter/border_size = 0.001
-shader_parameter/border_fade_in = 0.005
-shader_parameter/border_fade_out = 0.0
-shader_parameter/corner_radius = 0.025
+shader_parameter/border_size = 0.00075
+shader_parameter/border_fade_in = 0.00375
+shader_parameter/border_fade_out = 0
+shader_parameter/corner_radius = 0.024
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
