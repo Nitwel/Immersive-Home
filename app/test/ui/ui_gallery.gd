@@ -23,7 +23,7 @@ extends Node3D
 ##                             screenshot (e.g. to capture an open Select)
 ##   --type=<text>             after the clicks, type this text with virtual
 ##                             keyboard events (click an Input first to focus it);
-##                             "{backspace}" sends a backspace
+##                             "{backspace}" sends a backspace, "{enter}" an enter
 ##   --grab=<x>,<y>><x>,<y>    after the clicks, press grip at the first pixel and
 ##                             drag to the second, still holding it for the
 ##                             screenshot (add --release to let go first)
@@ -268,11 +268,12 @@ func _scripted_grab(from: Vector2, to: Vector2, release: bool):
 ## Types [param text] the way the virtual keyboard does (EventKey via EventSystem).
 ## "{backspace}" in the text sends a backspace key.
 func _scripted_type(text: String):
-	for c in text.replace("{backspace}", "\b"):
+	for c in text.replace("{backspace}", "\b").replace("{enter}", "\n"):
 		var key: Key
 		match c:
 			" ": key = KEY_SPACE
 			"\b": key = KEY_BACKSPACE
+			"\n": key = KEY_ENTER
 			_: key = OS.find_keycode_from_string(c.to_upper())
 
 		var event = EventKey.new()

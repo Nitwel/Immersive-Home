@@ -5,10 +5,13 @@ const UiFont = preload ("res://assets/fonts/ui_font_500.tres")
 const IconFont = preload ("res://assets/icons/icons.tres")
 
 ## Domains in order of how well they describe a device, used to pick its icon.
-const DOMAIN_PRIORITY = ["light", "media_player", "camera", "switch", "weather", "number", "timer", "binary_sensor", "sensor", "button"]
+const DOMAIN_PRIORITY = ["light", "climate", "media_player", "camera", "lock", "switch", "weather", "number", "select",
+	"text", "datetime", "date", "time", "timer", "binary_sensor", "sensor", "button",
+	"input_boolean", "input_number", "input_select", "input_text", "input_button", "counter", "automation", "scene", "script"]
 
 ## Domains whose state is worth showing as an on/off dot on the device.
-const LIVE_DOMAINS = {"light": ["on"], "switch": ["on"], "media_player": ["on", "playing"]}
+const LIVE_DOMAINS = {"light": ["on"], "switch": ["on"], "input_boolean": ["on"], "media_player": ["on", "playing"],
+	"climate": ["heat", "cool", "heat_cool", "auto", "dry", "fan_only"], "lock": ["unlocked", "open"]}
 
 const DOMAIN_NAMES = {
 	"light": "Lights",
@@ -21,6 +24,22 @@ const DOMAIN_NAMES = {
 	"number": "Numbers",
 	"timer": "Timers",
 	"weather": "Weather",
+	"select": "Selects",
+	"climate": "Climate",
+	"lock": "Locks",
+	"text": "Texts",
+	"date": "Dates",
+	"time": "Times",
+	"datetime": "Date and time",
+	"input_boolean": "Toggle helpers",
+	"input_number": "Number helpers",
+	"input_select": "Dropdown helpers",
+	"input_text": "Text helpers",
+	"input_button": "Button helpers",
+	"counter": "Counters",
+	"automation": "Automations",
+	"scene": "Scenes",
+	"script": "Scripts",
 }
 
 static func domain_of(entity_id: String) -> String:
@@ -117,9 +136,16 @@ static func format_state(entity_id: String, data) -> String:
 		"light":
 			if state == "on" && attributes.get("brightness") != null:
 				return "On · %d %%" % roundi(float(attributes["brightness"]) / 255.0 * 100.0)
-		"sensor", "number":
+		"sensor", "number", "input_number", "counter":
 			var unit = attributes.get("unit_of_measurement")
 			return (state + " " + (str(unit) if unit != null else "")).strip_edges()
+		"climate":
+			if attributes.get("temperature") != null:
+				return state.capitalize() + " · " + str(attributes["temperature"]) + " °"
+		"select", "input_select", "text", "input_text", "date", "time", "datetime":
+			return state
+		"scene", "script", "input_button":
+			return domain_of(entity_id).capitalize().replace("Input ", "")
 		"media_player":
 			if attributes.get("media_title") != null && (state == "playing" || state == "paused"):
 				return state.capitalize() + " · " + str(attributes["media_title"])

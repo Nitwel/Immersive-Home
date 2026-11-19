@@ -13,72 +13,92 @@ const LineGraphEntity = preload ("res://content/entities/line_chart/line_chart.t
 const TimerEntity = preload ("res://content/entities/timer/timer.tscn")
 const WeatherEntity = preload ("res://content/entities/weather/weather.tscn")
 const BinarySensorEntity = preload ("res://content/entities/binary_sensor/binary_sensor.tscn")
+const SelectEntity = preload ("res://content/entities/select/select.tscn")
+const ClimateEntity = preload ("res://content/entities/climate/climate.tscn")
+const LockEntity = preload ("res://content/entities/lock/lock.tscn")
+const TextEntity = preload ("res://content/entities/text/text.tscn")
+const DateTimeEntity = preload ("res://content/entities/datetime/datetime.tscn")
+
+## Widget used for each Home Assistant domain. Several domains share a widget when
+## they behave the same (e.g. input_boolean is a switch, scene/script are pressed once).
+const SCENES = {
+	"switch": Switch,
+	"input_boolean": Switch,
+	"automation": Switch,
+	"light": Light,
+	"sensor": Sensor,
+	"counter": Sensor,
+	"binary_sensor": BinarySensorEntity,
+	"media_player": MediaPlayer,
+	"camera": Camera,
+	"button": ButtonEntity,
+	"input_button": ButtonEntity,
+	"scene": ButtonEntity,
+	"script": ButtonEntity,
+	"number": NumberEntity,
+	"input_number": NumberEntity,
+	"timer": TimerEntity,
+	"weather": WeatherEntity,
+	"select": SelectEntity,
+	"input_select": SelectEntity,
+	"climate": ClimateEntity,
+	"lock": LockEntity,
+	"text": TextEntity,
+	"input_text": TextEntity,
+	"date": DateTimeEntity,
+	"time": DateTimeEntity,
+	"datetime": DateTimeEntity,
+	# Not a Home Assistant domain: the history chart of a sensor
+	"line_chart": LineGraphEntity,
+}
+
+const ICONS = {
+	"switch": "toggle_on",
+	"input_boolean": "toggle_on",
+	"automation": "smart_toy",
+	"light": "lightbulb",
+	"sensor": "sensors",
+	"counter": "tag",
+	"binary_sensor": "sensors",
+	"media_player": "play_circle",
+	"camera": "photo_camera",
+	"button": "radio_button_checked",
+	"input_button": "radio_button_checked",
+	"scene": "palette",
+	"script": "code",
+	"number": "sliders",
+	"input_number": "sliders",
+	"line_chart": "finance",
+	"timer": "timer",
+	"weather": "partly_cloudy_day",
+	"select": "list",
+	"input_select": "list",
+	"climate": "thermostat",
+	"lock": "lock",
+	"text": "text_fields",
+	"input_text": "text_fields",
+	"date": "calendar_today",
+	"time": "schedule",
+	"datetime": "event",
+}
 
 ## Home Assistant domains that create_entity can turn into an entity widget.
-const SUPPORTED_DOMAINS = ["switch", "light", "sensor", "binary_sensor", "media_player", "camera", "button", "number", "timer", "weather"]
+static var SUPPORTED_DOMAINS: Array = SCENES.keys().filter(func(domain): return domain != "line_chart")
 
 ## Returns true if entities of this domain (or an entity id like "light.kitchen") can be placed.
 static func is_supported(domain_or_id: String) -> bool:
 	return SUPPORTED_DOMAINS.has(domain_or_id.split(".")[0])
 
 static func create_entity(id: String, type=null):
-	var entity = null
-
 	if type == null:
 		type = id.split(".")[0]
 
-	match type:
-		"switch":
-			entity = Switch.instantiate()
-		"light":
-			entity = Light.instantiate()
-		"sensor":
-			entity = Sensor.instantiate()
-		"media_player":
-			entity = MediaPlayer.instantiate()
-		"camera":
-			entity = Camera.instantiate()
-		"button":
-			entity = ButtonEntity.instantiate()
-		"number":
-			entity = NumberEntity.instantiate()
-		"line_chart":
-			entity = LineGraphEntity.instantiate()
-		"timer":
-			entity = TimerEntity.instantiate()
-		"weather":
-			entity = WeatherEntity.instantiate()
-		"binary_sensor":
-			entity = BinarySensorEntity.instantiate()
-		_:
-			return null
-			
+	if not SCENES.has(type):
+		return null
+
+	var entity = SCENES[type].instantiate()
 	entity.entity_id = id
 	return entity
 
 static func get_entity_icon(type: String) -> String:
-	match type:
-		"switch":
-			return "toggle_on"
-		"light":
-			return "lightbulb"
-		"sensor":
-			return "sensors"
-		"binary_sensor":
-			return "sensors"
-		"media_player":
-			return "play_circle"
-		"camera":
-			return "photo_camera"
-		"button":
-			return "radio_button_checked"
-		"number":
-			return "sliders"
-		"line_chart":
-			return "finance"
-		"timer":
-			return "timer"
-		"weather":
-			return "partly_cloudy_day"
-		_:
-			return "question_mark"
+	return ICONS.get(type, "question_mark")

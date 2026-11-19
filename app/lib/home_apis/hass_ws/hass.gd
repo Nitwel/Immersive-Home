@@ -124,53 +124,58 @@ func watch_state(entity: String, callback: Callable):
 func unwatch_owner(target: Object):
 	entitiy_callbacks.remove_owner(target)
 
+## Maps the state an entity widget asks for to the Home Assistant service that
+## produces it. Each domain maps a requested state to a service name.
+const SERVICES = {
+	"switch": {"on": "turn_on", "off": "turn_off"},
+	"input_boolean": {"on": "turn_on", "off": "turn_off"},
+	"automation": {"on": "turn_on", "off": "turn_off"},
+	"light": {"on": "turn_on", "off": "turn_off"},
+	"media_player": {"play": "media_play", "pause": "media_pause", "next": "media_next_track",
+		"previous": "media_previous_track", "volume": "volume_set"},
+	"button": {"pressed": "press"},
+	"input_button": {"pressed": "press"},
+	"scene": {"pressed": "turn_on"},
+	"script": {"pressed": "turn_on"},
+	"timer": {"start": "start", "cancel": "cancel", "pause": "pause"},
+	"climate": {"temperature": "set_temperature", "hvac_mode": "set_hvac_mode"},
+	"lock": {"lock": "lock", "unlock": "unlock", "open": "open"},
+}
+
+## Domains whose widgets send the new value itself as the state. The value is passed
+## to the service in this field.
+const VALUE_SERVICES = {
+	"number": ["set_value", "value"],
+	"input_number": ["set_value", "value"],
+	"select": ["select_option", "option"],
+	"input_select": ["select_option", "option"],
+	"text": ["set_value", "value"],
+	"input_text": ["set_value", "value"],
+	"date": ["set_value", "date"],
+	"time": ["set_value", "time"],
+	"datetime": ["set_value", "datetime"],
+}
+
 func set_state(entity: String, state: Variant, attributes: Dictionary={}):
 	var domain = entity.split(".")[0]
-	var service: String
+	var service := ""
+	var service_data = attributes.duplicate()
 
-	if domain == 'switch':
-		if state == 'on':
-			service = 'turn_on'
-		elif state == 'off':
-			service = 'turn_off'
-	elif domain == 'light':
-		if state == 'on':
-			service = 'turn_on'
-		elif state == 'off':
-			service = 'turn_off'
-	elif domain == 'media_player':
-		if state == 'play':
-			service = 'media_play'
-		elif state == "pause":
-			service = "media_pause"
-		elif state == "next":
-			service = "media_next_track"
-		elif state == "previous":
-			service = "media_previous_track"
-		elif state == "volume":
-			service = "volume_set"
-	elif domain == 'button':
-		if state == 'pressed':
-			service = 'press'
-	elif domain == 'number':
-		service = 'set_value'
-		attributes["value"] = state
-	elif domain == 'timer':
-		if state == 'start':
-			service = 'start'
-		elif state == 'cancel':
-			service = 'cancel'
-		elif state == 'pause':
-			service = 'pause'
+	if VALUE_SERVICES.has(domain):
+		service = VALUE_SERVICES[domain][0]
+		service_data[VALUE_SERVICES[domain][1]] = state
+	elif SERVICES.has(domain):
+		service = SERVICES[domain].get(str(state), "")
 
-	if service == null:
+	if service == "":
+		push_warning("No Home Assistant service for %s -> %s" % [entity, state])
 		return null
 
 	return await connection.send_request_packet({
 		"type": "call_service",
 		"domain": domain,
 		"service": service,
-		"service_data": attributes,
+		"service_data": service_data,
 		"target": {
 			"entity_id": entity
 		}
