@@ -7,7 +7,7 @@ signal on_button_down()
 signal on_button_up()
 signal on_toggled(active: bool)
 
-const IconFont = preload ("res://assets/icons/icons.tres")
+const IconFont = preload("res://assets/icons/icons.tres")
 const ECHO_WAIT_INITIAL = 0.5
 const ECHO_WAIT_REPEAT = 0.1
 
@@ -33,7 +33,7 @@ var _touch_pressed := false
 @export var font_size: int = 10:
 	set(value):
 		font_size = value
-		if !is_inside_tree()||icon: return
+		if !is_inside_tree() || icon: return
 		label_node.font_size = font_size
 
 @export var label: String = "":
@@ -49,7 +49,7 @@ var _touch_pressed := false
 		
 		if icon:
 			label_node.font = IconFont
-			label_node.font_size = size.x / 0.05 * 36
+			label_node.font_size = size.x / 0.05 * 30
 			label_node.width = 1000
 			label_node.autowrap_mode = TextServer.AUTOWRAP_OFF
 		else:
@@ -97,7 +97,7 @@ func _ready():
 
 		echo_timer.timeout.connect(func():
 			echo_timer.stop()
-			echo_timer.wait_time=ECHO_WAIT_REPEAT
+			echo_timer.wait_time = ECHO_WAIT_REPEAT
 			echo_timer.start()
 			on_button_down.emit()
 		)
@@ -164,10 +164,8 @@ func _on_touch_enter(event: EventTouch):
 		event.bubbling = false
 		return
 
-	# The finger area extends behind the button so a deep push keeps it held.
-	# Only accept touches that start at the front half, so fingers behind
-	# the button (e.g. behind a panel or inside the palm) don't press it.
-	if _finger_z(event) < size.z / 2:
+	var finger = event.fingers[0]
+	if to_local(finger.area.global_position).z >= to_local(finger.previous_position).z:
 		return
 
 	_touch_pressed = true

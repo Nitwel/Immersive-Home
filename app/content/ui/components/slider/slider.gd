@@ -148,10 +148,8 @@ func _update():
 
 	mesh.position = Vector3(0, 0, size.z)
 	mesh.mesh.size = Vector2(size.x, size.y)
-	mesh.material_override.set_shader_parameter("size", Vector2(size.x, size.y) * 10.0)
 
 	slider_knob.position.z = size.z + 0.002
 	slider_knob.mesh.size = Vector2(size.y * 0.75, size.y * 0.75)
-	slider_knob.material_override.set_shader_parameter("size", Vector2(size.y * 7.5, size.y * 7.5))
 
 	label.position = Vector3(size.x / 2 + 0.005, 0, size.z)
