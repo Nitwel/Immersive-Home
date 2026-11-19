@@ -193,12 +193,14 @@ func _update_placeholder():
 	placeholder_label.visible = show_placeholder
 	label.visible = !show_placeholder
 
+const TEXT_PADDING = 0.002
+
 func _update():
-	text_handler.width = size.x
+	text_handler.width = size.x - TEXT_PADDING * 2
 	panel.size = Vector2(size.x, size.y)
 	panel.position.z = size.z / 2
 	collision.shape.size = size
-	label.position = Vector3( - size.x / 2 + 0.002, 0, size.z / 2)
+	label.position = Vector3( - size.x / 2 + TEXT_PADDING, 0, size.z / 2)
 	label.text = text_handler.get_display_text()
 	placeholder_label.position = label.position
 	body.position = Vector3(0, 0, size.z / 2)

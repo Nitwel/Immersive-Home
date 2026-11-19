@@ -3,7 +3,6 @@ extends Node3D
 
 @onready var label: Label3D = $AnimationNode/Text
 @onready var icon_label: Label3D = $AnimationNode/Icon
-@onready var mesh: MeshInstance3D = $AnimationNode/MeshInstance3D
 @onready var collision: CollisionShape3D = $AnimationNode/CollisionShape3D
 @onready var animation_player: AnimationPlayer = $AnimationNode/AnimationPlayer
 @onready var button = $AnimationNode/Button

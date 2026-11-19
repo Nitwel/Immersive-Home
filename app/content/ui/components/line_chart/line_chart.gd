@@ -69,6 +69,9 @@ func generate_mesh(points: Array):
 	var sf = SurfaceTool.new()
 
 	sf.begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
+	# The line is a flat strip facing the viewer. generate_normals() only works
+	# on PRIMITIVE_TRIANGLES, so set the normal directly.
+	sf.set_normal(Vector3.BACK)
 
 	for i in range(points.size()):
 		var prev_point = points[i - 1] if i > 0 else (points[i] + Vector2( - 1, 0))
@@ -89,7 +92,6 @@ func generate_mesh(points: Array):
 		sf.add_vertex(Vector3(p0.x, p0.y, DEPTH))
 
 	sf.index()
-	sf.generate_normals()
 
 	var _mesh = sf.commit()
 

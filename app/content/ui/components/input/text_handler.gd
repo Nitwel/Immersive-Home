@@ -1,7 +1,5 @@
 extends RefCounted
 
-const FontTools = preload ("res://lib/utils/font_tools.gd")
-
 var label: Label3D
 
 var text: String = ""
@@ -67,11 +65,16 @@ func update_caret_position(click_pos_x: float):
 	caret_position = _calculate_caret_position(click_pos_x)
 	focus_caret()
 
+## Returns the gap closest to [param click_pos_x], so clicking the right half
+## of a character puts the caret after it rather than before it.
+## Gaps before [member char_offset] have negative positions, so a click/drag
+## past the left edge selects a hidden character and focus_caret() scrolls to it.
 func _calculate_caret_position(click_pos_x: float):
 	for i in range(1, gap_offsets.size()):
-		var left = gap_offsets[i] - gap_offsets[char_offset]
-		
-		if click_pos_x < left:
+		var left = gap_offsets[i - 1] - gap_offsets[char_offset]
+		var right = gap_offsets[i] - gap_offsets[char_offset]
+
+		if click_pos_x < (left + right) / 2.0:
 			return i - 1
 
 	return gap_offsets.size() - 1
@@ -79,10 +82,18 @@ func _calculate_caret_position(click_pos_x: float):
 func _calculate_text_gaps():
 	var offsets = [0.0]
 
+	if label.font == null:
+		offsets.resize(text.length() + 1)
+		offsets.fill(0.0)
+		return offsets
+
 	for i in range(text.length()):
 		var chars = text.substr(0, i + 1) # Can't use single chars because of kerning.
-		var size = FontTools.get_label_size(label, chars)
-		
+		# Measure as one unbounded line. Passing label.width (as FontTools does)
+		# caps the result at the label width, so long text would get zero-width
+		# gaps and overflow the input.
+		var size = label.font.get_string_size(chars, HORIZONTAL_ALIGNMENT_LEFT, -1, label.font_size) * label.pixel_size
+
 		offsets.append(size.x)
 
 	return offsets

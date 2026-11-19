@@ -1,0 +1,449 @@
+extends Node3D
+## Desktop gallery for the 3D UI components.
+##
+## Lays every component out on a wall in front of a regular Camera3D and drives
+## the real EventSystem pointer pipeline from the mouse, so components react
+## exactly like they do with an XR controller ray.
+##
+## Controls:
+##   Left mouse        - trigger (press / click / drag sliders)
+##   Right mouse       - grip (grab)
+##   Middle drag       - orbit, Shift + middle drag - pan
+##   Mouse wheel       - zoom
+##   1..9              - focus a component cell, 0 / F - show everything
+##   F1                - while an input is focused: type with the PC keyboard
+##   P                 - save a screenshot to user://ui_gallery/
+##
+## Command line (after `--`):
+##   --screenshot=<path.png>   render, save the image and quit
+##   --focus=<cell name>       frame a single cell (e.g. --focus=slider)
+##   --size=<w>x<h>            window size, default 1600x1000
+##   --delay=<seconds>         wait before the screenshot, default 1.0
+##   --click=<x>,<y>[;<x>,<y>] left-click these window pixels before the
+##                             screenshot (e.g. to capture an open Select)
+##   --type=<text>             after the clicks, type this text with virtual
+##                             keyboard events (click an Input first to focus it)
+
+const Pointer = preload ("res://lib/utils/pointer/pointer.gd")
+const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
+
+const ButtonScene = preload ("res://content/ui/components/button/button.tscn")
+const InputScene = preload ("res://content/ui/components/input/input.tscn")
+const SliderScene = preload ("res://content/ui/components/slider/slider.tscn")
+const SelectScene = preload ("res://content/ui/components/select/select.tscn")
+const TabsScene = preload ("res://content/ui/components/tabs/tabs.tscn")
+const PaginationScene = preload ("res://content/ui/components/pagination/pagination.tscn")
+const ColorWheelScene = preload ("res://content/ui/components/color_wheel/color_wheel.tscn")
+const LineChartScene = preload ("res://content/ui/components/line_chart/line_chart.tscn")
+const NotificationScene = preload ("res://content/ui/components/notification/notification.tscn")
+const LabelContainerScene = preload ("res://content/ui/components/label_container/label_container.tscn")
+const PanelScene = preload ("res://content/ui/components/panel/panel.tscn")
+
+const CELL_SIZE = Vector2(0.6, 0.4)
+const COLUMNS = 3
+const CAMERA_FOV = 40.0
+
+@onready var camera: Camera3D = $Camera3D
+@onready var ray: RayCast3D = $Camera3D/RayCast3D
+@onready var cells_root: Node3D = $Cells
+@onready var status_label: Label = $HUD/Status
+
+var pointer: Pointer
+var cells: Array[Node3D] = []
+
+# Orbit camera state
+var orbit_target := Vector3.ZERO
+var orbit_yaw := 0.0
+var orbit_pitch := 0.0
+var orbit_distance := 1.5
+
+var _args := {}
+
+func _ready():
+	_args = _parse_args()
+
+	# The project renders with a transparent background for passthrough; the
+	# gallery wants an opaque backdrop so screenshots aren't see-through.
+	get_viewport().transparent_bg = false
+
+	var parts = String(_args.get("size", "1600x1000")).split("x")
+	get_window().size = Vector2i(int(parts[0]), int(parts[1]))
+	get_window().move_to_center()
+	await get_tree().process_frame # let the viewport pick up the new size before framing
+
+	camera.fov = CAMERA_FOV
+	_setup_pointer()
+	_build_gallery()
+
+	if _args.has("focus"):
+		_focus_cell_by_name(_args["focus"])
+	else:
+		_focus_all()
+
+	if _args.has("screenshot"):
+		_take_screenshot_and_quit(_args["screenshot"], float(_args.get("delay", "1.0")))
+
+func _parse_args() -> Dictionary:
+	var result := {}
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--"):
+			var kv = arg.substr(2).split("=", true, 1)
+			result[kv[0]] = kv[1] if kv.size() > 1 else "true"
+	return result
+
+# ---------------------------------------------------------------------------
+# Pointer: mouse -> RayCast3D -> Pointer -> EventSystem
+# ---------------------------------------------------------------------------
+
+func _setup_pointer():
+	var initiator = Initiator.new()
+	initiator.type = Initiator.Type.CONTROLLER_RIGHT
+	initiator.node = camera
+
+	pointer = Pointer.new(initiator, ray)
+	ray.add_child(pointer)
+
+func _physics_process(_delta):
+	_aim_ray_at_mouse()
+
+var _scripted_mouse = null # Vector2 while a --click is being replayed
+
+func _aim_ray_at_mouse():
+	var mouse = _scripted_mouse if _scripted_mouse != null else get_viewport().get_mouse_position()
+	var origin = camera.project_ray_origin(mouse)
+	var dir = camera.project_ray_normal(mouse)
+
+	# The ray's -Z must point along the mouse ray; components read
+	# event.ray.global_transform.basis.z to compute drag positions.
+	ray.global_transform = Transform3D(Basis.looking_at(dir, Vector3.UP), origin)
+	ray.target_position = Vector3(0, 0, -20)
+	ray.force_raycast_update()
+
+func _unhandled_input(event):
+	if event is InputEventMouseButton:
+		match event.button_index:
+			MOUSE_BUTTON_LEFT:
+				_aim_ray_at_mouse()
+				if event.pressed: pointer.pressed(Initiator.EventType.TRIGGER)
+				else: pointer.released(Initiator.EventType.TRIGGER)
+			MOUSE_BUTTON_RIGHT:
+				_aim_ray_at_mouse()
+				if event.pressed: pointer.pressed(Initiator.EventType.GRIP)
+				else: pointer.released(Initiator.EventType.GRIP)
+			MOUSE_BUTTON_WHEEL_UP:
+				orbit_distance = max(0.1, orbit_distance * 0.9)
+				_update_camera()
+			MOUSE_BUTTON_WHEEL_DOWN:
+				orbit_distance = min(10.0, orbit_distance * 1.1)
+				_update_camera()
+
+	elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_MIDDLE:
+		if event.shift_pressed:
+			var pan = orbit_distance * 0.0015
+			orbit_target += camera.global_transform.basis * Vector3(-event.relative.x * pan, event.relative.y * pan, 0)
+		else:
+			orbit_yaw -= event.relative.x * 0.005
+			orbit_pitch = clamp(orbit_pitch - event.relative.y * 0.005, -1.4, 1.4)
+		_update_camera()
+
+	elif event is InputEventKey and event.pressed and not event.echo:
+		# Don't steal keys while an input field is focused (F1 typing mode).
+		if EventSystem.get_focused() is Input3D:
+			return
+
+		match event.keycode:
+			KEY_P:
+				_save_screenshot("user://ui_gallery/%s.png" % Time.get_datetime_string_from_system().replace(":", "-"))
+			KEY_F, KEY_0:
+				_focus_all()
+			_:
+				var index = event.keycode - KEY_1
+				if index >= 0 and index < cells.size():
+					_focus_cell(cells[index])
+
+func _update_camera():
+	var offset = Basis.from_euler(Vector3(orbit_pitch, orbit_yaw, 0)) * Vector3(0, 0, orbit_distance)
+	camera.global_transform = Transform3D(Basis.IDENTITY, orbit_target + offset).looking_at(orbit_target, Vector3.UP)
+
+func _frame(center: Vector3, extent: Vector2):
+	var aspect = float(get_viewport().get_visible_rect().size.x) / get_viewport().get_visible_rect().size.y
+	var half_v = deg_to_rad(CAMERA_FOV) / 2.0
+	var dist_v = (extent.y / 2.0) / tan(half_v)
+	var dist_h = (extent.x / 2.0) / (tan(half_v) * aspect)
+
+	orbit_target = center
+	orbit_yaw = 0
+	orbit_pitch = 0
+	orbit_distance = max(dist_v, dist_h) * 1.1
+	_update_camera()
+
+func _focus_all():
+	var rows = ceil(cells.size() / float(COLUMNS))
+	var extent = Vector2(COLUMNS * CELL_SIZE.x, rows * CELL_SIZE.y)
+	_frame(Vector3(extent.x / 2.0, -extent.y / 2.0, 0), extent)
+
+func _focus_cell(cell: Node3D):
+	_frame(cell.position + Vector3(CELL_SIZE.x / 2.0, -CELL_SIZE.y / 2.0, 0), CELL_SIZE)
+
+func _focus_cell_by_name(cell_name: String):
+	for cell in cells:
+		if cell.name.to_lower() == cell_name.to_lower():
+			_focus_cell(cell)
+			return
+	push_warning("ui_gallery: no cell named '%s'. Available: %s" % [cell_name, ", ".join(cells.map(func(c): return c.name))])
+	_focus_all()
+
+# ---------------------------------------------------------------------------
+# Screenshots
+# ---------------------------------------------------------------------------
+
+func _save_screenshot(path: String):
+	DirAccess.make_dir_recursive_absolute(path.get_base_dir())
+	var image = get_viewport().get_texture().get_image()
+	image.convert(Image.FORMAT_RGB8)
+	var err = image.save_png(path)
+	var abs_path = ProjectSettings.globalize_path(path)
+	if err == OK:
+		print("ui_gallery: saved screenshot to ", abs_path)
+		status_label.text = "Saved " + abs_path
+	else:
+		push_error("ui_gallery: failed to save screenshot to %s (%s)" % [abs_path, error_string(err)])
+
+func _take_screenshot_and_quit(path: String, delay: float):
+	if _args.has("click"):
+		await get_tree().create_timer(0.3).timeout
+		for pair in String(_args["click"]).split(";"):
+			var xy = pair.split(",")
+			await _scripted_click(Vector2(float(xy[0]), float(xy[1])))
+		_scripted_mouse = null
+
+	if _args.has("type"):
+		await _scripted_type(_args["type"])
+
+	# Let tweens/animations (button press depth, notification fade-in) settle.
+	await get_tree().create_timer(delay).timeout
+	await RenderingServer.frame_post_draw
+	if not path.is_absolute_path() and not path.begins_with("res://") and not path.begins_with("user://"):
+		path = OS.get_environment("PWD").path_join(path) if OS.has_environment("PWD") else path
+	_save_screenshot(path)
+	get_tree().quit()
+
+## Simulates hover + trigger press/release at a window pixel position.
+func _scripted_click(pos: Vector2):
+	_scripted_mouse = pos
+	for i in 3: await get_tree().physics_frame # hover (ray_enter)
+	_aim_ray_at_mouse()
+	pointer.pressed(Initiator.EventType.TRIGGER)
+	await get_tree().physics_frame
+	pointer.released(Initiator.EventType.TRIGGER)
+	for i in 3: await get_tree().physics_frame
+
+## Types [param text] the way the virtual keyboard does (EventKey via EventSystem).
+func _scripted_type(text: String):
+	for c in text:
+		var event = EventKey.new()
+		event.key = KEY_SPACE if c == " " else OS.find_keycode_from_string(c.to_upper())
+		event.shift_pressed = c != c.to_lower()
+		EventSystem.emit("key_down", event)
+		await get_tree().process_frame
+		event = EventKey.new()
+		event.key = KEY_SPACE if c == " " else OS.find_keycode_from_string(c.to_upper())
+		EventSystem.emit("key_up", event)
+		await get_tree().process_frame
+
+# ---------------------------------------------------------------------------
+# Gallery content. Add a new component by adding another _add_cell() call.
+# ---------------------------------------------------------------------------
+
+func _build_gallery():
+	_add_cell("Button", func(root: Node3D):
+		var row = _row(root, 0.08)
+		var plain = _button("Button", Vector3(0.12, 0.04, 0.01))
+		var toggle = _button("Toggle", Vector3(0.12, 0.04, 0.01))
+		toggle.toggleable = true
+		toggle.initial_active = true
+		var disabled = _button("Disabled", Vector3(0.12, 0.04, 0.01))
+		disabled.disabled = true
+		for b in [plain, toggle, disabled]: row.add_child(b)
+		_layout_row(row, 0.02)
+
+		var icons = _row(root, -0.02)
+		for icon_name in ["home", "settings", "lightbulb", "close"]:
+			var b = _button(icon_name, Vector3(0.05, 0.05, 0.01))
+			b.icon = true
+			icons.add_child(b)
+		_layout_row(icons, 0.02)
+	)
+
+	_add_cell("Input", func(root: Node3D):
+		var a = InputScene.instantiate()
+		a.text = ""
+		a.placeholder = "Placeholder"
+		a.size = Vector3(0.3, 0.04, 0.01)
+		a.position.y = 0.05
+		root.add_child(a)
+
+		var b = InputScene.instantiate()
+		b.text = "Some text value"
+		b.size = Vector3(0.3, 0.04, 0.01)
+		root.add_child(b)
+
+		var c = InputScene.instantiate()
+		c.text = "Disabled"
+		c.disabled = true
+		c.size = Vector3(0.3, 0.04, 0.01)
+		c.position.y = -0.05
+		root.add_child(c)
+	)
+
+	_add_cell("Slider", func(root: Node3D):
+		var a = SliderScene.instantiate()
+		a.size = Vector3(0.3, 0.02, 0.01)
+		a.value = 0.3
+		a.position.y = 0.04
+		root.add_child(a)
+
+		var b = SliderScene.instantiate()
+		b.size = Vector3(0.3, 0.02, 0.01)
+		b.min = 0
+		b.max = 100
+		b.step = 1
+		b.value = 70
+		b.show_label = true
+		b.label_unit = "%"
+		b.position.y = -0.04
+		root.add_child(b)
+	)
+
+	_add_cell("Select", func(root: Node3D):
+		var s = SelectScene.instantiate()
+		s.options = {"living": "Living room", "kitchen": "Kitchen", "bedroom": "Bedroom"}
+		s.selected = "living"
+		s.position.y = 0.06
+		root.add_child(s)
+	)
+
+	_add_cell("Tabs", func(root: Node3D):
+		var tabs = TabsScene.instantiate()
+		tabs.size = Vector3(0.36, 0.04, 0.01)
+		tabs.gap = 0.01
+		for tab_name in ["Rooms", "Devices", "Settings"]:
+			var b = _button(tab_name, Vector3(0.11, 0.04, 0.01))
+			tabs.add_child(b)
+		tabs.position.x = -0.18
+		root.add_child(tabs)
+	)
+
+	_add_cell("Pagination", func(root: Node3D):
+		var p = PaginationScene.instantiate()
+		p.size = Vector3(0.4, 0.05, 0.01)
+		p.pages = 12
+		p.visible_pages = 5
+		p.page = 3
+		p.position.x = -0.2
+		root.add_child(p)
+	)
+
+	_add_cell("ColorWheel", func(root: Node3D):
+		var c = ColorWheelScene.instantiate()
+		c.color = Color(1.0, 0.6, 0.2)
+		root.add_child(c)
+	)
+
+	_add_cell("LineChart", func(root: Node3D):
+		var chart = LineChartScene.instantiate()
+		chart.position = Vector3(-0.25, -0.15, 0)
+		root.add_child(chart)
+	)
+
+	_add_cell("Notification", func(root: Node3D):
+		var y = 0.08
+		for t in [EventNotify.Type.INFO, EventNotify.Type.WARNING, EventNotify.Type.DANGER, EventNotify.Type.SUCCESS]:
+			var n = NotificationScene.instantiate()
+			n.type = t
+			n.text = EventNotify.Type.keys()[t].capitalize() + " notification"
+			n.position.y = y
+			root.add_child(n)
+			n.timer.stop() # keep it on screen instead of auto-dismissing
+			y -= 0.06
+	)
+
+	_add_cell("Panel", func(root: Node3D):
+		var a = PanelScene.instantiate()
+		a.size = Vector2(0.15, 0.15)
+		a.position.x = -0.1
+		root.add_child(a)
+
+		var b = PanelScene.instantiate()
+		b.size = Vector2(0.15, 0.15)
+		b.active = true
+		b.position.x = 0.1
+		root.add_child(b)
+	)
+
+	_add_cell("LabelContainer", func(root: Node3D):
+		var l = LabelContainerScene.instantiate()
+		l.text = "Label container"
+		l.size = Vector3(0.3, 0.05, 0.01)
+		root.add_child(l)
+	)
+
+func _add_cell(cell_name: String, build: Callable):
+	var index = cells.size()
+	var cell = Node3D.new()
+	cell.name = cell_name
+	cell.position = Vector3((index % COLUMNS) * CELL_SIZE.x, -floori(index / float(COLUMNS)) * CELL_SIZE.y, 0)
+	cells_root.add_child(cell)
+	cells.append(cell)
+
+	# Faint cell frame + caption
+	var frame = MeshInstance3D.new()
+	var quad = QuadMesh.new()
+	quad.size = CELL_SIZE - Vector2(0.02, 0.02)
+	frame.mesh = quad
+	var mat = StandardMaterial3D.new()
+	mat.albedo_color = Color(1, 1, 1, 0.04)
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	frame.material_override = mat
+	frame.position = Vector3(CELL_SIZE.x / 2, -CELL_SIZE.y / 2, -0.005)
+	cell.add_child(frame)
+
+	var caption = Label3D.new()
+	caption.text = "%d  %s" % [index + 1, cell_name]
+	caption.font_size = 24
+	caption.pixel_size = 0.001
+	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	caption.modulate = Color(1, 1, 1, 0.6)
+	caption.position = Vector3(0.02, -0.025, 0)
+	caption.offset = Vector2(0, 0)
+	cell.add_child(caption)
+
+	# Components are centred on the cell
+	var content = Node3D.new()
+	content.name = "Content"
+	content.position = Vector3(CELL_SIZE.x / 2, -CELL_SIZE.y / 2 - 0.01, 0)
+	cell.add_child(content)
+	build.call(content)
+
+func _button(text: String, size: Vector3) -> Button3D:
+	var b = ButtonScene.instantiate()
+	b.label = text
+	b.size = size
+	return b
+
+func _row(root: Node3D, y: float) -> Node3D:
+	var row = Node3D.new()
+	row.position.y = y
+	root.add_child(row)
+	return row
+
+## Centres the Container3D children of [param row] horizontally.
+func _layout_row(row: Node3D, gap: float):
+	var total = 0.0
+	for c in row.get_children(): total += c.size.x
+	total += gap * (row.get_child_count() - 1)
+	var x = -total / 2.0
+	for c in row.get_children():
+		c.position.x = x + c.size.x / 2.0
+		x += c.size.x + gap
