@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://db7vmfki162rg"]
+
+[ext_resource type="Script" uid="uid://be635tue2k0db" path="res://test/content/entities/entity_gallery.gd" id="1_gallery"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
+sky_top_color = Color(0.12, 0.13, 0.16, 1)
+sky_horizon_color = Color(0.18, 0.19, 0.22, 1)
+ground_bottom_color = Color(0.08, 0.08, 0.1, 1)
+ground_horizon_color = Color(0.18, 0.19, 0.22, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMat")
+
+[sub_resource type="Environment" id="Env"]
+background_mode = 1
+background_color = Color(0.11, 0.115, 0.135, 1)
+sky = SubResource("Sky")
+ambient_light_source = 3
+reflected_light_source = 2
+
+[node name="EntityGallery" type="Node3D" unique_id=944228477]
+script = ExtResource("1_gallery")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1588644582]
+environment = SubResource("Env")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=899078933]
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 0, 2, 2)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1594725914]
+current = true
+near = 0.01
+
+[node name="RayCast3D" type="RayCast3D" parent="Camera3D" unique_id=299381020]
+target_position = Vector3(0, 0, -20)
+collision_mask = 19
+
+[node name="Cells" type="Node3D" parent="." unique_id=2035771830]
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1418628454]
+
+[node name="Help" type="Label" parent="HUD" unique_id=337500554]
+modulate = Color(1, 1, 1, 0.6)
+offset_left = 12.0
+offset_top = 8.0
+text = "Mock Home Assistant · LMB trigger · RMB grip · MMB orbit · Shift+MMB pan · wheel zoom · 1-9 focus · F all · U random state updates · P screenshot"
+
+[node name="Status" type="Label" parent="HUD" unique_id=1730512590]
+modulate = Color(1, 1, 1, 0.6)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -32.0
+grow_vertical = 0
