@@ -35,6 +35,8 @@ signal on_ray_leave(event: EventPointer)
 signal on_key_down(event: EventKey)
 ## Emitted when a key on the virtual keyboard is released
 signal on_key_up(event: EventKey)
+## Emitted when a QR code scanned with the virtual keyboard wasn't handled by the focused node or its parents
+signal on_qr_scan(event: EventQr)
 
 ## Emitted when a button on the controller is pressed
 signal on_action_down(event: EventAction)
@@ -100,6 +102,13 @@ func emit_action(name: String, value, initiator: Initiator):
 ## Returns true when the node is focused
 func is_focused(node: Node):
 	return _active_node == node
+
+## Returns the focused node, or null if nothing is focused
+func get_focused() -> Node:
+	if is_instance_valid(_active_node) == false:
+		return null
+
+	return _active_node
 
 func _handle_focus(target: Variant, event: EventBubble):
 	if target != null:

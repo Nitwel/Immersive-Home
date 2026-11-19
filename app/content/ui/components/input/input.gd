@@ -69,6 +69,16 @@ func _ready():
 		on_text_changed.emit(text)
 	)
 
+## Inserts [param value] at the caret, as if it had been typed.
+func insert_text(value: String):
+	if disabled:
+		return
+
+	text = text.substr(0, text_handler.caret_position) + value + text.substr(text_handler.caret_position, text.length())
+	caret.position.x = text_handler.get_caret_position()
+	label.text = text_handler.get_display_text()
+	on_text_changed.emit(text)
+
 func _input(event):
 	if event is InputEventKey&&EventSystem.is_focused(self)&&event.pressed:
 		if event.keycode == KEY_F1:
