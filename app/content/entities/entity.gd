@@ -25,6 +25,13 @@ func _ready():
 			App.house.save_all_entities()
 		)
 
+func _notification(what):
+	# Entities register state watchers with lambdas and never keep the unwatch handle.
+	# Drop them when the entity is freed (e.g. when the house is reloaded), otherwise
+	# the next state update calls into a freed node.
+	if what == NOTIFICATION_PREDELETE&&is_instance_valid(HomeApi):
+		HomeApi.unwatch_owner(self)
+
 func set_options(_options):
 	return
 

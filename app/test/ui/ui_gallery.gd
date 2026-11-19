@@ -24,6 +24,9 @@ extends Node3D
 ##   --type=<text>             after the clicks, type this text with virtual
 ##                             keyboard events (click an Input first to focus it);
 ##                             "{backspace}" sends a backspace
+##   --grab=<x>,<y>><x>,<y>    after the clicks, press grip at the first pixel and
+##                             drag to the second, still holding it for the
+##                             screenshot (add --release to let go first)
 
 const Pointer = preload ("res://lib/utils/pointer/pointer.gd")
 const Initiator = preload ("res://lib/utils/pointer/initiator.gd")
@@ -222,6 +225,10 @@ func _take_screenshot_and_quit(path: String, delay: float):
 	if _args.has("type"):
 		await _scripted_type(_args["type"])
 
+	if _args.has("grab"):
+		var points = String(_args["grab"]).split(">")
+		await _scripted_grab(_pixel(points[0]), _pixel(points[1]), _args.has("release"))
+
 	# Let tweens/animations (button press depth, notification fade-in) settle.
 	await get_tree().create_timer(delay).timeout
 	await RenderingServer.frame_post_draw
@@ -239,6 +246,24 @@ func _scripted_click(pos: Vector2):
 	await get_tree().physics_frame
 	pointer.released(Initiator.EventType.TRIGGER)
 	for i in 3: await get_tree().physics_frame
+
+func _pixel(text: String) -> Vector2:
+	var xy = text.split(",")
+	return Vector2(float(xy[0]), float(xy[1]))
+
+## Presses grip at [param from] and drags the pointer to [param to].
+## The mouse stays scripted afterwards so the ray keeps pointing at [param to].
+func _scripted_grab(from: Vector2, to: Vector2, release: bool):
+	_scripted_mouse = from
+	for i in 3: await get_tree().physics_frame
+	_aim_ray_at_mouse()
+	pointer.pressed(Initiator.EventType.GRIP)
+	for i in 20:
+		_scripted_mouse = from.lerp(to, (i + 1) / 20.0)
+		await get_tree().physics_frame
+	if release:
+		pointer.released(Initiator.EventType.GRIP)
+		for i in 3: await get_tree().physics_frame
 
 ## Types [param text] the way the virtual keyboard does (EventKey via EventSystem).
 ## "{backspace}" in the text sends a backspace key.

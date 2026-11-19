@@ -8,16 +8,18 @@
     {%- for entity in entities %}
       {%- set ns.entities = ns.entities +  [ {"id": entity, "name": state_attr(entity, "friendly_name")} ] %}
     {%- endfor %}
-    {%- set ns.devices = ns.devices +  [{"id": device, "name": device_attr(device, "name"), "entities": ns.entities } ] %}
+    {%- set ns.devices = ns.devices +  [{"id": device, "name": device_attr(device, "name_by_user") or device_attr(device, "name"), "area": area_name(device), "manufacturer": device_attr(device, "manufacturer"), "model": device_attr(device, "model"), "entities": ns.entities } ] %}
   {%- endif %}
 {%- endfor %}
 
 {%- set ns_group = namespace(entities = []) %}
 {%- for state in states %}
   {%- if device_id(state.entity_id) == None %}
-    {%- set ns_group.entities = ns_group.entities + [{"id": state.entity_id, "name": state.entity_id}] %}
+    {%- set ns_group.entities = ns_group.entities + [{"id": state.entity_id, "name": state_attr(state.entity_id, "friendly_name") or state.entity_id, "domain": state.domain}] %}
   {%- endif %}
 {%- endfor %}
-{%- set ns.devices = ns.devices +  [ {"id": "other.other", "name": "Other", "entities": ns_group.entities } ] %}
+{%- for group in ns_group.entities | groupby('domain') %}
+  {%- set ns.devices = ns.devices +  [ {"id": "other." ~ group.grouper, "name": group.grouper | replace('_', ' ') | title, "area": None, "manufacturer": None, "model": None, "entities": group.list } ] %}
+{%- endfor %}
 
 {{ ns.devices }}

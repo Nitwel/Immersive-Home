@@ -14,6 +14,13 @@ const TimerEntity = preload ("res://content/entities/timer/timer.tscn")
 const WeatherEntity = preload ("res://content/entities/weather/weather.tscn")
 const BinarySensorEntity = preload ("res://content/entities/binary_sensor/binary_sensor.tscn")
 
+## Home Assistant domains that create_entity can turn into an entity widget.
+const SUPPORTED_DOMAINS = ["switch", "light", "sensor", "binary_sensor", "media_player", "camera", "button", "number", "timer", "weather"]
+
+## Returns true if entities of this domain (or an entity id like "light.kitchen") can be placed.
+static func is_supported(domain_or_id: String) -> bool:
+	return SUPPORTED_DOMAINS.has(domain_or_id.split(".")[0])
+
 static func create_entity(id: String, type=null):
 	var entity = null
 
