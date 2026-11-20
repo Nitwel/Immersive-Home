@@ -1,4 +1,20 @@
-# Build the Android APK on push to the master branch
+# Builds and publishes a release when a version tag is pushed.
+#
+#   v0.7.0-alpha.1  -> GitHub pre-release, Meta Store "alpha" channel
+#   v0.7.0-beta.1   -> GitHub pre-release, Meta Store "beta" channel
+#   v0.7.0-rc.1     -> GitHub pre-release, Meta Store "rc" channel
+#   v0.7.0          -> GitHub release (Latest), Meta Store production ("store" channel),
+#                      only after the upload is approved in the "meta-live" environment
+#
+# The Android version code is calculated from the tag, so it always increases:
+#   major * 1000000 + minor * 10000 + patch * 100 + (alpha: n, beta: 30 + n, rc: 60 + n, final: 99)
+#   e.g. 0.7.0-alpha.4 -> 70004, 0.7.0-beta.1 -> 70031, 0.7.0-rc.2 -> 70062, 0.7.0 -> 70099
+#
+# Meta Store uploads need these repository settings:
+#   secrets.META_APP_ID       App ID from the Meta Horizon developer dashboard
+#   secrets.META_APP_SECRET   App secret (dashboard > your app > Development > API)
+#   vars.META_AGE_GROUP       TEENS_AND_ADULTS, MIXED_AGES or CHILDREN
+# Without the secrets the upload is skipped, the GitHub release is still created.
 name: Build Release APK
 on:
   push:
@@ -14,8 +30,65 @@ env:
   GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: ${{ secrets.RELEASE_PASSWORD }}
 
 jobs:
+  # Reads the release type and version code from the tag, fails for tags in another format
+  version:
+    runs-on: ubuntu-latest
+    name: Read Version
+    outputs:
+      code: ${{ steps.version.outputs.code }}
+      channel: ${{ steps.version.outputs.channel }}
+      environment: ${{ steps.version.outputs.environment }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+    steps:
+      - id: version
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          regex='^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-(alpha|beta|rc)\.([1-9][0-9]*))?$'
+
+          if [[ ! "$tag" =~ $regex ]]; then
+            echo "::error::Tag $tag must look like v1.2.3, v1.2.3-alpha.1, v1.2.3-beta.1 or v1.2.3-rc.1"
+            exit 1
+          fi
+
+          major=${BASH_REMATCH[1]} minor=${BASH_REMATCH[2]} patch=${BASH_REMATCH[3]}
+          stage=${BASH_REMATCH[5]} number=${BASH_REMATCH[6]}
+
+          if (( minor > 99 || patch > 99 )); then
+            echo "::error::Minor and patch versions above 99 don't fit into the version code"
+            exit 1
+          fi
+
+          case "$stage" in
+            alpha) offset=0 ;;
+            beta)  offset=30 ;;
+            rc)    offset=60 ;;
+            "")    offset=99 ;;
+          esac
+
+          if [[ -n "$stage" ]] && (( number < 1 || number > 29 )); then
+            echo "::error::The $stage number must be between 1 and 29"
+            exit 1
+          fi
+
+          code=$(( 10#$major * 1000000 + 10#$minor * 10000 + 10#$patch * 100 + offset + 10#${number:-0} ))
+
+          if [[ -n "$stage" ]]; then
+            channel="$stage" environment="meta-prerelease" prerelease=true
+          else
+            channel="store" environment="meta-live" prerelease=false
+          fi
+
+          echo "Version code $code, Meta channel $channel, pre-release $prerelease"
+          {
+            echo "code=$code"
+            echo "channel=$channel"
+            echo "environment=$environment"
+            echo "prerelease=$prerelease"
+          } >> "$GITHUB_OUTPUT"
+
   # Packages the Home Assistant integration for HACS (see hacs.json, zip_release)
   package_integration:
+    needs: version
     runs-on: ubuntu-latest
     name: Package Home Assistant Integration
     steps:
@@ -43,7 +116,7 @@ jobs:
 
   # job id, can be anything
   export_game:
-    needs: package_integration
+    needs: [version, package_integration]
     # Always use ubuntu-latest for this action
     runs-on: ubuntu-latest
     # Add permission for release creation. Can be made narrower according to your needs
@@ -92,8 +165,9 @@ jobs:
 
           sed -i 's/singleInstancePerTask/singleTask/g' ./app/android/build/src/main/AndroidManifest.xml
 
-          # Godot passes the version name of the export preset to gradle, use the tag
+          # Godot passes the version of the export preset to gradle, use the tag and the calculated code
           sed -i "s/^version\/name=.*/version\/name=\"${{ github.ref_name }}\"/" ./app/export_presets.cfg
+          sed -i "s/^version\/code=.*/version\/code=${{ needs.version.outputs.code }}/" ./app/export_presets.cfg
           grep -E "^(name|version/code|version/name)=" ./app/export_presets.cfg
 
       - name: export game
@@ -107,6 +181,13 @@ jobs:
           relative_project_path: ./app
           archive_output: true
           filter_exports: "AndroidProduction"
+
+      - name: keep APK for the Meta Store upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: ${{ steps.export.outputs.archive_directory }}/*
+          if-no-files-found: error
 
       - name: download integration
         uses: actions/download-artifact@v4
@@ -123,8 +204,68 @@ jobs:
           allowUpdates: true
           omitBodyDuringUpdate: true
           omitNameDuringUpdate: true
-          # Tags like v0.7.0-alpha.1 become pre-releases: not "Latest" on GitHub, and only
+          # Alpha, beta and rc tags become pre-releases: not "Latest" on GitHub, and only
           # offered in HACS to users who enabled beta versions
-          prerelease: ${{ contains(github.ref_name, '-') }}
+          prerelease: ${{ needs.version.outputs.prerelease }}
           # Added "/*" at the end is glob pattern match for this action
           artifacts: ${{ steps.export.outputs.archive_directory }}/*,${{ runner.temp }}/integration/Integration.zip
+
+  # Uploads the APK to the Meta Store release channel of the tag. Production uploads wait for
+  # approval in the "meta-live" environment (Settings > Environments > required reviewers).
+  meta_upload:
+    needs: [version, export_game]
+    runs-on: ubuntu-latest
+    name: Upload to Meta Store (${{ needs.version.outputs.channel }})
+    environment: ${{ needs.version.outputs.environment }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: apk
+          path: ${{ runner.temp }}/apk
+
+      - name: Upload build
+        env:
+          META_APP_ID: ${{ secrets.META_APP_ID }}
+          META_APP_SECRET: ${{ secrets.META_APP_SECRET }}
+          META_AGE_GROUP: ${{ vars.META_AGE_GROUP }}
+          CHANNEL: ${{ needs.version.outputs.channel }}
+        run: |
+          if [[ -z "$META_APP_ID" || -z "$META_APP_SECRET" ]]; then
+            echo "::warning::META_APP_ID or META_APP_SECRET is not set, skipping the Meta Store upload"
+            exit 0
+          fi
+
+          if [[ -z "$META_AGE_GROUP" ]]; then
+            echo "::error::Set the repository variable META_AGE_GROUP to TEENS_AND_ADULTS, MIXED_AGES or CHILDREN"
+            exit 1
+          fi
+
+          cd "$RUNNER_TEMP/apk"
+          for archive in *.zip; do
+            [[ -e "$archive" ]] && unzip -o -q "$archive"
+          done
+
+          apk=$(find . -name "*.apk" | head -n 1)
+          if [[ -z "$apk" ]]; then
+            echo "::error::No APK found in the build"
+            exit 1
+          fi
+          echo "Uploading $apk to the $CHANNEL channel"
+
+          # Meta's Oculus Platform Utility, Linux build
+          curl -sSfL -o ovr-platform-util "https://www.oculus.com/download_app/?id=5159709737372459&access_token=OC%7C5159709737372459%7C"
+          if file ovr-platform-util | grep -qi "zip archive"; then
+            mv ovr-platform-util ovr-platform-util.zip
+            unzip -o -q ovr-platform-util.zip
+          fi
+          chmod +x ovr-platform-util
+          ./ovr-platform-util version
+
+          ./ovr-platform-util upload-quest-build \
+            --app-id "$META_APP_ID" \
+            --app-secret "$META_APP_SECRET" \
+            --apk "$apk" \
+            --channel "$CHANNEL" \
+            --age-group "$META_AGE_GROUP" \
+            --notes "${GITHUB_REF_NAME}: https://github.com/${GITHUB_REPOSITORY}/releases/tag/${GITHUB_REF_NAME}" \
+            --disable-progress-bar
