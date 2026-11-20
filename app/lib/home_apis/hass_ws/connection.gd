@@ -129,38 +129,40 @@ func send_subscribe_packet(packet: Dictionary, callback: Callable):
 
 	return func():
 		packet_callbacks.remove(packet.id, callback)
-		send_packet({
-			id: id,
-			"type": packet.type.replace("subscribe", "unsubscribe"),
-			"subscription": packet.id
-		})
-		id += 1
+		unsubscribe(packet.id)
 
-func send_request_packet(packet: Dictionary, ignore_initial:=false):
-	packet.id = id
+## Ends a subscription, all Home Assistant subscriptions are ended the same way.
+func unsubscribe(subscription_id: int):
+	send_packet({
+		"type": "unsubscribe_events",
+		"subscription": subscription_id
+	}, true)
+
+## Sends [param packet] and waits for its response, settling with the response packet.
+## With [param ignore_initial] the request is a subscription: the successful result
+## that confirms it is skipped and the first event is returned. A failed result is
+## returned too, as no event follows it.
+func send_request_packet(packet: Dictionary, ignore_initial:=false, timeout:=request_timeout):
+	var packet_id = id
+	packet.id = packet_id
 	id += 1
 
+	# Lambdas capture locals by value, so the handler reaches itself through a dictionary
+	var holder = {"handler": Callable()}
+
 	var promise = Promise.new(func(resolve: Callable, reject: Callable):
-		var fn: Callable
+		holder.handler=func(response: Dictionary):
+			if ignore_initial&&response.get("type") == "result"&&response.get("success") == true:
+				return
 
-		if ignore_initial:
-			fn=func(packet: Dictionary):
-				if packet.type == "event":
-					resolve.call(packet)
-					packet_callbacks.remove(packet.id, fn)
+			packet_callbacks.remove(packet_id, holder.handler)
+			resolve.call(response)
 
-			packet_callbacks.add(packet.id, fn)
-		else:
-			packet_callbacks.add_once(packet.id, resolve)
-		
-		var timeout=get_tree().create_timer(request_timeout)
+		packet_callbacks.add(packet_id, holder.handler)
 
-		timeout.timeout.connect(func():
+		get_tree().create_timer(timeout).timeout.connect(func():
+			packet_callbacks.remove(packet_id, holder.handler)
 			reject.call(Promise.Rejection.new("Request timed out"))
-			if ignore_initial:
-				packet_callbacks.remove(packet.id, fn)
-			else:
-				packet_callbacks.remove(packet.id, resolve)
 		)
 	)
 

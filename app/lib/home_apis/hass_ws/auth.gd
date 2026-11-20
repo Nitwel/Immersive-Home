@@ -46,7 +46,8 @@ func _handle_message(message):
 		"auth_invalid":
 			_try_auth.emit(Error.ERR_CANT_RESOLVE)
 			EventSystem.notify("Failed to authenticate with Home Assistant. Check your token and try again.", EventNotify.Type.DANGER)
-			connection.handle_disconnect()
+			# The connection reports the disconnect once the socket is closed
+			connection.socket.close()
 
 func on_disconnect():
 	authenticated = false

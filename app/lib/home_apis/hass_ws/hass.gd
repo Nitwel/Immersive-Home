@@ -91,20 +91,39 @@ func has_connected():
 	return connection.connected
 
 func get_devices():
-	var result = await connection.send_request_packet({
+	var request = {
 		"type": "render_template",
 		"template": devices_template,
-		"timeout": 3,
+		# Seconds Home Assistant may spend rendering before giving up, large installs need a while
+		"timeout": 10,
 		"report_errors": true
-	}, true)
+	}
+	var response = await connection.send_request_packet(request, true, 30.0)
+
+	# render_template is a subscription that re-renders on every state change, only the first render is needed
+	connection.unsubscribe(request.id)
+
+	if response.status != Promise.Status.RESOLVED:
+		return _devices_error("no answer from Home Assistant")
+
+	var payload: Dictionary = response.payload
+
+	# A failed result, e.g. the template took too long or the user isn't an admin
+	if payload.get("type") == "result":
+		var error = payload.get("error", {})
+		return _devices_error("%s (%s)" % [error.get("message", "unknown error"), error.get("code", "")])
 
 	# With report_errors, template warnings and errors arrive as an event without a result
-	var event = result.payload.event
+	var event: Dictionary = payload.get("event", {})
 	if !event.has("result"):
-		push_error("Home Assistant could not render the devices template: %s" % event.get("error", event))
-		return []
+		return _devices_error(str(event.get("error", event)))
 
 	return event.result
+
+func _devices_error(reason: String) -> Array:
+	push_error("Could not load the devices from Home Assistant: %s" % reason)
+	EventSystem.notify("Could not load the devices from Home Assistant: %s" % reason, EventNotify.Type.DANGER)
+	return []
 
 func get_device(id: String):
 	pass
