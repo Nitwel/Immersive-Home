@@ -48,6 +48,7 @@ const LineChartScene = preload ("res://content/ui/components/line_chart/line_cha
 const NotificationScene = preload ("res://content/ui/components/notification/notification.tscn")
 const LabelContainerScene = preload ("res://content/ui/components/label_container/label_container.tscn")
 const PanelScene = preload ("res://content/ui/components/panel/panel.tscn")
+const KeyboardScene = preload ("res://content/system/keyboard/keyboard.tscn")
 
 const CELL_SIZE = Vector2(0.6, 0.4)
 const COLUMNS = 3
@@ -474,6 +475,24 @@ func _build_gallery():
 		l.text = "Label container"
 		l.size = Vector3(0.3, 0.05, 0.01)
 		root.add_child(l)
+	)
+
+	_add_cell("Keyboard", func(root: Node3D):
+		var input = InputScene.instantiate()
+		input.text = ""
+		input.placeholder = "Click here, then type"
+		input.size = Vector3(0.4, 0.04, 0.01)
+		input.position.y = 0.13
+		root.add_child(input)
+
+		var keyboard = KeyboardScene.instantiate()
+		keyboard.position.y = -0.03
+		root.add_child(keyboard)
+		# The keyboard takes itself out of the tree until an input is focused,
+		# put it back so it stays visible in the gallery.
+		await get_tree().process_frame
+		if not keyboard.is_inside_tree():
+			root.add_child(keyboard)
 	)
 
 	# Glass/border shader on different sizes and non-quad meshes. The border and
