@@ -22,6 +22,9 @@
  *   pitch: 55                 # degrees the view looks down, 15 (side) to 90 (top)
  *   aspect_ratio: 1.333       # width / height of the view
  *
+ * Both cards have a visual editor built on Home Assistant's ha-form. Options set
+ * to their default are left out of the configuration.
+ *
  * The 3D view is drawn in SVG with the painter's algorithm: floors first, then
  * the walls back to front. Walls facing the viewer are drawn see-through so the
  * rooms stay visible. That is plenty for extruded rooms and needs no WebGL library.
@@ -621,7 +624,14 @@ class FloorPlan3DCard extends FloorPlanCardBase {
 
     container.addEventListener("pointerdown", (event) => {
       if (event.button !== 0 || event.target.closest(".reset")) return;
-      drag = { x: event.clientX, y: event.clientY, view: { ...this._view }, moved: false, id: event.pointerId };
+      drag = {
+        x: event.clientX,
+        y: event.clientY,
+        view: { ...this._view },
+        moved: false,
+        id: event.pointerId,
+        turn: this._turnDirection(container, event.clientY),
+      };
       this._suppressClick = false;
     });
 
@@ -643,7 +653,7 @@ class FloorPlan3DCard extends FloorPlanCardBase {
       }
 
       this._setView({
-        yaw: drag.view.yaw + dx * 0.5,
+        yaw: drag.view.yaw + dx * 0.5 * drag.turn,
         pitch: clamp(drag.view.pitch + dy * 0.4, 15, 90),
       });
     });
@@ -679,6 +689,24 @@ class FloorPlan3DCard extends FloorPlanCardBase {
       event.preventDefault();
       this._setView(views[event.key]);
     });
+  }
+
+  /**
+   * Which way a horizontal drag turns the plan, so the part that was grabbed follows
+   * the pointer like on a turntable: increasing the yaw turns the plan clockwise,
+   * which moves its far half (above the middle of the floor) right and its near half
+   * left. Grabbed below the middle of the floor the turn is reversed.
+   */
+  _turnDirection(container, clientY) {
+    const box = this._viewBox;
+    if (!box) return 1;
+
+    // The middle of the floor: the plan's center lowered to the floor, on screen.
+    const floorY = this._geometry.center[1] * Math.cos(this._view.pitch * DEG);
+    const rect = container.getBoundingClientRect();
+    const screenY = rect.top + ((floorY - box.minY) / box.height) * rect.height;
+
+    return clientY > screenY ? -1 : 1;
   }
 
   _setView(view) {
@@ -789,6 +817,7 @@ class FloorPlan3DCard extends FloorPlanCardBase {
     });
 
     this._svg.setAttribute("viewBox", `${minX} ${minY} ${width} ${height}`);
+    this._viewBox = { minX, minY, width, height };
     this._svg.innerHTML = parts.join("");
 
     const place = (element, p) => {
@@ -993,9 +1022,206 @@ const BASE_STYLES = `
   }
 `;
 
-const register = (type, element, name, description) => {
+/**
+ * Home Assistant loads ha-form only once something needs it. Opening the editor of
+ * a built-in card loads it, that is the documented way for custom cards to get it.
+ */
+const loadHaForm = async () => {
+  if (customElements.get("ha-form")) return true;
+
+  try {
+    const helpers = await window.loadCardHelpers?.();
+    const card = await helpers?.createCardElement({ type: "entities", entities: [] });
+    await card?.constructor?.getConfigElement?.();
+  } catch {
+    // Waited for below, it may still arrive another way
+  }
+
+  const timeout = new Promise((resolve) => setTimeout(() => resolve(false), 5000));
+  return Promise.race([customElements.whenDefined("ha-form").then(() => true), timeout]);
+};
+
+// Option defaults, an option set to its default is left out of the configuration.
+const DEFAULTS_2D = {
+  north_up: false,
+  rotation: 0,
+  show_compass: true,
+  show_room_names: true,
+  show_headsets: true,
+};
+const DEFAULTS_3D = { ...DEFAULTS_2D, rotation: 30, pitch: 55, aspect_ratio: 1.333 };
+
+const EDITOR_LABELS = {
+  title: "Title",
+  north_up: "North up",
+  rotation: "Rotation",
+  pitch: "Tilt",
+  aspect_ratio: "Aspect ratio",
+  show_compass: "Compass",
+  show_room_names: "Room names",
+  show_headsets: "Headsets",
+  hide_entities: "Hide entities",
+};
+
+const EDITOR_HELPERS = {
+  north_up: "Turn the plan so north is up, using the heading set in the headset.",
+  rotation: "Turns the plan clockwise.",
+  rotation_3d: "Starting turn of the view, drag the card to turn it further.",
+  pitch: "How steeply the view looks down, 90° is straight from above.",
+  aspect_ratio: "Width divided by height of the view.",
+  show_headsets: "Highlight the rooms a headset is in.",
+  hide_entities: "Entities placed in the headset not to show on the plan.",
+};
+
+/** Visual editor of both cards, built on Home Assistant's ha-form. */
+class FloorPlanCardEditorBase extends HTMLElement {
+  constructor() {
+    super();
+    this._config = null;
+    this._hass = null;
+    this._form = null;
+    this._planEntities = null; // entity ids placed in the floor plan, null until known
+    this._planRequested = false;
+  }
+
+  get _is3d() {
+    return false;
+  }
+
+  get _defaults() {
+    return this._is3d ? DEFAULTS_3D : DEFAULTS_2D;
+  }
+
+  setConfig(config) {
+    this._config = config;
+    this._update();
+  }
+
+  set hass(hass) {
+    this._hass = hass;
+    this._loadPlanEntities();
+    this._update();
+  }
+
+  connectedCallback() {
+    this._init();
+  }
+
+  async _init() {
+    if (this._form || this._loading) return;
+    this._loading = true;
+
+    if (!(await loadHaForm())) {
+      this.innerHTML = `<p>The visual editor could not be loaded, use the code editor instead.</p>`;
+      return;
+    }
+
+    this._form = document.createElement("ha-form");
+    this._form.computeLabel = (schema) => EDITOR_LABELS[schema.name] ?? schema.name;
+    this._form.computeHelper = (schema) =>
+      EDITOR_HELPERS[this._is3d && schema.name === "rotation" ? "rotation_3d" : schema.name];
+    this._form.addEventListener("value-changed", (event) => this._changed(event));
+    this.appendChild(this._form);
+    this._update();
+  }
+
+  /** The hide picker offers only the entities placed in the floor plan. */
+  async _loadPlanEntities() {
+    if (this._planRequested || !this._hass) return;
+    this._planRequested = true;
+
+    try {
+      const data = await this._hass.callWS({ type: "immersive_home/floor_plan/get" });
+      const ids = (data?.floor_plan?.entities || []).map((entity) => entity.id);
+      this._planEntities = [...new Set(ids)];
+    } catch {
+      // No integration or no floor plan yet: any entity can be picked
+      this._planEntities = null;
+    }
+    this._update();
+  }
+
+  _schema(data) {
+    const view = [{ name: "north_up", selector: { boolean: {} } }];
+
+    if (!data.north_up) {
+      view.push({
+        name: "rotation",
+        selector: { number: { min: 0, max: 359, step: 1, mode: "slider", unit_of_measurement: "°" } },
+      });
+    }
+    if (this._is3d) {
+      view.push(
+        { name: "pitch", selector: { number: { min: 15, max: 90, step: 1, mode: "slider", unit_of_measurement: "°" } } },
+        { name: "aspect_ratio", selector: { number: { min: 0.5, max: 3, step: 0.05, mode: "box" } } },
+      );
+    }
+
+    const entities = this._planEntities?.length
+      ? { multiple: true, include_entities: [...new Set([...this._planEntities, ...(data.hide_entities || [])])] }
+      : { multiple: true };
+
+    return [
+      { name: "title", selector: { text: {} } },
+      ...view,
+      {
+        type: "grid",
+        name: "",
+        schema: [
+          { name: "show_compass", selector: { boolean: {} } },
+          { name: "show_room_names", selector: { boolean: {} } },
+          { name: "show_headsets", selector: { boolean: {} } },
+        ],
+      },
+      { name: "hide_entities", selector: { entity: entities } },
+    ];
+  }
+
+  _update() {
+    if (!this._form || !this._config) return;
+
+    const data = { ...this._defaults, ...this._config };
+    this._form.hass = this._hass;
+    this._form.data = data;
+    this._form.schema = this._schema(data);
+  }
+
+  _changed(event) {
+    event.stopPropagation();
+    if (!this._config) return;
+
+    const merged = { ...this._config, ...event.detail.value };
+    const config = { type: this._config.type };
+
+    for (const [key, value] of Object.entries(merged)) {
+      if (key === "type") continue;
+      if (value === undefined || value === null || value === "") continue;
+      if (Array.isArray(value) && value.length === 0) continue;
+      if (key in this._defaults && value === this._defaults[key]) continue;
+      config[key] = value;
+    }
+
+    this._config = config;
+    this._update();
+    this.dispatchEvent(new CustomEvent("config-changed", { detail: { config }, bubbles: true, composed: true }));
+  }
+}
+
+class FloorPlanCardEditor extends FloorPlanCardEditorBase {}
+
+class FloorPlan3DCardEditor extends FloorPlanCardEditorBase {
+  get _is3d() {
+    return true;
+  }
+}
+
+FloorPlanCard.getConfigElement = () => document.createElement(`${CARD_2D}-editor`);
+FloorPlan3DCard.getConfigElement = () => document.createElement(`${CARD_3D}-editor`);
+
+const register = (type, element, editor, name, description) => {
   if (customElements.get(type)) return;
   customElements.define(type, element);
+  customElements.define(`${type}-editor`, editor);
   window.customCards = window.customCards || [];
   window.customCards.push({ type, name, description, preview: false });
 };
@@ -1003,12 +1229,14 @@ const register = (type, element, name, description) => {
 register(
   CARD_2D,
   FloorPlanCard,
+  FloorPlanCardEditor,
   "Immersive Home Floor Plan",
   "The rooms set up in Immersive Home with the live state of the entities placed in them.",
 );
 register(
   CARD_3D,
   FloorPlan3DCard,
+  FloorPlan3DCardEditor,
   "Immersive Home 3D Floor Plan",
   "The rooms set up in Immersive Home as a dollhouse to turn around, with the live state of the entities in them.",
 );
