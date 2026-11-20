@@ -5,6 +5,7 @@ const environment_passthrough_material = preload ("res://assets/environment_pass
 const Menu = preload ("res://content/ui/menu/menu.gd")
 const OnboardingScene = preload ("res://content/ui/onboarding/onboarding.tscn")
 const MetaSceneEntity = preload ("res://content/system/house/meta_scene_entity/meta_scene_entity.tscn")
+const ShaderWarmup = preload ("res://content/system/map_overview/shader_warmup.gd")
 
 @onready var environment: WorldEnvironment = $WorldEnvironment
 @onready var camera: XRCamera3D = %XRCamera3D
@@ -17,6 +18,7 @@ const MetaSceneEntity = preload ("res://content/system/house/meta_scene_entity/m
 
 var voice_assistant = null
 var meta_scene_manager = null
+var _shaders_warmed = false
 
 func _ready():
 	if OS.get_name() == "Android":
@@ -31,7 +33,12 @@ func _ready():
 	xr.xr_started.connect(func():
 		if HomeApi.has_connected() == false:
 			HomeApi.start()
+		warm_up_shaders()
 	)
+
+	# Without a headset nothing waits for XR to start
+	if OS.get_name() != "Android":
+		warm_up_shaders.call_deferred()
 
 	if OS.get_model_name() == "Quest":
 		meta_scene_manager = OpenXRFbSceneManager.new()
@@ -48,6 +55,13 @@ func _ready():
 	HomeApi.on_connect.connect(func():
 		start_setup_flow.call_deferred()
 	)
+
+## Compiles the Map View's shaders now rather than in a hitch the first time it opens.
+func warm_up_shaders():
+	if _shaders_warmed:
+		return
+	_shaders_warmed = true
+	camera.add_child(ShaderWarmup.new())
 
 func start_setup_flow():
 	var onboarding = OnboardingScene.instantiate()
