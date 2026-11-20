@@ -78,6 +78,10 @@ func _handle_key(key: Key, shift: bool):
 		on_submit.emit(text)
 		return
 
+	if key == KEY_LEFT||key == KEY_RIGHT:
+		_move_caret(-1 if key == KEY_LEFT else 1)
+		return
+
 	var before = text.substr(0, text_handler.caret_position)
 	var after = text.substr(text_handler.caret_position)
 
@@ -94,6 +98,18 @@ func _handle_key(key: Key, shift: bool):
 		before = EventKey.key_to_string(key, shift, before)
 
 	_apply_edit(before + after, before.length())
+
+## Moves the caret one character in [param direction] (-1 or 1). With text
+## selected, the caret jumps to that side of the selection instead.
+func _move_caret(direction: int):
+	if text_handler.has_selection():
+		text_handler.caret_position = text_handler.selection_start if direction < 0 else text_handler.selection_end
+		text_handler.clear_selection()
+	else:
+		text_handler.caret_position += direction
+
+	text_handler.focus_caret()
+	_refresh_text()
 
 ## Inserts [param value] at the caret (replacing any selection), as if it had been typed.
 func insert_text(value: String):

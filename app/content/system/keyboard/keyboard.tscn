@@ -1,13 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://lrehk38exd5n"]
+[gd_scene load_steps=8 format=3 uid="uid://lrehk38exd5n"]
 
 [ext_resource type="Script" path="res://content/system/keyboard/keyboard.gd" id="1_maojw"]
-[ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="1_xdpwr"]
-[ext_resource type="Script" path="res://content/ui/components/grid_container/grid_container.gd" id="3_mx544"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="4_86fct"]
 [ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="5_0dbg6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k5ib7"]
-size = Vector3(0.86, 0.27, 0.06)
+size = Vector3(0.93, 0.33, 0.06)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_x72nd"]
 render_priority = 19
@@ -23,10 +21,10 @@ shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
 
 [sub_resource type="QuadMesh" id="QuadMesh_88pdc"]
-size = Vector2(0.86, 0.27)
+size = Vector2(0.93, 0.33)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yn0je"]
-size = Vector3(0.96, 0.33, 0.16)
+size = Vector3(1.03, 0.39, 0.16)
 
 [node name="Keyboard" type="StaticBody3D" groups=["ui_focus_stop"]]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
@@ -34,44 +32,7 @@ collision_layer = 6
 collision_mask = 0
 script = ExtResource("1_maojw")
 
-[node name="Backspace" parent="." instance=ExtResource("1_xdpwr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, 0.09, 0)
-focusable = false
-label = "backspace"
-icon = true
-echo = true
-size = Vector3(0.05, 0.05, 0.01)
-metadata/key = 4194308
-
-[node name="Caps" parent="." instance=ExtResource("1_xdpwr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.39, -0.03, 0)
-focusable = false
-label = "keyboard_capslock"
-icon = true
-toggleable = true
-size = Vector3(0.05, 0.05, 0.01)
-
-[node name="Paste" parent="." instance=ExtResource("1_xdpwr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, -0.09, 0)
-focusable = false
-label = "assignment"
-icon = true
-size = Vector3(0.05, 0.05, 0.01)
-
-[node name="QrScan" parent="." instance=ExtResource("1_xdpwr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, -0.03, 0)
-focusable = false
-label = "qr_code_scanner"
-icon = true
-toggleable = true
-size = Vector3(0.05, 0.05, 0.01)
-
 [node name="Keys" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.325, 0.09, 0)
-script = ExtResource("3_mx544")
-columns = 11
-gaps = Vector2(0.01, 0.01)
-size = Vector3(0.6, 0.15, 1)
 
 [node name="Movable" type="Node" parent="."]
 script = ExtResource("4_86fct")
