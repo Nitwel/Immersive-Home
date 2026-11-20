@@ -1,0 +1,14 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Immersive Home",
+        "description": "Headsets are added automatically when the Immersive Home app connects to Home Assistant."
+      }
+    },
+    "abort": {
+      "install_app": "Headsets are added automatically. Install the Immersive Home app on your headset and connect it to Home Assistant, see {docs_url}.",
+      "already_configured": "This headset is already set up."
+    }
+  }
+}

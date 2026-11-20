@@ -16,5 +16,5 @@ func test_integration():
 		"platform": OS.get_name(),
 	})
 
-	if response.status == Promise.Status.RESOLVED:
-		integration_exists = true
+	# Home Assistant also answers when the integration isn't installed, with success: false
+	integration_exists = response.status == Promise.Status.RESOLVED&&response.payload.get("success") == true

@@ -202,8 +202,8 @@ func update_room(room: String):
 		"room": room
 	})
 
-	if response.status == Promise.Status.RESOLVED:
-		pass
+	if response.status != Promise.Status.RESOLVED||response.payload.get("success") != true:
+		push_warning("Could not update the room in Home Assistant: %s" % (response.payload.get("error") if response.payload is Dictionary else response.payload.reason))
 
 func get_voice_assistant():
 	return assist_handler
