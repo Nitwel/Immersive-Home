@@ -30,13 +30,13 @@ var base_scale = {
 	HeatmapType.HUMIDITY: Vector2(0.0, 100.0)
 }
 var selected_scale = R.state(Vector2(0.0, 1.0))
-## How strongly the heat map colours the floors, in percent (View menu's Opacity)
+## How strongly the heat map colours the floors, in percent (Map View's Opacity)
 var opacity = R.state(70)
 var heatmap_type = R.state(HeatmapType.NONE)
 ## The rooms are shown, standing on the Map View. Set through place_on_map /
 ## leave_map.
 var small = R.state(false)
-## Whether the Map View is open (View menu, palm quick action, B button). The rooms
+## Whether the Map View is open (menu's map button, palm quick action, B button). The rooms
 ## are shown on it, at the home zone.
 var map_view = R.state(false)
 var _map_overview: MapOverview

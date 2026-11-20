@@ -1,7 +1,7 @@
 extends StaticBody3D
 ## Floating map of all people and device trackers, like Home Assistant's Map panel:
 ## their current positions, the zones, and the paths they took over the selected
-## time range. Toggled from the View menu ("Map View"). The round map lies flat in
+## time range. Toggled from the menu's map button. The round map lies flat in
 ## front of the user like the miniature; the controls and the entity list stand
 ## upright on its far side and follow round as the user walks around it. Movable /
 ## resizable. Can switch between the flat and the 3D map.
@@ -9,7 +9,8 @@ extends StaticBody3D
 ## The miniature house (content/system/miniature) stands on the map at the home
 ## zone, to the map's scale; zooming in past the map's own levels leaves only the
 ## rooms and the building outlines around them. Its compass heading is set with the rotate buttons
-## (stored as the house's map_heading).
+## (stored as the house's map_heading). Zoomed into the rooms, the panel shows the
+## heat map controls (room_controls.gd) instead of the people list.
 
 const UI = preload ("res://content/entities/entity_ui.gd")
 const MapView = preload ("res://content/entities/person/map_view.gd")
@@ -17,6 +18,7 @@ const Map3D = preload ("res://content/entities/person/map_3d.gd")
 const Tiles = preload ("res://content/entities/person/map_tiles.gd")
 const MovableScript = preload ("res://content/functions/movable.gd")
 const MapPan = preload ("res://content/entities/person/map_pan.gd")
+const RoomControls = preload ("./room_controls.gd")
 
 const PAD = 0.015
 ## The round map (its diameter), and the plate it lies on
@@ -82,6 +84,9 @@ var _pan := MapPan.new()
 var _loading = false
 ## Header buttons for the house on the map; only in the tree while it is shown.
 var _house_buttons := Node3D.new()
+## Heat map controls (room_controls.gd); in place of the people list while zoomed
+## into the rooms. Only in the tree while shown.
+var _room_controls := RoomControls.new()
 ## Point of the house (world / miniature model coordinates) that stands on the home
 ## zone: the middle of its floor plan. null until worked out.
 var _house_anchor = null
@@ -123,8 +128,13 @@ func _ready():
 
 func _notification(what):
 	# The state watchers are lambdas on this node; drop them before it is freed.
-	if what == NOTIFICATION_PREDELETE and is_instance_valid(HomeApi):
-		HomeApi.unwatch_owner(self)
+	if what == NOTIFICATION_PREDELETE:
+		if is_instance_valid(HomeApi):
+			HomeApi.unwatch_owner(self)
+		# Swapped-out panel parts aren't in the tree, so they aren't freed with it.
+		for part in [_house_buttons, _room_controls, _rows]:
+			if is_instance_valid(part) and part.get_parent() == null:
+				part.free()
 	# Hidden (taken out of the tree) or freed: the miniature goes back to its own spot.
 	if what == NOTIFICATION_EXIT_TREE and is_instance_valid(App.miniature):
 		App.miniature.leave_map()
@@ -182,6 +192,11 @@ func _update_house():
 		for view in [map, map_3d]:
 			view.max_zoom = Tiles.ROOMS_MAX_ZOOM if active else float(Tiles.MAX_ZOOM)
 		_update_map()
+	var view = map_3d if use_3d.value else map
+	# The walls grow out of the floor as the map fades into the rooms (and the map's
+	# buildings sink into their outlines).
+	var walls = 1.0 - Tiles.map_opacity(view.get_fractional_zoom()) if active else 0.0
+	_show_room_controls(walls > 0.5)
 	if not active:
 		miniature.leave_map()
 		map_3d.clear_ghost()
@@ -199,7 +214,6 @@ func _update_house():
 	else:
 		map_3d.clear_ghost()
 
-	var view = map_3d if use_3d.value else map
 	var frame: Transform3D = view.surface_transform(home.x, home.y)
 	# The map may have been resized; the body stays unscaled, the model takes it.
 	var model_scale = view.panel_per_meter(home.x) * frame.basis.get_scale().x
@@ -212,10 +226,20 @@ func _update_house():
 	# Cut off at the map's rim (zoomed in, the house is larger than the map).
 	var up = global_transform.basis.y
 	var disc = [global_position + up.normalized() * 0.001, up.normalized(), MAP_SIZE.x / 2.0 * up.length()]
-	# The walls grow out of the floor as the map fades into the rooms (and the map's
-	# buildings sink into their outlines).
-	var walls = 1.0 - Tiles.map_opacity(view.get_fractional_zoom())
 	miniature.place_on_map(body_transform, model_scale, view.is_visible_in_tree(), disc, walls)
+
+## Zoomed into the rooms, the panel shows the heat map controls instead of the
+## people list (their markers sit far off the house by then anyway).
+func _show_room_controls(shown: bool):
+	if shown == (_room_controls.get_parent() != null):
+		return
+	_status_label.visible = not shown # about the people's paths
+	if shown:
+		_panel_content.add_child(_room_controls)
+		_panel_content.remove_child(_rows)
+	else:
+		_panel_content.remove_child(_room_controls)
+		_panel_content.add_child(_rows)
 
 func _turn_house(degrees: float):
 	Store.house.state.map_heading = fposmod(float(Store.house.state.map_heading) + degrees, 360.0)
@@ -376,6 +400,9 @@ func _build_panel(panel: Node3D):
 	# Entity list below, in columns
 	_rows.position = Vector3(left + ROW_WIDTH / 2.0, PANEL_SIZE.y / 2.0 - HEADER - ROW_HEIGHT / 2.0, 0)
 	panel.add_child(_rows)
+	# Between the header and the bottom row, in the list's place
+	_room_controls.width = PANEL_SIZE.x - 2 * PAD
+	_room_controls.position = Vector3(0, -0.005, 0)
 	_status_label = UI.label(panel, "Loading…", 13, Vector3(left, -PANEL_SIZE.y / 2.0 + PAD + 0.006, 0))
 	_status_label.modulate = Color(1, 1, 1, 0.6)
 

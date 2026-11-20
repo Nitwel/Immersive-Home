@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://c3kdssrmv84kv"]
+[gd_scene load_steps=21 format=3 uid="uid://c3kdssrmv84kv"]
 
 [ext_resource type="Script" path="res://content/ui/menu/menu.gd" id="1_ng4u3"]
 [ext_resource type="Script" path="res://content/functions/movable.gd" id="2_8coxu"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://crrb0l3ekuotj" path="res://content/ui/menu/edit/edit_menu.tscn" id="4_r2raj"]
 [ext_resource type="PackedScene" uid="uid://bsjqdvkt0u87c" path="res://content/ui/components/button/button.tscn" id="5_w4i01"]
 [ext_resource type="Script" path="res://content/ui/components/tabs/tabs_content.gd" id="6_7rntr"]
-[ext_resource type="PackedScene" uid="uid://ddpxthb414unp" path="res://content/ui/menu/view/view_menu.tscn" id="8_71pkg"]
 [ext_resource type="PackedScene" uid="uid://c01gkeldvjwtr" path="res://content/ui/menu/room/room_menu.tscn" id="10_u4i1x"]
 [ext_resource type="PackedScene" uid="uid://c6r4higceibif" path="res://content/ui/menu/settings/settings_menu.tscn" id="11_7wm6b"]
 [ext_resource type="AudioStream" uid="uid://nmm8y0xt5wyj" path="res://assets/sound/open_menu.wav" id="12_dsnuc"]
@@ -216,45 +215,45 @@ material_override = SubResource("ShaderMaterial_mhqg4")
 mesh = SubResource("QuadMesh_7q1en")
 skeleton = NodePath("../..")
 
+[node name="MapView" parent="AnimationContainer" instance=ExtResource("5_w4i01")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.03, 0)
+label = "map"
+icon = true
+toggleable = true
+size = Vector3(0.05, 0.05, 0.01)
+
 [node name="Tabs" type="Node3D" parent="AnimationContainer" node_paths=PackedStringArray("initial_selected")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.005, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, -0.065, 0)
 script = ExtResource("4_eavfx")
-initial_selected = NodePath("View")
+initial_selected = NodePath("Edit")
 vertical = true
 gap = 0.01
 size = Vector3(0.05, 0.4, 1)
 
-[node name="View" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
+[node name="Edit" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025, 0)
-label = "visibility"
+label = "widgets"
 icon = true
 toggleable = true
 disabled = true
 size = Vector3(0.05, 0.05, 0.01)
 
-[node name="Edit" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.085, 0)
-label = "widgets"
-icon = true
-toggleable = true
-size = Vector3(0.05, 0.05, 0.01)
-
 [node name="Room" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.145, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.085, 0)
 label = "view_in_ar"
 icon = true
 toggleable = true
 size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Automate" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.205, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.145, 0)
 label = "schema"
 icon = true
 toggleable = true
 size = Vector3(0.05, 0.05, 0.01)
 
 [node name="Settings" parent="AnimationContainer/Tabs" instance=ExtResource("5_w4i01")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.265, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.205, 0)
 label = "settings"
 icon = true
 toggleable = true
@@ -265,10 +264,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, 0.00999999, 0)
 script = ExtResource("6_7rntr")
 tabs = NodePath("../Tabs")
 
-[node name="ViewMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("8_71pkg")]
-
 [node name="EditMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("4_r2raj")]
-visible = false
 
 [node name="RoomMenu" parent="AnimationContainer/TabsContent" instance=ExtResource("10_u4i1x")]
 visible = false
