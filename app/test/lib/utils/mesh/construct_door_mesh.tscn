@@ -1,7 +1,9 @@
 [gd_scene load_steps=8 format=4 uid="uid://dkbepq6h2u0j"]
 
 [ext_resource type="Script" path="res://test/lib/utils/mesh/construct_door_mesh.gd" id="1_8sv27"]
-[ext_resource type="Material" uid="uid://bcfcough6ucvc" path="res://content/system/miniature/mini_wall.tres" id="2_gp7go"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_door"]
+albedo_color = Color(0.7, 0.7, 0.7, 1)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_6dtdv"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -48,7 +50,7 @@ transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -
 shadow_enabled = true
 
 [node name="DoorMesh" type="MeshInstance3D" parent="."]
-material_override = ExtResource("2_gp7go")
+material_override = SubResource("StandardMaterial3D_door")
 mesh = SubResource("ArrayMesh_4qu22")
 
 [node name="DoorMeshGrid" type="MeshInstance3D" parent="."]

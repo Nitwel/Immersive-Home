@@ -212,7 +212,10 @@ func _update_house():
 	# Cut off at the map's rim (zoomed in, the house is larger than the map).
 	var up = global_transform.basis.y
 	var disc = [global_position + up.normalized() * 0.001, up.normalized(), MAP_SIZE.x / 2.0 * up.length()]
-	miniature.place_on_map(body_transform, model_scale, view.is_visible_in_tree(), disc)
+	# The walls grow out of the floor as the map fades into the rooms (and the map's
+	# buildings sink into their outlines).
+	var walls = 1.0 - Tiles.map_opacity(view.get_fractional_zoom())
+	miniature.place_on_map(body_transform, model_scale, view.is_visible_in_tree(), disc, walls)
 
 func _turn_house(degrees: float):
 	Store.house.state.map_heading = fposmod(float(Store.house.state.map_heading) + degrees, 360.0)
