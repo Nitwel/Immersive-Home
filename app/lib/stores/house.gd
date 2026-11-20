@@ -30,7 +30,10 @@ func _init():
 		##   room2_position2: Vec3
 		"doors": [],
 		"align_position1": Vector3(),
-		"align_position2": Vector3()
+		"align_position2": Vector3(),
+		## Compass bearing (degrees, clockwise from north) the house's -Z axis points
+		## to; turns the miniature on the Map View to match the real house.
+		"map_heading": 0.0
 	})
 
 func clear():

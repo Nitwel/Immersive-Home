@@ -1,8 +1,13 @@
 extends StaticBody3D
 ## Floating map of all people and device trackers, like Home Assistant's Map panel:
 ## their current positions, the zones, and the paths they took over the selected
-## time range. Toggled from the View menu ("Map View"), placed in the room like the
-## miniature and movable / resizable. Can switch between the flat and the 3D map.
+## time range. Toggled from the View menu ("Map View"). Lies flat in front of the
+## user like the miniature, movable / resizable. Can switch between the flat and
+## the 3D map.
+##
+## With the Mini View on as well, the miniature house stands on the map at the home
+## zone, to the map's scale. Its compass heading is set with the rotate buttons
+## (stored as the house's map_heading).
 
 const UI = preload ("res://content/entities/entity_ui.gd")
 const MapView = preload ("res://content/entities/person/map_view.gd")
@@ -18,9 +23,9 @@ const LIST_WIDTH = 0.15
 const ROW_HEIGHT = 0.042
 const MAX_ROWS = 8
 const MAP_SIZE = Vector2(SIZE.x - LIST_WIDTH - 3 * PAD, SIZE.y - HEADER - 2 * PAD)
-## Narrower than the flat map: its front edge comes towards the viewer and looks wider.
-const MAP_3D_SIZE = Vector2(MAP_SIZE.x * 0.8, MAP_SIZE.y * 0.95)
 const FOCUS_ZOOM = 16
+## Degrees the house turns per press (repeats while held) of a rotate button.
+const HEADING_STEP = 1.0
 const MAX_PATH_POINTS = 400
 ## Reload the history this often while the map is shown.
 const HISTORY_REFRESH = 600.0
@@ -56,6 +61,11 @@ var _base_view = null ## [center, zoom] from fitting everything or the focused e
 var _pan_center = null
 var _pan := MapPan.new()
 var _loading = false
+## Header buttons for the house on the map; only in the tree while it is shown.
+var _house_buttons := Node3D.new()
+## Point of the house (world / miniature model coordinates) that stands on the home
+## zone: the middle of its floor plan. null until worked out.
+var _house_anchor = null
 
 func _ready():
 	_build()
@@ -86,15 +96,73 @@ func _notification(what):
 	# The state watchers are lambdas on this node; drop them before it is freed.
 	if what == NOTIFICATION_PREDELETE and is_instance_valid(HomeApi):
 		HomeApi.unwatch_owner(self)
+	# Hidden (taken out of the tree) or freed: the miniature goes back to its own spot.
+	if what == NOTIFICATION_EXIT_TREE and is_instance_valid(App.miniature):
+		App.miniature.leave_map()
+		_house_anchor = null
 
-## Places the map in front of [param camera], facing it, slightly below eye height.
+## Lays the map flat in front of [param camera], like the miniature: at half eye
+## height, north (the header) away from the viewer.
 func open_in_front_of(camera: Node3D):
 	var forward = -camera.global_transform.basis.z
 	forward.y = 0
 	forward = forward.normalized() if forward.length() > 0.01 else Vector3.FORWARD
-	var target = camera.global_position + forward * 0.7 + Vector3(0, -0.15, 0)
-	# looking_at points -Z away from the viewer, so the front (+Z) faces them.
-	global_transform = Transform3D(Basis.looking_at(forward, Vector3.UP), target)
+	var target = camera.global_position + forward * 0.6
+	target.y = camera.global_position.y * 0.5
+	# looking_at points -Z away from the viewer, so the front (+Z) faces them; tipping
+	# it back by 90° turns the front up and the top edge away.
+	var facing = Basis.looking_at(forward, Vector3.UP) * Basis(Vector3.RIGHT, -PI / 2.0)
+	global_transform = Transform3D(facing, target)
+
+func _process(_delta):
+	_update_house()
+
+## Stands the miniature on the map at the home zone while the Mini View is on.
+func _update_house():
+	var miniature = App.miniature
+	if miniature == null: # not in the main scene (galleries)
+		return
+	var home = _location(_states.get("zone.home"))
+	var active = miniature.small.value and home != null and map != null
+	if active != (_house_buttons.get_parent() != null):
+		if active:
+			add_child(_house_buttons)
+		else:
+			remove_child(_house_buttons)
+	if not active:
+		miniature.leave_map()
+		_house_anchor = null
+		return
+
+	if _house_anchor == null:
+		var aabb: AABB = App.house.get_rooms_aabb()
+		_house_anchor = Vector3(aabb.get_center().x, aabb.position.y, aabb.get_center().z)
+
+	var view = map_3d if use_3d.value else map
+	var frame: Transform3D = view.surface_transform(home.x, home.y)
+	# The card may have been resized; the body stays unscaled, the model takes it.
+	var model_scale = view.panel_per_meter(home.x) * frame.basis.get_scale().x
+	frame = frame.orthonormalized()
+	# A compass bearing turns clockwise seen from above; Basis turns the other way.
+	var turn = Basis(Vector3.UP, -deg_to_rad(float(Store.house.state.map_heading)))
+	var body_transform = frame * Transform3D(turn, turn * (-_house_anchor * model_scale))
+	miniature.place_on_map(body_transform, model_scale, view.is_visible_in_tree() and view.shows(home.x, home.y))
+
+func _turn_house(degrees: float):
+	Store.house.state.map_heading = fposmod(float(Store.house.state.map_heading) + degrees, 360.0)
+
+## Centres the map on the home zone, zoomed in as far as it goes, where the house is
+## largest.
+func _focus_home():
+	var home = _location(_states.get("zone.home"))
+	if home == null:
+		return
+	_focused = null
+	_zoom_offset = 0
+	_base_view = [home, Tiles.MAX_ZOOM]
+	_pan_center = null
+	_update_rows()
+	_update_map()
 
 ## Pressing the map (not a button or row) starts dragging it; a second hand zooms.
 func _on_press_down(event: EventPointer):
@@ -151,6 +219,19 @@ func _build():
 			_load_history()
 	)
 
+	# House on the map (see _update_house), right to left
+	x -= 0.065 + 0.04
+	var turn_right = UI.icon_button(_house_buttons, "rotate_right", Vector3(x, top, 0), 0.035, true)
+	turn_right.on_button_down.connect(_turn_house.bind(HEADING_STEP))
+	turn_right.on_button_up.connect(func(): Store.house.save_local())
+	x -= 0.043
+	var turn_left = UI.icon_button(_house_buttons, "rotate_left", Vector3(x, top, 0), 0.035, true)
+	turn_left.on_button_down.connect(_turn_house.bind(-HEADING_STEP))
+	turn_left.on_button_up.connect(func(): Store.house.save_local())
+	x -= 0.05
+	var home = UI.icon_button(_house_buttons, "home", Vector3(x, top, 0), 0.035)
+	home.on_button_up.connect(_focus_home)
+
 	# Entity list on the left
 	_rows.position = Vector3(left + LIST_WIDTH / 2.0, SIZE.y / 2.0 - HEADER - ROW_HEIGHT / 2.0, 0)
 	add_child(_rows)
@@ -165,9 +246,10 @@ func _build():
 	add_child(map)
 
 	map_3d = Map3D.new()
-	map_3d.size = MAP_3D_SIZE
-	# Steeper than on the person card: a model this big would stick out far otherwise.
-	map_3d.tilt = deg_to_rad(62.0)
+	map_3d.size = MAP_SIZE
+	# The card already lies flat, so the diorama lies in its plane instead of being
+	# tilted towards the viewer like on the person card.
+	map_3d.tilt = PI / 2.0
 	map_3d.position = Vector3(map_center.x, map_center.y + MAP_SIZE.y / 2.0, 0.002)
 	map_3d.visible = false
 	add_child(map_3d)

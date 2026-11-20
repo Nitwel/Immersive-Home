@@ -185,6 +185,21 @@ func ray_offset(ray: RayCast3D):
 	var hit = from + direction * t
 	return Vector2(hit.x, hit.z) * PIXELS_PER_METER
 
+## Where a coordinate lies on the terrain, as a global transform with x pointing
+## east, y up (out of the ground) and z south. Same as map_view.gd's.
+func surface_transform(latitude: float, longitude: float) -> Transform3D:
+	var p = Tiles.offset_px(center, Vector2(latitude, longitude), zoom) / _ppm()
+	return _ground.global_transform * Transform3D(Basis.IDENTITY, Vector3(p.x, _height_at(p), p.y))
+
+## Whether a coordinate lies on the shown part of the map.
+func shows(latitude: float, longitude: float) -> bool:
+	var p = Tiles.offset_px(center, Vector2(latitude, longitude), zoom) / _ppm()
+	return abs(p.x) <= size.x / 2.0 and abs(p.y) <= size.y / 2.0
+
+## Meters of panel per meter of ground at [param latitude]: the map's scale.
+func panel_per_meter(latitude: float) -> float:
+	return 1.0 / (Tiles.meters_per_pixel(latitude, zoom) * _ppm())
+
 ## Whether an offset from [method ray_offset] lies on the map.
 func contains_offset(offset: Vector2) -> bool:
 	var half = size * PIXELS_PER_METER / 2.0

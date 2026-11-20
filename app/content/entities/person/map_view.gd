@@ -102,6 +102,23 @@ func to_local_position(latitude: float, longitude: float) -> Vector3:
 	var p = (Tiles.project(latitude, longitude, zoom) - _top_left()) / _ppm()
 	return Vector3(p.x - size.x / 2.0, size.y / 2.0 - p.y, 0)
 
+## Where a coordinate lies on the map, as a global transform on the map's surface
+## with x pointing east, y up (out of the map) and z south. Its basis carries the
+## map's own scale (see [method panel_per_meter] for the map's scale).
+func surface_transform(latitude: float, longitude: float) -> Transform3D:
+	var o = Tiles.offset_px(center, Vector2(latitude, longitude), zoom) / _ppm()
+	var local = Transform3D(Basis(Vector3.RIGHT, Vector3.BACK, Vector3.DOWN), Vector3(o.x, -o.y, 0.0005))
+	return global_transform * local
+
+## Whether a coordinate lies on the shown part of the map.
+func shows(latitude: float, longitude: float) -> bool:
+	var o = Tiles.offset_px(center, Vector2(latitude, longitude), zoom) / _ppm()
+	return abs(o.x) <= size.x / 2.0 and abs(o.y) <= size.y / 2.0
+
+## Meters of panel per meter of ground at [param latitude]: the map's scale.
+func panel_per_meter(latitude: float) -> float:
+	return 1.0 / (Tiles.meters_per_pixel(latitude, zoom) * _ppm())
+
 ## Largest zoom (up to [param max_zoom]) at which all coordinates fit, with a margin.
 func fit_zoom(points: Array, max_zoom := 16) -> int:
 	for z in range(max_zoom, Tiles.MIN_ZOOM - 1, -1):

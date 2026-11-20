@@ -76,6 +76,19 @@ static func unproject(world_px: Vector2, zoom: int) -> Vector2:
 	var latitude = rad_to_deg(atan(sinh(PI * (1.0 - 2.0 * world_px.y / scale))))
 	return Vector2(latitude, longitude)
 
+## World pixels at [param zoom] from [param from] to [param to] (both latitude,
+## longitude). Worked out in double precision: Vector2 is single precision, and the
+## world pixel values of [method project] lose metres at high zoom levels.
+static func offset_px(from: Vector2, to: Vector2, zoom: int) -> Vector2:
+	var scale = TILE_SIZE * pow(2.0, zoom)
+	var dx = (float(to.y) - float(from.y)) / 360.0 * scale
+	var dy = (_mercator_y(to.x) - _mercator_y(from.x)) / 2.0 * scale
+	return Vector2(dx, dy)
+
+static func _mercator_y(latitude: float) -> float:
+	var lat = deg_to_rad(clamp(latitude, -85.0511, 85.0511))
+	return -log(tan(lat) + 1.0 / cos(lat)) / PI
+
 ## Ground distance covered by one world pixel at [param latitude] and [param zoom].
 static func meters_per_pixel(latitude: float, zoom: int) -> float:
 	return 156543.03392 * cos(deg_to_rad(latitude)) / pow(2.0, zoom)

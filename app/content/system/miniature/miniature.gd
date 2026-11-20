@@ -105,40 +105,8 @@ func _ready():
 
 	# Update Size
 	R.effect(func(_arg):
-		collision_shape.disabled=small.value == false
-		player.visible=small.value
-
-		var tween:=create_tween()
-		tween.set_parallel(true)
-		if small.value:
-
-			var aabb=App.house.get_rooms_aabb()
-			var height=aabb.size.y
-
-			aabb.position.y=- 0.03
-			aabb.size.y=0.06
-
-			var center=aabb.position + aabb.size / 2
-
-			collision_shape.shape.size=aabb.size * 0.1
-			collision_shape.position=center * 0.1
-			entity_select.position=Vector3(0, height * 0.1 + 0.1, 0)
-
-			var camera_position=App.camera.global_position
-			var camera_direction=- App.camera.global_transform.basis.z
-
-			camera_position.y *= 0.5
-			camera_direction.y=0
-
-			var target_position=camera_position + camera_direction.normalized() * 0.5
-			var new_position=target_position - center * 0.1
-
-			tween.tween_property(small_node, "scale", Vector3(0.1, 0.1, 0.1), 0.5)
-			tween.tween_property(body, "position", new_position, 0.5)
-		else:
-			tween.tween_property(small_node, "scale", Vector3.ONE, 0.5)
-			tween.tween_property(body, "position", Vector3.ZERO, 0.5)
-			tween.tween_property(body, "quaternion", Quaternion.IDENTITY, 0.5)
+		small.value
+		_update_size()
 	)
 
 	# Update Walls
@@ -163,6 +131,77 @@ func _ready():
 	R.effect(func(_arg):
 		wall_material.set_shader_parameter("alpha", opacity.value / 100.0)
 	)
+
+var _size_tween: Tween
+## True while the small model stands on the Map View (map_overview.gd), which then
+## places it every frame through [method place_on_map].
+var on_map := false
+
+## Puts the small model on a map: [param body_transform] is the global transform of
+## the body (without scale), [param model_scale] the map's scale, and [param shown]
+## whether the house lies on the shown part of the map.
+func place_on_map(body_transform: Transform3D, model_scale: float, shown: bool):
+	if not on_map:
+		on_map = true
+		if _size_tween != null:
+			_size_tween.kill()
+		# The pointer should land on the map below, for panning it.
+		collision_shape.disabled = true
+	body.global_transform = body_transform
+	small_node.scale = Vector3.ONE * model_scale
+	small_node.visible = shown
+
+## Takes the small model off the map again, back in front of the user (or back to
+## full size if the Mini View was turned off).
+func leave_map():
+	if not on_map:
+		return
+	on_map = false
+	small_node.visible = true
+	_update_size()
+
+func _update_size():
+	collision_shape.disabled = small.value == false or on_map
+	player.visible = small.value
+
+	if on_map and small.value:
+		return # placed by the map
+
+	if _size_tween != null:
+		_size_tween.kill()
+	var tween := create_tween()
+	_size_tween = tween
+	tween.set_parallel(true)
+	if small.value:
+		var aabb = App.house.get_rooms_aabb()
+		var height = aabb.size.y
+
+		aabb.position.y = -0.03
+		aabb.size.y = 0.06
+
+		var center = aabb.position + aabb.size / 2
+
+		collision_shape.shape.size = aabb.size * 0.1
+		collision_shape.position = center * 0.1
+		entity_select.position = Vector3(0, height * 0.1 + 0.1, 0)
+
+		var camera_position = App.camera.global_position
+		var camera_direction = -App.camera.global_transform.basis.z
+
+		camera_position.y *= 0.5
+		camera_direction.y = 0
+
+		var target_position = camera_position + camera_direction.normalized() * 0.5
+		var new_position = target_position - center * 0.1
+
+		tween.tween_property(small_node, "scale", Vector3(0.1, 0.1, 0.1), 0.5)
+		tween.tween_property(body, "position", new_position, 0.5)
+		# Coming off the map, it may still be turned to the map's north.
+		tween.tween_property(body, "quaternion", Quaternion.IDENTITY, 0.5)
+	else:
+		tween.tween_property(small_node, "scale", Vector3.ONE, 0.5)
+		tween.tween_property(body, "position", Vector3.ZERO, 0.5)
+		tween.tween_property(body, "quaternion", Quaternion.IDENTITY, 0.5)
 
 func _process(delta):
 	var cam_pos = App.camera.global_position
