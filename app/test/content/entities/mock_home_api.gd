@@ -85,6 +85,12 @@ func set_state(entity: String, state: Variant, attributes: Dictionary = {}):
 			_simulate_climate(current, state, attributes)
 		"lock":
 			_simulate_lock(entity, current, state)
+		"cover":
+			_simulate_cover(entity, current, state, attributes)
+		"fan":
+			_simulate_fan(current, state, attributes)
+		"vacuum":
+			_simulate_vacuum(entity, current, state, attributes)
 		_:
 			return null
 
@@ -224,6 +230,92 @@ func _simulate_lock(entity: String, current: Dictionary, state):
 	get_tree().create_timer(1.0).timeout.connect(func():
 		update_entity(entity, target)
 	)
+
+## Increases on every cover command, so a running movement notices it was replaced.
+var _cover_moves := {}
+
+## Covers move 10 % every 0.3 s and report opening/closing meanwhile. Covers without
+## current_position switch after a second.
+func _simulate_cover(entity: String, current: Dictionary, state, service_data: Dictionary):
+	var attrs: Dictionary = current.attributes
+	var move_id = _cover_moves.get(entity, 0) + 1
+	_cover_moves[entity] = move_id
+
+	if state == "stop":
+		if current.state in ["opening", "closing"]:
+			current.state = "closed" if attrs.get("current_position", 1) == 0 else "open"
+		return
+
+	var target = {"open": 100, "close": 0}.get(state, service_data.get("position"))
+	if target == null:
+		return
+	target = clampi(int(target), 0, 100)
+
+	if attrs.get("current_position") == null:
+		current.state = "opening" if target > 0 else "closing"
+		get_tree().create_timer(1.0).timeout.connect(func():
+			if _cover_moves[entity] == move_id:
+				update_entity(entity, "open" if target > 0 else "closed")
+		)
+		return
+
+	var position = int(attrs["current_position"])
+	if position == target:
+		return
+	current.state = "opening" if target > position else "closing"
+	_move_cover(entity, move_id, target)
+
+func _move_cover(entity: String, move_id: int, target: int):
+	await get_tree().create_timer(0.3).timeout
+	if _cover_moves.get(entity) != move_id or not entities.has(entity):
+		return
+	var position = int(entities[entity].attributes["current_position"])
+	position = int(move_toward(position, target, 10))
+	if position == target:
+		update_entity(entity, "closed" if position == 0 else "open", {"current_position": position})
+	else:
+		update_entity(entity, entities[entity].state, {"current_position": position})
+		_move_cover(entity, move_id, target)
+
+func _simulate_fan(current: Dictionary, state, service_data: Dictionary):
+	var attrs: Dictionary = current.attributes
+	match state:
+		"on":
+			current.state = "on"
+			if attrs.has("percentage") and not attrs.get("percentage"):
+				attrs["percentage"] = attrs.get("_last_percentage", 50)
+		"off":
+			current.state = "off"
+			if attrs.get("percentage"):
+				attrs["_last_percentage"] = attrs["percentage"]
+				attrs["percentage"] = 0
+		"percentage":
+			var percentage = int(service_data.get("percentage", 0))
+			attrs["percentage"] = percentage
+			current.state = "on" if percentage > 0 else "off"
+		"preset_mode":
+			if service_data.get("preset_mode") in attrs.get("preset_modes", []):
+				attrs["preset_mode"] = service_data["preset_mode"]
+				current.state = "on"
+		"oscillate":
+			attrs["oscillating"] = service_data.get("oscillating", false)
+
+func _simulate_vacuum(entity: String, current: Dictionary, state, service_data: Dictionary):
+	var attrs: Dictionary = current.attributes
+	match state:
+		"start", "clean_spot": current.state = "cleaning"
+		"pause": current.state = "paused"
+		"stop": current.state = "idle"
+		"locate": pass
+		"fan_speed":
+			if service_data.get("fan_speed") in attrs.get("fan_speed_list", []):
+				attrs["fan_speed"] = service_data["fan_speed"]
+		"return_to_base":
+			current.state = "returning"
+			get_tree().create_timer(2.0).timeout.connect(func():
+				if entities[entity].state == "returning":
+					update_entity(entity, "docked")
+			)
 
 static func _parse_duration(text) -> int:
 	var parts = str(text).split(":")

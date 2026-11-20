@@ -18,6 +18,9 @@ const ClimateEntity = preload ("res://content/entities/climate/climate.tscn")
 const LockEntity = preload ("res://content/entities/lock/lock.tscn")
 const TextEntity = preload ("res://content/entities/text/text.tscn")
 const DateTimeEntity = preload ("res://content/entities/datetime/datetime.tscn")
+const CoverEntity = preload ("res://content/entities/cover/cover.tscn")
+const FanEntity = preload ("res://content/entities/fan/fan.tscn")
+const VacuumEntity = preload ("res://content/entities/vacuum/vacuum.tscn")
 
 ## Widget used for each Home Assistant domain. Several domains share a widget when
 ## they behave the same (e.g. input_boolean is a switch, scene/script are pressed once).
@@ -48,6 +51,9 @@ const SCENES = {
 	"date": DateTimeEntity,
 	"time": DateTimeEntity,
 	"datetime": DateTimeEntity,
+	"cover": CoverEntity,
+	"fan": FanEntity,
+	"vacuum": VacuumEntity,
 	# Not a Home Assistant domain: the history chart of a sensor
 	"line_chart": LineGraphEntity,
 }
@@ -80,6 +86,9 @@ const ICONS = {
 	"date": "calendar_today",
 	"time": "schedule",
 	"datetime": "event",
+	"cover": "blinds",
+	"fan": "mode_fan",
+	"vacuum": "cleaning_services",
 }
 
 ## Home Assistant domains that create_entity can turn into an entity widget.

@@ -5,13 +5,14 @@ const UiFont = preload ("res://assets/fonts/ui_font_500.tres")
 const IconFont = preload ("res://assets/icons/icons.tres")
 
 ## Domains in order of how well they describe a device, used to pick its icon.
-const DOMAIN_PRIORITY = ["light", "climate", "media_player", "camera", "lock", "switch", "weather", "number", "select",
+const DOMAIN_PRIORITY = ["light", "climate", "media_player", "vacuum", "cover", "fan", "camera", "lock", "switch", "weather", "number", "select",
 	"text", "datetime", "date", "time", "timer", "binary_sensor", "sensor", "button",
 	"input_boolean", "input_number", "input_select", "input_text", "input_button", "counter", "automation", "scene", "script"]
 
 ## Domains whose state is worth showing as an on/off dot on the device.
 const LIVE_DOMAINS = {"light": ["on"], "switch": ["on"], "input_boolean": ["on"], "media_player": ["on", "playing"],
-	"climate": ["heat", "cool", "heat_cool", "auto", "dry", "fan_only"], "lock": ["unlocked", "open"]}
+	"climate": ["heat", "cool", "heat_cool", "auto", "dry", "fan_only"], "lock": ["unlocked", "open"],
+	"cover": ["open", "opening", "closing"], "fan": ["on"], "vacuum": ["cleaning", "returning"]}
 
 const DOMAIN_NAMES = {
 	"light": "Lights",
@@ -27,6 +28,9 @@ const DOMAIN_NAMES = {
 	"select": "Selects",
 	"climate": "Climate",
 	"lock": "Locks",
+	"cover": "Covers",
+	"fan": "Fans",
+	"vacuum": "Vacuums",
 	"text": "Texts",
 	"date": "Dates",
 	"time": "Times",
@@ -142,6 +146,16 @@ static func format_state(entity_id: String, data) -> String:
 		"climate":
 			if attributes.get("temperature") != null:
 				return state.capitalize() + " · " + str(attributes["temperature"]) + " °"
+		"cover":
+			var position = attributes.get("current_position")
+			if position != null && int(position) > 0 && int(position) < 100:
+				return state.capitalize() + " · %d %%" % int(position)
+		"fan":
+			if state == "on" && attributes.get("percentage") != null:
+				return "On · %d %%" % int(attributes["percentage"])
+		"vacuum":
+			if attributes.get("battery_level") != null:
+				return state.capitalize() + " · %d %%" % int(attributes["battery_level"])
 		"select", "input_select", "text", "input_text", "date", "time", "datetime":
 			return state
 		"scene", "script", "input_button":

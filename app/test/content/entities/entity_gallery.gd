@@ -151,6 +151,33 @@ func _initial_states() -> Dictionary:
 		"time.alarm": {"state": "06:45:00", "attributes": {"friendly_name": "Alarm"}},
 		"datetime.next_service": {"state": "2026-12-01T08:30:00+00:00", "attributes": {"friendly_name": "Next service"}},
 		"date.unknown": {"state": "unknown", "attributes": {"friendly_name": "Unset date"}},
+
+		# supported_features: open 1, close 2, set_position 4, stop 8
+		"cover.living_room_blinds": {"state": "open", "attributes": {
+			"friendly_name": "Living room blinds", "device_class": "blind", "current_position": 60, "supported_features": 15}},
+		"cover.curtains": {"state": "closed", "attributes": {
+			"friendly_name": "Bedroom curtains", "device_class": "curtain", "current_position": 0, "supported_features": 15}},
+		"cover.garage": {"state": "closed", "attributes": {
+			"friendly_name": "Garage door", "device_class": "garage", "supported_features": 11}},
+		"cover.unavailable": {"state": "unavailable", "attributes": {"friendly_name": "Shutter", "device_class": "shutter"}},
+
+		# supported_features: set_speed 1, oscillate 2, preset_mode 8, turn_off 16, turn_on 32
+		"fan.ceiling": {"state": "on", "attributes": {
+			"friendly_name": "Ceiling fan", "percentage": 66, "percentage_step": 33.333333, "oscillating": false,
+			"preset_modes": ["auto", "sleep", "nature"], "preset_mode": null, "supported_features": 59}},
+		"fan.desk": {"state": "off", "attributes": {
+			"friendly_name": "Desk fan", "percentage": 0, "percentage_step": 1, "supported_features": 49}},
+		"fan.simple": {"state": "on", "attributes": {"friendly_name": "Bathroom fan", "supported_features": 48}},
+
+		# supported_features: pause 4, stop 8, return_home 16, fan_speed 32, battery 64,
+		# locate 512, clean_spot 1024, state 4096, start 8192
+		"vacuum.robot": {"state": "docked", "attributes": {
+			"friendly_name": "Robot vacuum", "battery_level": 92, "fan_speed": "balanced",
+			"fan_speed_list": ["quiet", "balanced", "turbo", "max"], "supported_features": 13948}},
+		"vacuum.cleaning": {"state": "cleaning", "attributes": {
+			"friendly_name": "Upstairs vacuum", "battery_level": 47, "supported_features": 12380}},
+		"vacuum.error": {"state": "error", "attributes": {
+			"friendly_name": "Basement vacuum", "battery_level": 5, "supported_features": 12380}},
 	}
 
 func _weather(state: String, temperature: float, humidity: int) -> Dictionary:
@@ -171,6 +198,7 @@ func _push_random_updates():
 	for id in ["weather.sunny", "weather.rainy", "weather.lightning", "weather.snowy"]:
 		mock.update_entity(id, WEATHER_STATES.pick_random(), {"temperature": snappedf(randf_range(-5, 30), 0.1), "humidity": randi_range(20, 99)})
 	mock.update_entity("light.dimmable", "on", {"brightness": randi_range(10, 255)})
+	mock.update_entity("vacuum.cleaning", ["cleaning", "paused", "returning", "idle"].pick_random(), {"battery_level": randi_range(5, 100)})
 	status_label.text = "Pushed random state updates"
 	await get_tree().create_timer(0.4).timeout
 	_layout()
@@ -210,6 +238,10 @@ func _build_gallery():
 	_entity_cell("Select", [["select", "select.fan_mode"], ["input_select", "input_select.house_mode"], ["Unavailable", "select.unavailable"]])
 	_entity_cell("Text", [["text", "text.message"], ["input_text (empty)", "input_text.note"]])
 	_entity_cell("Date and time", [["date", "date.birthday"], ["time", "time.alarm"], ["datetime (local)", "datetime.next_service"], ["Unknown", "date.unknown"]])
+	_entity_cell("Cover", [["Blinds at 60 %", "cover.living_room_blinds"], ["Curtains closed", "cover.curtains"],
+		["Garage (no position)", "cover.garage"], ["Unavailable", "cover.unavailable"]])
+	_entity_cell("Fan", [["Speed + presets + oscillate", "fan.ceiling"], ["Speed only (off)", "fan.desk"], ["On/off only", "fan.simple"]])
+	_entity_cell("Vacuum", [["Docked, all features", "vacuum.robot"], ["Cleaning", "vacuum.cleaning"], ["Error", "vacuum.error"]])
 	_entity_cell("Reused widgets", [["input_boolean", "input_boolean.guest_mode"], ["automation", "automation.night_lights"],
 		["input_number", "input_number.volume"], ["input_button", "input_button.doorbell"], ["scene", "scene.movie"],
 		["script", "script.good_night"], ["counter", "counter.coffees"]])
@@ -218,7 +250,8 @@ func _build_gallery():
 		_add_edge_case_states()
 		_entity_cell("Edge cases", [
 			["Sensor w/o name", "sensor.no_name"], ["Light w/o attrs", "light.bare"],
-			["Number unavailable", "number.bare"], ["Weather unknown", "weather.unknown"]])
+			["Number unavailable", "number.bare"], ["Weather unknown", "weather.unknown"],
+			["Cover w/o attrs", "cover.bare"], ["Fan w/o attrs", "fan.bare"], ["Vacuum w/o attrs", "vacuum.bare"]])
 
 	_add_unsupported_cell()
 
@@ -246,6 +279,9 @@ func _add_edge_case_states():
 	mock.entities["light.bare"] = {"state": "on", "attributes": {}}
 	mock.entities["number.bare"] = {"state": "unavailable", "attributes": {}}
 	mock.entities["weather.unknown"] = {"state": "unknown", "attributes": {}}
+	mock.entities["cover.bare"] = {"state": "open", "attributes": {}}
+	mock.entities["fan.bare"] = {"state": "on", "attributes": {}}
+	mock.entities["vacuum.bare"] = {"state": "docked", "attributes": {}}
 
 ## Creates an empty cell; [param items] are filled with {node, caption} pairs.
 func _new_cell(cell_name: String) -> Node3D:

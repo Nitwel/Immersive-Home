@@ -140,6 +140,11 @@ const SERVICES = {
 	"timer": {"start": "start", "cancel": "cancel", "pause": "pause"},
 	"climate": {"temperature": "set_temperature", "hvac_mode": "set_hvac_mode"},
 	"lock": {"lock": "lock", "unlock": "unlock", "open": "open"},
+	"cover": {"open": "open_cover", "close": "close_cover", "stop": "stop_cover", "position": "set_cover_position"},
+	"fan": {"on": "turn_on", "off": "turn_off", "percentage": "set_percentage", "preset_mode": "set_preset_mode",
+		"oscillate": "oscillate"},
+	"vacuum": {"start": "start", "pause": "pause", "stop": "stop", "return_to_base": "return_to_base",
+		"locate": "locate", "clean_spot": "clean_spot", "fan_speed": "set_fan_speed"},
 }
 
 ## Domains whose widgets send the new value itself as the state. The value is passed
