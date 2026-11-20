@@ -5,14 +5,18 @@ const UiFont = preload ("res://assets/fonts/ui_font_500.tres")
 const IconFont = preload ("res://assets/icons/icons.tres")
 
 ## Domains in order of how well they describe a device, used to pick its icon.
-const DOMAIN_PRIORITY = ["light", "climate", "media_player", "vacuum", "cover", "fan", "camera", "lock", "switch", "weather", "number", "select",
-	"text", "datetime", "date", "time", "timer", "binary_sensor", "sensor", "button",
-	"input_boolean", "input_number", "input_select", "input_text", "input_button", "counter", "automation", "scene", "script"]
+const DOMAIN_PRIORITY = ["light", "climate", "water_heater", "humidifier", "media_player", "vacuum", "cover", "fan",
+	"alarm_control_panel", "camera", "lock", "switch", "weather", "air_quality", "calendar", "todo", "image", "number", "select",
+	"text", "datetime", "date", "time", "timer", "event", "binary_sensor", "sensor", "button",
+	"input_boolean", "input_number", "input_select", "input_text", "input_button", "counter", "automation", "scene", "script",
+	"sun", "zone", "update"]
 
 ## Domains whose state is worth showing as an on/off dot on the device.
 const LIVE_DOMAINS = {"light": ["on"], "switch": ["on"], "input_boolean": ["on"], "media_player": ["on", "playing"],
 	"climate": ["heat", "cool", "heat_cool", "auto", "dry", "fan_only"], "lock": ["unlocked", "open"],
-	"cover": ["open", "opening", "closing"], "fan": ["on"], "vacuum": ["cleaning", "returning"]}
+	"cover": ["open", "opening", "closing"], "fan": ["on"], "vacuum": ["cleaning", "returning"],
+	"humidifier": ["on"], "alarm_control_panel": ["armed_home", "armed_away", "armed_night", "armed_vacation",
+	"armed_custom_bypass", "triggered"]}
 
 const DOMAIN_NAMES = {
 	"light": "Lights",
@@ -31,6 +35,17 @@ const DOMAIN_NAMES = {
 	"cover": "Covers",
 	"fan": "Fans",
 	"vacuum": "Vacuums",
+	"alarm_control_panel": "Alarm panels",
+	"humidifier": "Humidifiers",
+	"water_heater": "Water heaters",
+	"sun": "Sun",
+	"zone": "Zones",
+	"update": "Updates",
+	"event": "Events",
+	"image": "Images",
+	"air_quality": "Air quality",
+	"calendar": "Calendars",
+	"todo": "To-do lists",
 	"text": "Texts",
 	"date": "Dates",
 	"time": "Times",
@@ -156,6 +171,32 @@ static func format_state(entity_id: String, data) -> String:
 		"vacuum":
 			if attributes.get("battery_level") != null:
 				return state.capitalize() + " · %d %%" % int(attributes["battery_level"])
+		"humidifier":
+			if state == "on" && attributes.get("humidity") != null:
+				return "On · %d %%" % int(attributes["humidity"])
+		"water_heater":
+			if attributes.get("temperature") != null:
+				return state.capitalize() + " · " + str(attributes["temperature"]) + " °"
+		"sun":
+			return "Above horizon" if state == "above_horizon" else "Below horizon"
+		"zone":
+			return state + (" person" if state == "1" else " people")
+		"update":
+			if state == "on" && attributes.get("latest_version") != null:
+				return "Update to " + str(attributes["latest_version"])
+			return "Up to date"
+		"todo":
+			return state + " open"
+		"calendar":
+			if attributes.get("message") != null:
+				return str(attributes["message"])
+		"event":
+			if attributes.get("event_type") != null:
+				return str(attributes["event_type"]).capitalize()
+		"air_quality":
+			return "PM2.5 " + state
+		"image":
+			return "Image"
 		"select", "input_select", "text", "input_text", "date", "time", "datetime":
 			return state
 		"scene", "script", "input_button":

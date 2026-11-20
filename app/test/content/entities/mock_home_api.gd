@@ -91,6 +91,14 @@ func set_state(entity: String, state: Variant, attributes: Dictionary = {}):
 			_simulate_fan(current, state, attributes)
 		"vacuum":
 			_simulate_vacuum(entity, current, state, attributes)
+		"alarm_control_panel":
+			_simulate_alarm(entity, current, state, attributes)
+		"humidifier":
+			_simulate_humidifier(current, state, attributes)
+		"water_heater":
+			_simulate_water_heater(current, state, attributes)
+		"update":
+			_simulate_update(entity, current, state)
 		_:
 			return null
 
@@ -105,6 +113,13 @@ func update_room(_room: String):
 
 func get_voice_assistant():
 	return null
+
+## To-do items are kept in the entity's "_items" attribute.
+func get_todo_items(entity_id: String):
+	var state = entities.get(entity_id)
+	if state == null:
+		return []
+	return state.attributes.get("_items", []).duplicate(true)
 
 ## Fake hourly statistics: a smooth curve around the entity's current value.
 func get_history(entity_id, start, interval, _end = null):
@@ -316,6 +331,77 @@ func _simulate_vacuum(entity: String, current: Dictionary, state, service_data: 
 				if entities[entity].state == "returning":
 					update_entity(entity, "docked")
 			)
+
+## Arming takes a moment ("arming"), disarming is immediate. A code_format panel
+## checks the code against "_code".
+func _simulate_alarm(entity: String, current: Dictionary, state, service_data: Dictionary):
+	var attrs: Dictionary = current.attributes
+	if attrs.get("code_format") != null and (state == "disarm" or attrs.get("code_arm_required", true)):
+		if str(service_data.get("code", "")) != str(attrs.get("_code", "")):
+			push_warning("mock_home_api: wrong alarm code for %s" % entity)
+			return
+	if state == "disarm":
+		current.state = "disarmed"
+		return
+	var target = {"arm_home": "armed_home", "arm_away": "armed_away", "arm_night": "armed_night",
+		"arm_vacation": "armed_vacation", "arm_custom_bypass": "armed_custom_bypass"}.get(state)
+	if target == null:
+		return
+	current.state = "arming"
+	get_tree().create_timer(1.5).timeout.connect(func():
+		if entities[entity].state == "arming":
+			update_entity(entity, target)
+	)
+
+func _simulate_humidifier(current: Dictionary, state, service_data: Dictionary):
+	var attrs: Dictionary = current.attributes
+	match state:
+		"on", "off": current.state = state
+		"humidity": attrs["humidity"] = service_data.get("humidity", attrs.get("humidity"))
+		"mode":
+			if service_data.get("mode") in attrs.get("available_modes", []):
+				attrs["mode"] = service_data["mode"]
+	if attrs.has("action"):
+		var wants_more = float(attrs.get("current_humidity", 0)) < float(attrs.get("humidity", 0))
+		attrs["action"] = "off" if current.state == "off" else ("humidifying" if wants_more else "idle")
+
+func _simulate_water_heater(current: Dictionary, state, service_data: Dictionary):
+	var attrs: Dictionary = current.attributes
+	match state:
+		"temperature": attrs["temperature"] = service_data.get("temperature", attrs.get("temperature"))
+		"operation_mode":
+			var mode = service_data.get("operation_mode")
+			if mode in attrs.get("operation_list", []):
+				current.state = mode
+				attrs["operation_mode"] = mode
+		"on", "off":
+			current.state = "eco" if state == "on" else "off"
+			attrs["operation_mode"] = current.state
+
+## Installs in 10 % steps, then reports the latest version as installed.
+func _simulate_update(entity: String, current: Dictionary, state):
+	var attrs: Dictionary = current.attributes
+	match state:
+		"skip":
+			attrs["skipped_version"] = attrs.get("latest_version")
+			current.state = "off"
+		"install":
+			attrs["in_progress"] = true
+			attrs["update_percentage"] = 0
+			_install_update(entity)
+
+func _install_update(entity: String):
+	await get_tree().create_timer(0.3).timeout
+	if not entities.has(entity):
+		return
+	var attrs = entities[entity].attributes
+	var progress = int(attrs.get("update_percentage", 0)) + 10
+	if progress >= 100:
+		update_entity(entity, "off", {"in_progress": false, "update_percentage": null,
+			"installed_version": attrs.get("latest_version")})
+	else:
+		update_entity(entity, "on", {"update_percentage": progress})
+		_install_update(entity)
 
 static func _parse_duration(text) -> int:
 	var parts = str(text).split(":")

@@ -178,7 +178,85 @@ func _initial_states() -> Dictionary:
 			"friendly_name": "Upstairs vacuum", "battery_level": 47, "supported_features": 12380}},
 		"vacuum.error": {"state": "error", "attributes": {
 			"friendly_name": "Basement vacuum", "battery_level": 5, "supported_features": 12380}},
+
+		# supported_features: arm_home 1, arm_away 2, arm_night 4, trigger 8, custom_bypass 16, vacation 32
+		"alarm_control_panel.house": {"state": "disarmed", "attributes": {
+			"friendly_name": "House alarm", "code_format": "number", "code_arm_required": false, "_code": "1234",
+			"supported_features": 39}},
+		"alarm_control_panel.garage": {"state": "armed_away", "attributes": {
+			"friendly_name": "Garage alarm", "code_format": null, "supported_features": 3}},
+		"alarm_control_panel.triggered": {"state": "triggered", "attributes": {
+			"friendly_name": "Shed alarm", "code_format": "number", "_code": "0000", "supported_features": 3}},
+
+		"humidifier.bedroom": {"state": "on", "attributes": {
+			"friendly_name": "Bedroom humidifier", "humidity": 45, "current_humidity": 38, "min_humidity": 30,
+			"max_humidity": 80, "mode": "normal", "available_modes": ["normal", "eco", "sleep", "boost"],
+			"action": "humidifying", "device_class": "humidifier", "supported_features": 1}},
+		"humidifier.basement": {"state": "off", "attributes": {
+			"friendly_name": "Basement dehumidifier", "humidity": 55, "current_humidity": 63,
+			"action": "off", "device_class": "dehumidifier"}},
+
+		# supported_features: target_temperature 1, operation_mode 2, away_mode 4, on_off 8
+		"water_heater.boiler": {"state": "eco", "attributes": {
+			"friendly_name": "Boiler", "temperature": 55, "current_temperature": 48, "min_temp": 40, "max_temp": 65,
+			"operation_list": ["off", "eco", "electric", "heat_pump", "performance"], "operation_mode": "eco",
+			"away_mode": "off", "supported_features": 15}},
+		"water_heater.simple": {"state": "electric", "attributes": {
+			"friendly_name": "Kitchen water heater", "temperature": 60, "current_temperature": 59}},
+
+		"sun.sun": {"state": "above_horizon", "attributes": {
+			"friendly_name": "Sun", "elevation": 18.4, "azimuth": 182.1, "rising": false,
+			"next_setting": _iso(now + 3 * 3600 + 1200), "next_rising": _iso(now + 15 * 3600)}},
+		"zone.home": {"state": "2", "attributes": {"friendly_name": "Home", "radius": 100, "passive": false}},
+		"zone.work": {"state": "0", "attributes": {"friendly_name": "Work", "radius": 250, "passive": false}},
+
+		# supported_features: install 1, specific_version 2, progress 4, backup 8, release_notes 16
+		"update.core": {"state": "on", "attributes": {
+			"friendly_name": "Home Assistant Core Update", "title": "Home Assistant Core", "installed_version": "2026.10.4",
+			"latest_version": "2026.11.2", "in_progress": false, "update_percentage": null,
+			"release_summary": "Fixes for the energy dashboard and faster startup.", "supported_features": 29}},
+		"update.firmware": {"state": "off", "attributes": {
+			"friendly_name": "Bulb firmware", "installed_version": "1.4.2", "latest_version": "1.4.2", "in_progress": false,
+			"supported_features": 5}},
+
+		"event.doorbell": {"state": _iso(now - 300), "attributes": {
+			"friendly_name": "Front doorbell", "device_class": "doorbell", "event_type": "ring", "event_types": ["ring"]}},
+		"event.remote": {"state": _iso(now - 7200), "attributes": {
+			"friendly_name": "Living room remote", "device_class": "button", "event_type": "double_press",
+			"event_types": ["single_press", "double_press", "long_press"]}},
+		"event.never": {"state": "unknown", "attributes": {"friendly_name": "Motion event", "device_class": "motion"}},
+
+		"image.badge": {"state": _iso(now - 60), "attributes": {
+			"friendly_name": "Website badge", "entity_picture": "res://assets/badges/website.png"}},
+		"image.missing": {"state": "unknown", "attributes": {"friendly_name": "Map snapshot"}},
+
+		"air_quality.outside": {"state": "12.4", "attributes": {
+			"friendly_name": "Outside air", "particulate_matter_10": 18.2, "air_quality_index": 42,
+			"nitrogen_dioxide": 21, "ozone": 54.3}},
+
+		"calendar.family": {"state": "on", "attributes": {
+			"friendly_name": "Family", "message": "Dentist appointment", "all_day": false,
+			"start_time": _local(now - 1200), "end_time": _local(now + 2400), "location": "Main Street 12"}},
+		"calendar.holidays": {"state": "off", "attributes": {
+			"friendly_name": "Holidays", "message": "Christmas Eve", "all_day": true,
+			"start_time": "2026-12-24 00:00:00", "end_time": "2026-12-25 00:00:00"}},
+		"calendar.empty": {"state": "off", "attributes": {"friendly_name": "Work"}},
+
+		"todo.shopping": {"state": "3", "attributes": {"friendly_name": "Shopping list", "_items": [
+			{"uid": "1", "summary": "Milk", "status": "needs_action"},
+			{"uid": "2", "summary": "Bread", "status": "needs_action", "due": _local(now + 86400).substr(0, 10)},
+			{"uid": "3", "summary": "Coffee beans from the roastery around the corner", "status": "needs_action"},
+			{"uid": "4", "summary": "Apples", "status": "completed"}]}},
+		"todo.chores": {"state": "0", "attributes": {"friendly_name": "Chores", "_items": []}},
 	}
+
+## UTC timestamp like Home Assistant's last_changed.
+func _iso(unix: float) -> String:
+	return Time.get_datetime_string_from_unix_time(int(unix)) + "+00:00"
+
+## Local wall-clock time like calendar start_time ("2026-11-20 10:00:00").
+func _local(unix: float) -> String:
+	return Time.get_datetime_string_from_unix_time(int(unix) + int(Time.get_time_zone_from_system().bias) * 60, true)
 
 func _weather(state: String, temperature: float, humidity: int) -> Dictionary:
 	return {"state": state, "attributes": {
@@ -242,6 +320,17 @@ func _build_gallery():
 		["Garage (no position)", "cover.garage"], ["Unavailable", "cover.unavailable"]])
 	_entity_cell("Fan", [["Speed + presets + oscillate", "fan.ceiling"], ["Speed only (off)", "fan.desk"], ["On/off only", "fan.simple"]])
 	_entity_cell("Vacuum", [["Docked, all features", "vacuum.robot"], ["Cleaning", "vacuum.cleaning"], ["Error", "vacuum.error"]])
+	_entity_cell("Alarm panel", [["Disarmed (code)", "alarm_control_panel.house"], ["Armed away", "alarm_control_panel.garage"],
+		["Triggered (code)", "alarm_control_panel.triggered"]])
+	_entity_cell("Humidifier", [["On with modes", "humidifier.bedroom"], ["Off, no modes", "humidifier.basement"]])
+	_entity_cell("Water heater", [["Operation modes", "water_heater.boiler"], ["No mode list", "water_heater.simple"]])
+	_entity_cell("Sun and zones", [["sun", "sun.sun"], ["zone", "zone.home"], ["Empty zone", "zone.work"]])
+	_entity_cell("Update", [["Available", "update.core"], ["Up to date", "update.firmware"]])
+	_entity_cell("Event", [["Doorbell", "event.doorbell"], ["Remote", "event.remote"], ["Never fired", "event.never"]])
+	_entity_cell("Image", [["Picture", "image.badge"], ["No picture", "image.missing"]])
+	_entity_cell("Air quality", [["Outside", "air_quality.outside"]])
+	_entity_cell("Calendar", [["Running now", "calendar.family"], ["All day, upcoming", "calendar.holidays"], ["No events", "calendar.empty"]])
+	_entity_cell("To-do", [["Shopping list", "todo.shopping"], ["Empty", "todo.chores"]])
 	_entity_cell("Reused widgets", [["input_boolean", "input_boolean.guest_mode"], ["automation", "automation.night_lights"],
 		["input_number", "input_number.volume"], ["input_button", "input_button.doorbell"], ["scene", "scene.movie"],
 		["script", "script.good_night"], ["counter", "counter.coffees"]])
@@ -251,7 +340,10 @@ func _build_gallery():
 		_entity_cell("Edge cases", [
 			["Sensor w/o name", "sensor.no_name"], ["Light w/o attrs", "light.bare"],
 			["Number unavailable", "number.bare"], ["Weather unknown", "weather.unknown"],
-			["Cover w/o attrs", "cover.bare"], ["Fan w/o attrs", "fan.bare"], ["Vacuum w/o attrs", "vacuum.bare"]])
+			["Cover w/o attrs", "cover.bare"], ["Fan w/o attrs", "fan.bare"], ["Vacuum w/o attrs", "vacuum.bare"],
+			["Alarm w/o attrs", "alarm_control_panel.bare"], ["Humidifier w/o attrs", "humidifier.bare"],
+			["Water heater w/o attrs", "water_heater.bare"], ["Update w/o attrs", "update.bare"],
+			["Calendar unavailable", "calendar.bare"], ["To-do unavailable", "todo.bare"]])
 
 	_add_unsupported_cell()
 
@@ -282,6 +374,12 @@ func _add_edge_case_states():
 	mock.entities["cover.bare"] = {"state": "open", "attributes": {}}
 	mock.entities["fan.bare"] = {"state": "on", "attributes": {}}
 	mock.entities["vacuum.bare"] = {"state": "docked", "attributes": {}}
+	mock.entities["alarm_control_panel.bare"] = {"state": "armed_home", "attributes": {}}
+	mock.entities["humidifier.bare"] = {"state": "on", "attributes": {}}
+	mock.entities["water_heater.bare"] = {"state": "eco", "attributes": {}}
+	mock.entities["update.bare"] = {"state": "on", "attributes": {}}
+	mock.entities["calendar.bare"] = {"state": "unavailable", "attributes": {}}
+	mock.entities["todo.bare"] = {"state": "unavailable", "attributes": {}}
 
 ## Creates an empty cell; [param items] are filled with {node, caption} pairs.
 func _new_cell(cell_name: String) -> Node3D:

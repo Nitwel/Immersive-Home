@@ -124,3 +124,116 @@ static func set_shown(node: Node3D, shown: bool):
 ## Dims a button's icon, e.g. while it can't be used.
 static func dim_button(button: Button3D, dimmed: bool):
 	button.get_node("Body/Label").modulate = Color(1, 1, 1, 0.4 if dimmed else 1.0)
+
+## Makes [param node] wrap its text at [param width] meters.
+static func wrap(node: Label3D, width: float):
+	node.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	node.width = width / node.pixel_size
+
+# ---------------------------------------------------------------------------
+# Time
+# ---------------------------------------------------------------------------
+
+## Seconds to add to a UTC unix time to get the local wall clock.
+static func utc_offset() -> int:
+	return int(Time.get_time_zone_from_system().bias) * 60
+
+## Unix time (UTC) of a Home Assistant timestamp, or -1. Accepts
+## "2026-11-20T10:00:00.123+01:00", "...Z", local "2026-11-20 10:00:00" and dates.
+static func parse_timestamp(value) -> int:
+	if value == null:
+		return -1
+	var text = str(value).strip_edges()
+	if text.length() == 10:
+		text += "T00:00:00"
+	if text.length() < 19:
+		return -1
+
+	var unix = Time.get_unix_time_from_datetime_string(text.substr(0, 19).replace(" ", "T"))
+	var rest = text.substr(19)
+	if rest.begins_with("."):
+		var i = 1
+		while i < rest.length() and rest[i].is_valid_int():
+			i += 1
+		rest = rest.substr(i)
+
+	if rest == "":
+		return unix - utc_offset()
+	if rest == "Z":
+		return unix
+	var parts = rest.substr(1).split(":")
+	var offset = int(parts[0]) * 3600 + (int(parts[1]) * 60 if parts.size() > 1 else 0)
+	return unix - offset if rest.begins_with("+") else unix + offset
+
+## Local "18:42" for a unix time.
+static func format_clock(unix: int) -> String:
+	var d = Time.get_datetime_dict_from_unix_time(unix + utc_offset())
+	return "%02d:%02d" % [d.hour, d.minute]
+
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+## "Today", "Tomorrow", "Yesterday" or "Fri 21 Nov" for a unix time.
+static func format_day(unix: int) -> String:
+	var local = unix + utc_offset()
+	var today = floori((Time.get_unix_time_from_system() + utc_offset()) / 86400.0)
+	var day = floori(local / 86400.0)
+	match day - today:
+		0: return "Today"
+		1: return "Tomorrow"
+		-1: return "Yesterday"
+	var d = Time.get_datetime_dict_from_unix_time(local)
+	return "%s %d %s" % [WEEKDAYS[d.weekday], d.day, MONTHS[d.month - 1]]
+
+## "just now", "5 min ago", "3 h ago", "2 days ago" (or "in ..." for the future).
+static func format_relative(unix: int) -> String:
+	var delta = int(Time.get_unix_time_from_system()) - unix
+	var future = delta < 0
+	delta = abs(delta)
+	var text: String
+	if delta < 60:
+		return "just now"
+	elif delta < 3600:
+		text = "%d min" % floori(delta / 60.0)
+	elif delta < 86400:
+		text = "%d h" % floori(delta / 3600.0)
+	else:
+		var days = floori(delta / 86400.0)
+		text = "%d day%s" % [days, "" if days == 1 else "s"]
+	return "in " + text if future else text + " ago"
+
+# ---------------------------------------------------------------------------
+# Images
+# ---------------------------------------------------------------------------
+
+## Downloads an image from Home Assistant ([param path] like "/api/image_proxy/...").
+## Returns null on failure. "res://" paths load a local texture (used by the gallery).
+static func load_image(http_request: HTTPRequest, path: String) -> Texture2D:
+	if path.begins_with("res://"):
+		return load(path) if ResourceLoader.exists(path) else null
+
+	if http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED:
+		return null
+	var url = path if path.begins_with("http") else HomeApi.get_http_url() + path
+	if http_request.request(url) != OK:
+		return null
+
+	var result = await http_request.request_completed
+	if result[0] != HTTPRequest.RESULT_SUCCESS or result[1] != 200:
+		return null
+
+	var content_type = "image/png"
+	for header in result[2]:
+		if header.to_lower().begins_with("content-type:"):
+			content_type = header.substr(13).strip_edges().split(";")[0]
+
+	var image = Image.new()
+	var error = ERR_FILE_UNRECOGNIZED
+	match content_type:
+		"image/png": error = image.load_png_from_buffer(result[3])
+		"image/jpeg", "image/jpg": error = image.load_jpg_from_buffer(result[3])
+		"image/webp": error = image.load_webp_from_buffer(result[3])
+		"image/bmp": error = image.load_bmp_from_buffer(result[3])
+	if error != OK:
+		return null
+	return ImageTexture.create_from_image(image)
