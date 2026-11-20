@@ -1,8 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://lrehk38exd5n"]
+[gd_scene format=3 uid="uid://lrehk38exd5n"]
 
-[ext_resource type="Script" path="res://content/system/keyboard/keyboard.gd" id="1_maojw"]
-[ext_resource type="Script" path="res://content/functions/movable.gd" id="4_86fct"]
-[ext_resource type="Shader" path="res://content/ui/components/panel/glass.gdshader" id="5_0dbg6"]
+[ext_resource type="Script" uid="uid://cdm8rsm76p54t" path="res://content/system/keyboard/keyboard.gd" id="1_maojw"]
+[ext_resource type="Script" uid="uid://l2fgupqbucew" path="res://content/functions/movable.gd" id="4_86fct"]
+[ext_resource type="Shader" uid="uid://iy8r68qd33qd" path="res://content/ui/components/panel/glass.gdshader" id="5_0dbg6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k5ib7"]
 size = Vector3(0.93, 0.33, 0.06)
@@ -15,7 +15,7 @@ shader_parameter/border_color = Color(1, 1, 1, 1)
 shader_parameter/edge_color = Color(0, 0, 0, 1)
 shader_parameter/border_size = 0.00075
 shader_parameter/border_fade_in = 0.00375
-shader_parameter/border_fade_out = 0
+shader_parameter/border_fade_out = 0.0
 shader_parameter/corner_radius = 0.019
 shader_parameter/roughness = 0.3
 shader_parameter/grain_amount = 0.02
@@ -26,30 +26,30 @@ size = Vector2(0.93, 0.33)
 [sub_resource type="BoxShape3D" id="BoxShape3D_yn0je"]
 size = Vector3(1.03, 0.39, 0.16)
 
-[node name="Keyboard" type="StaticBody3D" groups=["ui_focus_stop"]]
+[node name="Keyboard" type="StaticBody3D" unique_id=976387884 groups=["ui_focus_stop"]]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 collision_layer = 6
 collision_mask = 0
 script = ExtResource("1_maojw")
 
-[node name="Keys" type="Node3D" parent="."]
+[node name="Keys" type="Node3D" parent="." unique_id=2010653107]
 
-[node name="Movable" type="Node" parent="."]
+[node name="Movable" type="Node" parent="." unique_id=104232852]
 script = ExtResource("4_86fct")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=894007157]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.03)
 shape = SubResource("BoxShape3D_k5ib7")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1531708611]
 material_override = SubResource("ShaderMaterial_x72nd")
 mesh = SubResource("QuadMesh_88pdc")
 
-[node name="TouchArea" type="Area3D" parent="." groups=["ui_focus_skip"]]
+[node name="TouchArea" type="Area3D" parent="." unique_id=875516860 groups=["ui_focus_skip"]]
 collision_layer = 4
 collision_mask = 0
 monitoring = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="TouchArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TouchArea" unique_id=228749236]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.03)
 shape = SubResource("BoxShape3D_yn0je")

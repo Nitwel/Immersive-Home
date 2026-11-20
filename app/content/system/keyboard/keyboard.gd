@@ -1,7 +1,7 @@
 @tool
 extends StaticBody3D
 
-const button_scene = preload ("res://content/ui/components/button/button.tscn")
+const button_scene = preload("res://content/ui/components/button/button.tscn")
 
 ## Distance between the left edges of two neighbouring keys (one key unit).
 const UNIT = 0.06
@@ -57,7 +57,7 @@ const ICONS = {
 	KEY_SPACE: "space_bar",
 	KEY_LEFT: "keyboard_arrow_left",
 	KEY_RIGHT: "keyboard_arrow_right",
-	QR: "qr_code_scanner",
+	QR: "qr_code",
 }
 
 @onready var keys = $Keys
@@ -113,7 +113,7 @@ func _prepare_keyboard_spawn():
 			return
 
 		App.main.add_child(self)
-		global_transform=App.menu.get_node("AnimationContainer/KeyboardPlace").global_transform
+		global_transform = App.menu.get_node("AnimationContainer/KeyboardPlace").global_transform
 	)
 
 	EventSystem.on_focus_out.connect(func(event):
@@ -196,12 +196,12 @@ func _connect_key(key_node: Button3D, key):
 			pass # see _connect_qr_scanner
 		KEY_CAPSLOCK:
 			key_node.on_toggled.connect(func(active):
-				caps=active
+				caps = active
 				_emit_event("key_down" if active else "key_up", KEY_CAPSLOCK)
 			)
 		KEY_SHIFT:
 			key_node.on_toggled.connect(func(active):
-				shift=active
+				shift = active
 			)
 		_:
 			key_node.on_button_down.connect(func():
@@ -233,7 +233,7 @@ func _connect_qr_scanner():
 	qr_button.on_button_up.connect(QrScanner.stop)
 
 	QrScanner.on_scanning_changed.connect(func(scanning):
-		qr_button.active=scanning
+		qr_button.active = scanning
 	)
 
 	QrScanner.on_timeout.connect(func():
@@ -273,7 +273,7 @@ func _on_qr_scanned(text: String):
 
 	EventSystem.emit("qr_scan", event)
 
-	if event.bubbling&&focused.has_method("insert_text"):
+	if event.bubbling && focused.has_method("insert_text"):
 		focused.insert_text(text)
 
 func _update_labels():
@@ -283,7 +283,7 @@ func _update_labels():
 			key = SHIFTED.get(key, key)
 		key_node.label = EventKey.key_to_string(key, caps != shift)
 
-func _emit_event(type: String, key: Key, shift_pressed: bool=caps):
+func _emit_event(type: String, key: Key, shift_pressed: bool = caps):
 	var event = EventKey.new()
 	event.key = key
 	event.shift_pressed = shift_pressed
