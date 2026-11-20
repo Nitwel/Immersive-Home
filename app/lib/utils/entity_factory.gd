@@ -18,6 +18,7 @@ const ClimateEntity = preload ("res://content/entities/climate/climate.tscn")
 const LockEntity = preload ("res://content/entities/lock/lock.tscn")
 const TextEntity = preload ("res://content/entities/text/text.tscn")
 const DateTimeEntity = preload ("res://content/entities/datetime/datetime.tscn")
+const PersonEntity = preload ("res://content/entities/person/person.tscn")
 const CoverEntity = preload ("res://content/entities/cover/cover.tscn")
 const FanEntity = preload ("res://content/entities/fan/fan.tscn")
 const VacuumEntity = preload ("res://content/entities/vacuum/vacuum.tscn")
@@ -62,6 +63,8 @@ const SCENES = {
 	"date": DateTimeEntity,
 	"time": DateTimeEntity,
 	"datetime": DateTimeEntity,
+	"person": PersonEntity,
+	"device_tracker": PersonEntity,
 	"cover": CoverEntity,
 	"fan": FanEntity,
 	"vacuum": VacuumEntity,
@@ -108,6 +111,8 @@ const ICONS = {
 	"date": "calendar_today",
 	"time": "schedule",
 	"datetime": "event",
+	"person": "person",
+	"device_tracker": "location_on",
 	"cover": "blinds",
 	"fan": "mode_fan",
 	"vacuum": "cleaning_services",

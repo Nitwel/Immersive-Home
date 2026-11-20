@@ -15,16 +15,20 @@ const DeviceUtils = preload ("res://content/ui/menu/edit/device_utils.gd")
 ## Glass card of [param size] centred on the parent; also sizes the entity's collision
 ## shape so the whole card can be grabbed and moved.
 static func card(entity: Node3D, size: Vector2) -> Panel3D:
-	var panel: Panel3D = PanelScene.instantiate()
-	panel.size = size
-	panel.corner_radius = 0.012
-	entity.add_child(panel)
+	var panel = glass(entity, size)
 
 	var collision: CollisionShape3D = entity.get_node("CollisionShape3D")
 	collision.shape = BoxShape3D.new()
 	resize_card(entity, panel, size)
 	return panel
 
+## Glass panel of [param size] centred on [param parent], e.g. for a settings panel.
+static func glass(parent: Node3D, size: Vector2) -> Panel3D:
+	var panel: Panel3D = PanelScene.instantiate()
+	panel.size = size
+	panel.corner_radius = 0.012
+	parent.add_child(panel)
+	return panel
 ## Changes the card (and grab shape) to [param size], centred at [param center_y].
 ## Used by widgets that drop rows for features a device doesn't support.
 static func resize_card(entity: Node3D, panel: Panel3D, size: Vector2, center_y := 0.0):

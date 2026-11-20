@@ -171,6 +171,22 @@ func get_history(entity_id, start, interval, end=null):
 
 	return await api.get_history(entity_id, start, interval, end)
 
+## Recorded states with attributes of several entities since [param start] (ISO
+## time): {entity_id: [{state, attributes, time}]}, oldest first. Empty if the
+## adapter has no history.
+func get_state_history(entity_ids: Array, start: String, end=null) -> Dictionary:
+	if has_connected() == false||api.has_method("get_state_history") == false:
+		return {}
+
+	return await api.get_state_history(entity_ids, start, end)
+
+## Ids of all entities in [param domains], e.g. ["person", "device_tracker"].
+func get_entity_ids(domains: Array) -> Array:
+	if has_connected() == false||api.has_method("get_entity_ids") == false:
+		return []
+
+	return api.get_entity_ids(domains)
+
 ## Returns the HTTP(S) base URL of the home automation server, without a trailing slash,
 ## or an empty string if the adapter does not expose one.
 func get_http_url() -> String:

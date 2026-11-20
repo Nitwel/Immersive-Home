@@ -94,9 +94,9 @@ external_skeleton = NodePath("../hand_l/Armature/Skeleton3D")
 [node name="QuickActions" type="Node3D" parent="Palm" unique_id=1980579046]
 transform = Transform3D(-0.0922588, -0.0922553, 0.482677, -0.353553, 0.353553, -2.63596e-06, -0.341303, -0.341304, -0.130471, 0.003, 0.041, 0.001)
 
-[node name="MiniView" parent="Palm/QuickActions" unique_id=33150624 instance=ExtResource("6_x5vuc")]
+[node name="MapView" parent="Palm/QuickActions" unique_id=33150624 instance=ExtResource("6_x5vuc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0600001, 0, 0)
-label = "nest_multi_room"
+label = "map"
 icon = true
 size = Vector3(0.04, 0.04, 0.05)
 

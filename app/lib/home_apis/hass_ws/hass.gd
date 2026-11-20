@@ -222,3 +222,11 @@ func get_todo_items(entity_id: String):
 
 func get_history(entity_id, start, interval, end=null):
 	return await history_handler.get_history(entity_id, start, interval, end)
+
+func get_state_history(entity_ids: Array, start: String, end=null) -> Dictionary:
+	return await history_handler.get_state_history(entity_ids, start, end)
+
+## Ids of all known entities in [param domains].
+func get_entity_ids(domains: Array) -> Array:
+	var result = entities.keys().filter(func(id): return domains.has(id.split(".")[0]))
+	return result

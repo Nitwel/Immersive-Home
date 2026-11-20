@@ -114,6 +114,46 @@ func update_room(_room: String):
 func get_voice_assistant():
 	return null
 
+func get_entity_ids(domains: Array) -> Array:
+	return entities.keys().filter(func(id): return domains.has(id.split(".")[0]))
+
+## Made-up position history: every 10 minutes along a wandering route from the home
+## zone to the current position (the same route every time for an entity).
+func get_state_history(entity_ids: Array, start: String, _end = null) -> Dictionary:
+	var from = Time.get_unix_time_from_datetime_string(start.trim_suffix("Z").trim_suffix(".000"))
+	var now = Time.get_unix_time_from_system()
+	var home = entities.get("zone.home", {}).get("attributes", {})
+	var history = {}
+
+	for id in entity_ids:
+		var current = entities.get(id)
+		if current == null:
+			continue
+		var attrs = current.attributes
+		var entries = []
+		if attrs.get("latitude") != null:
+			var target = Vector2(attrs.latitude, attrs.longitude)
+			var origin = Vector2(home.get("latitude", target.x), home.get("longitude", target.y))
+			if origin.distance_to(target) < 0.001:
+				origin = target + Vector2(0.006, -0.008) # stayed home: show a trip and back
+			var rng = RandomNumberGenerator.new()
+			rng.seed = hash(id)
+			var steps = clampi(int((now - from) / 600.0), 2, 400)
+			var wander = Vector2.ZERO
+			for i in steps + 1:
+				var t = float(i) / steps
+				wander = wander * 0.8 + Vector2(rng.randf_range(-1, 1), rng.randf_range(-1, 1)) * 0.0008
+				# Out and back when the trip ends where it started
+				var along = t if origin.distance_to(target) > 0.001 else 1.0 - abs(2.0 * t - 1.0)
+				var p = origin.lerp(target, along) + wander * sin(PI * t)
+				var entry_attrs = attrs.duplicate()
+				entry_attrs.latitude = p.x
+				entry_attrs.longitude = p.y
+				entries.append({"state": current.state, "attributes": entry_attrs, "time": from + t * (now - from)})
+		else:
+			entries.append({"state": current.state, "attributes": attrs.duplicate(), "time": now})
+		history[id] = entries
+	return history
 ## To-do items are kept in the entity's "_items" attribute.
 func get_todo_items(entity_id: String):
 	var state = entities.get(entity_id)

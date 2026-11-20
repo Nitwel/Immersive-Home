@@ -1,17 +1,16 @@
 extends Node3D
+## The house's rooms on the Map View (content/system/map_overview), as a dollhouse
+## (dollhouse.gd) at the home zone, to the map's scale. Also keeps whether the Map
+## View is open, and the heat / humidity map, which colours the dollhouse's floors.
 
-const ConstructRoomMesh = preload ("res://lib/utils/mesh/construct_room_mesh.gd")
-const ConstructDoorMesh = preload ("res://lib/utils/mesh/construct_door_mesh.gd")
-const wall_material = preload ("./mini_wall.tres")
 const humidity_gradient = preload ("./humid_gradient.tres")
 const temperature_gradient = preload ("./temp_gradient.tres")
+const MapOverview = preload ("res://content/system/map_overview/map_overview.gd")
+const Dollhouse = preload ("./dollhouse.gd")
 
 @onready var body = $Body
 @onready var small_node = $Body/Small
-@onready var model = $Body/Small/Model
 @onready var player = $Body/Small/Player
-@onready var collision_shape = $Body/CollisionShape3D
-@onready var entity_select = $Body/EntitySelect
 
 enum HeatmapType {
 	NONE = 0,
@@ -31,145 +30,133 @@ var base_scale = {
 	HeatmapType.HUMIDITY: Vector2(0.0, 100.0)
 }
 var selected_scale = R.state(Vector2(0.0, 1.0))
+## How strongly the heat map colours the floors, in percent (View menu's Opacity)
 var opacity = R.state(70)
 var heatmap_type = R.state(HeatmapType.NONE)
+## The rooms are shown, standing on the Map View. Set through place_on_map /
+## leave_map.
 var small = R.state(false)
+## Whether the Map View is open (View menu, palm quick action, B button). The rooms
+## are shown on it, at the home zone.
+var map_view = R.state(false)
+var _map_overview: MapOverview
+var dollhouse := Dollhouse.new()
+## What the dollhouse was last built from (a hash), to skip rebuilding it
+var _dollhouse_key = null
 
 func _ready():
-	wall_material.set_shader_parameter("data", [])
-	wall_material.set_shader_parameter("data_size", 0)
-
 	EventSystem.on_action_down.connect(func(action):
 		if action.name == "by_button":
-			small.value=!small.value
+			map_view.value=!map_view.value
 	)
+
+	R.effect(func(_arg):
+		# Deferred, out of the effect: closing takes the rooms off the map, which sets
+		# `small`, and states can't be written while an effect runs.
+		_show_map_overview.call_deferred(map_view.value)
+	)
+
+	dollhouse.visible = false
+	small_node.add_child(dollhouse)
 
 	if Store.house.is_loaded() == false:
 		await Store.house.on_loaded
 
-	# Update Room Mesh
+	# Build the dollhouse when shown, and only again when the house changed: opening
+	# the Map View shouldn't stall the headset.
 	R.effect(func(_arg):
-		if Store.house.state.rooms.size() == 0:
+		if Store.house.state.rooms.size() == 0 or not small.value:
 			return
-
-		if heatmap_type.value == HeatmapType.NONE&&small.value == false:
-			return
-
-		for child in model.get_children():
-			model.remove_child(child)
-			child.free()
-
-		for room in Store.house.state.rooms:
-			var walls_mesh=MeshInstance3D.new()
-			var floor_mesh=MeshInstance3D.new()
-
-			model.add_child(walls_mesh)
-			model.add_child(floor_mesh)
-
-			var doors=[]
-
-			for door in Store.house.state.doors:
-				if door.room1 == room.name:
-					doors.append([door.room1_position1, door.room1_position2])
-				elif door.room2 == room.name:
-					doors.append([door.room2_position1, door.room2_position2])
-
-			walls_mesh.mesh=ConstructRoomMesh.generate_wall_mesh_with_doors_grid(room.corners, room.height, doors)
-			floor_mesh.mesh=ConstructRoomMesh.generate_ceiling_mesh_grid(room.corners)
-
-			walls_mesh.material_override=wall_material
-			floor_mesh.material_override=wall_material
-
-			walls_mesh.set_layer_mask_value(2, true)
-			floor_mesh.set_layer_mask_value(2, true)
-
-		for door in Store.house.state.doors:
-			var door_mesh=MeshInstance3D.new()
-
-			model.add_child(door_mesh)
-
-			if Geometry2D.is_polygon_clockwise([
-				Vector2(door.room1_position1.x, door.room1_position1.z),
-				Vector2(door.room2_position1.x, door.room2_position1.z),
-				Vector2(door.room2_position2.x, door.room2_position2.z),
-				Vector2(door.room1_position2.x, door.room1_position2.z)
-			]):
-				door_mesh.mesh=ConstructDoorMesh.generate_door_mesh(door.room1_position2, door.room2_position2, door.room2_position1, door.room1_position1)
-			else:
-				door_mesh.mesh=ConstructDoorMesh.generate_door_mesh(door.room1_position1, door.room2_position1, door.room2_position2, door.room1_position2)
-
-			door_mesh.material_override=wall_material
-
-			door_mesh.set_layer_mask_value(2, true)
+		var key = hash(str(Store.house.state.rooms) + str(Store.house.state.doors) + str(Store.house.state.entities))
+		if key != _dollhouse_key:
+			_dollhouse_key = key
+			dollhouse.build(Store.house.state.rooms, Store.house.state.doors, Store.house.state.entities, App.house.global_transform.affine_inverse())
 	)
 
-	# Update Size
 	R.effect(func(_arg):
-		collision_shape.disabled=small.value == false
+		dollhouse.visible=small.value
 		player.visible=small.value
-
-		var tween:=create_tween()
-		tween.set_parallel(true)
-		if small.value:
-
-			var aabb=App.house.get_rooms_aabb()
-			var height=aabb.size.y
-
-			aabb.position.y=- 0.03
-			aabb.size.y=0.06
-
-			var center=aabb.position + aabb.size / 2
-
-			collision_shape.shape.size=aabb.size * 0.1
-			collision_shape.position=center * 0.1
-			entity_select.position=Vector3(0, height * 0.1 + 0.1, 0)
-
-			var camera_position=App.camera.global_position
-			var camera_direction=- App.camera.global_transform.basis.z
-
-			camera_position.y *= 0.5
-			camera_direction.y=0
-
-			var target_position=camera_position + camera_direction.normalized() * 0.5
-			var new_position=target_position - center * 0.1
-
-			tween.tween_property(small_node, "scale", Vector3(0.1, 0.1, 0.1), 0.5)
-			tween.tween_property(body, "position", new_position, 0.5)
-		else:
-			tween.tween_property(small_node, "scale", Vector3.ONE, 0.5)
-			tween.tween_property(body, "position", Vector3.ZERO, 0.5)
-			tween.tween_property(body, "quaternion", Quaternion.IDENTITY, 0.5)
 	)
 
-	# Update Walls
-	R.effect(func(_arg):
-		model.visible=heatmap_type.value != HeatmapType.NONE||small.value
-	)
-
-	# Update Heatmap
+	# Heat map on the dollhouse's floors; turning one on opens the Map View.
 	R.effect(func(_arg):
 		if heatmap_type.value != HeatmapType.NONE:
 			EventSystem.on_slow_tick.connect(update_data)
-			if heatmap_type.value == HeatmapType.TEMPERATURE:
-				wall_material.set_shader_parameter("color_gradient", temperature_gradient)
-			else:
-				wall_material.set_shader_parameter("color_gradient", humidity_gradient)
+			dollhouse.set_heat(temperature_gradient if heatmap_type.value == HeatmapType.TEMPERATURE else humidity_gradient)
+			# Deferred: states can't be written while an effect runs.
+			(func(): map_view.value = true).call_deferred()
 		else:
-			EventSystem.on_slow_tick.disconnect(update_data)
-			wall_material.set_shader_parameter("data", [])
-			wall_material.set_shader_parameter("data_size", 0)
+			if EventSystem.on_slow_tick.is_connected(update_data):
+				EventSystem.on_slow_tick.disconnect(update_data)
+			dollhouse.set_heat(null)
+			dollhouse.set_heat_data([])
 	)
 
 	R.effect(func(_arg):
-		wall_material.set_shader_parameter("alpha", opacity.value / 100.0)
+		dollhouse.set_heat_strength(opacity.value / 100.0)
 	)
 
-func _process(delta):
+## True while the rooms stand on the Map View (map_overview.gd), which then places
+## them every frame through [method place_on_map].
+var on_map := false
+
+## Where the map the model stands on ends: [centre, up, radius] (world space), or
+## null. Rooms and the player marker are cut off outside it.
+var _map_disc = null
+
+## Puts the rooms on a map: [param body_transform] is the global transform of the
+## body (without scale), [param model_scale] the map's scale, [param shown] whether
+## to show them at all, and [param disc] the round map's [centre, up, radius] in world
+## space, outside which they are cut off (null: not cut). [param walls] (0..1): how
+## far the dollhouse's walls have grown out of the floor.
+func place_on_map(body_transform: Transform3D, model_scale: float, shown: bool, disc = null, walls := 1.0):
+	if not on_map:
+		on_map = true
+		if not small.value:
+			small.value = true # builds and shows the rooms
+	body.global_transform = body_transform
+	small_node.scale = Vector3.ONE * model_scale
+	small_node.visible = shown
+	_map_disc = disc
+	dollhouse.set_view(walls, model_scale, disc)
+
+## Takes the rooms off the map again (the Map View closed): hidden.
+func leave_map():
+	if not on_map:
+		return
+	on_map = false
+	_map_disc = null
+	small.value = false
+
+## The Map View stays in the room after the menu closes. It is created on first use
+## and kept (with its loaded history) while hidden.
+func _show_map_overview(open: bool):
+	if open:
+		if _map_overview == null:
+			_map_overview = MapOverview.new()
+			_map_overview.on_close.connect(func(): map_view.value = false)
+		if _map_overview.get_parent() == null:
+			App.main.add_child(_map_overview)
+			_map_overview.open_in_front_of(App.camera)
+	elif _map_overview != null and _map_overview.get_parent() != null:
+		_map_overview.get_parent().remove_child(_map_overview)
+
+func _process(_delta):
+	if not on_map:
+		return
 	var cam_pos = App.camera.global_position
 	cam_pos.y += 0.1
 	player.mesh.height = cam_pos.y
 	player.position = Vector3(cam_pos.x, cam_pos.y / 2, cam_pos.z)
+	player.visible = small.value and _on_disc(player.global_position)
 
+## Whether a world position lies over the map the model stands on.
+func _on_disc(point: Vector3) -> bool:
+	if _map_disc == null:
+		return true
+	var offset: Vector3 = point - _map_disc[0]
+	var normal: Vector3 = _map_disc[1]
+	return (offset - offset.dot(normal) * normal).length() <= _map_disc[2]
 const SensorEntity = preload ("res://content/entities/sensor/sensor.gd")
 
 func get_base_scale() -> Vector2:
@@ -227,5 +214,4 @@ func update_data(_delta: float) -> void:
 		return data
 	)
 
-	wall_material.set_shader_parameter("data", data_list)
-	wall_material.set_shader_parameter("data_size", data_list.size())
+	dollhouse.set_heat_data(data_list)

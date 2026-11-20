@@ -2,7 +2,7 @@ extends Node3D
 
 const Miniature = preload ("res://content/system/miniature/miniature.gd")
 
-@onready var mini_view_button = $Content/MiniView
+@onready var map_view_button = $Content/MapView
 @onready var heat_map_button = $Content/HeatMap
 @onready var humudity_map_button = $Content/HumidityMap
 @onready var min_slider = $Content/MinSlider
@@ -21,9 +21,8 @@ func _ready():
 	if App.miniature.is_node_ready() == false:
 		await App.miniature.ready
 
-	mini_view_button.on_toggled.connect(func(active):
-		App.miniature.small.value=active
-	)
+	# The rooms are shown on the Map View; the miniature keeps whether it is open.
+	R.bind(map_view_button, "active", App.miniature.map_view, map_view_button.on_toggled)
 
 	heat_map_button.on_toggled.connect(func(active):
 		if active == false:

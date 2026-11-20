@@ -8,10 +8,13 @@ extends "res://test/ui/ui_gallery.gd"
 ##
 ##   U                 - push a random state update to every entity (watch_state path)
 ##   --edge-cases      - add a cell with malformed/minimal states to find crashes
+##   --frame-stats     - print the longest frames on exit, to spot main thread stalls
+##                       (e.g. while maps load)
 ##
 ## The last cell lists Home Assistant domains EntityFactory does not support yet.
 
 const MockHomeApi = preload ("./mock_home_api.gd")
+const MapOverview = preload ("res://content/system/map_overview/map_overview.gd")
 
 ## Common Home Assistant entity domains, used to report which ones have no widget yet.
 const HA_DOMAINS = [
@@ -25,10 +28,36 @@ const HA_DOMAINS = [
 ]
 
 var mock: MockHomeApi
+var _frame_times := PackedFloat32Array()
+var _last_frame_usec := 0
 
 func _ready():
 	_install_mock()
 	super()
+
+func _process(_delta):
+	if not _args.has("frame-stats"):
+		return
+	# Wall clock between frames, so a stall shows even if the engine caps delta.
+	var now = Time.get_ticks_usec()
+	if _last_frame_usec > 0:
+		_frame_times.append((now - _last_frame_usec) / 1000.0)
+	_last_frame_usec = now
+
+func _exit_tree():
+	if _frame_times.is_empty():
+		return
+	var sorted = Array(_frame_times)
+	sorted.sort()
+	sorted.reverse()
+	var slow = []
+	var elapsed = 0.0
+	for ms in _frame_times:
+		elapsed += ms
+		if ms > 50.0:
+			slow.append("%.0f ms at %.1f s" % [ms, elapsed / 1000.0])
+	print("frame-stats: %d frames, longest %s ms; over 50 ms: %s" % [
+		_frame_times.size(), ", ".join(sorted.slice(0, 5).map(func(ms): return "%.0f" % ms)), ", ".join(slow) if not slow.is_empty() else "none"])
 
 func _install_mock():
 	# Drop a real adapter HomeApi may have started from the saved settings.
@@ -152,6 +181,15 @@ func _initial_states() -> Dictionary:
 		"datetime.next_service": {"state": "2026-12-01T08:30:00+00:00", "attributes": {"friendly_name": "Next service"}},
 		"date.unknown": {"state": "unknown", "attributes": {"friendly_name": "Unset date"}},
 
+		# Made-up positions around a public landmark (Brandenburg Gate, Berlin)
+		"zone.home": {"state": "2", "attributes": {"friendly_name": "Home", "latitude": 52.5163, "longitude": 13.3777, "radius": 120, "icon": "mdi:home", "passive": false}},
+		"person.alice": {"state": "home", "attributes": {"friendly_name": "Alice Example", "latitude": 52.5164, "longitude": 13.3781, "gps_accuracy": 25, "source": "device_tracker.alice_phone"}},
+		"person.bob": {"state": "not_home", "attributes": {"friendly_name": "Bob", "latitude": 52.5215, "longitude": 13.4110, "gps_accuracy": 60, "source": "device_tracker.bob_phone"}},
+		"device_tracker.work_phone": {"state": "Work", "attributes": {"friendly_name": "Work phone", "source_type": "gps", "latitude": 52.5096, "longitude": 13.3760, "gps_accuracy": 15, "battery_level": 80}},
+		"device_tracker.router": {"state": "home", "attributes": {"friendly_name": "Laptop", "source_type": "router", "ip": "192.0.2.10"}},
+		"person.no_location": {"state": "not_home", "attributes": {"friendly_name": "Carol"}},
+		# Made-up position near a public mountain (Zugspitze) to test the height map
+		"device_tracker.hiker": {"state": "not_home", "attributes": {"friendly_name": "Hiking watch", "source_type": "gps", "latitude": 47.4211, "longitude": 10.9853, "gps_accuracy": 30}},
 		# supported_features: open 1, close 2, set_position 4, stop 8
 		"cover.living_room_blinds": {"state": "open", "attributes": {
 			"friendly_name": "Living room blinds", "device_class": "blind", "current_position": 60, "supported_features": 15}},
@@ -207,7 +245,6 @@ func _initial_states() -> Dictionary:
 		"sun.sun": {"state": "above_horizon", "attributes": {
 			"friendly_name": "Sun", "elevation": 18.4, "azimuth": 182.1, "rising": false,
 			"next_setting": _iso(now + 3 * 3600 + 1200), "next_rising": _iso(now + 15 * 3600)}},
-		"zone.home": {"state": "2", "attributes": {"friendly_name": "Home", "radius": 100, "passive": false}},
 		"zone.work": {"state": "0", "attributes": {"friendly_name": "Work", "radius": 250, "passive": false}},
 
 		# supported_features: install 1, specific_version 2, progress 4, backup 8, release_notes 16
@@ -276,6 +313,8 @@ func _push_random_updates():
 	for id in ["weather.sunny", "weather.rainy", "weather.lightning", "weather.snowy"]:
 		mock.update_entity(id, WEATHER_STATES.pick_random(), {"temperature": snappedf(randf_range(-5, 30), 0.1), "humidity": randi_range(20, 99)})
 	mock.update_entity("light.dimmable", "on", {"brightness": randi_range(10, 255)})
+	var bob = mock.entities["person.bob"].attributes
+	mock.update_entity("person.bob", "not_home", {"latitude": bob.latitude + randf_range(-0.002, 0.002), "longitude": bob.longitude + randf_range(-0.003, 0.003)})
 	mock.update_entity("vacuum.cleaning", ["cleaning", "paused", "returning", "idle"].pick_random(), {"battery_level": randi_range(5, 100)})
 	status_label.text = "Pushed random state updates"
 	await get_tree().create_timer(0.4).timeout
@@ -316,6 +355,13 @@ func _build_gallery():
 	_entity_cell("Select", [["select", "select.fan_mode"], ["input_select", "input_select.house_mode"], ["Unavailable", "select.unavailable"]])
 	_entity_cell("Text", [["text", "text.message"], ["input_text (empty)", "input_text.note"]])
 	_entity_cell("Date and time", [["date", "date.birthday"], ["time", "time.alarm"], ["datetime (local)", "datetime.next_service"], ["Unknown", "date.unknown"]])
+	_entity_cell("Person and tracker", [["Home", "person.alice"], ["Away", "person.bob"], ["GPS tracker in zone", "device_tracker.work_phone"],
+		["Router tracker (no GPS)", "device_tracker.router"], ["No location", "person.no_location"]])
+	_entity_cell("3D map", [["Home (houses)", "person.alice", false, null, {"map_3d": true}],
+		["Away", "person.bob", false, null, {"map_3d": true}],
+		["Mountains (height map)", "device_tracker.hiker", false, null, {"map_3d": true}],
+		["Settings open", "device_tracker.work_phone", true, null, {"map_3d": true}]])
+	_map_overview_cell()
 	_entity_cell("Cover", [["Blinds at 60 %", "cover.living_room_blinds"], ["Curtains closed", "cover.curtains"],
 		["Garage (no position)", "cover.garage"], ["Unavailable", "cover.unavailable"]])
 	_entity_cell("Fan", [["Speed + presets + oscillate", "fan.ceiling"], ["Speed only (off)", "fan.desk"], ["On/off only", "fan.simple"]])
@@ -364,6 +410,18 @@ func _layout_when_ready():
 		_focus_cell_by_name(_args["focus"])
 	else:
 		_focus_all()
+
+## The floating "Map View" (content/system/map_overview), in 2D and 3D.
+func _map_overview_cell():
+	var cell = _new_cell("Map overview")
+	for in_3d in [false, true]:
+		var overview = MapOverview.new()
+		overview.use_3d.value = in_3d
+		# It lies flat; tip it towards the gallery camera, as if looked down at.
+		overview.rotation.x = deg_to_rad(55.0)
+		cell.get_node("Content").add_child(overview)
+		cell.get_meta("items").append({"node": overview, "caption": _caption("Map View (%s)" % ("3D" if in_3d else "2D"))})
+		cell.get_node("Content").add_child(cell.get_meta("items")[-1].caption)
 
 ## Minimal states real Home Assistant can send; used to surface crashes.
 func _add_edge_case_states():
@@ -423,13 +481,15 @@ func _caption(text: String) -> Label3D:
 	caption.modulate = Color(1, 1, 1, 0.6)
 	return caption
 
-## variants: [caption, entity_id, show_settings?, type?]
+## variants: [caption, entity_id, show_settings?, type?, options?]
 func _entity_cell(cell_name: String, variants: Array):
 	var cell = _new_cell(cell_name)
 	var content = cell.get_node("Content")
 
 	for variant in variants:
 		var entity = EntityFactory.create_entity(variant[1], variant[3] if variant.size() > 3 else null)
+		if entity != null and variant.size() > 4:
+			entity.set_options(variant[4]) # e.g. {"map_3d": true}
 		var caption = _caption(variant[0] + "\n" + variant[1] if entity != null else variant[0] + "\n(not created)")
 		content.add_child(caption)
 
