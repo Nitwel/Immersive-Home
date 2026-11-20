@@ -182,7 +182,7 @@ func _initial_states() -> Dictionary:
 		"date.unknown": {"state": "unknown", "attributes": {"friendly_name": "Unset date"}},
 
 		# Made-up positions around a public landmark (Brandenburg Gate, Berlin)
-		"zone.home": {"state": "1", "attributes": {"friendly_name": "Home", "latitude": 52.5163, "longitude": 13.3777, "radius": 120, "icon": "mdi:home"}},
+		"zone.home": {"state": "2", "attributes": {"friendly_name": "Home", "latitude": 52.5163, "longitude": 13.3777, "radius": 120, "icon": "mdi:home", "passive": false}},
 		"person.alice": {"state": "home", "attributes": {"friendly_name": "Alice Example", "latitude": 52.5164, "longitude": 13.3781, "gps_accuracy": 25, "source": "device_tracker.alice_phone"}},
 		"person.bob": {"state": "not_home", "attributes": {"friendly_name": "Bob", "latitude": 52.5215, "longitude": 13.4110, "gps_accuracy": 60, "source": "device_tracker.bob_phone"}},
 		"device_tracker.work_phone": {"state": "Work", "attributes": {"friendly_name": "Work phone", "source_type": "gps", "latitude": 52.5096, "longitude": 13.3760, "gps_accuracy": 15, "battery_level": 80}},
@@ -190,7 +190,110 @@ func _initial_states() -> Dictionary:
 		"person.no_location": {"state": "not_home", "attributes": {"friendly_name": "Carol"}},
 		# Made-up position near a public mountain (Zugspitze) to test the height map
 		"device_tracker.hiker": {"state": "not_home", "attributes": {"friendly_name": "Hiking watch", "source_type": "gps", "latitude": 47.4211, "longitude": 10.9853, "gps_accuracy": 30}},
+		# supported_features: open 1, close 2, set_position 4, stop 8
+		"cover.living_room_blinds": {"state": "open", "attributes": {
+			"friendly_name": "Living room blinds", "device_class": "blind", "current_position": 60, "supported_features": 15}},
+		"cover.curtains": {"state": "closed", "attributes": {
+			"friendly_name": "Bedroom curtains", "device_class": "curtain", "current_position": 0, "supported_features": 15}},
+		"cover.garage": {"state": "closed", "attributes": {
+			"friendly_name": "Garage door", "device_class": "garage", "supported_features": 11}},
+		"cover.unavailable": {"state": "unavailable", "attributes": {"friendly_name": "Shutter", "device_class": "shutter"}},
+
+		# supported_features: set_speed 1, oscillate 2, preset_mode 8, turn_off 16, turn_on 32
+		"fan.ceiling": {"state": "on", "attributes": {
+			"friendly_name": "Ceiling fan", "percentage": 66, "percentage_step": 33.333333, "oscillating": false,
+			"preset_modes": ["auto", "sleep", "nature"], "preset_mode": null, "supported_features": 59}},
+		"fan.desk": {"state": "off", "attributes": {
+			"friendly_name": "Desk fan", "percentage": 0, "percentage_step": 1, "supported_features": 49}},
+		"fan.simple": {"state": "on", "attributes": {"friendly_name": "Bathroom fan", "supported_features": 48}},
+
+		# supported_features: pause 4, stop 8, return_home 16, fan_speed 32, battery 64,
+		# locate 512, clean_spot 1024, state 4096, start 8192
+		"vacuum.robot": {"state": "docked", "attributes": {
+			"friendly_name": "Robot vacuum", "battery_level": 92, "fan_speed": "balanced",
+			"fan_speed_list": ["quiet", "balanced", "turbo", "max"], "supported_features": 13948}},
+		"vacuum.cleaning": {"state": "cleaning", "attributes": {
+			"friendly_name": "Upstairs vacuum", "battery_level": 47, "supported_features": 12380}},
+		"vacuum.error": {"state": "error", "attributes": {
+			"friendly_name": "Basement vacuum", "battery_level": 5, "supported_features": 12380}},
+
+		# supported_features: arm_home 1, arm_away 2, arm_night 4, trigger 8, custom_bypass 16, vacation 32
+		"alarm_control_panel.house": {"state": "disarmed", "attributes": {
+			"friendly_name": "House alarm", "code_format": "number", "code_arm_required": false, "_code": "1234",
+			"supported_features": 39}},
+		"alarm_control_panel.garage": {"state": "armed_away", "attributes": {
+			"friendly_name": "Garage alarm", "code_format": null, "supported_features": 3}},
+		"alarm_control_panel.triggered": {"state": "triggered", "attributes": {
+			"friendly_name": "Shed alarm", "code_format": "number", "_code": "0000", "supported_features": 3}},
+
+		"humidifier.bedroom": {"state": "on", "attributes": {
+			"friendly_name": "Bedroom humidifier", "humidity": 45, "current_humidity": 38, "min_humidity": 30,
+			"max_humidity": 80, "mode": "normal", "available_modes": ["normal", "eco", "sleep", "boost"],
+			"action": "humidifying", "device_class": "humidifier", "supported_features": 1}},
+		"humidifier.basement": {"state": "off", "attributes": {
+			"friendly_name": "Basement dehumidifier", "humidity": 55, "current_humidity": 63,
+			"action": "off", "device_class": "dehumidifier"}},
+
+		# supported_features: target_temperature 1, operation_mode 2, away_mode 4, on_off 8
+		"water_heater.boiler": {"state": "eco", "attributes": {
+			"friendly_name": "Boiler", "temperature": 55, "current_temperature": 48, "min_temp": 40, "max_temp": 65,
+			"operation_list": ["off", "eco", "electric", "heat_pump", "performance"], "operation_mode": "eco",
+			"away_mode": "off", "supported_features": 15}},
+		"water_heater.simple": {"state": "electric", "attributes": {
+			"friendly_name": "Kitchen water heater", "temperature": 60, "current_temperature": 59}},
+
+		"sun.sun": {"state": "above_horizon", "attributes": {
+			"friendly_name": "Sun", "elevation": 18.4, "azimuth": 182.1, "rising": false,
+			"next_setting": _iso(now + 3 * 3600 + 1200), "next_rising": _iso(now + 15 * 3600)}},
+		"zone.work": {"state": "0", "attributes": {"friendly_name": "Work", "radius": 250, "passive": false}},
+
+		# supported_features: install 1, specific_version 2, progress 4, backup 8, release_notes 16
+		"update.core": {"state": "on", "attributes": {
+			"friendly_name": "Home Assistant Core Update", "title": "Home Assistant Core", "installed_version": "2026.10.4",
+			"latest_version": "2026.11.2", "in_progress": false, "update_percentage": null,
+			"release_summary": "Fixes for the energy dashboard and faster startup.", "supported_features": 29}},
+		"update.firmware": {"state": "off", "attributes": {
+			"friendly_name": "Bulb firmware", "installed_version": "1.4.2", "latest_version": "1.4.2", "in_progress": false,
+			"supported_features": 5}},
+
+		"event.doorbell": {"state": _iso(now - 300), "attributes": {
+			"friendly_name": "Front doorbell", "device_class": "doorbell", "event_type": "ring", "event_types": ["ring"]}},
+		"event.remote": {"state": _iso(now - 7200), "attributes": {
+			"friendly_name": "Living room remote", "device_class": "button", "event_type": "double_press",
+			"event_types": ["single_press", "double_press", "long_press"]}},
+		"event.never": {"state": "unknown", "attributes": {"friendly_name": "Motion event", "device_class": "motion"}},
+
+		"image.badge": {"state": _iso(now - 60), "attributes": {
+			"friendly_name": "Website badge", "entity_picture": "res://assets/badges/website.png"}},
+		"image.missing": {"state": "unknown", "attributes": {"friendly_name": "Map snapshot"}},
+
+		"air_quality.outside": {"state": "12.4", "attributes": {
+			"friendly_name": "Outside air", "particulate_matter_10": 18.2, "air_quality_index": 42,
+			"nitrogen_dioxide": 21, "ozone": 54.3}},
+
+		"calendar.family": {"state": "on", "attributes": {
+			"friendly_name": "Family", "message": "Dentist appointment", "all_day": false,
+			"start_time": _local(now - 1200), "end_time": _local(now + 2400), "location": "Main Street 12"}},
+		"calendar.holidays": {"state": "off", "attributes": {
+			"friendly_name": "Holidays", "message": "Christmas Eve", "all_day": true,
+			"start_time": "2026-12-24 00:00:00", "end_time": "2026-12-25 00:00:00"}},
+		"calendar.empty": {"state": "off", "attributes": {"friendly_name": "Work"}},
+
+		"todo.shopping": {"state": "3", "attributes": {"friendly_name": "Shopping list", "_items": [
+			{"uid": "1", "summary": "Milk", "status": "needs_action"},
+			{"uid": "2", "summary": "Bread", "status": "needs_action", "due": _local(now + 86400).substr(0, 10)},
+			{"uid": "3", "summary": "Coffee beans from the roastery around the corner", "status": "needs_action"},
+			{"uid": "4", "summary": "Apples", "status": "completed"}]}},
+		"todo.chores": {"state": "0", "attributes": {"friendly_name": "Chores", "_items": []}},
 	}
+
+## UTC timestamp like Home Assistant's last_changed.
+func _iso(unix: float) -> String:
+	return Time.get_datetime_string_from_unix_time(int(unix)) + "+00:00"
+
+## Local wall-clock time like calendar start_time ("2026-11-20 10:00:00").
+func _local(unix: float) -> String:
+	return Time.get_datetime_string_from_unix_time(int(unix) + int(Time.get_time_zone_from_system().bias) * 60, true)
 
 func _weather(state: String, temperature: float, humidity: int) -> Dictionary:
 	return {"state": state, "attributes": {
@@ -212,6 +315,7 @@ func _push_random_updates():
 	mock.update_entity("light.dimmable", "on", {"brightness": randi_range(10, 255)})
 	var bob = mock.entities["person.bob"].attributes
 	mock.update_entity("person.bob", "not_home", {"latitude": bob.latitude + randf_range(-0.002, 0.002), "longitude": bob.longitude + randf_range(-0.003, 0.003)})
+	mock.update_entity("vacuum.cleaning", ["cleaning", "paused", "returning", "idle"].pick_random(), {"battery_level": randi_range(5, 100)})
 	status_label.text = "Pushed random state updates"
 	await get_tree().create_timer(0.4).timeout
 	_layout()
@@ -258,6 +362,21 @@ func _build_gallery():
 		["Mountains (height map)", "device_tracker.hiker", false, null, {"map_3d": true}],
 		["Settings open", "device_tracker.work_phone", true, null, {"map_3d": true}]])
 	_map_overview_cell()
+	_entity_cell("Cover", [["Blinds at 60 %", "cover.living_room_blinds"], ["Curtains closed", "cover.curtains"],
+		["Garage (no position)", "cover.garage"], ["Unavailable", "cover.unavailable"]])
+	_entity_cell("Fan", [["Speed + presets + oscillate", "fan.ceiling"], ["Speed only (off)", "fan.desk"], ["On/off only", "fan.simple"]])
+	_entity_cell("Vacuum", [["Docked, all features", "vacuum.robot"], ["Cleaning", "vacuum.cleaning"], ["Error", "vacuum.error"]])
+	_entity_cell("Alarm panel", [["Disarmed (code)", "alarm_control_panel.house"], ["Armed away", "alarm_control_panel.garage"],
+		["Triggered (code)", "alarm_control_panel.triggered"]])
+	_entity_cell("Humidifier", [["On with modes", "humidifier.bedroom"], ["Off, no modes", "humidifier.basement"]])
+	_entity_cell("Water heater", [["Operation modes", "water_heater.boiler"], ["No mode list", "water_heater.simple"]])
+	_entity_cell("Sun and zones", [["sun", "sun.sun"], ["zone", "zone.home"], ["Empty zone", "zone.work"]])
+	_entity_cell("Update", [["Available", "update.core"], ["Up to date", "update.firmware"]])
+	_entity_cell("Event", [["Doorbell", "event.doorbell"], ["Remote", "event.remote"], ["Never fired", "event.never"]])
+	_entity_cell("Image", [["Picture", "image.badge"], ["No picture", "image.missing"]])
+	_entity_cell("Air quality", [["Outside", "air_quality.outside"]])
+	_entity_cell("Calendar", [["Running now", "calendar.family"], ["All day, upcoming", "calendar.holidays"], ["No events", "calendar.empty"]])
+	_entity_cell("To-do", [["Shopping list", "todo.shopping"], ["Empty", "todo.chores"]])
 	_entity_cell("Reused widgets", [["input_boolean", "input_boolean.guest_mode"], ["automation", "automation.night_lights"],
 		["input_number", "input_number.volume"], ["input_button", "input_button.doorbell"], ["scene", "scene.movie"],
 		["script", "script.good_night"], ["counter", "counter.coffees"]])
@@ -266,7 +385,11 @@ func _build_gallery():
 		_add_edge_case_states()
 		_entity_cell("Edge cases", [
 			["Sensor w/o name", "sensor.no_name"], ["Light w/o attrs", "light.bare"],
-			["Number unavailable", "number.bare"], ["Weather unknown", "weather.unknown"]])
+			["Number unavailable", "number.bare"], ["Weather unknown", "weather.unknown"],
+			["Cover w/o attrs", "cover.bare"], ["Fan w/o attrs", "fan.bare"], ["Vacuum w/o attrs", "vacuum.bare"],
+			["Alarm w/o attrs", "alarm_control_panel.bare"], ["Humidifier w/o attrs", "humidifier.bare"],
+			["Water heater w/o attrs", "water_heater.bare"], ["Update w/o attrs", "update.bare"],
+			["Calendar unavailable", "calendar.bare"], ["To-do unavailable", "todo.bare"]])
 
 	_add_unsupported_cell()
 
@@ -306,6 +429,15 @@ func _add_edge_case_states():
 	mock.entities["light.bare"] = {"state": "on", "attributes": {}}
 	mock.entities["number.bare"] = {"state": "unavailable", "attributes": {}}
 	mock.entities["weather.unknown"] = {"state": "unknown", "attributes": {}}
+	mock.entities["cover.bare"] = {"state": "open", "attributes": {}}
+	mock.entities["fan.bare"] = {"state": "on", "attributes": {}}
+	mock.entities["vacuum.bare"] = {"state": "docked", "attributes": {}}
+	mock.entities["alarm_control_panel.bare"] = {"state": "armed_home", "attributes": {}}
+	mock.entities["humidifier.bare"] = {"state": "on", "attributes": {}}
+	mock.entities["water_heater.bare"] = {"state": "eco", "attributes": {}}
+	mock.entities["update.bare"] = {"state": "on", "attributes": {}}
+	mock.entities["calendar.bare"] = {"state": "unavailable", "attributes": {}}
+	mock.entities["todo.bare"] = {"state": "unavailable", "attributes": {}}
 
 ## Creates an empty cell; [param items] are filled with {node, caption} pairs.
 func _new_cell(cell_name: String) -> Node3D:

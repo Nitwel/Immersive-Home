@@ -151,6 +151,15 @@ func get_voice_assistant() -> VoiceAssistant:
 
 	return api.get_voice_assistant()
 
+## Returns the items of a to-do list entity: [{uid, summary, status, due?}], or an
+## empty array if the adapter can't list them.
+func get_todo_items(entity_id: String) -> Array:
+	if has_connected() == false||api.has_method("get_todo_items") == false:
+		return []
+
+	var items = await api.get_todo_items(entity_id)
+	return items if items is Array else []
+
 func get_history(entity_id, start, interval, end=null):
 	assert(has_connected(), "Not connected")
 

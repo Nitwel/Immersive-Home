@@ -85,6 +85,20 @@ func set_state(entity: String, state: Variant, attributes: Dictionary = {}):
 			_simulate_climate(current, state, attributes)
 		"lock":
 			_simulate_lock(entity, current, state)
+		"cover":
+			_simulate_cover(entity, current, state, attributes)
+		"fan":
+			_simulate_fan(current, state, attributes)
+		"vacuum":
+			_simulate_vacuum(entity, current, state, attributes)
+		"alarm_control_panel":
+			_simulate_alarm(entity, current, state, attributes)
+		"humidifier":
+			_simulate_humidifier(current, state, attributes)
+		"water_heater":
+			_simulate_water_heater(current, state, attributes)
+		"update":
+			_simulate_update(entity, current, state)
 		_:
 			return null
 
@@ -140,6 +154,12 @@ func get_state_history(entity_ids: Array, start: String, _end = null) -> Diction
 			entries.append({"state": current.state, "attributes": attrs.duplicate(), "time": now})
 		history[id] = entries
 	return history
+## To-do items are kept in the entity's "_items" attribute.
+func get_todo_items(entity_id: String):
+	var state = entities.get(entity_id)
+	if state == null:
+		return []
+	return state.attributes.get("_items", []).duplicate(true)
 
 ## Fake hourly statistics: a smooth curve around the entity's current value.
 func get_history(entity_id, start, interval, _end = null):
@@ -265,6 +285,163 @@ func _simulate_lock(entity: String, current: Dictionary, state):
 	get_tree().create_timer(1.0).timeout.connect(func():
 		update_entity(entity, target)
 	)
+
+## Increases on every cover command, so a running movement notices it was replaced.
+var _cover_moves := {}
+
+## Covers move 10 % every 0.3 s and report opening/closing meanwhile. Covers without
+## current_position switch after a second.
+func _simulate_cover(entity: String, current: Dictionary, state, service_data: Dictionary):
+	var attrs: Dictionary = current.attributes
+	var move_id = _cover_moves.get(entity, 0) + 1
+	_cover_moves[entity] = move_id
+
+	if state == "stop":
+		if current.state in ["opening", "closing"]:
+			current.state = "closed" if attrs.get("current_position", 1) == 0 else "open"
+		return
+
+	var target = {"open": 100, "close": 0}.get(state, service_data.get("position"))
+	if target == null:
+		return
+	target = clampi(int(target), 0, 100)
+
+	if attrs.get("current_position") == null:
+		current.state = "opening" if target > 0 else "closing"
+		get_tree().create_timer(1.0).timeout.connect(func():
+			if _cover_moves[entity] == move_id:
+				update_entity(entity, "open" if target > 0 else "closed")
+		)
+		return
+
+	var position = int(attrs["current_position"])
+	if position == target:
+		return
+	current.state = "opening" if target > position else "closing"
+	_move_cover(entity, move_id, target)
+
+func _move_cover(entity: String, move_id: int, target: int):
+	await get_tree().create_timer(0.3).timeout
+	if _cover_moves.get(entity) != move_id or not entities.has(entity):
+		return
+	var position = int(entities[entity].attributes["current_position"])
+	position = int(move_toward(position, target, 10))
+	if position == target:
+		update_entity(entity, "closed" if position == 0 else "open", {"current_position": position})
+	else:
+		update_entity(entity, entities[entity].state, {"current_position": position})
+		_move_cover(entity, move_id, target)
+
+func _simulate_fan(current: Dictionary, state, service_data: Dictionary):
+	var attrs: Dictionary = current.attributes
+	match state:
+		"on":
+			current.state = "on"
+			if attrs.has("percentage") and not attrs.get("percentage"):
+				attrs["percentage"] = attrs.get("_last_percentage", 50)
+		"off":
+			current.state = "off"
+			if attrs.get("percentage"):
+				attrs["_last_percentage"] = attrs["percentage"]
+				attrs["percentage"] = 0
+		"percentage":
+			var percentage = int(service_data.get("percentage", 0))
+			attrs["percentage"] = percentage
+			current.state = "on" if percentage > 0 else "off"
+		"preset_mode":
+			if service_data.get("preset_mode") in attrs.get("preset_modes", []):
+				attrs["preset_mode"] = service_data["preset_mode"]
+				current.state = "on"
+		"oscillate":
+			attrs["oscillating"] = service_data.get("oscillating", false)
+
+func _simulate_vacuum(entity: String, current: Dictionary, state, service_data: Dictionary):
+	var attrs: Dictionary = current.attributes
+	match state:
+		"start", "clean_spot": current.state = "cleaning"
+		"pause": current.state = "paused"
+		"stop": current.state = "idle"
+		"locate": pass
+		"fan_speed":
+			if service_data.get("fan_speed") in attrs.get("fan_speed_list", []):
+				attrs["fan_speed"] = service_data["fan_speed"]
+		"return_to_base":
+			current.state = "returning"
+			get_tree().create_timer(2.0).timeout.connect(func():
+				if entities[entity].state == "returning":
+					update_entity(entity, "docked")
+			)
+
+## Arming takes a moment ("arming"), disarming is immediate. A code_format panel
+## checks the code against "_code".
+func _simulate_alarm(entity: String, current: Dictionary, state, service_data: Dictionary):
+	var attrs: Dictionary = current.attributes
+	if attrs.get("code_format") != null and (state == "disarm" or attrs.get("code_arm_required", true)):
+		if str(service_data.get("code", "")) != str(attrs.get("_code", "")):
+			push_warning("mock_home_api: wrong alarm code for %s" % entity)
+			return
+	if state == "disarm":
+		current.state = "disarmed"
+		return
+	var target = {"arm_home": "armed_home", "arm_away": "armed_away", "arm_night": "armed_night",
+		"arm_vacation": "armed_vacation", "arm_custom_bypass": "armed_custom_bypass"}.get(state)
+	if target == null:
+		return
+	current.state = "arming"
+	get_tree().create_timer(1.5).timeout.connect(func():
+		if entities[entity].state == "arming":
+			update_entity(entity, target)
+	)
+
+func _simulate_humidifier(current: Dictionary, state, service_data: Dictionary):
+	var attrs: Dictionary = current.attributes
+	match state:
+		"on", "off": current.state = state
+		"humidity": attrs["humidity"] = service_data.get("humidity", attrs.get("humidity"))
+		"mode":
+			if service_data.get("mode") in attrs.get("available_modes", []):
+				attrs["mode"] = service_data["mode"]
+	if attrs.has("action"):
+		var wants_more = float(attrs.get("current_humidity", 0)) < float(attrs.get("humidity", 0))
+		attrs["action"] = "off" if current.state == "off" else ("humidifying" if wants_more else "idle")
+
+func _simulate_water_heater(current: Dictionary, state, service_data: Dictionary):
+	var attrs: Dictionary = current.attributes
+	match state:
+		"temperature": attrs["temperature"] = service_data.get("temperature", attrs.get("temperature"))
+		"operation_mode":
+			var mode = service_data.get("operation_mode")
+			if mode in attrs.get("operation_list", []):
+				current.state = mode
+				attrs["operation_mode"] = mode
+		"on", "off":
+			current.state = "eco" if state == "on" else "off"
+			attrs["operation_mode"] = current.state
+
+## Installs in 10 % steps, then reports the latest version as installed.
+func _simulate_update(entity: String, current: Dictionary, state):
+	var attrs: Dictionary = current.attributes
+	match state:
+		"skip":
+			attrs["skipped_version"] = attrs.get("latest_version")
+			current.state = "off"
+		"install":
+			attrs["in_progress"] = true
+			attrs["update_percentage"] = 0
+			_install_update(entity)
+
+func _install_update(entity: String):
+	await get_tree().create_timer(0.3).timeout
+	if not entities.has(entity):
+		return
+	var attrs = entities[entity].attributes
+	var progress = int(attrs.get("update_percentage", 0)) + 10
+	if progress >= 100:
+		update_entity(entity, "off", {"in_progress": false, "update_percentage": null,
+			"installed_version": attrs.get("latest_version")})
+	else:
+		update_entity(entity, "on", {"update_percentage": progress})
+		_install_update(entity)
 
 static func _parse_duration(text) -> int:
 	var parts = str(text).split(":")

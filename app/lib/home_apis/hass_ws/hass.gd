@@ -140,6 +140,17 @@ const SERVICES = {
 	"timer": {"start": "start", "cancel": "cancel", "pause": "pause"},
 	"climate": {"temperature": "set_temperature", "hvac_mode": "set_hvac_mode"},
 	"lock": {"lock": "lock", "unlock": "unlock", "open": "open"},
+	"cover": {"open": "open_cover", "close": "close_cover", "stop": "stop_cover", "position": "set_cover_position"},
+	"fan": {"on": "turn_on", "off": "turn_off", "percentage": "set_percentage", "preset_mode": "set_preset_mode",
+		"oscillate": "oscillate"},
+	"vacuum": {"start": "start", "pause": "pause", "stop": "stop", "return_to_base": "return_to_base",
+		"locate": "locate", "clean_spot": "clean_spot", "fan_speed": "set_fan_speed"},
+	"alarm_control_panel": {"disarm": "alarm_disarm", "arm_home": "alarm_arm_home", "arm_away": "alarm_arm_away",
+		"arm_night": "alarm_arm_night", "arm_vacation": "alarm_arm_vacation", "arm_custom_bypass": "alarm_arm_custom_bypass"},
+	"humidifier": {"on": "turn_on", "off": "turn_off", "humidity": "set_humidity", "mode": "set_mode"},
+	"water_heater": {"on": "turn_on", "off": "turn_off", "temperature": "set_temperature",
+		"operation_mode": "set_operation_mode"},
+	"update": {"install": "install", "skip": "skip"},
 }
 
 ## Domains whose widgets send the new value itself as the state. The value is passed
@@ -196,6 +207,18 @@ func update_room(room: String):
 
 func get_voice_assistant():
 	return assist_handler
+
+func get_todo_items(entity_id: String):
+	var response = await connection.send_request_packet({
+		"type": "todo/item/list",
+		"entity_id": entity_id,
+	})
+
+	if response.status != Promise.Status.RESOLVED||response.payload.get("success") != true:
+		return []
+
+	var result = response.payload.get("result")
+	return result.get("items", []) if result is Dictionary else []
 
 func get_history(entity_id, start, interval, end=null):
 	return await history_handler.get_history(entity_id, start, interval, end)

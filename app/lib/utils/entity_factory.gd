@@ -19,6 +19,20 @@ const LockEntity = preload ("res://content/entities/lock/lock.tscn")
 const TextEntity = preload ("res://content/entities/text/text.tscn")
 const DateTimeEntity = preload ("res://content/entities/datetime/datetime.tscn")
 const PersonEntity = preload ("res://content/entities/person/person.tscn")
+const CoverEntity = preload ("res://content/entities/cover/cover.tscn")
+const FanEntity = preload ("res://content/entities/fan/fan.tscn")
+const VacuumEntity = preload ("res://content/entities/vacuum/vacuum.tscn")
+const AlarmEntity = preload ("res://content/entities/alarm_control_panel/alarm_control_panel.tscn")
+const HumidifierEntity = preload ("res://content/entities/humidifier/humidifier.tscn")
+const WaterHeaterEntity = preload ("res://content/entities/water_heater/water_heater.tscn")
+const SunEntity = preload ("res://content/entities/sun/sun.tscn")
+const ZoneEntity = preload ("res://content/entities/zone/zone.tscn")
+const UpdateEntity = preload ("res://content/entities/update/update.tscn")
+const EventEntity = preload ("res://content/entities/event/event.tscn")
+const ImageEntity = preload ("res://content/entities/image/image.tscn")
+const AirQualityEntity = preload ("res://content/entities/air_quality/air_quality.tscn")
+const CalendarEntity = preload ("res://content/entities/calendar/calendar.tscn")
+const TodoEntity = preload ("res://content/entities/todo/todo.tscn")
 
 ## Widget used for each Home Assistant domain. Several domains share a widget when
 ## they behave the same (e.g. input_boolean is a switch, scene/script are pressed once).
@@ -51,6 +65,20 @@ const SCENES = {
 	"datetime": DateTimeEntity,
 	"person": PersonEntity,
 	"device_tracker": PersonEntity,
+	"cover": CoverEntity,
+	"fan": FanEntity,
+	"vacuum": VacuumEntity,
+	"alarm_control_panel": AlarmEntity,
+	"humidifier": HumidifierEntity,
+	"water_heater": WaterHeaterEntity,
+	"sun": SunEntity,
+	"zone": ZoneEntity,
+	"update": UpdateEntity,
+	"event": EventEntity,
+	"image": ImageEntity,
+	"air_quality": AirQualityEntity,
+	"calendar": CalendarEntity,
+	"todo": TodoEntity,
 	# Not a Home Assistant domain: the history chart of a sensor
 	"line_chart": LineGraphEntity,
 }
@@ -85,6 +113,20 @@ const ICONS = {
 	"datetime": "event",
 	"person": "person",
 	"device_tracker": "location_on",
+	"cover": "blinds",
+	"fan": "mode_fan",
+	"vacuum": "cleaning_services",
+	"alarm_control_panel": "shield",
+	"humidifier": "humidity_percentage",
+	"water_heater": "water_heater",
+	"sun": "wb_sunny",
+	"zone": "location_on",
+	"update": "system_update",
+	"event": "event",
+	"image": "image",
+	"air_quality": "air",
+	"calendar": "calendar_month",
+	"todo": "checklist",
 }
 
 ## Home Assistant domains that create_entity can turn into an entity widget.
