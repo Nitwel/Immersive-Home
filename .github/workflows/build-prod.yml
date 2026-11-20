@@ -77,20 +77,24 @@ jobs:
 
           echo "${{ secrets.KEYSTORE_RELEASE }}" | base64 -di > release.keystore
 
-          mkdir -p ./android/build
-          touch ./android/build/.gdignore
+          # The Godot project lives in app/, the Android build template goes into app/android
+          mkdir -p ./app/android/build
+          touch ./app/android/build/.gdignore
 
           wget -nv https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz -O ./godot_templates.tpz
           unzip -q ./godot_templates.tpz -d .
           rm ./godot_templates.tpz
-          unzip -q ./templates/android_source.zip -d ./android/build/
+          unzip -q ./templates/android_source.zip -d ./app/android/build/
           rm ./templates/android_source.zip
 
-          sed -i 's/singleInstancePerTask/singleTask/g' ./android/build/src/main/AndroidManifest.xml
+          # Godot refuses gradle builds when the template has no version info
+          echo -n "4.7.2.stable" > ./app/android/.build_version
 
-          versioncode=$(eval "cat export_presets.cfg | grep version/code | tail -1 | cut -d'=' -f2")
-          sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$versioncode\"/g" ./android/build/src/main/AndroidManifest.xml
-          sed -i "s/android:versionName=\"1.0\"/android:versionName=\"${{ github.ref_name }}\"/g" ./android/build/src/main/AndroidManifest.xml
+          sed -i 's/singleInstancePerTask/singleTask/g' ./app/android/build/src/main/AndroidManifest.xml
+
+          # Godot passes the version name of the export preset to gradle, use the tag
+          sed -i "s/^version\/name=.*/version\/name=\"${{ github.ref_name }}\"/" ./app/export_presets.cfg
+          grep -E "^(name|version/code|version/name)=" ./app/export_presets.cfg
 
       - name: export game
         id: export
@@ -100,7 +104,7 @@ jobs:
           # Defining all the required inputs
           godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip
           godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz
-          relative_project_path: ./
+          relative_project_path: ./app
           archive_output: true
           filter_exports: "AndroidProduction"
 
