@@ -112,5 +112,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           generateReleaseNotes: true
+          # Tags like v0.7.0-alpha.1 become pre-releases: not "Latest" on GitHub, and only
+          # offered in HACS to users who enabled beta versions
+          prerelease: ${{ contains(github.ref_name, '-') }}
           # Added "/*" at the end is glob pattern match for this action
           artifacts: ${{ steps.export.outputs.archive_directory }}/*,${{ runner.temp }}/integration/Integration.zip
