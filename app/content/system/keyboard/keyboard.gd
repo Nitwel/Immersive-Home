@@ -64,6 +64,8 @@ const ICONS = {
 
 var caps_button: Button3D
 var qr_button: Button3D
+## The running QR scan was started from this keyboard.
+var _qr_scan_started := false
 var shift_buttons: Array[Button3D] = []
 ## Buttons that type a character, mapped to their unshifted key.
 var char_buttons := {}
@@ -230,13 +232,20 @@ func _is_char_key(key: int) -> bool:
 
 func _connect_qr_scanner():
 	qr_button.on_button_down.connect(_start_qr_scan)
-	qr_button.on_button_up.connect(QrScanner.stop)
+	qr_button.on_button_up.connect(func(_event=null):
+		_qr_scan_started=false
+		QrScanner.stop()
+	)
 
 	QrScanner.on_scanning_changed.connect(func(scanning):
 		qr_button.active = scanning
 	)
 
 	QrScanner.on_timeout.connect(func():
+		# Other scans, e.g. the room alignment, report their own timeout.
+		if not _qr_scan_started:
+			return
+		_qr_scan_started = false
 		EventSystem.notify("No QR code found.", EventNotify.Type.WARNING)
 	)
 
@@ -246,6 +255,7 @@ func _connect_qr_scanner():
 	tree_exiting.connect(QrScanner.stop)
 
 func _start_qr_scan():
+	_qr_scan_started = true
 	var error = await QrScanner.start()
 
 	match error:
@@ -260,6 +270,7 @@ func _start_qr_scan():
 		qr_button.active = false
 
 func _on_qr_scanned(text: String):
+	_qr_scan_started = false
 	var focused = EventSystem.get_focused()
 
 	if focused == null:

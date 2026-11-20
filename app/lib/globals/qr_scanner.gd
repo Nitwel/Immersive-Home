@@ -10,6 +10,9 @@ extends Node
 
 ## Emitted with the content of the first QR code found during a scan. The scan stops right after.
 signal on_scanned(text: String)
+## Emitted for every QR code seen during a scan started with stop_on_first = false, with its
+## pose in tracking space, as often as the codes are detected. The scan keeps running.
+signal on_marker(text: String, pose: Transform3D)
 ## Emitted when a scan starts or stops.
 signal on_scanning_changed(scanning: bool)
 ## Emitted when a scan stops because no QR code was found in time.
@@ -53,6 +56,7 @@ var _discovery_started_at := 0.0
 var _discovery_cooldown := 0.0
 var _scan_time_left := 0.0
 var _component_data: Array[OpenXRSpatialComponentData] = []
+var _stop_on_first := true
 
 func _ready():
 	set_process(false)
@@ -67,14 +71,17 @@ func is_supported() -> bool:
 	return _marker_tracking != null && _spatial_entities != null && _marker_tracking.is_qrcode_supported()
 
 ## Starts scanning for QR codes. The first QR code found is emitted with [signal on_scanned].
+## With [param stop_on_first] false, every detection is emitted with [signal on_marker]
+## instead, until [method stop] is called or the scan times out.
 ## Returns once the scan is running or failed to start.
-func start(timeout: float = DEFAULT_TIMEOUT) -> ScanError:
+func start(timeout: float = DEFAULT_TIMEOUT, stop_on_first := true) -> ScanError:
 	if scanning:
 		return ScanError.OK
 
 	if is_supported() == false:
 		return ScanError.UNSUPPORTED
 
+	_stop_on_first = stop_on_first
 	_scan_id += 1
 	var scan_id = _scan_id
 	scanning = true
@@ -185,9 +192,21 @@ func _on_snapshot(_snapshot: RID, processed: bool, context: RID):
 
 		var text = _marker_data_to_text(tracker.get_marker_data())
 
-		if text != "":
+		if text == "":
+			continue
+
+		if _stop_on_first:
 			_finish.call_deferred(text, _scan_id)
 			return
+
+		if tracker.has_pose(&"default"):
+			_emit_marker.call_deferred(text, tracker.get_pose(&"default").transform, _scan_id)
+
+func _emit_marker(text: String, pose: Transform3D, scan_id: int):
+	if scan_id != _scan_id:
+		return
+
+	on_marker.emit(text, pose)
 
 func _finish(text: String, scan_id: int):
 	if scan_id != _scan_id:

@@ -6,6 +6,8 @@ const Room = preload ("./room/room.tscn")
 const RoomType = preload ("./room/room.gd")
 const Doors = preload ("./doors/doors.gd")
 const AlignReference = preload ("./align_reference.gd")
+const HouseAnchor = preload ("./house_anchor.gd")
+const HouseQr = preload ("./house_qr.gd")
 
 @onready var rooms = $Rooms
 @onready var align_reference: AlignReference = $AlignReference
@@ -14,8 +16,15 @@ const AlignReference = preload ("./align_reference.gd")
 var fixing_reference: bool = false
 var editing_room: RoomType = null
 var loaded = R.state(false)
+var anchor: HouseAnchor = HouseAnchor.new()
+var qr: HouseQr = HouseQr.new()
 
 func _ready():
+	anchor.name = "HouseAnchor"
+	add_child(anchor)
+	qr.name = "HouseQr"
+	add_child(qr)
+
 	Store.house.on_loaded.connect(func():
 		update_house()
 	)
@@ -223,8 +232,13 @@ func save_reference():
 			room.editable = true
 
 		var align_transform = align_reference.global_transform
+		var old_transform = transform
 		transform = align_reference.get_new_transform()
 		align_reference.global_transform = align_transform
+
+		# Fixing moves the house the way tracking space moved, the linked QR code
+		# was saved in the old one.
+		qr.house_shifted(HouseAnchor.flatten(transform * old_transform.affine_inverse()))
 
 		align_reference.update_store()
 
@@ -239,6 +253,42 @@ func save_reference():
 
 	Store.house.save_local()
 	RoomMaterial.set_shader_parameter("show_border", false)
+
+	# The user just lined the house up with the real home, remember that spot.
+	anchor.save()
+
+## Moves everything the house store keeps in tracking space by [param shift], which
+## is how much tracking space moved since the house was saved (yaw and floor
+## position only, see HouseAnchor.flatten). The real world references then update
+## their saved poses, and the house is rebuilt.
+func shift_house(shift: Transform3D):
+	var state = Store.house.state
+
+	for room in state.rooms:
+		room.corners = room.corners.map(func(corner):
+			var point=shift * Vector3(corner.x, 0, corner.y)
+			return Vector2(point.x, point.z)
+		)
+
+	for entity in state.entities:
+		entity.position = shift * entity.position
+		entity.rotation = (shift.basis * Basis.from_euler(entity.rotation)).get_euler()
+
+	for door in state.doors:
+		for key in ["room1_position1", "room1_position2", "room2_position1", "room2_position2"]:
+			door[key] = shift * door[key]
+
+	state.align_position1 = shift * state.align_position1
+	state.align_position2 = shift * state.align_position2
+
+	# map_heading is the bearing of tracking space's -Z axis, the house turned with it.
+	state.map_heading = fposmod(float(state.map_heading) + rad_to_deg(HouseAnchor.get_yaw(shift.basis)), 360.0)
+
+	anchor.house_shifted(shift)
+	qr.house_shifted(shift)
+
+	Store.house.save_local()
+	update_house()
 
 func save_all_entities():
 	Store.house.state.entities.clear()

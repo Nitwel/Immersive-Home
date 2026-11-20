@@ -31,6 +31,16 @@ func _init():
 		"doors": [],
 		"align_position1": Vector3(),
 		"align_position2": Vector3(),
+		## The persistent spatial anchor the house is saved against, see house_anchor.gd
+		"anchor_uuid": "",
+		## Where that anchor was (floor position and yaw) in the tracking space the
+		## house is saved in.
+		"anchor_position": Vector3(),
+		"anchor_yaw": 0.0,
+		## Content of the QR code the house is linked to, see house_qr.gd
+		"qr_text": "",
+		## Where that QR code was in the tracking space the house is saved in.
+		"qr_transform": Transform3D(),
 		## Compass bearing (degrees, clockwise from north) the house's -Z axis points
 		## to; turns the miniature on the Map View to match the real house.
 		"map_heading": 0.0
