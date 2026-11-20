@@ -37,6 +37,9 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          # The default also installs "tools", which no longer exists in the SDK repository
+          packages: "platform-tools"
 
       - name: Setup Android Export
         run: |

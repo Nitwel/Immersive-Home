@@ -67,6 +67,9 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          # The default also installs "tools", which no longer exists in the SDK repository
+          packages: "platform-tools"
 
       - name: Setup Android Export
         run: |
@@ -108,10 +111,14 @@ jobs:
           path: ${{ runner.temp }}/integration
 
       - name: create release
-        uses: ncipollo/release-action@v1.11.2
+        uses: ncipollo/release-action@v1.14.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           generateReleaseNotes: true
+          # If the release was already created on GitHub, attach the files to it and keep its text
+          allowUpdates: true
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
           # Tags like v0.7.0-alpha.1 become pre-releases: not "Latest" on GitHub, and only
           # offered in HACS to users who enabled beta versions
           prerelease: ${{ contains(github.ref_name, '-') }}
