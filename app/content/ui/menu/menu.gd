@@ -6,11 +6,20 @@ const Notification = preload ("res://content/ui/components/notification/notifica
 @onready var open_sound = $OpenSound
 @onready var close_sound = $CloseSound
 @onready var notify_place = $AnimationContainer/NotifyPlace
+@onready var map_view_button = $AnimationContainer/MapView
 
 var show_menu = R.state(false)
 
 func _ready():
 	App.main.remove_child.call_deferred(self)
+
+	# Opens the Map View right away; its heat map controls show once zoomed into
+	# the rooms (map_overview.gd).
+	var bind_map_view = func():
+		if not App.miniature.is_node_ready():
+			await App.miniature.ready
+		R.bind(map_view_button, "active", App.miniature.map_view, map_view_button.on_toggled)
+	bind_map_view.call()
 
 	R.effect(func(_arg):
 		if show_menu.value:
