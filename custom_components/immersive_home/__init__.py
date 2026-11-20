@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
+from homeassistant.components.frontend import add_extra_js_url
+from homeassistant.components.http import StaticPathConfig
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
@@ -10,7 +14,8 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.typing import ConfigType
 
 from . import websocket_api
-from .const import DOMAIN, MANUFACTURER
+from .const import DOMAIN, FLOOR_PLAN_CARD, FRONTEND_URL, MANUFACTURER
+from .floor_plan import FloorPlan
 from .hub import Device, Hub
 
 PLATFORMS: list[Platform] = [Platform.SENSOR]
@@ -23,12 +28,32 @@ ImmersiveHomeConfigEntry = ConfigEntry[Device]
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     """Set up the Immersive Home component."""
 
+    floor_plan = FloorPlan(hass)
+    await floor_plan.async_load()
+
     hass.data[DOMAIN] = {
         "hub": Hub(hass),
+        "floor_plan": floor_plan,
     }
 
     websocket_api.async_setup_commands(hass)
+    await _async_register_frontend(hass)
     return True
+
+
+async def _async_register_frontend(hass: HomeAssistant) -> None:
+    """Serve the Lovelace cards and load them in the frontend, no resource needs adding."""
+    frontend_dir = Path(__file__).parent / "frontend"
+
+    await hass.http.async_register_static_paths(
+        [StaticPathConfig(FRONTEND_URL, str(frontend_dir), True)]
+    )
+
+    # Browsers cache the card, the modification time makes them load a changed one.
+    modified = await hass.async_add_executor_job(
+        lambda: int((frontend_dir / FLOOR_PLAN_CARD).stat().st_mtime)
+    )
+    add_extra_js_url(hass, f"{FRONTEND_URL}/{FLOOR_PLAN_CARD}?v={modified}")
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ImmersiveHomeConfigEntry) -> bool:

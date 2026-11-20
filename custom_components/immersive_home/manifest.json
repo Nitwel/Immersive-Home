@@ -6,6 +6,8 @@
   ],
   "config_flow": true,
   "dependencies": [
+    "frontend",
+    "http",
     "websocket_api"
   ],
   "documentation": "https://docs.immersive-home.org",

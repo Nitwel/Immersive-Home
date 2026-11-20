@@ -7,6 +7,8 @@ const Connection = preload ("./connection.gd")
 
 signal on_connect()
 signal on_disconnect()
+## Emitted once Home Assistant confirmed the Immersive Home integration is installed
+signal on_integration_ready()
 
 var devices_template := FileAccess.get_file_as_string("res://lib/home_apis/hass_ws/templates/devices.j2")
 
@@ -223,6 +225,20 @@ func update_room(room: String):
 
 	if response.status != Promise.Status.RESOLVED||response.payload.get("success") != true:
 		push_warning("Could not update the room in Home Assistant: %s" % (response.payload.get("error") if response.payload is Dictionary else response.payload.reason))
+
+## Sends the floor plan (see floor_plan.gd) to the integration, returns true if it was stored.
+func update_floor_plan(floor_plan: Dictionary) -> bool:
+	var response = await connection.send_request_packet({
+		"type": "immersive_home/floor_plan/update",
+		"device_id": OS.get_unique_id(),
+		"floor_plan": floor_plan
+	})
+
+	if response.status != Promise.Status.RESOLVED||response.payload.get("success") != true:
+		push_warning("Could not update the floor plan in Home Assistant: %s" % (response.payload.get("error") if response.payload is Dictionary else response.payload.reason))
+		return false
+
+	return true
 
 func get_voice_assistant():
 	return assist_handler

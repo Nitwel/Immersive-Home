@@ -18,3 +18,6 @@ func test_integration():
 
 	# Home Assistant also answers when the integration isn't installed, with success: false
 	integration_exists = response.status == Promise.Status.RESOLVED&&response.payload.get("success") == true
+
+	if integration_exists:
+		api.on_integration_ready.emit()

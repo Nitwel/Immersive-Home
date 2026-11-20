@@ -2,3 +2,12 @@
 
 DOMAIN = "immersive_home"
 MANUFACTURER = "Immersive Home"
+
+# Where the integration serves its Lovelace cards.
+FRONTEND_URL = f"/{DOMAIN}/frontend"
+FLOOR_PLAN_CARD = "immersive-home-floor-plan-card.js"
+
+# Fired on the event bus when a headset synced a new floor plan.
+EVENT_FLOOR_PLAN_UPDATED = f"{DOMAIN}_floor_plan_updated"
+# Dispatcher signal for the websocket subscriptions to the floor plan.
+SIGNAL_FLOOR_PLAN_UPDATED = f"{DOMAIN}_floor_plan_updated"

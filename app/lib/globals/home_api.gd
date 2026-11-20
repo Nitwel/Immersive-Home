@@ -4,6 +4,11 @@ extends Node
 const EntityGroups = preload ("res://lib/utils/entity_group.gd")
 const HassWebSocket = preload ("res://lib/home_apis/hass_ws/hass.gd")
 const VoiceAssistant = preload ("res://lib/home_apis/voice_handler.gd")
+const FloorPlan = preload ("res://lib/utils/floor_plan.gd")
+
+## Seconds to wait after the house changed before syncing the floor plan, moving
+## things around saves the house many times in a row.
+const FLOOR_PLAN_SYNC_DELAY = 2.0
 
 const apis = {
 	"hass_ws": HassWebSocket
@@ -20,8 +25,19 @@ signal on_disconnect()
 ## The current home automation system adapter
 var api: Node
 var reconnect_timer := Timer.new()
+var floor_plan_timer := Timer.new()
+## JSON of the floor plan Home Assistant last stored, to skip unchanged syncs
+var _synced_floor_plan := ""
 
 func _ready():
+	floor_plan_timer.wait_time = FLOOR_PLAN_SYNC_DELAY
+	floor_plan_timer.one_shot = true
+	add_child(floor_plan_timer)
+	floor_plan_timer.timeout.connect(sync_floor_plan)
+
+	Store.house.on_saved.connect(floor_plan_timer.start)
+	Store.house.on_loaded.connect(floor_plan_timer.start)
+
 	start()
 
 	reconnect_timer.wait_time = 60
@@ -48,6 +64,8 @@ func start_adapter(type: String, url: String, token: String):
 	if api != null:
 		api.on_connect.disconnect(_on_connect)
 		api.on_disconnect.disconnect(_on_disconnect)
+		if api.has_signal("on_integration_ready"):
+			api.on_integration_ready.disconnect(_on_integration_ready)
 		remove_child(api)
 		api.queue_free()
 		api = null
@@ -57,6 +75,8 @@ func start_adapter(type: String, url: String, token: String):
 
 	api.on_connect.connect(_on_connect)
 	api.on_disconnect.connect(_on_disconnect)
+	if api.has_signal("on_integration_ready"):
+		api.on_integration_ready.connect(_on_integration_ready)
 
 func _on_connect():
 	Store.house.load_local()
@@ -64,6 +84,13 @@ func _on_connect():
 
 func _on_disconnect():
 	on_disconnect.emit()
+
+## A fresh connection: push the floor plan even if it didn't change, Home Assistant
+## may have lost it or another headset may have replaced it in the meantime.
+func _on_integration_ready():
+	_synced_floor_plan = ""
+	floor_plan_timer.stop()
+	sync_floor_plan()
 
 ## Returns true if the adapter is connected to the home automation system
 func has_connected():
@@ -141,6 +168,31 @@ func update_room(room: String) -> void:
 		return
 
 	api.update_room(room)
+
+## Sends the floor plan of the house (rooms, doors and the placed entities) to the
+## home automation system, if it has an integration that stores it. Does nothing
+## if the floor plan didn't change since the last sync.
+func sync_floor_plan() -> void:
+	if has_integration() == false||api.has_method("update_floor_plan") == false:
+		return
+
+	# Until the house is loaded the store holds no rooms, that would wipe the stored floor plan.
+	if Store.house.is_loaded() == false:
+		return
+
+	var floor_plan = FloorPlan.build(Store.house.state)
+
+	# A headset without a room setup shouldn't replace the floor plan of one that has it.
+	if floor_plan.rooms.is_empty():
+		return
+
+	var json = JSON.stringify(floor_plan)
+
+	if json == _synced_floor_plan:
+		return
+
+	if await api.update_floor_plan(floor_plan):
+		_synced_floor_plan = json
 
 ## Returns the VoiceHandler if the adapter has a voice assistant
 func get_voice_assistant() -> VoiceAssistant:
