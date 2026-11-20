@@ -1,0 +1,567 @@
+extends "res://test/ui/ui_gallery.gd"
+## Desktop gallery for every entity widget EntityFactory can create.
+##
+## Replaces the Home Assistant adapter with MockHomeApi, so the entities get
+## realistic states without a server and clicking them runs a simulated service
+## call (toggle lights, start timers, skip tracks, ...). Camera, controls and
+## command line flags are the same as the UI gallery (see ui_gallery.gd), plus:
+##
+##   U                 - push a random state update to every entity (watch_state path)
+##   --edge-cases      - add a cell with malformed/minimal states to find crashes
+##
+## The last cell lists Home Assistant domains EntityFactory does not support yet.
+
+const MockHomeApi = preload ("./mock_home_api.gd")
+
+## Common Home Assistant entity domains, used to report which ones have no widget yet.
+const HA_DOMAINS = [
+	"air_quality", "alarm_control_panel", "assist_satellite", "automation", "binary_sensor",
+	"button", "calendar", "camera", "climate", "conversation", "counter", "cover", "date",
+	"datetime", "device_tracker", "event", "fan", "group", "humidifier", "image", "input_boolean",
+	"input_button", "input_datetime", "input_number", "input_select", "input_text", "lawn_mower",
+	"light", "lock", "media_player", "notify", "number", "person", "remote", "scene", "script",
+	"select", "sensor", "siren", "stt", "sun", "switch", "text", "time", "timer", "todo", "tts",
+	"update", "vacuum", "valve", "wake_word", "water_heater", "weather", "zone",
+]
+
+var mock: MockHomeApi
+
+func _ready():
+	_install_mock()
+	super()
+
+func _install_mock():
+	# Drop a real adapter HomeApi may have started from the saved settings.
+	HomeApi.reconnect_timer.stop()
+	if HomeApi.api != null:
+		HomeApi.remove_child(HomeApi.api)
+		HomeApi.api.queue_free()
+
+	mock = MockHomeApi.new(_initial_states())
+	mock.name = "MockHomeApi"
+	HomeApi.api = mock
+	HomeApi.add_child(mock)
+	mock.on_call.connect(func(entity, state, attributes):
+		status_label.text = "%s → %s %s" % [entity, state, "" if attributes.is_empty() else str(attributes)]
+	)
+
+func _unhandled_input(event):
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_U \
+			and not (EventSystem.get_focused() is Input3D):
+		_push_random_updates()
+		return
+	super(event)
+
+# ---------------------------------------------------------------------------
+# Mock states, shaped like Home Assistant's subscribe_entities payload
+# ---------------------------------------------------------------------------
+
+func _initial_states() -> Dictionary:
+	var now = Time.get_unix_time_from_system()
+	return {
+		"light.rgb": {"state": "on", "attributes": {
+			"friendly_name": "RGB light", "brightness": 200, "rgb_color": [255, 120, 40],
+			"supported_color_modes": ["rgb"], "color_mode": "rgb",
+			"effect_list": ["None", "Rainbow", "Candle", "Strobe"], "effect": "Candle"}},
+		"light.dimmable": {"state": "on", "attributes": {
+			"friendly_name": "Dimmable light", "brightness": 90, "supported_color_modes": ["brightness"]}},
+		"light.onoff": {"state": "off", "attributes": {
+			"friendly_name": "On/off light", "supported_color_modes": ["onoff"]}},
+		"light.settings": {"state": "on", "attributes": {
+			"friendly_name": "Light settings", "brightness": 255, "rgb_color": [120, 180, 255],
+			"supported_color_modes": ["rgb"], "effect_list": ["None", "Rainbow"], "effect": "None"}},
+
+		"switch.on": {"state": "on", "attributes": {"friendly_name": "Switch on"}},
+		"switch.off": {"state": "off", "attributes": {"friendly_name": "Switch off"}},
+		"switch.unavailable": {"state": "unavailable", "attributes": {"friendly_name": "Switch unavailable"}},
+
+		"sensor.temperature": {"state": "21.4", "attributes": {
+			"friendly_name": "Temperature", "unit_of_measurement": "°C", "device_class": "temperature",
+			"state_class": "measurement"}},
+		"sensor.text": {"state": "Dishwasher running", "attributes": {"friendly_name": "Status"}},
+		"sensor.unavailable": {"state": "unavailable", "attributes": {
+			"friendly_name": "Humidity", "unit_of_measurement": "%", "device_class": "humidity"}},
+
+		"binary_sensor.on": {"state": "on", "attributes": {"friendly_name": "Window open", "device_class": "window"}},
+		"binary_sensor.off": {"state": "off", "attributes": {"friendly_name": "Motion", "device_class": "motion"}},
+		"binary_sensor.unavailable": {"state": "unavailable", "attributes": {"friendly_name": "Door"}},
+
+		"media_player.playing": {"state": "playing", "attributes": {
+			"friendly_name": "Living room speaker", "media_title": "Northern Lights", "media_artist": "The Placeholders",
+			"volume_level": 0.35, "_tracks": [["Northern Lights", "The Placeholders"], ["Second Song", "Test Artist"], ["Third One", "Mock Band"]]}},
+		"media_player.paused": {"state": "paused", "attributes": {
+			"friendly_name": "Kitchen speaker", "media_title": "Paused track", "media_artist": "Someone", "volume_level": 0.6}},
+		"media_player.off": {"state": "off", "attributes": {"friendly_name": "TV"}},
+		"media_player.settings": {"state": "paused", "attributes": {"friendly_name": "Settings player", "volume_level": 0.5}},
+
+		"camera.idle": {"state": "idle", "attributes": {"friendly_name": "Front door"}},
+		"camera.unavailable": {"state": "unavailable", "attributes": {"friendly_name": "Garage"}},
+		"camera.settings": {"state": "idle", "attributes": {"friendly_name": "Camera settings"}},
+
+		"button.text": {"state": "unknown", "attributes": {"friendly_name": "Restart"}},
+		"button.icon": {"state": "unknown", "attributes": {"friendly_name": "icon:power_settings_new"}},
+
+		"number.percent": {"state": "40", "attributes": {
+			"friendly_name": "Fan speed", "min": 0, "max": 100, "step": 1, "unit_of_measurement": "%"}},
+		"number.float": {"state": "21.5", "attributes": {
+			"friendly_name": "Target temp", "min": 15, "max": 30, "step": 0.5, "unit_of_measurement": "°C"}},
+
+		"timer.idle": {"state": "idle", "attributes": {"friendly_name": "Pasta", "duration": "0:10:00", "remaining": "0:10:00"}},
+		"timer.active": {"state": "active", "attributes": {
+			"friendly_name": "Laundry", "duration": "1:30:00", "remaining": "1:30:00",
+			"finishes_at": Time.get_datetime_string_from_unix_time(int(now + 2723)) + "+00:00"}},
+		"timer.paused": {"state": "paused", "attributes": {"friendly_name": "Oven", "duration": "0:45:00", "remaining": "0:12:34"}},
+
+		"weather.sunny": _weather("sunny", 24.5, 40),
+		"weather.rainy": _weather("rainy", 12.0, 92),
+		"weather.lightning": _weather("lightning-rainy", 18.3, 85),
+		"weather.snowy": _weather("snowy", -2.0, 70),
+
+		# Domains reusing an existing widget
+		"input_boolean.guest_mode": {"state": "on", "attributes": {"friendly_name": "Guest mode"}},
+		"automation.night_lights": {"state": "off", "attributes": {"friendly_name": "Night lights automation"}},
+		"input_number.volume": {"state": "30", "attributes": {"friendly_name": "Volume", "min": 0, "max": 50, "step": 5}},
+		"input_button.doorbell": {"state": "unknown", "attributes": {"friendly_name": "Ring doorbell"}},
+		"scene.movie": {"state": "unknown", "attributes": {"friendly_name": "Movie time"}},
+		"script.good_night": {"state": "off", "attributes": {"friendly_name": "Good night"}},
+		"counter.coffees": {"state": "3", "attributes": {"friendly_name": "Coffees today", "step": 1}},
+
+		"select.fan_mode": {"state": "medium", "attributes": {"friendly_name": "Fan mode", "options": ["low", "medium", "high", "auto"]}},
+		"input_select.house_mode": {"state": "Home", "attributes": {"friendly_name": "House mode", "options": ["Home", "Away", "Night", "Vacation"]}},
+		"select.unavailable": {"state": "unavailable", "attributes": {"friendly_name": "Unavailable select", "options": []}},
+
+		"climate.living_room": {"state": "heat", "attributes": {
+			"friendly_name": "Living room", "hvac_modes": ["off", "heat", "cool", "auto"], "hvac_action": "heating",
+			"current_temperature": 20.4, "temperature": 21.5, "min_temp": 7, "max_temp": 30, "target_temp_step": 0.5}},
+		"climate.range": {"state": "heat_cool", "attributes": {
+			"friendly_name": "Office", "hvac_modes": ["off", "heat_cool"], "hvac_action": "idle",
+			"current_temperature": 22.1, "target_temp_low": 20, "target_temp_high": 24, "min_temp": 10, "max_temp": 30}},
+		"climate.off": {"state": "off", "attributes": {
+			"friendly_name": "Bedroom", "hvac_modes": ["off", "heat"], "hvac_action": "off",
+			"current_temperature": 18.0, "temperature": null}},
+
+		"lock.front_door": {"state": "locked", "attributes": {"friendly_name": "Front door"}},
+		"lock.garage": {"state": "unlocked", "attributes": {"friendly_name": "Garage"}},
+		"lock.jammed": {"state": "jammed", "attributes": {"friendly_name": "Back door"}},
+
+		"text.message": {"state": "Hello from Home Assistant", "attributes": {"friendly_name": "Display message", "min": 0, "max": 100, "mode": "text"}},
+		"input_text.note": {"state": "", "attributes": {"friendly_name": "Note", "min": 0, "max": 255}},
+
+		"date.birthday": {"state": "2026-03-14", "attributes": {"friendly_name": "Birthday"}},
+		"time.alarm": {"state": "06:45:00", "attributes": {"friendly_name": "Alarm"}},
+		"datetime.next_service": {"state": "2026-12-01T08:30:00+00:00", "attributes": {"friendly_name": "Next service"}},
+		"date.unknown": {"state": "unknown", "attributes": {"friendly_name": "Unset date"}},
+
+		# supported_features: open 1, close 2, set_position 4, stop 8
+		"cover.living_room_blinds": {"state": "open", "attributes": {
+			"friendly_name": "Living room blinds", "device_class": "blind", "current_position": 60, "supported_features": 15}},
+		"cover.curtains": {"state": "closed", "attributes": {
+			"friendly_name": "Bedroom curtains", "device_class": "curtain", "current_position": 0, "supported_features": 15}},
+		"cover.garage": {"state": "closed", "attributes": {
+			"friendly_name": "Garage door", "device_class": "garage", "supported_features": 11}},
+		"cover.unavailable": {"state": "unavailable", "attributes": {"friendly_name": "Shutter", "device_class": "shutter"}},
+
+		# supported_features: set_speed 1, oscillate 2, preset_mode 8, turn_off 16, turn_on 32
+		"fan.ceiling": {"state": "on", "attributes": {
+			"friendly_name": "Ceiling fan", "percentage": 66, "percentage_step": 33.333333, "oscillating": false,
+			"preset_modes": ["auto", "sleep", "nature"], "preset_mode": null, "supported_features": 59}},
+		"fan.desk": {"state": "off", "attributes": {
+			"friendly_name": "Desk fan", "percentage": 0, "percentage_step": 1, "supported_features": 49}},
+		"fan.simple": {"state": "on", "attributes": {"friendly_name": "Bathroom fan", "supported_features": 48}},
+
+		# supported_features: pause 4, stop 8, return_home 16, fan_speed 32, battery 64,
+		# locate 512, clean_spot 1024, state 4096, start 8192
+		"vacuum.robot": {"state": "docked", "attributes": {
+			"friendly_name": "Robot vacuum", "battery_level": 92, "fan_speed": "balanced",
+			"fan_speed_list": ["quiet", "balanced", "turbo", "max"], "supported_features": 13948}},
+		"vacuum.cleaning": {"state": "cleaning", "attributes": {
+			"friendly_name": "Upstairs vacuum", "battery_level": 47, "supported_features": 12380}},
+		"vacuum.error": {"state": "error", "attributes": {
+			"friendly_name": "Basement vacuum", "battery_level": 5, "supported_features": 12380}},
+
+		# supported_features: arm_home 1, arm_away 2, arm_night 4, trigger 8, custom_bypass 16, vacation 32
+		"alarm_control_panel.house": {"state": "disarmed", "attributes": {
+			"friendly_name": "House alarm", "code_format": "number", "code_arm_required": false, "_code": "1234",
+			"supported_features": 39}},
+		"alarm_control_panel.garage": {"state": "armed_away", "attributes": {
+			"friendly_name": "Garage alarm", "code_format": null, "supported_features": 3}},
+		"alarm_control_panel.triggered": {"state": "triggered", "attributes": {
+			"friendly_name": "Shed alarm", "code_format": "number", "_code": "0000", "supported_features": 3}},
+
+		"humidifier.bedroom": {"state": "on", "attributes": {
+			"friendly_name": "Bedroom humidifier", "humidity": 45, "current_humidity": 38, "min_humidity": 30,
+			"max_humidity": 80, "mode": "normal", "available_modes": ["normal", "eco", "sleep", "boost"],
+			"action": "humidifying", "device_class": "humidifier", "supported_features": 1}},
+		"humidifier.basement": {"state": "off", "attributes": {
+			"friendly_name": "Basement dehumidifier", "humidity": 55, "current_humidity": 63,
+			"action": "off", "device_class": "dehumidifier"}},
+
+		# supported_features: target_temperature 1, operation_mode 2, away_mode 4, on_off 8
+		"water_heater.boiler": {"state": "eco", "attributes": {
+			"friendly_name": "Boiler", "temperature": 55, "current_temperature": 48, "min_temp": 40, "max_temp": 65,
+			"operation_list": ["off", "eco", "electric", "heat_pump", "performance"], "operation_mode": "eco",
+			"away_mode": "off", "supported_features": 15}},
+		"water_heater.simple": {"state": "electric", "attributes": {
+			"friendly_name": "Kitchen water heater", "temperature": 60, "current_temperature": 59}},
+
+		"sun.sun": {"state": "above_horizon", "attributes": {
+			"friendly_name": "Sun", "elevation": 18.4, "azimuth": 182.1, "rising": false,
+			"next_setting": _iso(now + 3 * 3600 + 1200), "next_rising": _iso(now + 15 * 3600)}},
+		"zone.home": {"state": "2", "attributes": {"friendly_name": "Home", "radius": 100, "passive": false}},
+		"zone.work": {"state": "0", "attributes": {"friendly_name": "Work", "radius": 250, "passive": false}},
+
+		# supported_features: install 1, specific_version 2, progress 4, backup 8, release_notes 16
+		"update.core": {"state": "on", "attributes": {
+			"friendly_name": "Home Assistant Core Update", "title": "Home Assistant Core", "installed_version": "2026.10.4",
+			"latest_version": "2026.11.2", "in_progress": false, "update_percentage": null,
+			"release_summary": "Fixes for the energy dashboard and faster startup.", "supported_features": 29}},
+		"update.firmware": {"state": "off", "attributes": {
+			"friendly_name": "Bulb firmware", "installed_version": "1.4.2", "latest_version": "1.4.2", "in_progress": false,
+			"supported_features": 5}},
+
+		"event.doorbell": {"state": _iso(now - 300), "attributes": {
+			"friendly_name": "Front doorbell", "device_class": "doorbell", "event_type": "ring", "event_types": ["ring"]}},
+		"event.remote": {"state": _iso(now - 7200), "attributes": {
+			"friendly_name": "Living room remote", "device_class": "button", "event_type": "double_press",
+			"event_types": ["single_press", "double_press", "long_press"]}},
+		"event.never": {"state": "unknown", "attributes": {"friendly_name": "Motion event", "device_class": "motion"}},
+
+		"image.badge": {"state": _iso(now - 60), "attributes": {
+			"friendly_name": "Website badge", "entity_picture": "res://assets/badges/website.png"}},
+		"image.missing": {"state": "unknown", "attributes": {"friendly_name": "Map snapshot"}},
+
+		"air_quality.outside": {"state": "12.4", "attributes": {
+			"friendly_name": "Outside air", "particulate_matter_10": 18.2, "air_quality_index": 42,
+			"nitrogen_dioxide": 21, "ozone": 54.3}},
+
+		"calendar.family": {"state": "on", "attributes": {
+			"friendly_name": "Family", "message": "Dentist appointment", "all_day": false,
+			"start_time": _local(now - 1200), "end_time": _local(now + 2400), "location": "Main Street 12"}},
+		"calendar.holidays": {"state": "off", "attributes": {
+			"friendly_name": "Holidays", "message": "Christmas Eve", "all_day": true,
+			"start_time": "2026-12-24 00:00:00", "end_time": "2026-12-25 00:00:00"}},
+		"calendar.empty": {"state": "off", "attributes": {"friendly_name": "Work"}},
+
+		"todo.shopping": {"state": "3", "attributes": {"friendly_name": "Shopping list", "_items": [
+			{"uid": "1", "summary": "Milk", "status": "needs_action"},
+			{"uid": "2", "summary": "Bread", "status": "needs_action", "due": _local(now + 86400).substr(0, 10)},
+			{"uid": "3", "summary": "Coffee beans from the roastery around the corner", "status": "needs_action"},
+			{"uid": "4", "summary": "Apples", "status": "completed"}]}},
+		"todo.chores": {"state": "0", "attributes": {"friendly_name": "Chores", "_items": []}},
+	}
+
+## UTC timestamp like Home Assistant's last_changed.
+func _iso(unix: float) -> String:
+	return Time.get_datetime_string_from_unix_time(int(unix)) + "+00:00"
+
+## Local wall-clock time like calendar start_time ("2026-11-20 10:00:00").
+func _local(unix: float) -> String:
+	return Time.get_datetime_string_from_unix_time(int(unix) + int(Time.get_time_zone_from_system().bias) * 60, true)
+
+func _weather(state: String, temperature: float, humidity: int) -> Dictionary:
+	return {"state": state, "attributes": {
+		"friendly_name": "Weather " + state, "temperature": temperature, "temperature_unit": "°C",
+		"humidity": humidity, "pressure": 1013, "wind_speed": 12.0}}
+
+const WEATHER_STATES = ["clear-night", "cloudy", "fog", "hail", "lightning", "lightning-rainy", "partlycloudy",
+	"pouring", "rainy", "snowy", "snowy-rainy", "sunny", "windy", "windy-variant", "exceptional"]
+
+func _push_random_updates():
+	mock.update_entity("sensor.temperature", "%.1f" % randf_range(16, 28))
+	mock.update_entity("sensor.text", ["Idle", "Dishwasher running", "Washing done"].pick_random())
+	mock.update_entity("binary_sensor.on", ["on", "off"].pick_random())
+	mock.update_entity("binary_sensor.off", ["on", "off"].pick_random())
+	mock.update_entity("number.percent", str(randi_range(0, 100)))
+	mock.update_entity("switch.off", ["on", "off"].pick_random())
+	for id in ["weather.sunny", "weather.rainy", "weather.lightning", "weather.snowy"]:
+		mock.update_entity(id, WEATHER_STATES.pick_random(), {"temperature": snappedf(randf_range(-5, 30), 0.1), "humidity": randi_range(20, 99)})
+	mock.update_entity("light.dimmable", "on", {"brightness": randi_range(10, 255)})
+	mock.update_entity("vacuum.cleaning", ["cleaning", "paused", "returning", "idle"].pick_random(), {"battery_level": randi_range(5, 100)})
+	status_label.text = "Pushed random state updates"
+	await get_tree().create_timer(0.4).timeout
+	_layout()
+
+# ---------------------------------------------------------------------------
+# Gallery content: one cell per entity type, one column per variant.
+# Entities differ a lot in size and change size with their state, so cells are
+# measured from the visible geometry once the states arrived (see _layout).
+# ---------------------------------------------------------------------------
+
+const PAD = 0.03
+const GAP = 0.04
+const TITLE_HEIGHT = 0.05
+const CAPTION_HEIGHT = 0.035
+const MAX_ROW_WIDTH = 2.4
+
+var _laid_out := false
+
+func _build_gallery():
+	_entity_cell("Light", [["RGB + effects", "light.rgb"], ["Dimmable", "light.dimmable"],
+		["On/off (off)", "light.onoff"], ["Settings open", "light.settings", true]])
+	_entity_cell("Switch", [["On", "switch.on"], ["Off", "switch.off"], ["Unavailable", "switch.unavailable"]])
+	_entity_cell("Sensor", [["Numeric", "sensor.temperature"], ["Text", "sensor.text"], ["Unavailable", "sensor.unavailable"]])
+	_entity_cell("Binary sensor", [["On", "binary_sensor.on"], ["Off", "binary_sensor.off"], ["Unavailable", "binary_sensor.unavailable"]])
+	_entity_cell("Media player", [["Playing", "media_player.playing"], ["Paused", "media_player.paused"],
+		["Off", "media_player.off"], ["Settings open", "media_player.settings", true]])
+	_entity_cell("Camera", [["No picture", "camera.idle"], ["Unavailable", "camera.unavailable"], ["Settings open", "camera.settings", true]])
+	_entity_cell("Button", [["Text", "button.text"], ["Icon", "button.icon"]])
+	_entity_cell("Number", [["0–100 %", "number.percent"], ["15–30 °C, step 0.5", "number.float"]])
+	_entity_cell("Timer", [["Idle", "timer.idle"], ["Active", "timer.active"], ["Paused", "timer.paused"]])
+	_entity_cell("Weather", [["Sunny", "weather.sunny"], ["Rainy", "weather.rainy"], ["Thunder", "weather.lightning"], ["Snowy", "weather.snowy"]])
+	_entity_cell("Line chart", [["History of sensor.temperature", "sensor.temperature", false, "line_chart"],
+		["Settings open", "sensor.temperature", true, "line_chart"]])
+
+	_entity_cell("Climate", [["Single setpoint", "climate.living_room"], ["Range", "climate.range"], ["Off", "climate.off"]])
+	_entity_cell("Lock", [["Locked", "lock.front_door"], ["Unlocked", "lock.garage"], ["Jammed", "lock.jammed"]])
+	_entity_cell("Select", [["select", "select.fan_mode"], ["input_select", "input_select.house_mode"], ["Unavailable", "select.unavailable"]])
+	_entity_cell("Text", [["text", "text.message"], ["input_text (empty)", "input_text.note"]])
+	_entity_cell("Date and time", [["date", "date.birthday"], ["time", "time.alarm"], ["datetime (local)", "datetime.next_service"], ["Unknown", "date.unknown"]])
+	_entity_cell("Cover", [["Blinds at 60 %", "cover.living_room_blinds"], ["Curtains closed", "cover.curtains"],
+		["Garage (no position)", "cover.garage"], ["Unavailable", "cover.unavailable"]])
+	_entity_cell("Fan", [["Speed + presets + oscillate", "fan.ceiling"], ["Speed only (off)", "fan.desk"], ["On/off only", "fan.simple"]])
+	_entity_cell("Vacuum", [["Docked, all features", "vacuum.robot"], ["Cleaning", "vacuum.cleaning"], ["Error", "vacuum.error"]])
+	_entity_cell("Alarm panel", [["Disarmed (code)", "alarm_control_panel.house"], ["Armed away", "alarm_control_panel.garage"],
+		["Triggered (code)", "alarm_control_panel.triggered"]])
+	_entity_cell("Humidifier", [["On with modes", "humidifier.bedroom"], ["Off, no modes", "humidifier.basement"]])
+	_entity_cell("Water heater", [["Operation modes", "water_heater.boiler"], ["No mode list", "water_heater.simple"]])
+	_entity_cell("Sun and zones", [["sun", "sun.sun"], ["zone", "zone.home"], ["Empty zone", "zone.work"]])
+	_entity_cell("Update", [["Available", "update.core"], ["Up to date", "update.firmware"]])
+	_entity_cell("Event", [["Doorbell", "event.doorbell"], ["Remote", "event.remote"], ["Never fired", "event.never"]])
+	_entity_cell("Image", [["Picture", "image.badge"], ["No picture", "image.missing"]])
+	_entity_cell("Air quality", [["Outside", "air_quality.outside"]])
+	_entity_cell("Calendar", [["Running now", "calendar.family"], ["All day, upcoming", "calendar.holidays"], ["No events", "calendar.empty"]])
+	_entity_cell("To-do", [["Shopping list", "todo.shopping"], ["Empty", "todo.chores"]])
+	_entity_cell("Reused widgets", [["input_boolean", "input_boolean.guest_mode"], ["automation", "automation.night_lights"],
+		["input_number", "input_number.volume"], ["input_button", "input_button.doorbell"], ["scene", "scene.movie"],
+		["script", "script.good_night"], ["counter", "counter.coffees"]])
+
+	if _args.has("edge-cases"):
+		_add_edge_case_states()
+		_entity_cell("Edge cases", [
+			["Sensor w/o name", "sensor.no_name"], ["Light w/o attrs", "light.bare"],
+			["Number unavailable", "number.bare"], ["Weather unknown", "weather.unknown"],
+			["Cover w/o attrs", "cover.bare"], ["Fan w/o attrs", "fan.bare"], ["Vacuum w/o attrs", "vacuum.bare"],
+			["Alarm w/o attrs", "alarm_control_panel.bare"], ["Humidifier w/o attrs", "humidifier.bare"],
+			["Water heater w/o attrs", "water_heater.bare"], ["Update w/o attrs", "update.bare"],
+			["Calendar unavailable", "calendar.bare"], ["To-do unavailable", "todo.bare"]])
+
+	_add_unsupported_cell()
+
+	_layout_when_ready()
+
+## Entities still running _after_ready (fetching state, opening settings).
+var _pending_entities := 0
+
+func _layout_when_ready():
+	# Wait for the entities, not a fixed time: the first frames can take longer than
+	# any timer while shaders compile, and settings panels open a few frames in.
+	while _pending_entities > 0:
+		await get_tree().process_frame
+	for i in 3:
+		await get_tree().process_frame
+	_layout()
+	if _args.has("focus"):
+		_focus_cell_by_name(_args["focus"])
+	else:
+		_focus_all()
+
+## Minimal states real Home Assistant can send; used to surface crashes.
+func _add_edge_case_states():
+	mock.entities["sensor.no_name"] = {"state": "5", "attributes": {}}
+	mock.entities["light.bare"] = {"state": "on", "attributes": {}}
+	mock.entities["number.bare"] = {"state": "unavailable", "attributes": {}}
+	mock.entities["weather.unknown"] = {"state": "unknown", "attributes": {}}
+	mock.entities["cover.bare"] = {"state": "open", "attributes": {}}
+	mock.entities["fan.bare"] = {"state": "on", "attributes": {}}
+	mock.entities["vacuum.bare"] = {"state": "docked", "attributes": {}}
+	mock.entities["alarm_control_panel.bare"] = {"state": "armed_home", "attributes": {}}
+	mock.entities["humidifier.bare"] = {"state": "on", "attributes": {}}
+	mock.entities["water_heater.bare"] = {"state": "eco", "attributes": {}}
+	mock.entities["update.bare"] = {"state": "on", "attributes": {}}
+	mock.entities["calendar.bare"] = {"state": "unavailable", "attributes": {}}
+	mock.entities["todo.bare"] = {"state": "unavailable", "attributes": {}}
+
+## Creates an empty cell; [param items] are filled with {node, caption} pairs.
+func _new_cell(cell_name: String) -> Node3D:
+	var cell = Node3D.new()
+	cell.name = cell_name
+	cells_root.add_child(cell)
+	cells.append(cell)
+
+	var frame = MeshInstance3D.new()
+	frame.name = "Frame"
+	frame.mesh = QuadMesh.new()
+	var mat = StandardMaterial3D.new()
+	mat.albedo_color = Color(1, 1, 1, 0.04)
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	frame.material_override = mat
+	cell.add_child(frame)
+
+	var title = Label3D.new()
+	title.text = "%d  %s" % [cells.size(), cell_name]
+	title.font_size = 24
+	title.pixel_size = 0.001
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	title.modulate = Color(1, 1, 1, 0.6)
+	title.position = Vector3(0.02, -0.025, 0)
+	cell.add_child(title)
+
+	var content = Node3D.new()
+	content.name = "Content"
+	cell.add_child(content)
+
+	cell.set_meta("items", [])
+	cell.set_meta("size", Vector2(0.3, 0.2))
+	return cell
+
+func _caption(text: String) -> Label3D:
+	var caption = Label3D.new()
+	caption.text = text
+	caption.font_size = 14
+	caption.pixel_size = 0.001
+	caption.modulate = Color(1, 1, 1, 0.6)
+	return caption
+
+## variants: [caption, entity_id, show_settings?, type?]
+func _entity_cell(cell_name: String, variants: Array):
+	var cell = _new_cell(cell_name)
+	var content = cell.get_node("Content")
+
+	for variant in variants:
+		var entity = EntityFactory.create_entity(variant[1], variant[3] if variant.size() > 3 else null)
+		var caption = _caption(variant[0] + "\n" + variant[1] if entity != null else variant[0] + "\n(not created)")
+		content.add_child(caption)
+
+		if entity == null:
+			cell.get_meta("items").append({"node": caption, "caption": null})
+			continue
+
+		content.add_child(entity)
+		cell.get_meta("items").append({"node": entity, "caption": caption})
+		_after_ready(entity, variant.size() > 2 and variant[2])
+
+func _after_ready(entity, open_settings: bool):
+	_pending_entities += 1
+	await get_tree().process_frame
+	# CameraFollower tracks App.camera (the XR headset), which doesn't exist here.
+	# Opening settings enables it, so switch it off right away and once more after
+	# the reactive effects ran.
+	# physics_frame fires before EventSystem's _physics_process sends the slow tick.
+	if open_settings:
+		entity.show_settings.value = true
+		await get_tree().physics_frame
+	if entity.camera_follower != null:
+		entity.camera_follower.enabled = false
+	_pending_entities -= 1
+
+func _add_unsupported_cell():
+	var unsupported = HA_DOMAINS.filter(func(domain): return not EntityFactory.is_supported(domain))
+	var supported = EntityFactory.SUPPORTED_DOMAINS
+
+	var cell = _new_cell("Unsupported domains")
+	var label = Label3D.new()
+	label.text = "Supported (%d):\n%s\n\nNot supported yet (%d):\n%s" % [
+		supported.size(), _wrap(supported, 5), unsupported.size(), _wrap(unsupported, 5)]
+	label.font_size = 16
+	label.pixel_size = 0.001
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	label.modulate = Color(1, 1, 1, 0.85)
+	cell.get_node("Content").add_child(label)
+	cell.get_meta("items").append({"node": label, "caption": null})
+
+func _wrap(items: Array, per_line: int) -> String:
+	var lines = []
+	for i in range(0, items.size(), per_line):
+		lines.append(", ".join(items.slice(i, i + per_line)))
+	return ",\n".join(lines)
+
+# ---------------------------------------------------------------------------
+# Layout
+# ---------------------------------------------------------------------------
+
+## Visible bounds of [param node] in the coordinates of [param space].
+func _bounds(node: Node3D, space: Node3D) -> AABB:
+	var result = null
+	var stack: Array = [node]
+	while not stack.is_empty():
+		var n = stack.pop_back()
+		if n is Node3D and not n.is_visible_in_tree():
+			continue
+		if n is VisualInstance3D:
+			var box: AABB = n.get_aabb()
+			if box.size.length() > 0.0001 and box.size.length() < 5.0:
+				box = (space.global_transform.affine_inverse() * n.global_transform) * box
+				result = box if result == null else result.merge(box)
+		stack.append_array(n.get_children())
+	return result if result != null else AABB(Vector3.ZERO, Vector3(0.05, 0.05, 0))
+
+func _layout():
+	var x = 0.0
+	var y = 0.0
+	var row_height = 0.0
+
+	for cell in cells:
+		var content: Node3D = cell.get_node("Content")
+		content.position = Vector3.ZERO
+		var items: Array = cell.get_meta("items")
+
+		# Lay the variants out left to right, aligned on their tops.
+		var cursor = PAD
+		var top = -INF
+		var bottom = INF
+		var boxes = []
+		for item in items:
+			item.node.position = Vector3.ZERO
+			var box = _bounds(item.node, content)
+			var width = box.size.x
+			if item.caption != null:
+				var text_size = item.caption.font.get_multiline_string_size(item.caption.text, HORIZONTAL_ALIGNMENT_CENTER, -1, item.caption.font_size) if item.caption.font != null \
+					else ThemeDB.fallback_font.get_multiline_string_size(item.caption.text, HORIZONTAL_ALIGNMENT_CENTER, -1, item.caption.font_size)
+				width = max(width, text_size.x * item.caption.pixel_size)
+			# Centre the entity in its column (the column may be wider for the caption).
+			item.node.position.x = cursor + (width - box.size.x) / 2.0 - box.position.x
+			box.position.x = cursor
+			box.size.x = width
+			boxes.append(box)
+			cursor += box.size.x + GAP
+			top = max(top, box.end.y)
+			bottom = min(bottom, box.position.y)
+
+		for i in items.size():
+			if items[i].caption != null:
+				items[i].caption.position = Vector3(boxes[i].get_center().x, bottom - CAPTION_HEIGHT / 2.0, 0.001)
+
+		var has_captions = items.any(func(item): return item.caption != null)
+		var size = Vector2(max(cursor - GAP + PAD, 0.3), TITLE_HEIGHT + (top - bottom) + (CAPTION_HEIGHT if has_captions else 0.0) + PAD)
+		content.position.y = -TITLE_HEIGHT - top
+		cell.set_meta("size", size)
+
+		var frame: MeshInstance3D = cell.get_node("Frame")
+		frame.mesh.size = size - Vector2(0.01, 0.01)
+		frame.position = Vector3(size.x / 2.0, -size.y / 2.0, -0.02)
+
+		if x > 0 and x + size.x > MAX_ROW_WIDTH:
+			x = 0.0
+			y -= row_height + 0.02
+			row_height = 0.0
+		cell.position = Vector3(x, y, 0)
+		x += size.x + 0.02
+		row_height = max(row_height, size.y)
+
+	_laid_out = true
+
+func _focus_all():
+	if not _laid_out:
+		return
+	var box = Rect2()
+	for cell in cells:
+		var size: Vector2 = cell.get_meta("size")
+		var rect = Rect2(Vector2(cell.position.x, cell.position.y - size.y), size)
+		box = rect if box.size == Vector2.ZERO else box.merge(rect)
+	_frame(Vector3(box.get_center().x, box.get_center().y, 0), box.size)
+
+func _focus_cell(cell: Node3D):
+	var size: Vector2 = cell.get_meta("size")
+	_frame(cell.position + Vector3(size.x / 2.0, -size.y / 2.0, 0), size)
+

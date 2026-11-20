@@ -43,19 +43,28 @@ func set_text(stateInfo):
 	if stateInfo == null:
 		return
 
-	var text = stateInfo["state"]
+	var state = str(stateInfo["state"])
+	var attributes = stateInfo.get("attributes", {})
+	if attributes == null:
+		attributes = {}
 
-	is_text = text.is_valid_float() == false&&text.is_valid_int() == false
+	is_text = state.is_valid_float() == false&&state.is_valid_int() == false
+	var unavailable = state == "unavailable"||state == "unknown"
 
-	if stateInfo["attributes"]["friendly_name"] != null:
-		text = stateInfo["attributes"]["friendly_name"] + "\n" + text
+	var text = state.capitalize() if unavailable else state
 
-	if stateInfo["attributes"].has("unit_of_measurement")&&stateInfo["attributes"]["unit_of_measurement"] != null:
-		unit = stateInfo["attributes"]["unit_of_measurement"]
-		text += " " + stateInfo["attributes"]["unit_of_measurement"]
+	if attributes.get("unit_of_measurement") != null:
+		unit = str(attributes["unit_of_measurement"])
+		# "Unavailable %" reads like a value; only show the unit next to real values.
+		if not unavailable:
+			text += " " + unit
 
-	if stateInfo["attributes"].has("device_class"):
-		sensor_data[stateInfo["attributes"]["device_class"]] = stateInfo["state"]
+	# Not every entity has a name; fall back to its id like the other entities do.
+	var friendly_name = attributes.get("friendly_name")
+	text = (str(friendly_name) if friendly_name != null else entity_id) + "\n" + text
+
+	if attributes.get("device_class") != null:
+		sensor_data[attributes["device_class"]] = state
 
 	label.text = text
 

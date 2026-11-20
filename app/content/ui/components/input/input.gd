@@ -5,6 +5,8 @@ class_name Input3D
 var text_handler = preload ("res://content/ui/components/input/text_handler.gd").new()
 
 signal on_text_changed(text: String)
+## Emitted when Enter is pressed while the input is focused.
+signal on_submit(text: String)
 
 @onready var caret: MeshInstance3D = $Body/Label/Caret
 @onready var panel: Panel3D = $Body/Panel3D
@@ -72,6 +74,10 @@ func _ready():
 ## Applies a key press at the caret. With text selected, backspace deletes the
 ## selection and any other key replaces it.
 func _handle_key(key: Key, shift: bool):
+	if key == KEY_ENTER||key == KEY_KP_ENTER:
+		on_submit.emit(text)
+		return
+
 	var before = text.substr(0, text_handler.caret_position)
 	var after = text.substr(text_handler.caret_position)
 

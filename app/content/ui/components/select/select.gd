@@ -39,6 +39,13 @@ signal on_select(value: String)
 
 @export var mandatory: bool = true
 
+## Sort options by key. Turn off to keep the order of [member options].
+@export var sort_options: bool = true:
+	set(value):
+		sort_options = value
+		if is_node_ready() == false: return
+		_update_options()
+
 @export var open: bool = false:
 	set(value):
 		if open == value: return
@@ -113,7 +120,8 @@ func _update_options():
 		display_options[null] = "Deselect"
 
 	var keys = display_options.keys()
-	keys.sort()
+	if sort_options:
+		keys.sort()
 
 	for i in range(keys.size()):
 		var key = keys[i]

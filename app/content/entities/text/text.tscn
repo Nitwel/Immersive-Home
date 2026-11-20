@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://content/entities/text/text.gd" id="1_script"]
+[ext_resource type="Script" path="res://content/functions/movable.gd" id="2_movable"]
+
+[node name="Text" type="StaticBody3D" groups=["entity"]]
+script = ExtResource("1_script")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+
+[node name="Movable" type="Node" parent="."]
+script = ExtResource("2_movable")

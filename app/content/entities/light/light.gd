@@ -35,6 +35,7 @@ var color = R.state(color_on)
 var show_color_wheel = R.state(true)
 var color_wheel_supported = R.state(false)
 var show_brightness = R.state(true)
+var brightness_supported = R.state(true)
 var show_modes = R.state(true)
 var modes_supported = R.state(false)
 
@@ -69,24 +70,15 @@ func _ready():
 	)
 
 	R.effect(func(_arg):
-		if show_color_wheel.value&&color_wheel_supported.value:
-			add_child(color_wheel)
-		else:
-			remove_child(color_wheel)
+		_set_child_visible(color_wheel, show_color_wheel.value&&color_wheel_supported.value)
 	)
 
 	R.effect(func(_arg):
-		if show_brightness.value:
-			add_child(slider)
-		else:
-			remove_child(slider)
+		_set_child_visible(slider, show_brightness.value&&brightness_supported.value)
 	)
 
 	R.effect(func(_arg):
-		if show_modes.value&&modes_supported.value:
-			add_child(modes)
-		else:
-			remove_child(modes)
+		_set_child_visible(modes, show_modes.value&&modes_supported.value)
 	)
 
 	modes.on_select.connect(_on_mode_selected)
@@ -112,8 +104,17 @@ func _ready():
 
 	slider.on_value_changed.connect(func(new_value):
 		var value=new_value / 100 * 255
-		HomeApi.set_state(entity_id, "on" if active.value else "off", {"brightness": int(value)})
+		# light.turn_off rejects brightness; dimming an off light turns it on, like in Home Assistant.
+		HomeApi.set_state(entity_id, "on", {"brightness": int(value)})
 	)
+
+## Attaches or detaches an optional control. The nodes start as children of the light,
+## so only add/remove when the parent actually changes.
+func _set_child_visible(node: Node, shown: bool):
+	if shown and node.get_parent() != self:
+		add_child(node)
+	elif not shown and node.get_parent() == self:
+		remove_child(node)
 
 func set_state(stateInfo):
 	if stateInfo == null:
@@ -241,6 +242,12 @@ func update_capabilities(attributes: Dictionary):
 	var has_rgb = color_modes is Array&&color_modes.has("rgb")
 	if color_wheel_supported.value != has_rgb:
 		color_wheel_supported.value = has_rgb
+
+	# Every color mode except "onoff" can be dimmed. Without the attribute we can't tell,
+	# so keep the slider rather than hide a control that might work.
+	var has_brightness = not (color_modes is Array) or color_modes.any(func(mode): return mode != "onoff")
+	if brightness_supported.value != has_brightness:
+		brightness_supported.value = has_brightness
 
 func _on_mode_selected(option):
 	HomeApi.set_state(entity_id, "on", {"effect": option})

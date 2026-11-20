@@ -124,53 +124,69 @@ func watch_state(entity: String, callback: Callable):
 func unwatch_owner(target: Object):
 	entitiy_callbacks.remove_owner(target)
 
+## Maps the state an entity widget asks for to the Home Assistant service that
+## produces it. Each domain maps a requested state to a service name.
+const SERVICES = {
+	"switch": {"on": "turn_on", "off": "turn_off"},
+	"input_boolean": {"on": "turn_on", "off": "turn_off"},
+	"automation": {"on": "turn_on", "off": "turn_off"},
+	"light": {"on": "turn_on", "off": "turn_off"},
+	"media_player": {"play": "media_play", "pause": "media_pause", "next": "media_next_track",
+		"previous": "media_previous_track", "volume": "volume_set"},
+	"button": {"pressed": "press"},
+	"input_button": {"pressed": "press"},
+	"scene": {"pressed": "turn_on"},
+	"script": {"pressed": "turn_on"},
+	"timer": {"start": "start", "cancel": "cancel", "pause": "pause"},
+	"climate": {"temperature": "set_temperature", "hvac_mode": "set_hvac_mode"},
+	"lock": {"lock": "lock", "unlock": "unlock", "open": "open"},
+	"cover": {"open": "open_cover", "close": "close_cover", "stop": "stop_cover", "position": "set_cover_position"},
+	"fan": {"on": "turn_on", "off": "turn_off", "percentage": "set_percentage", "preset_mode": "set_preset_mode",
+		"oscillate": "oscillate"},
+	"vacuum": {"start": "start", "pause": "pause", "stop": "stop", "return_to_base": "return_to_base",
+		"locate": "locate", "clean_spot": "clean_spot", "fan_speed": "set_fan_speed"},
+	"alarm_control_panel": {"disarm": "alarm_disarm", "arm_home": "alarm_arm_home", "arm_away": "alarm_arm_away",
+		"arm_night": "alarm_arm_night", "arm_vacation": "alarm_arm_vacation", "arm_custom_bypass": "alarm_arm_custom_bypass"},
+	"humidifier": {"on": "turn_on", "off": "turn_off", "humidity": "set_humidity", "mode": "set_mode"},
+	"water_heater": {"on": "turn_on", "off": "turn_off", "temperature": "set_temperature",
+		"operation_mode": "set_operation_mode"},
+	"update": {"install": "install", "skip": "skip"},
+}
+
+## Domains whose widgets send the new value itself as the state. The value is passed
+## to the service in this field.
+const VALUE_SERVICES = {
+	"number": ["set_value", "value"],
+	"input_number": ["set_value", "value"],
+	"select": ["select_option", "option"],
+	"input_select": ["select_option", "option"],
+	"text": ["set_value", "value"],
+	"input_text": ["set_value", "value"],
+	"date": ["set_value", "date"],
+	"time": ["set_value", "time"],
+	"datetime": ["set_value", "datetime"],
+}
+
 func set_state(entity: String, state: Variant, attributes: Dictionary={}):
 	var domain = entity.split(".")[0]
-	var service: String
+	var service := ""
+	var service_data = attributes.duplicate()
 
-	if domain == 'switch':
-		if state == 'on':
-			service = 'turn_on'
-		elif state == 'off':
-			service = 'turn_off'
-	elif domain == 'light':
-		if state == 'on':
-			service = 'turn_on'
-		elif state == 'off':
-			service = 'turn_off'
-	elif domain == 'media_player':
-		if state == 'play':
-			service = 'media_play'
-		elif state == "pause":
-			service = "media_pause"
-		elif state == "next":
-			service = "media_next_track"
-		elif state == "previous":
-			service = "media_previous_track"
-		elif state == "volume":
-			service = "volume_set"
-	elif domain == 'button':
-		if state == 'pressed':
-			service = 'press'
-	elif domain == 'number':
-		service = 'set_value'
-		attributes["value"] = state
-	elif domain == 'timer':
-		if state == 'start':
-			service = 'start'
-		elif state == 'cancel':
-			service = 'cancel'
-		elif state == 'pause':
-			service = 'pause'
+	if VALUE_SERVICES.has(domain):
+		service = VALUE_SERVICES[domain][0]
+		service_data[VALUE_SERVICES[domain][1]] = state
+	elif SERVICES.has(domain):
+		service = SERVICES[domain].get(str(state), "")
 
-	if service == null:
+	if service == "":
+		push_warning("No Home Assistant service for %s -> %s" % [entity, state])
 		return null
 
 	return await connection.send_request_packet({
 		"type": "call_service",
 		"domain": domain,
 		"service": service,
-		"service_data": attributes,
+		"service_data": service_data,
 		"target": {
 			"entity_id": entity
 		}
@@ -191,6 +207,18 @@ func update_room(room: String):
 
 func get_voice_assistant():
 	return assist_handler
+
+func get_todo_items(entity_id: String):
+	var response = await connection.send_request_packet({
+		"type": "todo/item/list",
+		"entity_id": entity_id,
+	})
+
+	if response.status != Promise.Status.RESOLVED||response.payload.get("success") != true:
+		return []
+
+	var result = response.payload.get("result")
+	return result.get("items", []) if result is Dictionary else []
 
 func get_history(entity_id, start, interval, end=null):
 	return await history_handler.get_history(entity_id, start, interval, end)
