@@ -1,59 +1,51 @@
 """Platform for sensor integration."""
+
 from __future__ import annotations
 
-from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import RestoreSensor
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 from .const import DOMAIN
-from .hub import Device, Hub
+from .hub import Device
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config: ConfigType,
+    entry: ConfigEntry[Device],
     async_add_entities: AddEntitiesCallback,
-    discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
-    """Set up the sensor platform."""
-
-    hub: Hub = hass.data[DOMAIN]["hub"]
-
-    for device in hub.devices.values():
-        async_add_entities([RoomSensor(device)])
+    """Set up the room sensor of the entry's headset."""
+    async_add_entities([RoomSensor(entry.runtime_data)])
 
 
-class RoomSensor(SensorEntity):
-    """Representation of a Sensor."""
+class RoomSensor(RestoreSensor):
+    """The room the headset is currently in."""
+
+    _attr_has_entity_name = True
+    _attr_name = "Room"
+    _attr_icon = "mdi:floor-plan"
+    _attr_should_poll = False
 
     def __init__(self, device: Device) -> None:
         """Initialize the sensor."""
-        self._attr_name = f"{device.name} Room"
-        self._attr_unique_id = f"{device.id}_room"
         self._device = device
-        self._attr_should_poll = False
+        self._attr_unique_id = f"{device.id}_room"
+        self._attr_device_info = DeviceInfo(identifiers={(DOMAIN, device.id)})
 
     @property
-    def device_info(self):
-        return {
-            "identifiers": {(DOMAIN, self._device.id)},
-        }
-
-    @property
-    def state(self):
+    def native_value(self) -> str | None:
         return self._device.room
 
-    @property
-    def available(self):
-        return True
+    async def async_added_to_hass(self) -> None:
+        """Restore the last room and listen for updates of the device."""
+        await super().async_added_to_hass()
 
-    async def async_added_to_hass(self):
-        """Run when this Entity has been added to HA."""
-        # Sensors should also register callbacks to HA when their state changes
-        self._device.add_callback(self.async_write_ha_state)
+        if self._device.room is None:
+            last_data = await self.async_get_last_sensor_data()
+            if last_data is not None and last_data.native_value is not None:
+                self._device.room = str(last_data.native_value)
 
-    async def async_will_remove_from_hass(self):
-        """Entity being removed from hass."""
-        # The opposite of async_added_to_hass. Remove any registered call backs here.
-        self._device.remove_callback(self.async_write_ha_state)
+        self.async_on_remove(self._device.add_callback(self.async_write_ha_state))

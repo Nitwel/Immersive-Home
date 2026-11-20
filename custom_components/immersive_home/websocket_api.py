@@ -10,17 +10,16 @@ from homeassistant.components import websocket_api
 from homeassistant.core import HomeAssistant, callback
 
 from .const import DOMAIN
-from .hub import Device, Hub
+from .hub import REGISTRATION_FIELDS, Hub
 
 
 @callback
-def async_setup_commands(hass):
-    """Set up the mobile app websocket API."""
+def async_setup_commands(hass: HomeAssistant) -> None:
+    """Set up the Immersive Home websocket API."""
     websocket_api.async_register_command(hass, handle_register)
     websocket_api.async_register_command(hass, handle_update)
 
 
-@callback
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "immersive_home/register",
@@ -36,29 +35,20 @@ async def handle_register(
     connection: websocket_api.ActiveConnection,
     msg: dict[str, Any],
 ) -> None:
-    """Set up a new Immersive Home Device."""
+    """Register a headset, creating its config entry on the first connect."""
 
     hub: Hub = hass.data[DOMAIN]["hub"]
+    registration = {key: msg[key] for key in REGISTRATION_FIELDS}
 
-    hub.add_device(
-        Device(
-            msg["device_id"],
-            msg["name"],
-            msg["version"],
-            msg["platform"],
-        )
-    )
+    hub.get_or_create_device(registration)
 
-    await hass.async_create_task(
-        hass.config_entries.flow.async_init(
-            DOMAIN, data=msg, context={"source": "registration"}
-        )
+    await hass.config_entries.flow.async_init(
+        DOMAIN, data=registration, context={"source": "registration"}
     )
 
     connection.send_result(msg["id"], {"result": "success"})
 
 
-@callback
 @websocket_api.websocket_command(
     {
         vol.Required("type"): "immersive_home/update",
@@ -66,12 +56,13 @@ async def handle_register(
         vol.Optional("room"): str,
     }
 )
+@callback
 def handle_update(
     hass: HomeAssistant,
     connection: websocket_api.ActiveConnection,
     msg: dict[str, Any],
 ) -> None:
-    """Update data of a Immersive Home Device."""
+    """Update the data of a headset."""
 
     hub: Hub = hass.data[DOMAIN]["hub"]
     device = hub.get_device(msg["device_id"])

@@ -14,8 +14,36 @@ env:
   GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: ${{ secrets.RELEASE_PASSWORD }}
 
 jobs:
+  # Packages the Home Assistant integration for HACS (see hacs.json, zip_release)
+  package_integration:
+    runs-on: ubuntu-latest
+    name: Package Home Assistant Integration
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Build Integration.zip
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          cd custom_components/immersive_home
+
+          # HACS shows the release tag, keep the integration's own version in sync with it
+          jq --arg version "$version" '.version = $version' manifest.json > manifest.tmp
+          mv manifest.tmp manifest.json
+
+          # HACS extracts the zip into custom_components/immersive_home, so the files go in the root
+          zip -r "$GITHUB_WORKSPACE/Integration.zip" . -x "__pycache__/*" "*/__pycache__/*" "*.pyc"
+          unzip -l "$GITHUB_WORKSPACE/Integration.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: integration
+          path: Integration.zip
+          if-no-files-found: error
+
   # job id, can be anything
   export_game:
+    needs: package_integration
     # Always use ubuntu-latest for this action
     runs-on: ubuntu-latest
     # Add permission for release creation. Can be made narrower according to your needs
@@ -73,9 +101,16 @@ jobs:
           archive_output: true
           filter_exports: "AndroidProduction"
 
+      - name: download integration
+        uses: actions/download-artifact@v4
+        with:
+          name: integration
+          path: ${{ runner.temp }}/integration
+
       - name: create release
         uses: ncipollo/release-action@v1.11.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           generateReleaseNotes: true
-          artifacts: ${{ steps.export.outputs.archive_directory }}/* # Added "/*" at the end is glob pattern match for this action
+          # Added "/*" at the end is glob pattern match for this action
+          artifacts: ${{ steps.export.outputs.archive_directory }}/*,${{ runner.temp }}/integration/Integration.zip
