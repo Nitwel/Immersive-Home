@@ -22,7 +22,9 @@ const MapView = preload ("./map_view.gd")
 const VectorMap = preload ("./vector_map.gd")
 const Builder = preload ("./map_3d_builder.gd")
 const PathOverlay = preload ("./path_overlay.gd")
+const BuildingOutlines = preload ("./building_outlines.gd")
 const DioramaShader = preload ("./diorama.gdshader")
+const DioramaFadeShader = preload ("./diorama_fade.gdshader")
 
 const PIXELS_PER_METER = Builder.PIXELS_PER_METER
 const PIN_HEIGHT = 0.022
@@ -32,7 +34,17 @@ const TREE_COLOR = Color8(130, 186, 118)
 ## Footprint in meters of panel: width x depth.
 var size := Vector2(0.28, 0.2)
 var tilt := deg_to_rad(50.0)
-var center := Vector2.ZERO
+## Round diorama: a disc of diameter size.x (keep size square) instead of a block.
+var circular := false
+## [latitude, longitude] doubles; a Vector2 can be assigned too (see map_view.gd).
+var center = [0.0, 0.0]:
+	set(value):
+		center = [float(value[0]), float(value[1])]
+## Highest fractional zoom, as in map_view.gd: past Tiles.ROOMS_FROM_ZOOM only the
+## pins, paths and the miniature house are left.
+var max_zoom := float(Tiles.MAX_ZOOM)
+## Draw building footprints when zoomed in close (Map View, see building_outlines.gd).
+var building_outlines := false
 var zoom := 16
 ## How much larger the map is shown than its tile level (fractional zoom, see
 ## [method set_fractional_zoom]).
@@ -44,6 +56,14 @@ var paths: Array = []
 
 const PATH_WIDTH = 0.0012
 const PATH_DOT = 0.003
+## Width in meters of panel of the outlines drawn by set_ghost.
+const GHOST_LINE = 0.0005
+
+## [latitude, longitude, radius m] of set_ghost, or null
+var _ghost = null
+## How far up the terrain, buildings and trees stand: 1, flattening to 0 into the
+## rooms (Tiles.map_opacity)
+var _flatten := 1.0
 
 ## How long a build waits for missing terrain tiles while a map is already shown,
 ## instead of flattening the terrain until they arrive.
@@ -55,6 +75,7 @@ var _ground := Node3D.new()
 var _content := Node3D.new()
 var _sides := MeshInstance3D.new()
 var _paths := MeshInstance3D.new()
+var _outlines := BuildingOutlines.new()
 var _terrain := MeshInstance3D.new()
 var _buildings := MeshInstance3D.new()
 var _trees := MultiMeshInstance3D.new()
@@ -100,7 +121,6 @@ func _ready():
 	_buildings.material_override.set_shader_parameter("use_vertex_color", true)
 	_trees.material_override = _material(TREE_COLOR)
 	_terrain.material_override = _terrain_material
-	set_process(false)
 
 	var cone = CylinderMesh.new()
 	cone.top_radius = 0.0
@@ -120,6 +140,9 @@ func _ready():
 	add_child(_attribution)
 
 	add_child(_loader)
+	_outlines.setup(_loader, true)
+	_ground.add_child(_outlines)
+
 	_loader.loaded.connect(func():
 		_update_texture()
 		_build()
@@ -128,7 +151,8 @@ func _ready():
 static func _material(color: Color) -> ShaderMaterial:
 	var material = ShaderMaterial.new()
 	material.shader = DioramaShader
-	material.render_priority = 12
+	# Under the paths (12): while fading out it is a transparent object.
+	material.render_priority = 11
 	material.set_shader_parameter("base_color", color)
 	return material
 
@@ -142,7 +166,23 @@ func refresh():
 	_ground.position = Vector3(0, -size.y / 2.0 * sin(tilt), size.y / 2.0 * cos(tilt))
 	# Under the front edge, which sits in front of the card
 	_attribution.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	_attribution.position = Vector3(size.x / 2.0, -size.y * sin(tilt) - Builder.BASE_THICKNESS - 0.002, size.y * cos(tilt))
+	_attribution.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if circular else HORIZONTAL_ALIGNMENT_RIGHT
+	_attribution.position = Vector3(0.0 if circular else size.x / 2.0, -size.y * sin(tilt) - Builder.BASE_THICKNESS - 0.002, size.y * cos(tilt))
+
+	var rooms = rooms_only()
+	_content.visible = not rooms
+	_sides.visible = not rooms
+	_attribution.visible = not rooms
+	# Into the rooms the diorama flattens onto the plate (no jump in height for the
+	# pins and the miniature) and the terrain fades out; buildings and trees stay solid
+	# and sink into their footprints (building_outlines.gd).
+	var fractional_zoom = get_fractional_zoom()
+	_flatten = Tiles.map_opacity(fractional_zoom)
+	for material in [_terrain_material, _side_material]:
+		MapView.set_fade(material, Tiles.map_opacity(fractional_zoom), DioramaShader, DioramaFadeShader)
+	var outlines_opacity = Tiles.outlines_opacity(fractional_zoom) if building_outlines else 0.0
+	# On the terrain in the middle while it still shows; it is flat enough this close.
+	_outlines.show_view(center, zoom, _ppm(), outlines_opacity, size / 2.0, circular, _height_at(Vector2.ZERO) + 0.0012)
 
 	_place_content()
 	_update_circles()
@@ -150,8 +190,8 @@ func refresh():
 	_update_paths()
 
 	# A state update that doesn't move the map only moves the pins and circles.
-	var view = [center, zoom, magnification, size, tilt]
-	if view == _built_view:
+	var view = [center, zoom, magnification, size, tilt, circular]
+	if view == _built_view or rooms: # rooms only: nothing to build
 		return
 	_built_view = view
 	_update_texture()
@@ -159,12 +199,16 @@ func refresh():
 
 ## Sets [member zoom] and [member magnification] from a fractional zoom level.
 func set_fractional_zoom(fractional_zoom: float):
-	var split = Tiles.split_zoom(fractional_zoom)
+	var split = Tiles.split_zoom(min(fractional_zoom, max_zoom))
 	zoom = split[0]
 	magnification = split[1]
 
 func get_fractional_zoom() -> float:
 	return zoom + log(magnification) / log(2.0)
+
+## Zoomed in past the base map: only the rooms (miniature) are shown.
+func rooms_only() -> bool:
+	return get_fractional_zoom() > Tiles.ROOMS_FROM_ZOOM + 0.0001
 
 ## Map pixels (at [member zoom]) per meter of panel
 func _ppm() -> float:
@@ -191,9 +235,41 @@ func surface_transform(latitude: float, longitude: float) -> Transform3D:
 	var p = Tiles.offset_px(center, Vector2(latitude, longitude), zoom) / _ppm()
 	return _ground.global_transform * Transform3D(Basis.IDENTITY, Vector3(p.x, _height_at(p), p.y))
 
+## Draws the buildings whose centre lies within [param radius] meters of a
+## coordinate as outlines only, e.g. where the miniature house stands.
+func set_ghost(latitude: float, longitude: float, radius: float):
+	_ghost = [latitude, longitude, radius]
+	_update_ghost()
+
+func clear_ghost():
+	if _ghost != null:
+		_ghost = null
+		_update_ghost()
+
+func _update_ghost():
+	var material: ShaderMaterial = _buildings.material_override
+	if material == null:
+		return
+	material.set_shader_parameter("ghost", _ghost != null)
+	if _ghost == null:
+		return
+	# The buildings mesh is in the shown build's ground units; map into those.
+	var mapping = _content_mapping()
+	var p = Tiles.offset_px(center, Vector2(_ghost[0], _ghost[1]), zoom) / _ppm()
+	var radius = _ghost[2] / (Tiles.meters_per_pixel(_ghost[0], zoom) * _ppm())
+	material.set_shader_parameter("ghost_center", (p - mapping[1]) / mapping[0])
+	material.set_shader_parameter("ghost_radius", radius / mapping[0])
+	material.set_shader_parameter("ghost_line", GHOST_LINE / mapping[0])
+
 ## Whether a coordinate lies on the shown part of the map.
 func shows(latitude: float, longitude: float) -> bool:
 	var p = Tiles.offset_px(center, Vector2(latitude, longitude), zoom) / _ppm()
+	return _within(p)
+
+## Whether a ground position (meters of panel from the centre) lies on the map.
+func _within(p: Vector2) -> bool:
+	if circular:
+		return p.length() <= size.x / 2.0
 	return abs(p.x) <= size.x / 2.0 and abs(p.y) <= size.y / 2.0
 
 ## Meters of panel per meter of ground at [param latitude]: the map's scale.
@@ -202,14 +278,15 @@ func panel_per_meter(latitude: float) -> float:
 
 ## Whether an offset from [method ray_offset] lies on the map.
 func contains_offset(offset: Vector2) -> bool:
-	var half = size * PIXELS_PER_METER / 2.0
-	return abs(offset.x) <= half.x and abs(offset.y) <= half.y
+	return _within(offset / PIXELS_PER_METER)
 
 func _px_size() -> Vector2:
 	return size * _ppm()
 
-func _top_left() -> Vector2:
-	return Tiles.project(center.x, center.y, zoom) - _px_size() / 2.0
+## [x, y] world pixels (doubles) of the map's top left corner
+func _top_left() -> Array:
+	var c = Tiles.project_d(center[0], center[1], zoom)
+	return [c[0] - _px_size().x / 2.0, c[1] - _px_size().y / 2.0]
 
 func _update_texture():
 	_vector.render(_loader, center, zoom, _px_size(), magnification)
@@ -233,20 +310,33 @@ func _content_mapping() -> Array:
 	var level_scale = pow(2.0, zoom - _shown.zoom) # shown map px -> current map px
 	var scale = level_scale * _shown.ppm / _ppm()
 	# The big world pixel values are subtracted first; they cancel out when unmoved.
-	var offset = (_shown.top_left * level_scale - _top_left() + _shown.size / 2.0 * _shown.ppm * level_scale) / _ppm() - size / 2.0
+	var top_left = _top_left()
+	var moved_px = Vector2(_shown.top_left[0] * level_scale - top_left[0], _shown.top_left[1] * level_scale - top_left[1])
+	var offset = (moved_px + _shown.size / 2.0 * _shown.ppm * level_scale) / _ppm() - size / 2.0
 	return [scale, offset]
 
 func _place_content():
 	var mapping = _content_mapping()
-	_content.transform = Transform3D(Basis.from_scale(Vector3(mapping[0], mapping[0], mapping[0])), Vector3(mapping[1].x, 0, mapping[1].y))
+	# Never quite 0: a flat basis can't be inverted.
+	var height = max(_flatten, 0.001)
+	_content.transform = Transform3D(Basis.from_scale(Vector3(mapping[0], mapping[0] * height, mapping[0])), Vector3(mapping[1].x, 0, mapping[1].y))
+	_sides.scale = Vector3(1, height, 1)
 	var moved = not _content.transform.is_equal_approx(Transform3D.IDENTITY)
 	for material in [_terrain_material, _buildings.material_override, _trees.material_override]:
 		material.set_shader_parameter("clip", moved)
 		material.set_shader_parameter("half_size", size / 2.0)
-	set_process(moved)
+		material.set_shader_parameter("circular", circular)
+	# Right before drawing rather than in _process, which can run before the card is
+	# moved in the same frame: the cut edges would trail a frame behind and flicker.
+	var updating = RenderingServer.frame_pre_draw.is_connected(_update_clip)
+	if moved and not updating:
+		RenderingServer.frame_pre_draw.connect(_update_clip)
+	elif not moved and updating:
+		RenderingServer.frame_pre_draw.disconnect(_update_clip)
 	if moved:
-		_process(0)
+		_update_clip()
 	_update_body()
+	_update_ghost()
 
 func _notification(what):
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
@@ -255,21 +345,23 @@ func _notification(what):
 ## Hidden nodes still collide; only catch the pointer while shown. Off as well while
 ## a zoom waits for its build: physics doesn't follow scaled shapes reliably.
 func _update_body():
-	var unscaled = is_equal_approx(_content.scale.x, 1.0)
-	body.collision_layer = 1 if is_visible_in_tree() and unscaled and _shown != null else 0
+	var unscaled = is_equal_approx(_content.scale.x, 1.0) and is_equal_approx(_content.scale.y, 1.0)
+	body.collision_layer = 1 if is_visible_in_tree() and unscaled and _shown != null and not rooms_only() else 0
 
 ## Keeps the clipping in place while the map is moved around the room.
-func _process(_delta):
+func _update_clip():
+	if not is_inside_tree():
+		return
 	var ground_from_world = Projection(_ground.global_transform.affine_inverse())
 	for material in [_terrain_material, _buildings.material_override, _trees.material_override]:
 		material.set_shader_parameter("ground_from_world", ground_from_world)
 
 ## Terrain height at a ground position of the current view.
 func _height_at(p: Vector2) -> float:
-	if _shown == null:
+	if _shown == null or rooms_only(): # no terrain shown
 		return 0.0
 	var mapping = _content_mapping()
-	return Builder.height_at(_heights, (p - mapping[1]) / mapping[0]) * mapping[0]
+	return Builder.height_at(_heights, (p - mapping[1]) / mapping[0]) * mapping[0] * _flatten
 
 # ---------------------------------------------------------------------------
 # Building on a worker thread
@@ -306,13 +398,14 @@ func _build():
 
 	var job = {
 		"size": size,
+		"circular": circular,
 		"zoom": zoom,
 		"top_left": _top_left(),
-		"latitude": center.x,
+		"latitude": center[0],
 		"ppm": _ppm(),
 		# Same zoom: keep the shown terrain's base height and relief (see Builder._heights)
 		"relief": _shown.relief if _shown != null and _shown.zoom == zoom and is_equal_approx(_shown.ppm, _ppm()) else null,
-		"scale": 1.0 / (Tiles.meters_per_pixel(center.x, zoom) * _ppm()),
+		"scale": 1.0 / (Tiles.meters_per_pixel(center[0], zoom) * _ppm()),
 		"terrain_zoom": terrain_zoom,
 		"terrain_tiles": terrain_tiles,
 		"vector_tiles": _loader.tiles_around("vector", center, zoom, _px_size(), Tiles.VECTOR_MAX_ZOOM).tiles if zoom >= Builder.TREES_MIN_ZOOM else [],
@@ -343,7 +436,9 @@ func _on_built(result: Dictionary):
 
 	if result.buildings != null:
 		var buildings = ArrayMesh.new()
-		buildings.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, result.buildings)
+		# CUSTOM0 holds the outline data (see Builder._building_arrays)
+		buildings.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, result.buildings, [], {},
+			Mesh.ARRAY_CUSTOM_RGBA_FLOAT << Mesh.ARRAY_FORMAT_CUSTOM0_SHIFT)
 		_buildings.mesh = buildings
 	else:
 		_buildings.mesh = null
@@ -361,16 +456,16 @@ func _on_built(result: Dictionary):
 
 ## Paths lie just above the terrain, so they follow hills.
 func _update_paths():
-	var top_left = _top_left()
 	var tracks = []
 	for path in paths:
 		var points = PackedVector3Array()
 		for latlon in path.points:
-			var p = (Tiles.project(latlon.x, latlon.y, zoom) - top_left) / _ppm() - size / 2.0
+			var p = Tiles.offset_px(center, latlon, zoom) / _ppm()
 			points.append(Vector3(p.x, _height_at(p) + 0.0015, p.y))
 		tracks.append({"points": points, "color": path.color})
 	_paths.mesh = PathOverlay.build(tracks, Vector3.UP, PATH_WIDTH, PATH_DOT)
 	_paths.material_override.set_shader_parameter("bounds", size / 2.0)
+	_paths.material_override.set_shader_parameter("circular", circular)
 
 # ---------------------------------------------------------------------------
 # Pins
@@ -380,15 +475,14 @@ func _update_pins():
 	while _pins.size() < markers.size():
 		_pins.append(_create_pin())
 
-	var top_left = _top_left()
 	for i in _pins.size():
 		var pin: Node3D = _pins[i]
 		if i >= markers.size():
 			pin.visible = false
 			continue
 		var marker = markers[i]
-		var p = (Tiles.project(marker.lat, marker.lon, zoom) - top_left) / _ppm() - size / 2.0
-		pin.visible = abs(p.x) <= size.x / 2.0 and abs(p.y) <= size.y / 2.0
+		var p = Tiles.offset_px(center, [marker.lat, marker.lon], zoom) / _ppm()
+		pin.visible = _within(p)
 		# Later markers (the person) stand a bit taller than earlier ones (home).
 		var height = PIN_HEIGHT * (0.6 if i < markers.size() - 1 else 1.0)
 		pin.position = Vector3(p.x, _height_at(p), p.y)

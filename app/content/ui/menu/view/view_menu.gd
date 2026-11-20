@@ -1,9 +1,7 @@
 extends Node3D
 
 const Miniature = preload ("res://content/system/miniature/miniature.gd")
-const MapOverview = preload ("res://content/system/map_overview/map_overview.gd")
 
-@onready var mini_view_button = $Content/MiniView
 @onready var map_view_button = $Content/MapView
 @onready var heat_map_button = $Content/HeatMap
 @onready var humudity_map_button = $Content/HumidityMap
@@ -23,11 +21,8 @@ func _ready():
 	if App.miniature.is_node_ready() == false:
 		await App.miniature.ready
 
-	mini_view_button.on_toggled.connect(func(active):
-		App.miniature.small.value=active
-	)
-
-	map_view_button.on_toggled.connect(_show_map_overview)
+	# The rooms are shown on the Map View; the miniature keeps whether it is open.
+	R.bind(map_view_button, "active", App.miniature.map_view, map_view_button.on_toggled)
 
 	heat_map_button.on_toggled.connect(func(active):
 		if active == false:
@@ -98,18 +93,3 @@ func _ready():
 	)
 
 	R.bind(opacity_slider, "value", App.miniature.opacity, opacity_slider.on_value_changed)
-
-var _map_overview: MapOverview
-
-## The floating map stays in the room after the menu closes, like the miniature.
-## It is created on first use and kept (with its loaded history) while hidden.
-func _show_map_overview(active: bool):
-	if active:
-		if _map_overview == null:
-			_map_overview = MapOverview.new()
-			_map_overview.on_close.connect(func(): map_view_button.active=false)
-		if _map_overview.get_parent() == null:
-			App.main.add_child(_map_overview)
-			_map_overview.open_in_front_of(App.camera)
-	elif _map_overview != null and _map_overview.get_parent() != null:
-		_map_overview.get_parent().remove_child(_map_overview)

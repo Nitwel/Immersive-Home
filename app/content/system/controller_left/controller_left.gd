@@ -16,7 +16,7 @@ const Entity = preload ("res://content/entities/entity.gd")
 @onready var thumb_tip = $ThumbTip
 @onready var middle_tip = $MiddleTip
 
-@onready var mini_view_button = $Palm/QuickActions/MiniView
+@onready var map_view_button = $Palm/QuickActions/MapView
 @onready var temperature_button = $Palm/QuickActions/Temperature
 @onready var humidity_button = $Palm/QuickActions/Humidity
 
@@ -151,8 +151,9 @@ func _setup_hand():
 		_apply_hand_active(hand_tracked&&_is_hand_simulated() == false)
 	)
 
-	mini_view_button.on_button_up.connect(func():
-		App.miniature.small.value=!App.miniature.small.value
+	# The rooms are shown on the Map View.
+	map_view_button.on_button_up.connect(func():
+		App.miniature.map_view.value=!App.miniature.map_view.value
 	)
 
 	temperature_button.on_button_up.connect(func():

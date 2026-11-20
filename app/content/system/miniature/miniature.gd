@@ -5,6 +5,7 @@ const ConstructDoorMesh = preload ("res://lib/utils/mesh/construct_door_mesh.gd"
 const wall_material = preload ("./mini_wall.tres")
 const humidity_gradient = preload ("./humid_gradient.tres")
 const temperature_gradient = preload ("./temp_gradient.tres")
+const MapOverview = preload ("res://content/system/map_overview/map_overview.gd")
 
 @onready var body = $Body
 @onready var small_node = $Body/Small
@@ -33,7 +34,13 @@ var base_scale = {
 var selected_scale = R.state(Vector2(0.0, 1.0))
 var opacity = R.state(70)
 var heatmap_type = R.state(HeatmapType.NONE)
+## The rooms are shown small, standing on the Map View. Set through place_on_map /
+## leave_map; there is no standalone small view.
 var small = R.state(false)
+## Whether the Map View is open (View menu, palm quick action, B button). The rooms
+## are shown on it, at the home zone.
+var map_view = R.state(false)
+var _map_overview: MapOverview
 
 func _ready():
 	wall_material.set_shader_parameter("data", [])
@@ -41,7 +48,11 @@ func _ready():
 
 	EventSystem.on_action_down.connect(func(action):
 		if action.name == "by_button":
-			small.value=!small.value
+			map_view.value=!map_view.value
+	)
+
+	R.effect(func(_arg):
+		_show_map_overview(map_view.value)
 	)
 
 	if Store.house.is_loaded() == false:
@@ -137,77 +148,87 @@ var _size_tween: Tween
 ## places it every frame through [method place_on_map].
 var on_map := false
 
+## Where the map the model stands on ends: [centre, up, radius] (world space), or
+## null. Rooms and the player marker are cut off outside it.
+var _map_disc = null
+
 ## Puts the small model on a map: [param body_transform] is the global transform of
-## the body (without scale), [param model_scale] the map's scale, and [param shown]
-## whether the house lies on the shown part of the map.
-func place_on_map(body_transform: Transform3D, model_scale: float, shown: bool):
+## the body (without scale), [param model_scale] the map's scale, [param shown]
+## whether to show it at all, and [param disc] the round map's [centre, up, radius]
+## in world space, outside which it is cut off (null: not cut).
+func place_on_map(body_transform: Transform3D, model_scale: float, shown: bool, disc = null):
 	if not on_map:
 		on_map = true
 		if _size_tween != null:
 			_size_tween.kill()
-		# The pointer should land on the map below, for panning it.
-		collision_shape.disabled = true
+		if not small.value:
+			small.value = true # builds the rooms; _update_size leaves the placing to us
 	body.global_transform = body_transform
 	small_node.scale = Vector3.ONE * model_scale
 	small_node.visible = shown
+	_map_disc = disc
+	wall_material.set_shader_parameter("clip_to_disc", disc != null)
+	if disc != null:
+		wall_material.set_shader_parameter("disc_center", disc[0])
+		wall_material.set_shader_parameter("disc_normal", disc[1])
+		wall_material.set_shader_parameter("disc_radius", disc[2])
 
-## Takes the small model off the map again, back in front of the user (or back to
-## full size if the Mini View was turned off).
+## Takes the model off the map again, back to full size (shown there only with a
+## heat map).
 func leave_map():
 	if not on_map:
 		return
 	on_map = false
 	small_node.visible = true
-	_update_size()
+	_map_disc = null
+	wall_material.set_shader_parameter("clip_to_disc", false)
+	small.value = false
+
+## The Map View stays in the room after the menu closes. It is created on first use
+## and kept (with its loaded history) while hidden.
+func _show_map_overview(open: bool):
+	if open:
+		if _map_overview == null:
+			_map_overview = MapOverview.new()
+			_map_overview.on_close.connect(func(): map_view.value = false)
+		if _map_overview.get_parent() == null:
+			App.main.add_child(_map_overview)
+			_map_overview.open_in_front_of(App.camera)
+	elif _map_overview != null and _map_overview.get_parent() != null:
+		_map_overview.get_parent().remove_child(_map_overview)
 
 func _update_size():
-	collision_shape.disabled = small.value == false or on_map
+	# Small, the rooms stand on the Map View, which keeps the pointer for panning.
+	collision_shape.disabled = true
 	player.visible = small.value
 
-	if on_map and small.value:
-		return # placed by the map
+	if small.value:
+		return # placed by the map (place_on_map)
 
 	if _size_tween != null:
 		_size_tween.kill()
 	var tween := create_tween()
 	_size_tween = tween
 	tween.set_parallel(true)
-	if small.value:
-		var aabb = App.house.get_rooms_aabb()
-		var height = aabb.size.y
-
-		aabb.position.y = -0.03
-		aabb.size.y = 0.06
-
-		var center = aabb.position + aabb.size / 2
-
-		collision_shape.shape.size = aabb.size * 0.1
-		collision_shape.position = center * 0.1
-		entity_select.position = Vector3(0, height * 0.1 + 0.1, 0)
-
-		var camera_position = App.camera.global_position
-		var camera_direction = -App.camera.global_transform.basis.z
-
-		camera_position.y *= 0.5
-		camera_direction.y = 0
-
-		var target_position = camera_position + camera_direction.normalized() * 0.5
-		var new_position = target_position - center * 0.1
-
-		tween.tween_property(small_node, "scale", Vector3(0.1, 0.1, 0.1), 0.5)
-		tween.tween_property(body, "position", new_position, 0.5)
-		# Coming off the map, it may still be turned to the map's north.
-		tween.tween_property(body, "quaternion", Quaternion.IDENTITY, 0.5)
-	else:
-		tween.tween_property(small_node, "scale", Vector3.ONE, 0.5)
-		tween.tween_property(body, "position", Vector3.ZERO, 0.5)
-		tween.tween_property(body, "quaternion", Quaternion.IDENTITY, 0.5)
+	tween.tween_property(small_node, "scale", Vector3.ONE, 0.5)
+	tween.tween_property(body, "position", Vector3.ZERO, 0.5)
+	tween.tween_property(body, "quaternion", Quaternion.IDENTITY, 0.5)
 
 func _process(delta):
 	var cam_pos = App.camera.global_position
 	cam_pos.y += 0.1
 	player.mesh.height = cam_pos.y
 	player.position = Vector3(cam_pos.x, cam_pos.y / 2, cam_pos.z)
+	if on_map:
+		player.visible = small.value and _on_disc(player.global_position)
+
+## Whether a world position lies over the map the model stands on.
+func _on_disc(point: Vector3) -> bool:
+	if _map_disc == null:
+		return true
+	var offset: Vector3 = point - _map_disc[0]
+	var normal: Vector3 = _map_disc[1]
+	return (offset - offset.dot(normal) * normal).length() <= _map_disc[2]
 
 const SensorEntity = preload ("res://content/entities/sensor/sensor.gd")
 

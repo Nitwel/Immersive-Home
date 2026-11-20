@@ -22,6 +22,22 @@ const ATTRIBUTION = "© OpenStreetMap contributors · OpenFreeMap © OpenMapTile
 const ATTRIBUTION_3D = "© OpenStreetMap contributors · OpenFreeMap © OpenMapTiles\nTerrain Tiles (Mapzen, AWS)"
 const MIN_ZOOM = 2
 const MAX_ZOOM = 19
+## Maps that show the miniature house can zoom further, past the map: from
+## ROOMS_FROM_ZOOM the base map stops drawing and only the rooms are shown.
+const ROOMS_FROM_ZOOM = MAX_ZOOM + 0.5
+const ROOMS_MAX_ZOOM = 26.0
+## Zoom levels over which the base map fades out before the rooms take over
+const ROOMS_FADE = 0.5
+## Building outlines (building_outlines.gd) fade in from here up to ROOMS_FROM_ZOOM.
+const OUTLINES_FROM_ZOOM = 18.5
+
+## Opacity of the base map at a fractional zoom: fading out into the rooms.
+static func map_opacity(fractional_zoom: float) -> float:
+	return clamp((ROOMS_FROM_ZOOM - fractional_zoom) / ROOMS_FADE, 0.0, 1.0)
+
+## Opacity of the building outlines at a fractional zoom.
+static func outlines_opacity(fractional_zoom: float) -> float:
+	return clamp((fractional_zoom - OUTLINES_FROM_ZOOM) / (ROOMS_FROM_ZOOM - OUTLINES_FROM_ZOOM), 0.0, 1.0)
 const VECTOR_MAX_ZOOM = 14 ## vector tiles exist up to this zoom; closer views scale them up
 const VECTOR_CACHE_VERSION = 2
 
@@ -64,10 +80,28 @@ static func project(latitude: float, longitude: float, zoom: int) -> Vector2:
 
 ## A fractional zoom as [tile level, magnification]: the map is drawn at the nearest
 ## whole level and shown that much larger or smaller (between 0.71 and 1.41).
+## Past MAX_ZOOM (up to ROOMS_MAX_ZOOM, see ROOMS_FROM_ZOOM) the level stays at
+## MAX_ZOOM and only the magnification grows.
 static func split_zoom(fractional_zoom: float) -> Array:
-	var z = clamp(fractional_zoom, MIN_ZOOM, MAX_ZOOM)
+	var z = clamp(fractional_zoom, MIN_ZOOM, ROOMS_MAX_ZOOM)
 	var level = clampi(roundi(z), MIN_ZOOM, MAX_ZOOM)
 	return [level, pow(2.0, z - level)]
+
+## [method project] in double precision: [x, y] world pixels. Vector2 is single
+## precision and world pixels reach 10^8 at high zoom levels, where it would only
+## resolve steps of 8 pixels and more (the map would jump while dragged).
+static func project_d(latitude: float, longitude: float, zoom: int) -> Array:
+	var scale = TILE_SIZE * pow(2.0, zoom)
+	return [(longitude + 180.0) / 360.0 * scale, (1.0 + _mercator_y(latitude)) / 2.0 * scale]
+
+## [method unproject] in double precision: [latitude, longitude].
+static func unproject_d(x: float, y: float, zoom: int) -> Array:
+	var scale = TILE_SIZE * pow(2.0, zoom)
+	return [rad_to_deg(atan(sinh(PI * (1.0 - 2.0 * y / scale)))), x / scale * 360.0 - 180.0]
+
+## [param a] - [param b] for [x, y] arrays of doubles; the (small) difference fits a Vector2.
+static func diff(a: Array, b: Array) -> Vector2:
+	return Vector2(a[0] - b[0], a[1] - b[1])
 
 ## Inverse of [method project]: Vector2(latitude, longitude).
 static func unproject(world_px: Vector2, zoom: int) -> Vector2:
@@ -79,10 +113,11 @@ static func unproject(world_px: Vector2, zoom: int) -> Vector2:
 ## World pixels at [param zoom] from [param from] to [param to] (both latitude,
 ## longitude). Worked out in double precision: Vector2 is single precision, and the
 ## world pixel values of [method project] lose metres at high zoom levels.
-static func offset_px(from: Vector2, to: Vector2, zoom: int) -> Vector2:
+## Either point can be a Vector2 or a [latitude, longitude] array of doubles.
+static func offset_px(from, to, zoom: int) -> Vector2:
 	var scale = TILE_SIZE * pow(2.0, zoom)
-	var dx = (float(to.y) - float(from.y)) / 360.0 * scale
-	var dy = (_mercator_y(to.x) - _mercator_y(from.x)) / 2.0 * scale
+	var dx = (float(to[1]) - float(from[1])) / 360.0 * scale
+	var dy = (_mercator_y(to[0]) - _mercator_y(from[0])) / 2.0 * scale
 	return Vector2(dx, dy)
 
 static func _mercator_y(latitude: float) -> float:

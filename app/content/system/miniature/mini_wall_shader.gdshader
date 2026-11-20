@@ -14,6 +14,13 @@ uniform vec4 edge_color : source_color = vec4(0.62, 0.62, 0.62, 0.431373);
 varying vec3 color;
 varying vec2 aspect_ratio;
 
+// On the round Map View, zoomed in past the map, the rooms are cut off at the map's
+// rim: whatever lies outside the upright cylinder over the disc is discarded.
+uniform bool clip_to_disc = false;
+uniform vec3 disc_center = vec3(0.0); // world space
+uniform vec3 disc_normal = vec3(0.0, 1.0, 0.0);
+uniform float disc_radius = 1.0;
+
 float simple_weight(int index, vec3 world_pos, float p) {
 	return 1.0 / pow(distance(data[index].xyz, world_pos), p);
 }
@@ -63,6 +70,12 @@ void vertex() {
 }
 
 void fragment() {
+	if (clip_to_disc) {
+		vec3 offset = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).xyz - disc_center;
+		if (length(offset - dot(offset, disc_normal) * disc_normal) > disc_radius) {
+			discard;
+		}
+	}
 	ROUGHNESS = roughness;
 	DEPTH = FRAGCOORD.z + 0.0001;
 	ALBEDO = vec3(color.xyz);

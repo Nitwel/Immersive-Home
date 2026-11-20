@@ -294,6 +294,8 @@ func _map_overview_cell():
 	for in_3d in [false, true]:
 		var overview = MapOverview.new()
 		overview.use_3d.value = in_3d
+		# It lies flat; tip it towards the gallery camera, as if looked down at.
+		overview.rotation.x = deg_to_rad(55.0)
 		cell.get_node("Content").add_child(overview)
 		cell.get_meta("items").append({"node": overview, "caption": _caption("Map View (%s)" % ("3D" if in_3d else "2D"))})
 		cell.get_node("Content").add_child(cell.get_meta("items")[-1].caption)

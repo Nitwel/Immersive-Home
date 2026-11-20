@@ -64,8 +64,9 @@ const MAX_LABELS = 30
 ## Emitted when a new drawing is shown.
 signal drawn()
 
-## View the shown drawing was made for: world pixel of its top left corner, and zoom.
-var drawn_top_left := Vector2.ZERO
+## View the shown drawing was made for: world pixel of its top left corner ([x, y]
+## doubles, see Tiles.project_d), and zoom.
+var drawn_top_left := [0.0, 0.0]
 var drawn_zoom := 0
 ## Texture pixels per map pixel of the shown drawing
 var _drawn_scale: float = SCALE
@@ -100,7 +101,7 @@ func _init():
 ## With a [param magnification] (fractional zoom: the map shown larger or smaller
 ## than its tile level), the texture keeps the resolution of the unmagnified map,
 ## so it stays sharp and labels keep their size.
-func render(loader, center: Vector2, zoom: int, px_size: Vector2, magnification := 1.0):
+func render(loader, center, zoom: int, px_size: Vector2, magnification := 1.0):
 	size = Vector2i((px_size * SCALE * magnification).round())
 	var tile_zoom = mini(zoom, Tiles.VECTOR_MAX_ZOOM)
 	_job_id += 1
@@ -110,7 +111,7 @@ func render(loader, center: Vector2, zoom: int, px_size: Vector2, magnification 
 		"zoom": zoom,
 		"zoom_f": zoom + log(magnification) / log(2.0),
 		"tile_zoom": tile_zoom,
-		"top_left": Tiles.project(center.x, center.y, zoom) - px_size / 2.0,
+		"top_left": _top_left(center, zoom, px_size),
 		"texture_size": Vector2(size),
 		"scale": SCALE * magnification,
 		"pixel_scale": SCALE,
@@ -126,6 +127,11 @@ func render(loader, center: Vector2, zoom: int, px_size: Vector2, magnification 
 		_next_job = job # only the newest waiting job matters
 		return
 	_start(job)
+
+## [x, y] world pixels (doubles) of the top left corner of a map around [param center].
+static func _top_left(center, zoom: int, px_size: Vector2) -> Array:
+	var c = Tiles.project_d(center[0], center[1], zoom)
+	return [c[0] - px_size.x / 2.0, c[1] - px_size.y / 2.0]
 
 func _start(job: Dictionary):
 	_building = true
@@ -149,18 +155,19 @@ func _on_built(result: Dictionary):
 	render_target_update_mode = SubViewport.UPDATE_ONCE
 	drawn.emit()
 
-## Where the shown drawing sits in a view with [param top_left] (world pixels at
-## [param zoom]): Vector3(offset.x, offset.y, scale), so that a view pixel p is at
+## Where the shown drawing sits in a view with [param top_left] ([x, y] world pixels
+## at [param zoom]): Vector3(offset.x, offset.y, scale), so that a view pixel p is at
 ## p * scale + offset in the drawing's pixels.
-func drawn_mapping(top_left: Vector2, zoom: int) -> Vector3:
+func drawn_mapping(top_left: Array, zoom: int) -> Vector3:
 	if _drawing.is_empty():
 		return Vector3(0, 0, 1)
 	var scale = pow(2.0, drawn_zoom - zoom)
-	var offset = top_left * scale - drawn_top_left
+	# Doubles until the difference: the world pixel values are huge.
+	var offset = Vector2(top_left[0] * scale - drawn_top_left[0], top_left[1] * scale - drawn_top_left[1])
 	return Vector3(offset.x, offset.y, scale)
 
 ## Sets [param material]'s texture mapping uniforms (see map.gdshader) for a view.
-func apply_mapping(material: ShaderMaterial, top_left: Vector2, zoom: int):
+func apply_mapping(material: ShaderMaterial, top_left: Array, zoom: int):
 	var mapping = drawn_mapping(top_left, zoom)
 	material.set_shader_parameter("texture_offset", Vector2(mapping.x, mapping.y))
 	material.set_shader_parameter("texture_scale", mapping.z)

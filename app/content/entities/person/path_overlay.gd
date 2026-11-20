@@ -10,7 +10,8 @@ const NEWEST_ALPHA = 0.9
 
 ## [param tracks]: [{points: PackedVector3Array (local, oldest first), color: Color}].
 ## [param normal]: the map's up direction (Z for the flat map, Y for the 3D ground).
-static func build(tracks: Array, normal: Vector3, line_width: float, dot_size: float) -> ArrayMesh:
+## With [param fade] off, lines keep the track's colour; a [param dot_size] of 0 draws no dots.
+static func build(tracks: Array, normal: Vector3, line_width: float, dot_size: float, fade := true) -> ArrayMesh:
 	var vertices = PackedVector3Array()
 	var colors = PackedColorArray()
 	var uvs = PackedVector2Array()
@@ -33,11 +34,11 @@ static func build(tracks: Array, normal: Vector3, line_width: float, dot_size: f
 			if direction.length() < 0.00001:
 				continue
 			var across = direction.cross(normal).normalized() * line_width / 2.0
-			var color = _faded(base_color, float(i + 1) / count)
+			var color = _faded(base_color, float(i + 1) / count) if fade else base_color
 			_quad(vertices, colors, uvs, indices, [a + across, b + across, b - across, a - across], color, false)
 
 		# Dots on top of the line
-		for i in count:
+		for i in (count if dot_size > 0.0 else 0):
 			var p = points[i]
 			var half_u = axis_u * dot_size / 2.0
 			var half_v = axis_v * dot_size / 2.0

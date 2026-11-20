@@ -5,7 +5,7 @@ extends RefCounted
 ## frame rate while it runs. map_3d.gd turns the result into meshes.
 ##
 ## Job (a snapshot taken on the main thread):
-##   size, zoom, top_left (world px), ppm (map px per panel m), scale (panel m per
+##   size, zoom, top_left ([x, y] world px as doubles, see Tiles.project_d), ppm (map px per panel m), scale (panel m per
 ##   real m), relief ([lowest m, scale] of the shown build to keep while dragging, or null),
 ##   terrain_zoom, terrain_tiles ({Vector2i: Image}, null when not all loaded),
 ##   vector_tiles ([tile x, tile y, data] at VECTOR zoom)
@@ -48,7 +48,7 @@ static func _deliver(map_ref: WeakRef, result: Dictionary):
 static func build(job: Dictionary) -> Dictionary:
 	var heights = _heights(job)
 	var result = {"heights": heights, "view": job.view, "top_left": job.top_left, "zoom": job.zoom, "size": job.size, "ppm": job.ppm}
-	var terrain = _terrain_arrays(job.size, heights)
+	var terrain = _round_terrain_arrays(job.size.x / 2.0, heights) if job.get("circular", false) else _terrain_arrays(job.size, heights)
 	result.terrain = terrain[0]
 	result.sides = terrain[1]
 	result.faces = _faces(terrain[0])
@@ -65,11 +65,11 @@ static func build(job: Dictionary) -> Dictionary:
 static func _px_size(job: Dictionary) -> Vector2:
 	return job.size * job.ppm
 
-## World pixels (at the job's zoom) to ground coordinates: x east, z south.
-static func _to_ground(job: Dictionary, world_px: Vector2) -> Vector2:
-	return (world_px - job.top_left) / job.ppm - job.size / 2.0
-
-static func _inside(size: Vector2, p: Vector2, margin := 0.0) -> bool:
+## Whether a ground position lies on the diorama (a disc when job.circular).
+static func _inside(job: Dictionary, p: Vector2, margin := 0.0) -> bool:
+	var size: Vector2 = job.size
+	if job.get("circular", false):
+		return p.length() <= size.x / 2.0 - margin
 	return abs(p.x) <= size.x / 2.0 - margin and abs(p.y) <= size.y / 2.0 - margin
 
 ## Terrain height (meters of panel) at a ground position, bilinear between the
@@ -104,13 +104,15 @@ static func height_at(heights: Dictionary, p: Vector2) -> float:
 static func _heights(job: Dictionary) -> Dictionary:
 	var px = _px_size(job)
 	var cell_px: float = px.x / GRID
-	var first = Vector2i(floori(job.top_left.x / cell_px), floori(job.top_left.y / cell_px))
-	var last = Vector2i(ceili((job.top_left.x + px.x) / cell_px), ceili((job.top_left.y + px.y) / cell_px))
+	var left: float = job.top_left[0]
+	var top: float = job.top_left[1]
+	var first = Vector2i(floori(left / cell_px), floori(top / cell_px))
+	var last = Vector2i(ceili((left + px.x) / cell_px), ceili((top + px.y) / cell_px))
 	var nx = last.x - first.x + 1
 	var ny = last.y - first.y + 1
 	var heights = {
 		"nx": nx, "ny": ny, "cell": Vector2(cell_px, cell_px) / job.ppm, "relief": null,
-		"origin": Vector2((first.x * cell_px - job.top_left.x) / job.ppm, (first.y * cell_px - job.top_left.y) / job.ppm) - job.size / 2.0,
+		"origin": Vector2((first.x * cell_px - left) / job.ppm, (first.y * cell_px - top) / job.ppm) - job.size / 2.0,
 	}
 	var values = PackedFloat32Array()
 	values.resize(nx * ny)
@@ -209,7 +211,56 @@ static func _terrain_arrays(size: Vector2, heights: Dictionary) -> Array:
 	for k in [0, 1, 2, 0, 2, 3]:
 		st.add_vertex(corners[k] * Vector3(size.x, 0, size.y) + bottom)
 	return [top, st.commit_to_arrays()]
-# ---------------------------------------------------------------------------
+
+## Segments of the round diorama's rim wall
+const RIM_SEGMENTS = 160
+
+## The disc version of [method _terrain_arrays]. Grid points outside the circle are
+## pulled in onto it, so the outer cells end on the rim; triangles lying wholly
+## outside are left out. The sides are a wall around the circle, following the
+## terrain, with a disc at the bottom.
+static func _round_terrain_arrays(radius: float, heights: Dictionary) -> Array:
+	var nx: int = heights.nx
+	var ny: int = heights.ny
+	var points = []
+	var outside = []
+	for j in ny:
+		for i in nx:
+			var grid: Vector2 = heights.origin + Vector2(i, j) * heights.cell
+			outside.append(grid.length() > radius)
+			var p = grid.limit_length(radius)
+			points.append(Vector3(p.x, height_at(heights, p), p.y))
+
+	var st = SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for v in points:
+		st.set_uv(Vector2(v.x / (2.0 * radius) + 0.5, v.z / (2.0 * radius) + 0.5))
+		st.add_vertex(v)
+	for j in ny - 1:
+		for i in nx - 1:
+			var a = j * nx + i
+			for triangle in [[a, a + 1, a + nx], [a + 1, a + nx + 1, a + nx]]:
+				if outside[triangle[0]] and outside[triangle[1]] and outside[triangle[2]]:
+					continue
+				for index in triangle:
+					st.add_index(index)
+	var top = st.commit_to_arrays()
+
+	st = SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var bottom = Vector3(0, -BASE_THICKNESS, 0)
+	# A hair above the terrain's rim, which runs straight between its own points
+	var lip = 0.0002
+	for k in RIM_SEGMENTS:
+		var pa = Vector2.from_angle(TAU * k / RIM_SEGMENTS) * radius
+		var pb = Vector2.from_angle(TAU * (k + 1) / RIM_SEGMENTS) * radius
+		var top_a = Vector3(pa.x, height_at(heights, pa) + lip, pa.y)
+		var top_b = Vector3(pb.x, height_at(heights, pb) + lip, pb.y)
+		var base_a = Vector3(pa.x, 0, pa.y) + bottom
+		var base_b = Vector3(pb.x, 0, pb.y) + bottom
+		for v in [top_a, top_b, base_b, top_a, base_b, base_a, bottom, base_a, base_b]:
+			st.add_vertex(v)
+	return [top, st.commit_to_arrays()]# ---------------------------------------------------------------------------
 # Buildings and trees
 # ---------------------------------------------------------------------------
 
@@ -217,7 +268,7 @@ static func _terrain_arrays(size: Vector2, heights: Dictionary) -> Array:
 static func _ring_to_ground(job: Dictionary, ring: PackedVector2Array, tx: int, ty: int) -> PackedVector2Array:
 	var factor = pow(2.0, job.zoom - Tiles.VECTOR_MAX_ZOOM) * Tiles.TILE_SIZE
 	var xform = Transform2D(0.0, Vector2(factor, factor) / job.ppm, 0.0,
-		(Vector2(tx, ty) * factor - job.top_left) / job.ppm - job.size / 2.0)
+		Vector2(tx * factor - job.top_left[0], ty * factor - job.top_left[1]) / job.ppm - job.size / 2.0)
 	return xform * ring
 
 ## Vector tiles repeat features near their edges (the tile buffer). Keep a polygon
@@ -232,9 +283,15 @@ static func _centroid(ring: PackedVector2Array) -> Vector2:
 		sum += p
 	return sum / max(ring.size(), 1)
 
+## Besides position and colour, each vertex carries what diorama.gdshader needs to
+## draw a building as an outline only (around the miniature house on the Map View):
+##   CUSTOM0 = (centroid x, centroid z, distance along the wall, wall length);
+##             distance and length are -1 on roofs
+##   UV2     = (bottom, top) height of the building
 static func _building_arrays(job: Dictionary, heights: Dictionary):
 	var st = SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	st.set_custom_format(0, SurfaceTool.CUSTOM_RGBA_FLOAT)
 	var building_scale = job.scale * BUILDING_EXAGGERATION
 	var count = 0
 
@@ -244,25 +301,33 @@ static func _building_arrays(job: Dictionary, heights: Dictionary):
 			if not _owns(ring):
 				continue
 			var outline = _ring_to_ground(job, ring, tile[0], tile[1])
-			if not Array(outline).all(func(p): return _inside(job.size, p)):
+			if not Array(outline).all(func(p): return _inside(job, p)):
 				continue # cut off at the edge: leave it out rather than overhang
 			var roof = Geometry2D.triangulate_polygon(outline)
 			if roof.is_empty():
 				continue # self-intersecting outline
 
-			var ground = height_at(heights, _centroid(outline))
+			var centroid = _centroid(outline)
+			var ground = height_at(heights, centroid)
 			var bottom = ground + building[0] * building_scale - (0.001 if building[0] == 0 else 0.0)
 			var top = ground + building[1] * building_scale
-			var tint = 0.94 + 0.06 * fposmod(sin(outline[0].x * 9137.0 + outline[0].y * 4513.0) * 43758.5, 1.0)
+			# Seeded by the outline in tile units, not in ground units: those change with
+			# every pan, and each rebuild would give the buildings new shades (flicker).
+			var seed_point = ring[0] + Vector2(tile[0], tile[1])
+			var tint = 0.94 + 0.06 * fposmod(sin(seed_point.x * 9137.0 + seed_point.y * 4513.0) * 43758.5, 1.0)
+			st.set_uv2(Vector2(bottom, top))
 
 			st.set_color(WALL_COLOR * tint)
 			for i in outline.size():
 				var a = outline[i]
 				var b = outline[(i + 1) % outline.size()]
-				for v in [Vector3(a.x, bottom, a.y), Vector3(b.x, bottom, b.y), Vector3(b.x, top, b.y),
-						Vector3(a.x, bottom, a.y), Vector3(b.x, top, b.y), Vector3(a.x, top, a.y)]:
-					st.add_vertex(v)
+				var length = a.distance_to(b)
+				for corner in [[a, bottom, 0.0], [b, bottom, length], [b, top, length],
+						[a, bottom, 0.0], [b, top, length], [a, top, 0.0]]:
+					st.set_custom(0, Color(centroid.x, centroid.y, corner[2], length))
+					st.add_vertex(Vector3(corner[0].x, corner[1], corner[0].y))
 			st.set_color(ROOF_COLOR * tint)
+			st.set_custom(0, Color(centroid.x, centroid.y, -1.0, -1.0))
 			for index in roof:
 				st.add_vertex(Vector3(outline[index].x, top, outline[index].y))
 			count += 1
@@ -283,7 +348,7 @@ static func _tree_buffer(job: Dictionary, heights: Dictionary) -> Array:
 
 	# Grid coordinates are in vector tile units (one tile = 1).
 	var tile_px = Tiles.TILE_SIZE * pow(2.0, job.zoom - Tiles.VECTOR_MAX_ZOOM) # map px per tile
-	var view = Rect2(job.top_left / tile_px, size * job.ppm / tile_px)
+	var view = Rect2(Vector2(job.top_left[0] / tile_px, job.top_left[1] / tile_px), size * job.ppm / tile_px)
 	var tile_meters = 40075016.686 / pow(2.0, Tiles.VECTOR_MAX_ZOOM) # at the equator
 	# Tiles shrink towards the poles (Mercator); keep fewer candidates to keep the density.
 	var keep = pow(cos(deg_to_rad(job.latitude)), 2)
@@ -321,9 +386,9 @@ static func _tree_buffer(job: Dictionary, heights: Dictionary) -> Array:
 							continue
 						if not Geometry2D.is_point_in_polygon(Vector2(gx - tile[0], gy - tile[1]), ring):
 							continue
-						var p = Vector2((gx * tile_px - job.top_left.x) / job.ppm - size.x / 2.0,
-							(gy * tile_px - job.top_left.y) / job.ppm - size.y / 2.0)
-						if not _inside(size, p, tree_size / 3.0):
+						var p = Vector2((gx * tile_px - job.top_left[0]) / job.ppm - size.x / 2.0,
+							(gy * tile_px - job.top_left[1]) / job.ppm - size.y / 2.0)
+						if not _inside(job, p, tree_size / 3.0):
 							continue
 						positions.append(p)
 						sizes.append(tree_scale)

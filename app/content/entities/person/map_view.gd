@@ -10,7 +10,10 @@ const Tiles = preload ("./map_tiles.gd")
 const TileLoader = preload ("./tile_loader.gd")
 const VectorMap = preload ("./vector_map.gd")
 const PathOverlay = preload ("./path_overlay.gd")
+const BuildingOutlines = preload ("./building_outlines.gd")
 const MapShader = preload ("./map.gdshader")
+## Same, transparent: used only while the map fades out into the rooms
+const MapFadeShader = preload ("./map_fade.gdshader")
 const MarkerShader = preload ("./marker.gdshader")
 const IconFont = preload ("res://assets/icons/icons.tres")
 
@@ -19,9 +22,19 @@ const PIXELS_PER_METER = 1600.0
 
 ## Size of the map in meters.
 var size := Vector2(0.28, 0.19)
-## Map centre as Vector2(latitude, longitude).
-var center := Vector2.ZERO
+## Round map: a circle of diameter size.x (keep size square) instead of a rectangle.
+var circular := false
+## Map centre as [latitude, longitude] doubles. A Vector2 can be assigned too, but
+## only resolves about half a meter: too coarse to drag a map smoothly up close.
+var center = [0.0, 0.0]:
+	set(value):
+		center = [float(value[0]), float(value[1])]
 var zoom := 15
+## Highest fractional zoom; up to Tiles.ROOMS_MAX_ZOOM on a map that shows the
+## miniature house, which takes over from the base map past Tiles.ROOMS_FROM_ZOOM.
+var max_zoom := float(Tiles.MAX_ZOOM)
+## Draw building footprints when zoomed in close (Map View, see building_outlines.gd).
+var building_outlines := false
 ## How much larger the map is shown than its tile level, for fractional zoom
 ## (see [method set_fractional_zoom]).
 var magnification := 1.0
@@ -41,6 +54,7 @@ var _vector := VectorMap.new()
 var _attribution: Label3D
 var _marker_nodes: Array = []
 var _paths := MeshInstance3D.new()
+var _outlines := BuildingOutlines.new()
 var _loader := TileLoader.new()
 var _compose_queued = false
 var _rendered_view := []
@@ -57,7 +71,8 @@ func _ready():
 
 	_material = ShaderMaterial.new()
 	_material.shader = MapShader
-	_material.render_priority = 12
+	# Under the paths (12): it can fade out, which makes it a transparent object.
+	_material.render_priority = 11
 
 	_quad = MeshInstance3D.new()
 	_quad.mesh = QuadMesh.new()
@@ -77,9 +92,12 @@ func _ready():
 	add_child(_loader)
 	_loader.loaded.connect(_queue_compose)
 
+	_outlines.setup(_loader, false)
+	add_child(_outlines)
+
 ## Sets [member zoom] and [member magnification] from a fractional zoom level.
 func set_fractional_zoom(fractional_zoom: float):
-	var split = Tiles.split_zoom(fractional_zoom)
+	var split = Tiles.split_zoom(min(fractional_zoom, max_zoom))
 	zoom = split[0]
 	magnification = split[1]
 
@@ -94,26 +112,38 @@ func _ppm() -> float:
 func _px_size() -> Vector2:
 	return size * _ppm()
 
-func _top_left() -> Vector2:
-	return Tiles.project(center.x, center.y, zoom) - _px_size() / 2.0
+## Zoomed in past the base map: only the rooms (miniature) are shown.
+func rooms_only() -> bool:
+	return get_fractional_zoom() > Tiles.ROOMS_FROM_ZOOM + 0.0001
+
+## [x, y] world pixels (doubles) of the map's top left corner
+func _top_left() -> Array:
+	var c = Tiles.project_d(center[0], center[1], zoom)
+	return [c[0] - _px_size().x / 2.0, c[1] - _px_size().y / 2.0]
 
 ## Local position (meters, on the map plane) of a coordinate.
 func to_local_position(latitude: float, longitude: float) -> Vector3:
-	var p = (Tiles.project(latitude, longitude, zoom) - _top_left()) / _ppm()
-	return Vector3(p.x - size.x / 2.0, size.y / 2.0 - p.y, 0)
+	var o = Tiles.offset_px(center, [latitude, longitude], zoom) / _ppm()
+	return Vector3(o.x, -o.y, 0)
 
 ## Where a coordinate lies on the map, as a global transform on the map's surface
 ## with x pointing east, y up (out of the map) and z south. Its basis carries the
 ## map's own scale (see [method panel_per_meter] for the map's scale).
 func surface_transform(latitude: float, longitude: float) -> Transform3D:
-	var o = Tiles.offset_px(center, Vector2(latitude, longitude), zoom) / _ppm()
+	var o = Tiles.offset_px(center, [latitude, longitude], zoom) / _ppm()
 	var local = Transform3D(Basis(Vector3.RIGHT, Vector3.BACK, Vector3.DOWN), Vector3(o.x, -o.y, 0.0005))
 	return global_transform * local
 
 ## Whether a coordinate lies on the shown part of the map.
 func shows(latitude: float, longitude: float) -> bool:
-	var o = Tiles.offset_px(center, Vector2(latitude, longitude), zoom) / _ppm()
-	return abs(o.x) <= size.x / 2.0 and abs(o.y) <= size.y / 2.0
+	var o = Tiles.offset_px(center, [latitude, longitude], zoom) / _ppm()
+	return _within(o)
+
+## Whether a position (meters of panel from the map centre) lies on the map.
+func _within(p: Vector2) -> bool:
+	if circular:
+		return p.length() <= size.x / 2.0
+	return abs(p.x) <= size.x / 2.0 and abs(p.y) <= size.y / 2.0
 
 ## Meters of panel per meter of ground at [param latitude]: the map's scale.
 func panel_per_meter(latitude: float) -> float:
@@ -149,14 +179,27 @@ func refresh():
 		return
 	zoom = clampi(zoom, Tiles.MIN_ZOOM, Tiles.MAX_ZOOM)
 
+	var rooms = rooms_only()
+	_quad.visible = not rooms
+	_attribution.visible = not rooms
 	_quad.mesh.size = size
 	# Front face 3 mm above the map: over the paths, under most of the markers
 	_body_shape.shape.size = Vector3(size.x, size.y, 0.004)
 	_body_shape.position = Vector3(0, 0, 0.001)
 	_update_body()
-	_attribution.position = Vector3(size.x / 2.0 - 0.006, -size.y / 2.0 + 0.004, 0.001)
+	if circular: # under the circle, its corners are gone
+		_attribution.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_attribution.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+		_attribution.position = Vector3(0, -size.y / 2.0 - 0.003, 0.001)
+	else:
+		_attribution.position = Vector3(size.x / 2.0 - 0.006, -size.y / 2.0 + 0.004, 0.001)
 	_material.set_shader_parameter("size_px", _px_size())
-	_material.set_shader_parameter("corner_radius_px", 0.008 * _ppm())
+	_material.set_shader_parameter("corner_radius_px", (size.x / 2.0 if circular else 0.008) * _ppm())
+
+	var fractional_zoom = get_fractional_zoom()
+	set_fade(_material, Tiles.map_opacity(fractional_zoom), MapShader, MapFadeShader)
+	var outlines_opacity = Tiles.outlines_opacity(fractional_zoom) if building_outlines else 0.0
+	_outlines.show_view(center, zoom, _ppm(), outlines_opacity, size / 2.0, circular, 0.0012)
 
 	set_circle_uniforms(_material, circles, _top_left(), zoom)
 	_update_markers()
@@ -164,7 +207,7 @@ func refresh():
 
 	# A state update that doesn't move the map only moves the markers.
 	var view = [center, zoom, magnification, size]
-	if view != _rendered_view:
+	if view != _rendered_view and not rooms: # no drawing hundreds of times the map's size
 		_rendered_view = view
 		_compose()
 	# Until the new drawing is ready, show the last one moved / scaled into place.
@@ -198,8 +241,7 @@ func ray_offset(ray: RayCast3D):
 
 ## Whether an offset from [method ray_offset] lies on the map.
 func contains_offset(offset: Vector2) -> bool:
-	var half = size * PIXELS_PER_METER / 2.0
-	return abs(offset.x) <= half.x and abs(offset.y) <= half.y
+	return _within(offset / PIXELS_PER_METER)
 
 func _compose():
 	_vector.render(_loader, center, zoom, _px_size(), magnification)
@@ -224,6 +266,7 @@ func _update_paths():
 		tracks.append({"points": points, "color": path.color})
 	_paths.mesh = PathOverlay.build(tracks, Vector3.BACK, PATH_WIDTH, PATH_DOT)
 	_paths.material_override.set_shader_parameter("bounds", size / 2.0)
+	_paths.material_override.set_shader_parameter("circular", circular)
 
 func _update_markers():
 	while _marker_nodes.size() < markers.size():
@@ -238,7 +281,7 @@ func _update_markers():
 			continue
 		var position_on_map = to_local_position(markers[i].lat, markers[i].lon)
 		# Hide markers whose centre is off the map.
-		node.visible = abs(position_on_map.x) <= size.x / 2.0 and abs(position_on_map.y) <= size.y / 2.0
+		node.visible = _within(Vector2(position_on_map.x, position_on_map.y))
 		node.position = position_on_map + Vector3(0, 0, 0.002 + i * 0.0005)
 		apply_marker(node, markers[i])
 
@@ -247,12 +290,12 @@ func _update_markers():
 # ---------------------------------------------------------------------------
 
 ## Sets the circle uniforms of the map / terrain shader. Circle centres are in map
-## pixels relative to [param top_left].
-static func set_circle_uniforms(material: ShaderMaterial, circle_list: Array, top_left: Vector2, map_zoom: int):
+## pixels relative to [param top_left] ([x, y] world pixels, doubles).
+static func set_circle_uniforms(material: ShaderMaterial, circle_list: Array, top_left: Array, map_zoom: int):
 	var centers = []
 	var colors = []
 	for circle in circle_list.slice(0, 8):
-		var p = Tiles.project(circle.lat, circle.lon, map_zoom) - top_left
+		var p = Tiles.diff(Tiles.project_d(circle.lat, circle.lon, map_zoom), top_left)
 		var radius = circle.radius / Tiles.meters_per_pixel(circle.lat, map_zoom)
 		centers.append(Vector4(p.x, p.y, radius, 0))
 		var color: Color = circle.color
@@ -263,6 +306,14 @@ static func set_circle_uniforms(material: ShaderMaterial, circle_list: Array, to
 	material.set_shader_parameter("circles", centers)
 	material.set_shader_parameter("circle_colors", colors)
 	material.set_shader_parameter("circle_count", min(circle_list.size(), 8))
+
+## Fades [param material] to [param opacity]: on the transparent [param fade_shader]
+## only while it is below 1, so a fully shown map stays an opaque object.
+static func set_fade(material: ShaderMaterial, opacity: float, shader: Shader, fade_shader: Shader):
+	var wanted = fade_shader if opacity < 0.999 else shader
+	if material.shader != wanted:
+		material.shader = wanted
+	material.set_shader_parameter("opacity", opacity)
 
 static func attribution_label(text: String) -> Label3D:
 	var label = Label3D.new()

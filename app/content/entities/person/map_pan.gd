@@ -20,7 +20,8 @@ const DEAD_ZONE = 4.0
 ## World pixels are measured at this zoom; deep enough for every map zoom.
 const REFERENCE_ZOOM = 20
 
-signal changed(center: Vector2, zoom: float)
+## center: [latitude, longitude] doubles
+signal changed(center: Array, zoom: float)
 
 ## Each: {ray: RayCast3D, initiator}
 var _pointers: Array = []
@@ -29,8 +30,9 @@ var _view = null
 var _zoom := 0.0
 var _last_zoom := 0.0
 ## The pressed spot (one pointer) or the spot between both pointers (two), in world
-## pixels at REFERENCE_ZOOM
-var _anchor_px := Vector2.ZERO
+## pixels at REFERENCE_ZOOM: [x, y] doubles (see Tiles.project_d), as Vector2 would
+## only resolve 32 pixels this deep and the map would follow the hand in jumps.
+var _anchor_px := [0.0, 0.0]
 var _start_offset := Vector2.ZERO
 var _start_gap := 1.0
 var _following := false
@@ -73,9 +75,9 @@ func stop(event: EventPointer = null):
 	else:
 		_anchor()
 
-## Panel pixels -> world pixels at REFERENCE_ZOOM, at fractional zoom [param zoom].
-static func _to_world(panel_px: Vector2, zoom: float) -> Vector2:
-	return panel_px * pow(2.0, REFERENCE_ZOOM - zoom)
+## World pixels at REFERENCE_ZOOM per panel pixel, at fractional zoom [param zoom].
+static func _world_scale(zoom: float) -> float:
+	return pow(2.0, REFERENCE_ZOOM - zoom)
 
 ## Takes the current pointer positions as the gesture's starting point.
 func _anchor():
@@ -84,13 +86,14 @@ func _anchor():
 		return
 	_zoom = _view.get_fractional_zoom()
 	_last_zoom = _zoom
-	var center_px = Tiles.project(_view.center.x, _view.center.y, REFERENCE_ZOOM)
+	var center_px = Tiles.project_d(_view.center[0], _view.center[1], REFERENCE_ZOOM)
+	var point = offsets[0] if offsets.size() == 1 else (offsets[0] + offsets[1]) / 2.0
+	var world = _world_scale(_zoom)
+	_anchor_px = [center_px[0] + point.x * world, center_px[1] + point.y * world]
 	if offsets.size() == 1:
 		_start_offset = offsets[0]
-		_anchor_px = center_px + _to_world(offsets[0], _zoom)
 		_following = false
 	else:
-		_anchor_px = center_px + _to_world((offsets[0] + offsets[1]) / 2.0, _zoom)
 		_start_gap = max(offsets[0].distance_to(offsets[1]), 1.0)
 		_following = true
 
@@ -129,9 +132,10 @@ func _process(_delta):
 	else:
 		point = (offsets[0] + offsets[1]) / 2.0
 		var gap = max(offsets[0].distance_to(offsets[1]), 1.0)
-		zoom = clamp(_zoom + log(gap / _start_gap) / log(2.0), Tiles.MIN_ZOOM, Tiles.MAX_ZOOM)
+		zoom = clamp(_zoom + log(gap / _start_gap) / log(2.0), Tiles.MIN_ZOOM, _view.max_zoom)
 
-	var center = Tiles.unproject(_anchor_px - _to_world(point, zoom), REFERENCE_ZOOM)
+	var world = _world_scale(zoom)
+	var center = Tiles.unproject_d(_anchor_px[0] - point.x * world, _anchor_px[1] - point.y * world, REFERENCE_ZOOM)
 	if center != _view.center or not is_equal_approx(zoom, _last_zoom):
 		_last_zoom = zoom
 		changed.emit(center, zoom)

@@ -32,14 +32,14 @@ func get_tile(layer: String, z: int, x: int, y: int):
 	return data
 
 ## The tiles of [param layer] covering a map of [param px_size] map pixels around
-## [param center] (latitude, longitude) at [param zoom], as [tile x, tile y, data]
-## (tile x unwrapped, so it lines up with the map). Missing tiles are requested;
-## [code]missing[/code] counts them.
-func tiles_around(layer: String, center: Vector2, zoom: int, px_size: Vector2, tile_zoom: int) -> Dictionary:
+## [param center] (latitude, longitude: Vector2 or array of doubles) at [param zoom],
+## as [tile x, tile y, data] (tile x unwrapped, so it lines up with the map).
+## Missing tiles are requested; [code]missing[/code] counts them.
+func tiles_around(layer: String, center, zoom: int, px_size: Vector2, tile_zoom: int) -> Dictionary:
 	var factor = pow(2.0, zoom - tile_zoom) * Tiles.TILE_SIZE
-	var top_left = Tiles.project(center.x, center.y, zoom) - px_size / 2.0
-	var lo = (top_left / factor).floor()
-	var hi = ((top_left + px_size) / factor).floor()
+	var c = Tiles.project_d(center[0], center[1], zoom)
+	var lo = Vector2(floorf((c[0] - px_size.x / 2.0) / factor), floorf((c[1] - px_size.y / 2.0) / factor))
+	var hi = Vector2(floorf((c[0] + px_size.x / 2.0) / factor), floorf((c[1] + px_size.y / 2.0) / factor))
 	var count = 1 << tile_zoom
 	var tiles = []
 	var missing = 0

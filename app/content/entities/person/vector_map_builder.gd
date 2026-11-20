@@ -84,7 +84,9 @@ static func build(job: Dictionary) -> Dictionary:
 ## Tile units of tile (tx, ty) -> texture pixels.
 static func _transform(job: Dictionary, tx: int, ty: int) -> Transform2D:
 	var factor = pow(2.0, job.zoom - job.tile_zoom) * Tiles.TILE_SIZE * job.scale
-	return Transform2D(0.0, Vector2(factor, factor), 0.0, Vector2(tx, ty) * factor - job.top_left * job.scale)
+	# top_left is [x, y] doubles; subtract before going to (single precision) Vector2.
+	var origin = Vector2(tx * factor - job.top_left[0] * job.scale, ty * factor - job.top_left[1] * job.scale)
+	return Transform2D(0.0, Vector2(factor, factor), 0.0, origin)
 
 static func _add_layer(layers: Array, geometry: Array, color: Color):
 	if not geometry[1].is_empty():
