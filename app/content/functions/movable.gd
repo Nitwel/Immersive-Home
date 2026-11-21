@@ -37,6 +37,8 @@ func reset():
 	get_parent().global_transform = initial_global_transform
 	initiator = null
 	initiator2 = null
+	if EventSystem.on_action_value.is_connected(_on_action_value):
+		EventSystem.on_action_value.disconnect(_on_action_value)
 	on_moved.emit()
 
 func _on_action_value(event: EventAction):
@@ -53,6 +55,10 @@ func _on_grab_down(event: EventPointer):
 		return
 
 	if initiator != null&&initiator2 != null:
+		return
+
+	# Already held by this initiator
+	if event.initiator == initiator||event.initiator == initiator2:
 		return
 
 	if initiator != null&&initiator2 == null&&initiator != event.initiator:
@@ -123,7 +129,8 @@ func _on_grab_up(event: EventPointer):
 			initiator = null
 			initiator2 = null
 			on_moved.emit()
-			EventSystem.on_action_value.disconnect(_on_action_value)
+			if EventSystem.on_action_value.is_connected(_on_action_value):
+				EventSystem.on_action_value.disconnect(_on_action_value)
 
 func _get_first_ray_point():
 	if initiator == null:

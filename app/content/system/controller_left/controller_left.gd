@@ -94,6 +94,7 @@ func _ready():
 var hand_tracked = false
 
 func _apply_hand_active(value: bool):
+	if !value: _release_pinches()
 	hand_active = value
 	$IndexTip/TouchArea/CollisionShape3D.disabled = !value
 	hand_mesh.visible = value
@@ -135,6 +136,16 @@ func _physics_process(_delta):
 		pointer.pressed(Initiator.EventType.GRIP)
 		grabbed = true
 	elif !grab_close&&grabbed:
+		pointer.released(Initiator.EventType.GRIP)
+		grabbed = false
+
+## Ends any running pinch, otherwise losing hand tracking mid-pinch leaves the
+## pointer pressed/grabbed forever, as no release is detected anymore.
+func _release_pinches():
+	if pressed:
+		pointer.released(Initiator.EventType.TRIGGER)
+		pressed = false
+	if grabbed:
 		pointer.released(Initiator.EventType.GRIP)
 		grabbed = false
 
