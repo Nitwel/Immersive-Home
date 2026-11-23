@@ -190,7 +190,9 @@ const lightGlow = (stateObj) => {
 
 /**
  * Maps colored by the readings of the sensors placed in the rooms. Stops are
- * [value, rgb], temperatures in °C.
+ * [value, rgb], temperatures in °C. The headset's Map View uses the same scales
+ * (app/content/system/miniature: temp_gradient.tres, humid_gradient.tres and
+ * default_scale in miniature.gd), keep them in step.
  */
 const OVERLAYS = {
   temperature: {

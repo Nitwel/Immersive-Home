@@ -80,7 +80,8 @@ func _ready():
 		max_slider.value = miniature.selected_scale.value.y
 	)
 
-	# A new heat map: its slider range, and the range its sensors read right now.
+	# A new heat map: its slider range, and the range its colours span by default, the
+	# same as on the Home Assistant floor plan cards.
 	R.effect(func(_arg):
 		var minmax = miniature.get_base_scale()
 		for slider in [min_slider, max_slider]:
@@ -88,12 +89,11 @@ func _ready():
 			slider.max = minmax.y
 			slider.label_unit = miniature.get_sensor_unit()
 
-		var sensor_minmax = miniature.get_sensor_scale()
-		sensor_minmax = Vector2(floor(sensor_minmax.x), ceil(sensor_minmax.y))
-		min_slider.value = sensor_minmax.x
-		max_slider.value = sensor_minmax.y
+		var default_minmax = miniature.get_default_scale()
+		min_slider.value = default_minmax.x
+		max_slider.value = default_minmax.y
 		# Deferred: states can't be written while an effect runs.
-		(func(): miniature.selected_scale.value = sensor_minmax).call_deferred()
+		(func(): miniature.selected_scale.value = default_minmax).call_deferred()
 	)
 
 	R.bind(opacity_slider, "value", miniature.opacity, opacity_slider.on_value_changed)

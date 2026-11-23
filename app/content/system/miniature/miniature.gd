@@ -24,10 +24,21 @@ var heatmap_type_strings = {
 	HeatmapType.HUMIDITY: "humidity"
 }
 
+## What the Min / Max sliders (room_controls.gd) can be set to, temperatures in °C.
 var base_scale = {
 	HeatmapType.NONE: Vector2(0.0, 1.0),
 	HeatmapType.TEMPERATURE: Vector2( - 20.0, 60.0),
 	HeatmapType.HUMIDITY: Vector2(0.0, 100.0)
+}
+## The range the colours span when a heat map is turned on, temperatures in °C. The
+## same as the Home Assistant floor plan cards (OVERLAYS in
+## custom_components/immersive_home/frontend/immersive-home-floor-plan-card.js), which
+## also share the gradients (temp_gradient.tres, humid_gradient.tres), so a colour
+## means the same in the headset and on the dashboard.
+var default_scale = {
+	HeatmapType.NONE: Vector2(0.0, 1.0),
+	HeatmapType.TEMPERATURE: Vector2(16.0, 30.0),
+	HeatmapType.HUMIDITY: Vector2(20.0, 80.0)
 }
 var selected_scale = R.state(Vector2(0.0, 1.0))
 ## How strongly the heat map colours the floors, in percent (Map View's Opacity)
@@ -160,7 +171,17 @@ func _on_disc(point: Vector3) -> bool:
 const SensorEntity = preload ("res://content/entities/sensor/sensor.gd")
 
 func get_base_scale() -> Vector2:
-	return base_scale[heatmap_type.value]
+	return _in_sensor_unit(base_scale[heatmap_type.value])
+
+## The range the colours span by default, in the sensors' unit.
+func get_default_scale() -> Vector2:
+	return _in_sensor_unit(default_scale[heatmap_type.value])
+
+## [param value_range] (°C for temperatures) in the unit the sensors read.
+func _in_sensor_unit(value_range: Vector2) -> Vector2:
+	if heatmap_type.value == HeatmapType.TEMPERATURE and get_sensor_unit() == "°F":
+		return Vector2(round(value_range.x * 9.0 / 5.0 + 32.0), round(value_range.y * 9.0 / 5.0 + 32.0))
+	return value_range
 
 func get_sensor_data():
 	var data_list = []
@@ -189,22 +210,6 @@ func get_sensor_unit():
 					return sensor_unit
 
 	return ""
-
-func get_sensor_scale():
-	var data = get_sensor_data()
-	var minmax
-
-	for sensor in data:
-		if minmax == null:
-			minmax = Vector2(sensor.w, sensor.w)
-		else:
-			minmax.x = min(sensor.w, minmax.x)
-			minmax.y = max(sensor.w, minmax.y)
-
-	if minmax == null:
-		return Vector2(0.0, 1.0)
-
-	return minmax
 
 func update_data(_delta: float) -> void:
 	var data_list = get_sensor_data()
