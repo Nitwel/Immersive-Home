@@ -4,9 +4,9 @@ This guide will help you get started with installing and configuring the app.
 
 ## Prerequisites
 
-The app requires that you have hosted [Home Assistant](https://www.home-assistant.io/) somewhere in your network or accessible from the internet.
+The app requires that you have hosted [Home Assistant](https://www.home-assistant.io/) somewhere in your network or accessible from the internet. Without one, you can still try the app in [Demo Mode](/getting-started/demo-mode).
 
-The app currently only supports the **Meta Quest 2, Pro and 3**, other headsets like Pico 4 might work but are not officially supported yet.
+The app currently only supports the **Meta Quest 2, Pro, 3 and 3S**, other headsets like Pico 4 might work but are not officially supported yet.
 
 ## Download
 
@@ -47,9 +47,11 @@ You can use a pastebin like [immho.me](https://immho.me) to access your token fr
 
 ![Home Assistant Dashboard](/img/setup-1.jpg)
 
-3. Open the Menu in the app and open the settings panel by either:
+3. Open the Menu in the app by either:
     - Pressing the **Menu** button on the left controller.
     - making the pinch gesture with the left hand while you palm points into your direction.
+
+   Then open the settings panel with the gear button at the bottom of the menu's side bar.
 4. Enter the URL of your Home Assistant instance and the token you just created. Make sure to change `http` -> `ws` or `https` -> `wss` in the URL.
     - The app searches your network for Home Assistant when the URL is empty. Press the search button next to the URL field to search again. If more than one install is found, press it again to go through them.
 
@@ -76,3 +78,5 @@ You successfully connected the app to Home Assistant. Next up you have to config
 ::: warning
 Rooms have to be configured first, before you can add entities to them.
 :::
+
+Once your rooms are set up, you can [place devices](/getting-started/placing-devices) in them and get an overview of your whole home in the [Map View](/getting-started/map-view). Installing the [Home Assistant integration](/vendor-integration/home-assistant) also syncs your floor plan to Home Assistant and lets you show it on your dashboards.

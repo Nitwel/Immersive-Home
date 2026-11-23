@@ -14,6 +14,10 @@ export default {
                     text: 'Room Setup',
                     link: '/getting-started/room-setup'
                 },
+                {
+                    text: 'Placing Devices',
+                    link: '/getting-started/placing-devices'
+                },
             ]
         },
         {
@@ -24,12 +28,16 @@ export default {
                     link: '/getting-started/hand-tracking'
                 },
                 {
-                    text: 'Miniature View',
-                    link: '/getting-started/mini-view'
+                    text: 'Map View',
+                    link: '/getting-started/map-view'
                 },
                 {
                     text: 'Voice Assistant',
                     link: '/getting-started/voice-assistant'
+                },
+                {
+                    text: 'Demo Mode',
+                    link: '/getting-started/demo-mode'
                 }
             ]
         },
