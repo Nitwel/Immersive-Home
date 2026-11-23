@@ -3,12 +3,18 @@
     "step": {
       "user": {
         "title": "Immersive Home",
-        "description": "Headsets are added automatically when the Immersive Home app connects to Home Assistant."
+        "description": "Set up Immersive Home so your headsets can connect. Headsets are added automatically when the Immersive Home app connects to Home Assistant, see {docs_url}."
       }
     },
     "abort": {
-      "install_app": "Headsets are added automatically. Install the Immersive Home app on your headset and connect it to Home Assistant, see {docs_url}.",
+      "already_set_up": "Immersive Home is already set up. Headsets are added automatically when the Immersive Home app connects to Home Assistant, see {docs_url}.",
       "already_configured": "This headset is already set up."
+    }
+  },
+  "issues": {
+    "yaml_not_needed": {
+      "title": "Immersive Home no longer needs YAML",
+      "description": "Immersive Home is now set up from the UI, and your configuration was imported. Remove the `immersive_home:` line from your configuration.yaml file and restart Home Assistant."
     }
   }
 }
