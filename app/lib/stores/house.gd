@@ -3,10 +3,31 @@ extends StoreClass
 
 const StoreClass = preload ("./store.gd")
 
-func _init():
-	_save_path = "user://house.json"
+## Where the house is saved. The demo mode keeps its own house in DEMO_PATH, so it
+## never touches the real one.
+const PATH = "user://house.json"
+const DEMO_PATH = "user://demo_house.json"
 
-	self.state = R.store({
+func _init():
+	_save_path = PATH
+
+	self.state = R.store(_defaults())
+
+## Switches the file the house is saved in and loaded from. The house in memory is
+## reset to an empty one, load_local() then reads the new file.
+func use_save_path(path: String):
+	if path == _save_path:
+		return
+
+	_save_path = path
+	_loaded = false
+
+	var defaults = _defaults()
+	for key in defaults:
+		self.state[key] = defaults[key]
+
+func _defaults() -> Dictionary:
+	return {
 		## Type Room
 		## 	 name: String
 		## 	 corners: Vec2[]
@@ -44,7 +65,7 @@ func _init():
 		## Compass bearing (degrees, clockwise from north) the house's -Z axis points
 		## to; turns the miniature on the Map View to match the real house.
 		"map_heading": 0.0
-	})
+	}
 
 func clear():
 	self.state.rooms = []

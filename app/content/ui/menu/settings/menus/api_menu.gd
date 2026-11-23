@@ -8,6 +8,7 @@ const Discovery = preload ("res://lib/home_apis/hass_ws/discovery.gd")
 @onready var input_token = $InputToken
 @onready var button_connect = $Connect
 @onready var button_discover = $Discover
+@onready var button_demo = $Demo
 
 var discovering := false
 ## Installs found by the last discovery, pressing discover again cycles through them.
@@ -26,9 +27,14 @@ func _ready():
 	button_connect.on_button_down.connect(_connect)
 	button_discover.on_button_down.connect(_on_discover_pressed)
 
-	HomeApi.on_connect.connect(func():
-		status_label.text="Status: Connected"
-	)
+	# Before connecting the handler, setting active emits on_toggled.
+	button_demo.active = settings_store.type == "DEMO"
+	button_demo.on_toggled.connect(_on_demo_toggled)
+
+	if HomeApi.has_connected():
+		_show_connected()
+
+	HomeApi.on_connect.connect(_show_connected)
 
 	HomeApi.on_disconnect.connect(func():
 		status_label.text="Status: Disconnected"
@@ -40,6 +46,9 @@ func _ready():
 			_discover()
 	)
 
+func _show_connected():
+	status_label.text = "Status: Demo mode" if HomeApi.is_demo() else "Status: Connected"
+
 func _connect():
 	var settings_store = Store.settings.state
 	var url = input_url.text.strip_edges()
@@ -47,10 +56,27 @@ func _connect():
 
 	HomeApi.start_adapter("hass_ws", url, token)
 
+	settings_store.type = "HASS_WS"
 	settings_store.url = url
 	settings_store.token = token
 
 	Store.settings.save_local()
+
+	button_demo.active = false
+
+## Turning demo mode on builds a fresh demo apartment around you, turning it off
+## connects to Home Assistant again with the settings above.
+func _on_demo_toggled(active: bool):
+	if active == HomeApi.is_demo():
+		return
+
+	if active:
+		HomeApi.start_demo()
+		EventSystem.notify("Demo mode: a made-up home was built around you.", EventNotify.Type.SUCCESS)
+	else:
+		HomeApi.stop_demo()
+		status_label.text = "Status: Disconnected"
+		EventSystem.notify("Demo mode off, connecting to Home Assistant.", EventNotify.Type.INFO)
 
 ## Fills in the connection settings from a QR code scanned with the keyboard.
 func _on_qr_scan(event: EventQr):

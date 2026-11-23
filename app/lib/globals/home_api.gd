@@ -5,13 +5,17 @@ const EntityGroups = preload ("res://lib/utils/entity_group.gd")
 const HassWebSocket = preload ("res://lib/home_apis/hass_ws/hass.gd")
 const VoiceAssistant = preload ("res://lib/home_apis/voice_handler.gd")
 const FloorPlan = preload ("res://lib/utils/floor_plan.gd")
+const Demo = preload ("res://lib/home_apis/demo/demo.gd")
+const DemoHouse = preload ("res://lib/home_apis/demo/demo_house.gd")
+const HouseStore = preload ("res://lib/stores/house.gd")
 
 ## Seconds to wait after the house changed before syncing the floor plan, moving
 ## things around saves the house many times in a row.
 const FLOOR_PLAN_SYNC_DELAY = 2.0
 
 const apis = {
-	"hass_ws": HassWebSocket
+	"hass_ws": HassWebSocket,
+	"demo": Demo,
 }
 
 var groups = EntityGroups.new()
@@ -24,6 +28,8 @@ signal on_disconnect()
 
 ## The current home automation system adapter
 var api: Node
+## Type of the current adapter, a key of [member apis]
+var api_type := ""
 var reconnect_timer := Timer.new()
 var floor_plan_timer := Timer.new()
 ## JSON of the floor plan Home Assistant last stored, to skip unchanged syncs
@@ -70,6 +76,9 @@ func start_adapter(type: String, url: String, token: String):
 		api.queue_free()
 		api = null
 
+	api_type = type
+	_use_house_of(type)
+
 	api = apis[type].new(url, token)
 	add_child(api)
 
@@ -79,8 +88,58 @@ func start_adapter(type: String, url: String, token: String):
 		api.on_integration_ready.connect(_on_integration_ready)
 
 func _on_connect():
+	if is_demo()&&FileAccess.file_exists(HouseStore.DEMO_PATH) == false:
+		_build_demo_house()
+
 	Store.house.load_local()
 	on_connect.emit()
+
+## Returns true while the demo mode runs, with made-up devices instead of a real
+## home automation system.
+func is_demo() -> bool:
+	return api_type == "demo"
+
+## Starts the demo mode with a freshly built demo apartment around the user. It's
+## remembered, so the app starts in demo mode until [method stop_demo] is called.
+func start_demo():
+	Store.settings.state.type = "DEMO"
+	Store.settings.save_local()
+
+	if FileAccess.file_exists(HouseStore.DEMO_PATH):
+		DirAccess.remove_absolute(HouseStore.DEMO_PATH)
+
+	start_adapter("demo", "", "")
+
+## Leaves the demo mode and connects to the home automation system in the settings.
+func stop_demo():
+	Store.settings.state.type = "HASS_WS"
+	Store.settings.save_local()
+
+	start_adapter("hass_ws", Store.settings.state.url, Store.settings.state.token)
+
+## The demo mode keeps its own house, so it never changes the real one.
+func _use_house_of(type: String):
+	var path = HouseStore.DEMO_PATH if type == "demo" else HouseStore.PATH
+
+	if Store.house._save_path == path:
+		return
+
+	Store.house.use_save_path(path)
+
+	# The rooms of the other house are still standing, take them down until the
+	# new house is loaded on connect.
+	if App.house != null&&App.house.is_inside_tree():
+		App.house.update_house()
+
+## Saves the demo apartment, built around where the user is standing.
+func _build_demo_house():
+	var origin = App.camera.global_transform if App.camera != null&&App.camera.is_inside_tree() else Transform3D()
+	var house = DemoHouse.build(origin)
+
+	for key in house:
+		Store.house.state[key] = house[key]
+
+	Store.house.save_local()
 
 func _on_disconnect():
 	on_disconnect.emit()
