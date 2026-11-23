@@ -127,8 +127,9 @@ func _use_house_of(type: String):
 	Store.house.use_save_path(path)
 
 	# The rooms of the other house are still standing, take them down until the
-	# new house is loaded on connect.
-	if App.house != null&&App.house.is_inside_tree():
+	# new house is loaded on connect. A house that isn't ready yet has none standing
+	# (and its @onready nodes are still null).
+	if App.house != null&&App.house.is_node_ready():
 		App.house.update_house()
 
 ## Saves the demo apartment, built around where the user is standing.
