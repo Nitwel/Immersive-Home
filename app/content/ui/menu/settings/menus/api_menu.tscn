@@ -60,7 +60,7 @@ label = "login"
 icon = true
 
 [node name="LabelDemo" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19, -0.17, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.165, -0.17, 0)
 pixel_size = 0.001
 render_priority = 15
 outline_render_priority = 14
