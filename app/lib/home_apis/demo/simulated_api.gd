@@ -3,7 +3,8 @@ extends Node
 ##
 ## Implements the same interface HomeApi forwards to, so entities can run without a
 ## server. set_state() simulates what the matching Home Assistant service would do and
-## notifies watchers, so toggling a light in the gallery really turns it on.
+## notifies watchers, so toggling a light really turns it on. Used by the entity
+## gallery (test/content/entities) and, extended, by the demo mode (./demo.gd).
 
 # Part of the adapter interface HomeApi connects to; the mock is always connected.
 @warning_ignore("unused_signal")
@@ -13,6 +14,10 @@ signal on_disconnect()
 
 var entities: Dictionary = {}
 var entity_callbacks := CallbackMap.new()
+
+## Devices in the shape of the Home Assistant adapter's get_devices() (see
+## hass_ws/templates/devices.j2): [{id, name, area, manufacturer, model, entities: [{id, name}]}]
+var devices: Array = []
 
 ## Every service call an entity made, newest last: {entity, state, attributes}.
 var calls: Array = []
@@ -37,7 +42,7 @@ func get_http_url() -> String:
 	return ""
 
 func get_devices():
-	return []
+	return devices.duplicate(true)
 
 func get_device(_id: String):
 	return null
@@ -56,7 +61,7 @@ func unwatch_owner(target: Object):
 func set_state(entity: String, state: Variant, attributes: Dictionary = {}):
 	calls.append({"entity": entity, "state": state, "attributes": attributes})
 	on_call.emit(entity, state, attributes)
-	print("mock_home_api: %s -> %s %s" % [entity, state, attributes])
+	print("simulated_api: %s -> %s %s" % [entity, state, attributes])
 
 	if not entities.has(entity):
 		return null
@@ -209,7 +214,7 @@ func _simulate_light(current: Dictionary, state, service_data: Dictionary):
 	if state == "off":
 		if not service_data.is_empty():
 			# light.turn_off doesn't accept brightness/colour; Home Assistant rejects the call.
-			push_warning("mock_home_api: light.turn_off with %s would be rejected by Home Assistant" % service_data)
+			push_warning("simulated_api: light.turn_off with %s would be rejected by Home Assistant" % service_data)
 			return
 		current.state = "off"
 		# Home Assistant reports colour attributes as null while a light is off.
@@ -378,7 +383,7 @@ func _simulate_alarm(entity: String, current: Dictionary, state, service_data: D
 	var attrs: Dictionary = current.attributes
 	if attrs.get("code_format") != null and (state == "disarm" or attrs.get("code_arm_required", true)):
 		if str(service_data.get("code", "")) != str(attrs.get("_code", "")):
-			push_warning("mock_home_api: wrong alarm code for %s" % entity)
+			push_warning("simulated_api: wrong alarm code for %s" % entity)
 			return
 	if state == "disarm":
 		current.state = "disarmed"

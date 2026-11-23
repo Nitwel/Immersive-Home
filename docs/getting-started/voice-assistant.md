@@ -6,7 +6,7 @@ The voice assistant is a feature that allows you to control your home using your
 
 ## Enabling the Voice Assistant
 
-First, you have to enable the voice assistant in the settings panel. You can do this by opening the menu and clicking on the settings button. Then, click on the microphone button to enable the voice assistant.
+First, you have to enable the voice assistant in the settings panel. You can do this by opening the menu and clicking on the settings button at the bottom of the side bar. Then, open the **Features** tab and click on the microphone button next to "Voice Assistant" to enable it.
 
 ::: warning
 There is currently a problem with the app not being able to select the correct microphone after enabling the voice assistant. If you have problems with the voice assistant, try restarting the app.

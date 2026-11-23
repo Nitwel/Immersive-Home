@@ -39,7 +39,9 @@ For developers: [https://docs.immersive-home.org/development/](https://docs.imme
 - **Fast and Intuitive control over IoT devices**
 - **Live overview over your smart home**
 - **Build in Voice Assistant for more control**
-- **Miniature view to manage your whole house**
+- **Map View with a live dollhouse of your house and everyone's positions**
+- **Support for 40 Home Assistant entity domains**
+- **Floor plan sync with 2D and 3D floor plan cards for Home Assistant**
 - **Natural interactions with hands**
 - **Advanced automations based on position in room**
 
@@ -57,4 +59,4 @@ For developers: [https://docs.immersive-home.org/development/](https://docs.imme
 - [Home Assistant](https://www.home-assistant.io/)
 
 **Mixed Reality Headsets**
-- Meta Quest 2 / Pro / 3
+- Meta Quest 2 / Pro / 3 / 3S

@@ -4,7 +4,7 @@ Thanks for your interest in contributing to the project! This guide will help yo
 
 ## Prerequisites
 
-In order to contribute to this project, you need to have [Godot 4.2.x](https://godotengine.org/download/archive/) installed on your computer.
+In order to contribute to this project, you need to have [Godot 4.7.x](https://godotengine.org/download/archive/) (the project is built with 4.7.2) installed on your computer.
 
 [Git](https://git-scm.com/) and [Git-LFS](https://git-lfs.com/) is also required to clone the repository and download the large binary files.
 
@@ -38,18 +38,20 @@ Communication with the Smart Home Environment is done using the HomeApi global. 
 │   ├── content/           (Main files of the project)
 │   │   ├── entities       (Entities that can be placed into the room)
 │   │   ├── functions      (Generic functions that can be used in scenes)
+│   │   ├── system         (Controllers, house, keyboard, Map View and other systems)
 │   │   └── ui             (User Interface Scenes and related files)
-│   └── lib/               (Shared code)
-│       ├── globals        (Globally running scripts)
-|       ├── home_apis       (Code that communicates with the smart home environment)
-|       ├── stores         (Stores that hold the state of the app)
-│       └── utils          (Utility functions)
-├── docs/              (Documentation)
-│   ├── development        (Development related documentation)
-│   ├── getting-started    (Getting started guides)
-│   └── vendor-integration (Integration guides for different smart home vendors)
-└── vendors/          (Vendor specific code)
-    └── home-assistant_integration (Home Assistant Integration)
+│   ├── lib/               (Shared code)
+│   │   ├── globals        (Globally running scripts)
+│   │   ├── home_apis      (Code that communicates with the smart home environment)
+│   │   ├── stores         (Stores that hold the state of the app)
+│   │   └── utils          (Utility functions)
+│   └── test/              (UI and entity galleries and other test scenes)
+├── custom_components/ (Home Assistant Integration, installable with HACS)
+│   └── immersive_home     (Integration code and the floor plan dashboard cards)
+└── docs/              (Documentation)
+    ├── development        (Development related documentation)
+    ├── getting-started    (Getting started guides)
+    └── vendor-integration (Integration guides for different smart home vendors)
 ```
 
 ### Scene Structure

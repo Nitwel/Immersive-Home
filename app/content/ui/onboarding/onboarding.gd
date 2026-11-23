@@ -7,7 +7,7 @@ func _ready():
 	if Store.settings.is_loaded() == false:
 		await Store.settings.on_loaded
 
-	if (Store.settings.state.url != ""&&Store.settings.state.url != null)||Store.settings.state.onboarding_complete:
+	if (Store.settings.state.url != ""&&Store.settings.state.url != null)||Store.settings.state.onboarding_complete||Store.settings.state.type == "DEMO":
 		close()
 		return
 

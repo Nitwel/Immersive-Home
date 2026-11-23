@@ -13,7 +13,7 @@ extends "res://test/ui/ui_gallery.gd"
 ##
 ## The last cell lists Home Assistant domains EntityFactory does not support yet.
 
-const MockHomeApi = preload ("./mock_home_api.gd")
+const MockHomeApi = preload ("res://lib/home_apis/demo/simulated_api.gd")
 const MapOverview = preload ("res://content/system/map_overview/map_overview.gd")
 
 ## Common Home Assistant entity domains, used to report which ones have no widget yet.

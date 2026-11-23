@@ -73,7 +73,9 @@ func _is_supported() -> bool:
 
 ## Runs every time the app gains focus, only the first one counts.
 func _start():
-	if _started:
+	# The demo house is built around the user and has no anchor. Not starting here
+	# also keeps the real house's anchor from being replaced by one for the demo.
+	if _started||HomeApi.is_demo():
 		return
 
 	if Store.house.is_loaded() == false:
@@ -114,7 +116,8 @@ func save():
 	_create_anchor()
 
 func _create_anchor():
-	if _creating:
+	# A new anchor erases the previous one, which belongs to the real house.
+	if _creating||HomeApi.is_demo():
 		return
 	_creating = true
 	anchor_manager.create_anchor(FloorPlan.get_house_frame(Store.house.state), {"house": true})
