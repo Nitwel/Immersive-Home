@@ -1,19 +1,20 @@
-FROM node:18-alpine AS build
+FROM node:22-alpine AS build
 
 WORKDIR /app
 
-COPY package.json .
+RUN corepack enable
 
-RUN npm install
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN npm run generate
-RUN npm run build
+# The reference pages are generated with Godot (`pnpm generate`) and committed, so only build here.
+RUN pnpm run build
 
 FROM httpd:2.4
 
 COPY --from=build /app/.vitepress/dist /usr/local/apache2/htdocs/
 
 EXPOSE 80
-

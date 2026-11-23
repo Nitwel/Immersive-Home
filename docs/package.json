@@ -12,15 +12,21 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "packageManager": "pnpm@10.6.3",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^20.11.28",
+    "@types/node": "^26.6.6",
     "endent": "^2.1.0",
-    "fast-xml-parser": "^4.3.6",
-    "lodash-es": "^4.17.21",
-    "markdown-table": "^3.0.3",
-    "tsx": "^4.7.1",
-    "vitepress": "1.0.0-rc.45",
-    "vue": "^3.4.21"
+    "fast-xml-parser": "^5.12.1",
+    "lodash-es": "^4.18.1",
+    "markdown-table": "^3.1.0",
+    "tsx": "^4.23.15",
+    "vitepress": "1.6.4",
+    "vue": "^3.5.46"
   }
 }
