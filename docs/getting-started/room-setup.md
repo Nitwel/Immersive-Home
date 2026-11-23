@@ -20,6 +20,8 @@ The Room Setup panel is the second button in the menu's side bar (the cube icon)
 
 Each tab shows the floor plan on the left, in the same colours the rooms have in the [Map View](/getting-started/map-view). The actions for the selected room or door are on the right.
 
+![The Overview tab of the Room Setup panel: the floor plan, the number of rooms and doors, and the reference buttons](/img/room-setup-overview.webp)
+
 ## Adding a Room
 
 1. Open the Menu and open the Room Setup panel.
@@ -50,6 +52,8 @@ Tap a room on the floor plan to select it. The selected room gets an outline in 
 - **Edit** lets you move its corners and rename it. Press **Save** when you are done.
 - **Delete** removes the room.
 
+![The Rooms tab with the Living Room selected on the floor plan, its name, and the Edit and Delete buttons](/img/room-setup-rooms.webp)
+
 ## Adding Doors
 
 Doors are shown as openings in the walls in the [Map View](/getting-started/map-view) and on the [floor plan cards](/vendor-integration/home-assistant#floor-plan-cards) in Home Assistant.
@@ -60,6 +64,8 @@ Doors are shown as openings in the walls in the [Map View](/getting-started/map-
 4. Press **Save**.
 
 Tap a door on the floor plan to select, edit or delete it.
+
+![The Doors tab with the door between the living room and the bedroom selected](/img/room-setup-doors.webp)
 
 ## Reference Point
 

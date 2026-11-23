@@ -69,7 +69,7 @@ If you have used a pastebin to store your token, open the Browser on your headse
 
 5. Finally, by clicking the **Connect** button, the app will try to connect to your Home Assistant instance. If everything is correct, you will see the text change to **Connected** below the button.
 
-![Setting Panel in the app](/img/setup-2.jpg)
+![The Api tab of the settings panel, with the URL and token fields, the search and Connect buttons and the status](/img/settings-api.webp)
 
 ## What's next?
 

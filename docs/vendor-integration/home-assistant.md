@@ -57,6 +57,8 @@ When you save your rooms, doors or placed devices in the app, the headset sends 
 
 The integration ships two dashboard cards. They are loaded automatically, you don't need to add a resource. Add them from the card picker in the dashboard editor or with YAML. Both cards have a visual editor.
 
+![The 2D floor plan card with the temperature map, and the 3D dollhouse card, both with lights and sensor values](/img/floor-plan-cards.webp)
+
 Both cards:
 
 - show lights that are on in their colour, and other active devices in Home Assistant's active colour,

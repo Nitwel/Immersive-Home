@@ -13,6 +13,8 @@ Open the menu. It opens on the **Widgets** panel (the first button in the side b
 
 Devices without any entity the app can show are hidden.
 
+![The Widgets panel with the Living Room selected, its devices on the left and the ceiling light's entity, already placed, on the right](/img/widgets-panel.webp)
+
 ## Placing an Entity
 
 There are two ways to place an entity:
@@ -31,6 +33,8 @@ Entities can only be placed inside a room.
 ## Supported Entities
 
 The app supports 40 Home Assistant domains. Widgets only show the controls a device supports, so a simple on/off light has no brightness slider.
+
+![Widgets for a thermostat, blinds, a robot vacuum, a fan, a door lock and a speaker](/img/widgets.webp)
 
 | Widget | Domains |
 |---|---|

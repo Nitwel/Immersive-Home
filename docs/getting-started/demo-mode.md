@@ -7,7 +7,11 @@ The demo mode lets you try Immersive Home, or show it to others, without a Home 
 1. Open the menu and the settings panel (the gear button at the bottom of the side bar).
 2. In the **Api** tab, press the **Demo mode** button.
 
+![The Api tab of the settings with Demo mode turned on and the status "Demo mode"](/img/settings-demo-mode.webp)
+
 A small apartment with a living room, kitchen, bedroom and bathroom is built around you, with the devices already placed on its walls. You stand in the middle of the living room.
+
+![The demo apartment seen as a dollhouse in the Map View](/img/map-view-dollhouse.webp)
 
 Everything works like with a real home: switch lights, move the blinds, start the oven timer, place more devices from the [Widgets panel](/getting-started/placing-devices), or open the [Map View](/getting-started/map-view) to see the apartment as a dollhouse, the temperature and humidity maps, and where everyone is.
 

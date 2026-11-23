@@ -21,6 +21,8 @@ The Map View lists everyone from Home Assistant's `person` entities, plus device
 
 The controls and the list stand upright on the far side of the map and turn to face you as you walk around it.
 
+![The Map View: a round map of the city with two people's paths over the last 24 hours, and the panel with the people list and controls behind it](/img/map-view.webp)
+
 ## Panning and Zooming
 
 - **Pan:** hold the trigger (or pinch) on the map and drag.
@@ -41,6 +43,8 @@ Zoomed in, your house is shown as a dollhouse:
 - **door and window sensors** show whether they are open,
 - **temperature sensors** show their reading.
 
+![The dollhouse of an apartment with four rooms, lights glowing, an open window, temperature readings and the temperature map on the floors](/img/map-view-dollhouse.webp)
+
 ### Temperature and Humidity Maps
 
 The Map View can colour the floors of your rooms by temperature or humidity, blended smoothly between all your sensors. Only sensors that you have [placed in your rooms](/getting-started/placing-devices) are used.
@@ -51,5 +55,5 @@ Turn a map on in the Map View's panel while it is zoomed into your rooms, or wit
 - **Opacity**: how strongly the map tints the floors.
 
 ::: info
-The maps need an internet connection the first time an area is shown. Map data comes from OpenFreeMap and AWS Terrain Tiles and is cached on the headset afterwards.
+The maps need an internet connection the first time an area is shown. Map data comes from OpenFreeMap and AWS Terrain Tiles and is cached on the headset afterwards. Map data © OpenStreetMap contributors, © OpenMapTiles.
 :::
