@@ -20,7 +20,8 @@ uniform float edge_pixels = 1.2;
 uniform bool heat = false;
 uniform vec4 data[100];
 uniform int data_size = 0;
-uniform sampler2D color_gradient;
+// sRGB colours, so they come out as picked (the same as the Home Assistant cards)
+uniform sampler2D color_gradient : source_color;
 uniform float heat_strength = 0.85;
 
 // Lights that are on (dollhouse_entities.gd): a soft wash of their colour on the floors
