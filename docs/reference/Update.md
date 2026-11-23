@@ -1,26 +1,14 @@
 # Update
-**Inherits:** [RefCounted](https://docs.godotengine.org/de/4.x/classes/class_refcounted.html)
-    
-
-
-
+**Inherits:** [RefCounted](https://docs.godotengine.org/en/stable/classes/class_refcounted.html)
 
 ## Methods
 
-| Returns | Name                                                                                                                                                                                 |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| void    | [props](#props) ( node: [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html), prop_names: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) |
-
-
-
-
-
-
-
-
+| Returns                                                                      | Name                                                                                                                                                                                              |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [props](#props) ( node: [Node](https://docs.godotengine.org/en/stable/classes/class_node.html), prop_names: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) = `[]` ) |
 
 ## Method Descriptions
 
-### static props (node: [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html) , prop_names: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#props}
+### static props (node: [Node](https://docs.godotengine.org/en/stable/classes/class_node.html) , prop_names: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) = `[]`  ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#props}
 
 No description provided yet.

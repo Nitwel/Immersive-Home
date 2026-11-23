@@ -1,61 +1,60 @@
 # CallbackMap
-**Inherits:** [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html)
-    
+**Inherits:** [Node](https://docs.godotengine.org/en/stable/classes/class_node.html)
+
 ## Description
 
 A simple class to manage callbacks for different keys
 
 ## Properties
 
-| Name                                       | Type                                                                            | Default |
-| ------------------------------------------ | ------------------------------------------------------------------------------- | ------- |
-| [callbacks](#prop-callbacks)               | [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) |         |
-| [single_callbacks](#prop-single-callbacks) | [Array](https://docs.godotengine.org/de/4.x/classes/class_array.html)           |         |
+| Name                                       | Type                                                                               | Default |
+| ------------------------------------------ | ---------------------------------------------------------------------------------- | ------- |
+| [callbacks](#prop-callbacks)               | [Dictionary](https://docs.godotengine.org/en/stable/classes/class_dictionary.html) | `{}`    |
+| [single_callbacks](#prop-single-callbacks) | [Array](https://docs.godotengine.org/en/stable/classes/class_array.html)           | `[]`    |
 
 ## Methods
 
-| Returns | Name                                                                                                                                                                                            |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| void    | [_validate_key](#-validate-key) ( key: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )                                                                              |
-| void    | [add](#add) ( key: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html) )           |
-| void    | [add_once](#add-once) ( key: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html) ) |
-| void    | [call_key](#call-key) ( key: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), args: [Array](https://docs.godotengine.org/de/4.x/classes/class_array.html) )           |
-| void    | [remove](#remove) ( key: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html) )     |
-
-
-
-
-
-
+| Returns                                                                      | Name                                                                                                                                                                                                  |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [_validate_key](#-validate-key) ( key: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) )                                                                                 |
+| void                                                                         | [add](#add) ( key: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), callback: [Callable](https://docs.godotengine.org/en/stable/classes/class_callable.html) )           |
+| void                                                                         | [add_once](#add-once) ( key: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), callback: [Callable](https://docs.godotengine.org/en/stable/classes/class_callable.html) ) |
+| void                                                                         | [call_key](#call-key) ( key: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), args: [Array](https://docs.godotengine.org/en/stable/classes/class_array.html) )           |
+| void                                                                         | [remove](#remove) ( key: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), callback: [Callable](https://docs.godotengine.org/en/stable/classes/class_callable.html) )     |
+| void                                                                         | [remove_owner](#remove-owner) ( target: [Object](https://docs.godotengine.org/en/stable/classes/class_object.html) )                                                                                  |
 
 ## Property Descriptions
 
-### callbacks: [Dictionary](https://docs.godotengine.org/de/4.x/classes/class_dictionary.html) {#prop-callbacks}
+### callbacks: [Dictionary](https://docs.godotengine.org/en/stable/classes/class_dictionary.html) {#prop-callbacks}
 
 Map of callbacks
 
-### single_callbacks: [Array](https://docs.godotengine.org/de/4.x/classes/class_array.html) {#prop-single-callbacks}
+### single_callbacks: [Array](https://docs.godotengine.org/en/stable/classes/class_array.html) {#prop-single-callbacks}
 
 No description provided yet.
 
 ## Method Descriptions
 
-###  _validate_key (key: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> void {#-validate-key}
+### _validate_key (key: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html)  ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#-validate-key}
 
 No description provided yet.
 
-###  add (key: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html)  ) -> void {#add}
+### add (key: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , callback: [Callable](https://docs.godotengine.org/en/stable/classes/class_callable.html)  ) -> void {#add}
 
 No description provided yet.
 
-###  add_once (key: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html)  ) -> void {#add-once}
+### add_once (key: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , callback: [Callable](https://docs.godotengine.org/en/stable/classes/class_callable.html)  ) -> void {#add-once}
 
 No description provided yet.
 
-###  call_key (key: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , args: [Array](https://docs.godotengine.org/de/4.x/classes/class_array.html)  ) -> void {#call-key}
+### call_key (key: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , args: [Array](https://docs.godotengine.org/en/stable/classes/class_array.html)  ) -> void {#call-key}
 
 No description provided yet.
 
-###  remove (key: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , callback: [Callable](https://docs.godotengine.org/de/4.x/classes/class_callable.html)  ) -> void {#remove}
+### remove (key: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , callback: [Callable](https://docs.godotengine.org/en/stable/classes/class_callable.html)  ) -> void {#remove}
 
 No description provided yet.
+
+### remove_owner (target: [Object](https://docs.godotengine.org/en/stable/classes/class_object.html)  ) -> void {#remove-owner}
+
+Removes every callback bound to `target`, e.g. lambdas created inside a node that is about to be freed. Call it before the target is gone.

@@ -1,48 +1,49 @@
 # ConstructRoomMesh
-**Inherits:** [RefCounted](https://docs.godotengine.org/de/4.x/classes/class_refcounted.html)
-    
-## Description
-
-Fill points insde the polygon
-
-
+**Inherits:** [RefCounted](https://docs.godotengine.org/en/stable/classes/class_refcounted.html)
 
 ## Methods
 
-| Returns                                                                   | Name                                                                                                                                                                                                                                                                                                           |
-| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [_create_mesh](#-create-mesh) ( points: [PackedVector2Array](https://docs.godotengine.org/de/4.x/classes/class_packedvector2array.html), triangles: [PackedInt32Array](https://docs.godotengine.org/de/4.x/classes/class_packedint32array.html) )                                                              |
-| [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [generate_ceiling_mesh](#generate-ceiling-mesh) ( corners: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )                                                                                                                                                                         |
-| [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [generate_ceiling_mesh_grid](#generate-ceiling-mesh-grid) ( corners: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), grid: [Vector2](https://docs.godotengine.org/de/4.x/classes/class_vector2.html) )                                                                              |
-| [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [generate_wall_mesh](#generate-wall-mesh) ( corners: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), height: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) )                                                                                            |
-| [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [generate_wall_mesh_grid](#generate-wall-mesh-grid) ( corners: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), height: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html), grid: [Vector2](https://docs.godotengine.org/de/4.x/classes/class_vector2.html) ) |
-
-
-
-
-
-
-
-
+| Returns                                                                      | Name                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [_create_mesh_2d](#-create-mesh-2d) ( points: [PackedVector2Array](https://docs.godotengine.org/en/stable/classes/class_packedvector2array.html), triangles: [PackedInt32Array](https://docs.godotengine.org/en/stable/classes/class_packedint32array.html) )                                                                                                                                                                                                                                                                                                                                                              |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [_create_mesh_3d](#-create-mesh-3d) ( points: [PackedVector3Array](https://docs.godotengine.org/en/stable/classes/class_packedvector3array.html), triangles: [PackedInt32Array](https://docs.godotengine.org/en/stable/classes/class_packedint32array.html), points_uv: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), width: [float](https://docs.godotengine.org/en/stable/classes/class_float.html), height: [float](https://docs.godotengine.org/en/stable/classes/class_float.html), existing: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) = `null` ) |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [generate_ceiling_mesh](#generate-ceiling-mesh) ( corners: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [generate_ceiling_mesh_grid](#generate-ceiling-mesh-grid) ( corners: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), grid: [Vector2](https://docs.godotengine.org/en/stable/classes/class_vector2.html) = `Vector2(0.2, 0.2)` )                                                                                                                                                                                                                                                                                                                                                              |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [generate_wall_mesh](#generate-wall-mesh) ( corners: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), height: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) )                                                                                                                                                                                                                                                                                                                                                                                                  |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [generate_wall_mesh_grid](#generate-wall-mesh-grid) ( corners: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), height: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), grid: [Vector2](https://docs.godotengine.org/en/stable/classes/class_vector2.html) = `Vector2(0.2, 0.2)` )                                                                                                                                                                                                                                                                              |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [generate_wall_mesh_with_doors](#generate-wall-mesh-with-doors) ( corners: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), height: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), doors: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) )                                                                                                                                                                                                                                                                                       |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [generate_wall_mesh_with_doors_grid](#generate-wall-mesh-with-doors-grid) ( corners: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), height: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), doors: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html), grid: [float](https://docs.godotengine.org/en/stable/classes/class_float.html) = `0.2` )                                                                                                                                                                                     |
 
 ## Method Descriptions
 
-### static _create_mesh (points: [PackedVector2Array](https://docs.godotengine.org/de/4.x/classes/class_packedvector2array.html) , triangles: [PackedInt32Array](https://docs.godotengine.org/de/4.x/classes/class_packedint32array.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#-create-mesh}
+### static _create_mesh_2d (points: [PackedVector2Array](https://docs.godotengine.org/en/stable/classes/class_packedvector2array.html) , triangles: [PackedInt32Array](https://docs.godotengine.org/en/stable/classes/class_packedint32array.html)  ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#-create-mesh-2d}
 
 No description provided yet.
 
-### static generate_ceiling_mesh (corners: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#generate-ceiling-mesh}
+### static _create_mesh_3d (points: [PackedVector3Array](https://docs.godotengine.org/en/stable/classes/class_packedvector3array.html) , triangles: [PackedInt32Array](https://docs.godotengine.org/en/stable/classes/class_packedint32array.html) , points_uv: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , width: [float](https://docs.godotengine.org/en/stable/classes/class_float.html) , height: [float](https://docs.godotengine.org/en/stable/classes/class_float.html) , existing: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) = `null`  ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#-create-mesh-3d}
 
 No description provided yet.
 
-### static generate_ceiling_mesh_grid (corners: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , grid: [Vector2](https://docs.godotengine.org/de/4.x/classes/class_vector2.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#generate-ceiling-mesh-grid}
+### static generate_ceiling_mesh (corners: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html)  ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#generate-ceiling-mesh}
 
 No description provided yet.
 
-### static generate_wall_mesh (corners: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , height: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#generate-wall-mesh}
+### static generate_ceiling_mesh_grid (corners: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , grid: [Vector2](https://docs.godotengine.org/en/stable/classes/class_vector2.html) = `Vector2(0.2, 0.2)`  ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#generate-ceiling-mesh-grid}
 
 No description provided yet.
 
-### static generate_wall_mesh_grid (corners: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , height: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) , grid: [Vector2](https://docs.godotengine.org/de/4.x/classes/class_vector2.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#generate-wall-mesh-grid}
+### static generate_wall_mesh (corners: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , height: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html)  ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#generate-wall-mesh}
+
+No description provided yet.
+
+### static generate_wall_mesh_grid (corners: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , height: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , grid: [Vector2](https://docs.godotengine.org/en/stable/classes/class_vector2.html) = `Vector2(0.2, 0.2)`  ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#generate-wall-mesh-grid}
+
+No description provided yet.
+
+### static generate_wall_mesh_with_doors (corners: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , height: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , doors: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html)  ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#generate-wall-mesh-with-doors}
+
+Generate a wall mesh with doors corners: Array of Vector2 height: float doors: Array[Array[Vector3, Vector3]]
+
+### static generate_wall_mesh_with_doors_grid (corners: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , height: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , doors: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) , grid: [float](https://docs.godotengine.org/en/stable/classes/class_float.html) = `0.2`  ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#generate-wall-mesh-with-doors-grid}
 
 No description provided yet.

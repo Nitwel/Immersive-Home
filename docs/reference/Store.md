@@ -1,6 +1,6 @@
-# MainStore
-**Inherits:** [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html)
-    
+# Store
+**Inherits:** [Node](https://docs.godotengine.org/en/stable/classes/class_node.html)
+
 ## Description
 
 Collection of all the stores to save the state persistently
@@ -13,15 +13,9 @@ Collection of all the stores to save the state persistently
 | [house](#prop-house)       | [House](/reference/lib--stores--house.html)       |         |
 | [settings](#prop-settings) | [Settings](/reference/lib--stores--settings.html) |         |
 
-
-
-
-
-
-
 ## Constants
 
-### SettingsStore = `<Object>` {#const-SettingsStore}
+### DevicesStore = `<Object>` {#const-DevicesStore}
 
 No description provided yet.
 
@@ -29,7 +23,7 @@ No description provided yet.
 
 No description provided yet.
 
-### DevicesStore = `<Object>` {#const-DevicesStore}
+### SettingsStore = `<Object>` {#const-SettingsStore}
 
 No description provided yet.
 

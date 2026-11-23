@@ -6,4 +6,4 @@ The `HomeApi` is a global singleton that is used to communicate with the smart h
 It is possible to write your own adapters for different smart home environments. For the time being, only Home Assistant is supported and extended by us. If you want to add support for another smart home environment, please reach out to us on [GitHub](https://github.com/nitwel/immersive-home) or [Discord](https://discord.gg/QgUnAzNVTx).
 :::
 
-For detailed information on how to use the `HomeApi`, please refer to the [Reference](/reference/lib--globals--home_api.html).
+For detailed information on how to use the `HomeApi`, please refer to the [Reference](/reference/HomeApi.html).

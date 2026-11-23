@@ -1,2 +1,2 @@
 # Gesture
-**Inherits:** [RefCounted](https://docs.godotengine.org/de/4.x/classes/class_refcounted.html)
+**Inherits:** [RefCounted](https://docs.godotengine.org/en/stable/classes/class_refcounted.html)

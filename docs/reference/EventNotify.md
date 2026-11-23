@@ -1,24 +1,20 @@
 # EventNotify
 **Inherits:** [Event](/reference/Event.html)
-    
+
 ## Description
 
 Emits a message to the user
 
 ## Properties
 
-| Name                     | Type                                                                    | Default |
-| ------------------------ | ----------------------------------------------------------------------- | ------- |
-| [message](#prop-message) | [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) |         |
-| [type](#prop-type)       | [int](https://docs.godotengine.org/de/4.x/classes/class_int.html)       |         |
-
-
-
-
+| Name                     | Type                                                                       | Default |
+| ------------------------ | -------------------------------------------------------------------------- | ------- |
+| [message](#prop-message) | [String](https://docs.godotengine.org/en/stable/classes/class_string.html) |         |
+| [type](#prop-type)       | [EventNotify.Type](/reference/EventNotify.html#enum-Type)                  |         |
 
 ## Enums
 
-### enum Type
+### enum Type {#enum-Type}
 
 #### Type.INFO = `0` {#const-INFO}
 
@@ -36,14 +32,12 @@ The message is a warning
 
 The message is an error
 
-
-
 ## Property Descriptions
 
-### message: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) {#prop-message}
+### message: [String](https://docs.godotengine.org/en/stable/classes/class_string.html) {#prop-message}
 
 The message to emit
 
-### type: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html) {#prop-type}
+### type: [EventNotify.Type](/reference/EventNotify.html#enum-Type) {#prop-type}
 
 The type of message to emit

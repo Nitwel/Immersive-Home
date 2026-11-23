@@ -1,25 +1,20 @@
 # History
-**Inherits:** [RefCounted](https://docs.godotengine.org/de/4.x/classes/class_refcounted.html)
-    
-
+**Inherits:** [RefCounted](https://docs.godotengine.org/en/stable/classes/class_refcounted.html)
 
 ## Properties
 
-| Name                                           | Type                                                                | Default |
-| ---------------------------------------------- | ------------------------------------------------------------------- | ------- |
-| [api](#prop-api)                               | [Hass](/reference/lib--home_apis--hass_ws--hass.html)               |         |
-| [integration_exists](#prop-integration-exists) | [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) | `false` |
+| Name                                           | Type                                                                   | Default |
+| ---------------------------------------------- | ---------------------------------------------------------------------- | ------- |
+| [api](#prop-api)                               | [Hass](/reference/lib--home_apis--hass_ws--hass.html)                  |         |
+| [integration_exists](#prop-integration-exists) | [bool](https://docs.godotengine.org/en/stable/classes/class_bool.html) | `false` |
 
 ## Methods
 
-| Returns                                                                   | Name                                                                                                                                                                                                                                                                               |
-| ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| void                                                                      | [_init](#-init) ( hass: [Hass](/reference/lib--home_apis--hass_ws--hass.html) )                                                                                                                                                                                                    |
-| [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [get_history](#get-history) ( entity_id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), start: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html), end: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) ) |
-
-
-
-
+| Returns                                                                            | Name                                                                                                                                                                                                                                                                                                                                                                                                     |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| void                                                                               | [_init](#-init) ( hass: [Hass](/reference/lib--home_apis--hass_ws--hass.html) )                                                                                                                                                                                                                                                                                                                          |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html)       | [get_history](#get-history) ( entity_id: [String](https://docs.godotengine.org/en/stable/classes/class_string.html), start: [String](https://docs.godotengine.org/en/stable/classes/class_string.html), interval: [String](https://docs.godotengine.org/en/stable/classes/class_string.html) = `"5minute"`, end: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) = `null` ) |
+| [Dictionary](https://docs.godotengine.org/en/stable/classes/class_dictionary.html) | [get_state_history](#get-state-history) ( entity_ids: [Array](https://docs.godotengine.org/en/stable/classes/class_array.html), start: [String](https://docs.godotengine.org/en/stable/classes/class_string.html), end: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) = `null` )                                                                                          |
 
 ## Constants
 
@@ -33,16 +28,20 @@ No description provided yet.
 
 No description provided yet.
 
-### integration_exists: [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) {#prop-integration-exists}
+### integration_exists: [bool](https://docs.godotengine.org/en/stable/classes/class_bool.html) {#prop-integration-exists}
 
 No description provided yet.
 
 ## Method Descriptions
 
-###  _init (hass: [Hass](/reference/lib--home_apis--hass_ws--hass.html)  ) -> void {#-init}
+### _init (hass: [Hass](/reference/lib--home_apis--hass_ws--hass.html)  ) -> void {#-init}
 
 No description provided yet.
 
-###  get_history (entity_id: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , start: [String](https://docs.godotengine.org/de/4.x/classes/class_string.html) , end: [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html)  ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#get-history}
+### get_history (entity_id: [String](https://docs.godotengine.org/en/stable/classes/class_string.html) , start: [String](https://docs.godotengine.org/en/stable/classes/class_string.html) , interval: [String](https://docs.godotengine.org/en/stable/classes/class_string.html) = `"5minute"` , end: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) = `null`  ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#get-history}
 
 No description provided yet.
+
+### get_state_history (entity_ids: [Array](https://docs.godotengine.org/en/stable/classes/class_array.html) , start: [String](https://docs.godotengine.org/en/stable/classes/class_string.html) , end: [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) = `null`  ) -> [Dictionary](https://docs.godotengine.org/en/stable/classes/class_dictionary.html) {#get-state-history}
+
+Recorded states (with attributes, e.g. GPS positions) of `entity_ids` since `start` (ISO time): {entity_id: [{state, attributes, time (unix)}]}, oldest first. Uses the same call as Home Assistant's history and map panels.

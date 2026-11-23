@@ -1,28 +1,18 @@
 # Event
-**Inherits:** [Resource](https://docs.godotengine.org/de/4.x/classes/class_resource.html)
-    
+**Inherits:** [Resource](https://docs.godotengine.org/en/stable/classes/class_resource.html)
+
 ## Description
 
 Base class for all events
 
-
-
 ## Methods
 
-| Returns | Name                                                      |
-| ------- | --------------------------------------------------------- |
-| void    | [merge](#merge) ( event: [Event](/reference/Event.html) ) |
-
-
-
-
-
-
-
-
+| Returns                                                                      | Name                                                      |
+| ---------------------------------------------------------------------------- | --------------------------------------------------------- |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [merge](#merge) ( event: [Event](/reference/Event.html) ) |
 
 ## Method Descriptions
 
-###  merge (event: [Event](/reference/Event.html)  ) -> void {#merge}
+### merge (event: [Event](/reference/Event.html)  ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#merge}
 
 Merges the current event with another event. This is used in the EventSystem internally.

@@ -1,36 +1,36 @@
 # Initiator
-**Inherits:** [RefCounted](https://docs.godotengine.org/de/4.x/classes/class_refcounted.html)
-    
+**Inherits:** [RefCounted](https://docs.godotengine.org/en/stable/classes/class_refcounted.html)
+
 ## Description
 
 Defines what triggered a EventPointer
 
 ## Properties
 
-| Name               | Type                                                                    | Default |
-| ------------------ | ----------------------------------------------------------------------- | ------- |
-| [node](#prop-node) | [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html) |         |
-| [type](#prop-type) | [int](https://docs.godotengine.org/de/4.x/classes/class_int.html)       |         |
+| Name               | Type                                                                       | Default |
+| ------------------ | -------------------------------------------------------------------------- | ------- |
+| [node](#prop-node) | [Node3D](https://docs.godotengine.org/en/stable/classes/class_node3d.html) |         |
+| [type](#prop-type) | [Initiator.Type](/reference/lib--utils--pointer--initiator.html#enum-Type) |         |
 
 ## Methods
 
-| Returns                                                             | Name                       |
-| ------------------------------------------------------------------- | -------------------------- |
-| [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) | [is_right](#is-right) (  ) |
-
-## Signals
-
-### on_press (type: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html)  ) {#on-press}
-
-No description provided yet.
-
-### on_release (type: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html)  ) {#on-release}
-
-No description provided yet.
+| Returns                                                                | Name                       |
+| ---------------------------------------------------------------------- | -------------------------- |
+| [bool](https://docs.godotengine.org/en/stable/classes/class_bool.html) | [is_right](#is-right) (  ) |
 
 ## Enums
 
-### enum Type
+### enum EventType {#enum-EventType}
+
+#### EventType.GRIP = `0` {#const-GRIP}
+
+No description provided yet.
+
+#### EventType.TRIGGER = `1` {#const-TRIGGER}
+
+No description provided yet.
+
+### enum Type {#enum-Type}
 
 #### Type.CONTROLLER_LEFT = `0` {#const-CONTROLLER-LEFT}
 
@@ -48,30 +48,18 @@ No description provided yet.
 
 No description provided yet.
 
-### enum EventType
-
-#### EventType.GRIP = `0` {#const-GRIP}
-
-No description provided yet.
-
-#### EventType.TRIGGER = `1` {#const-TRIGGER}
-
-No description provided yet.
-
-
-
 ## Property Descriptions
 
-### node: [Node3D](https://docs.godotengine.org/de/4.x/classes/class_node3d.html) {#prop-node}
+### node: [Node3D](https://docs.godotengine.org/en/stable/classes/class_node3d.html) {#prop-node}
 
 No description provided yet.
 
-### type: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html) {#prop-type}
+### type: [Initiator.Type](/reference/lib--utils--pointer--initiator.html#enum-Type) {#prop-type}
 
 No description provided yet.
 
 ## Method Descriptions
 
-###  is_right ( ) -> [bool](https://docs.godotengine.org/de/4.x/classes/class_bool.html) {#is-right}
+### is_right ( ) -> [bool](https://docs.godotengine.org/en/stable/classes/class_bool.html) {#is-right}
 
 No description provided yet.

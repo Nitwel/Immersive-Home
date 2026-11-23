@@ -1,24 +1,21 @@
 # Finger
-**Inherits:** [RefCounted](https://docs.godotengine.org/de/4.x/classes/class_refcounted.html)
-    
+**Inherits:** [RefCounted](https://docs.godotengine.org/en/stable/classes/class_refcounted.html)
+
 ## Description
 
 Description of a finger area.
 
 ## Properties
 
-| Name               | Type                                                                    | Default |
-| ------------------ | ----------------------------------------------------------------------- | ------- |
-| [area](#prop-area) | [Area3D](https://docs.godotengine.org/de/4.x/classes/class_area3d.html) |         |
-| [type](#prop-type) | [int](https://docs.godotengine.org/de/4.x/classes/class_int.html)       |         |
-
-
-
-
+| Name                                         | Type                                                                         | Default |
+| -------------------------------------------- | ---------------------------------------------------------------------------- | ------- |
+| [area](#prop-area)                           | [Area3D](https://docs.godotengine.org/en/stable/classes/class_area3d.html)   |         |
+| [previous_position](#prop-previous-position) | [Vector3](https://docs.godotengine.org/en/stable/classes/class_vector3.html) |         |
+| [type](#prop-type)                           | [Finger.Type](/reference/lib--utils--touch--finger.html#enum-Type)           |         |
 
 ## Enums
 
-### enum Type
+### enum Type {#enum-Type}
 
 #### Type.THUMB_RIGHT = `0` {#const-THUMB-RIGHT}
 
@@ -60,14 +57,16 @@ No description provided yet.
 
 No description provided yet.
 
-
-
 ## Property Descriptions
 
-### area: [Area3D](https://docs.godotengine.org/de/4.x/classes/class_area3d.html) {#prop-area}
+### area: [Area3D](https://docs.godotengine.org/en/stable/classes/class_area3d.html) {#prop-area}
 
 No description provided yet.
 
-### type: [int](https://docs.godotengine.org/de/4.x/classes/class_int.html) {#prop-type}
+### previous_position: [Vector3](https://docs.godotengine.org/en/stable/classes/class_vector3.html) {#prop-previous-position}
+
+Global position of [`area`](#prop-area) at the last physics tick where it was somewhere else. Lets receivers tell which side a touch came from, which the current position can't do when the finger moves far in a single tick.
+
+### type: [Finger.Type](/reference/lib--utils--touch--finger.html#enum-Type) {#prop-type}
 
 No description provided yet.

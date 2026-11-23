@@ -1,6 +1,6 @@
 # MachineState
-**Inherits:** [Node](https://docs.godotengine.org/de/4.x/classes/class_node.html)
-    
+**Inherits:** [Node](https://docs.godotengine.org/en/stable/classes/class_node.html)
+
 ## Description
 
 Base Class for all states
@@ -13,17 +13,11 @@ Base Class for all states
 
 ## Methods
 
-| Returns                                                                   | Name                         |
-| ------------------------------------------------------------------------- | ---------------------------- |
-| void                                                                      | [_on_enter](#-on-enter) (  ) |
-| void                                                                      | [_on_leave](#-on-leave) (  ) |
-| [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) | [is_active](#is-active) (  ) |
-
-
-
-
-
-
+| Returns                                                                      | Name                         |
+| ---------------------------------------------------------------------------- | ---------------------------- |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [_on_enter](#-on-enter) (  ) |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [_on_leave](#-on-leave) (  ) |
+| [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) | [is_active](#is-active) (  ) |
 
 ## Property Descriptions
 
@@ -33,14 +27,14 @@ No description provided yet.
 
 ## Method Descriptions
 
-###  _on_enter ( ) -> void {#-on-enter}
+### _on_enter ( ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#-on-enter}
 
 No description provided yet.
 
-###  _on_leave ( ) -> void {#-on-leave}
+### _on_leave ( ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#-on-leave}
 
 No description provided yet.
 
-###  is_active ( ) -> [Variant](https://docs.godotengine.org/de/4.x/classes/class_variant.html) {#is-active}
+### is_active ( ) -> [Variant](https://docs.godotengine.org/en/stable/classes/class_variant.html) {#is-active}
 
 No description provided yet.
