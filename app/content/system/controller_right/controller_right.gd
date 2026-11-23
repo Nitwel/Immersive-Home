@@ -60,6 +60,10 @@ func _setup_hand():
 		_apply_hand_active(hand_tracked&&_is_hand_simulated() == false)
 	)
 
+	# The tracker only emits hand_active_changed when tracking starts, so when the
+	# app starts with controllers it never fires. Start hidden until it does.
+	_apply_hand_active(false)
+
 ## Whether the hand tracker reports the hand as active, regardless of its source.
 var hand_tracked = false
 
