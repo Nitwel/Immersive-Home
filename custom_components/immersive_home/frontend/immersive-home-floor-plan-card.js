@@ -65,6 +65,13 @@ const escapeHtml = (text) =>
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const DEG = Math.PI / 180;
 
+/**
+ * Points as an SVG `points` value. Every coordinate goes through Number, so
+ * nothing but numbers can end up in the markup.
+ */
+const svgPoints = (points) =>
+  points.map(([x, y]) => `${Number(x).toFixed(4)},${Number(y).toFixed(4)}`).join(" ");
+
 /** Turns a floor point clockwise (as seen on screen) by `degrees`. */
 const rotate = ([x, z], degrees) => {
   const c = Math.cos(degrees * DEG);
@@ -669,7 +676,7 @@ class FloorPlanCardBase extends HTMLElement {
     const parts = this._plan.rooms.map((room, i) => {
       const readings = this._readings[kind].filter((r) => r.room === i);
       if (readings.length === 0) return "";
-      const points = room.polygon.map((p) => p.join(",")).join(" ");
+      const points = svgPoints(room.polygon);
 
       if (readings.length === 1) {
         return `<polygon points="${points}" fill="rgb(${scaleColor(stops, readings[0].value).join(",")})"></polygon>`;
@@ -785,7 +792,6 @@ class FloorPlanCard extends FloorPlanCardBase {
       element.style.left = `${(((p[0] - minX) / width) * 100).toFixed(3)}%`;
       element.style.top = `${(((p[1] - minY) / height) * 100).toFixed(3)}%`;
     };
-    const svgPoints = (points) => points.map((p) => `${p[0]},${p[1]}`).join(" ");
 
     container.style.aspectRatio = `${width} / ${height}`;
 
@@ -1358,7 +1364,6 @@ class FloorPlan3DCard extends FloorPlanCardBase {
     const box = this._box(this._view);
     const { minX, minY, width, height } = box;
 
-    const svgPoints = (points) => points.map((p) => `${p[0].toFixed(4)},${p[1].toFixed(4)}`).join(" ");
     const f = (n) => n.toFixed(4);
     const parts = [];
 

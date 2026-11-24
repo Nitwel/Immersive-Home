@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from typing import Any
 
 import voluptuous as vol
@@ -14,11 +15,32 @@ from .const import DOMAIN, SIGNAL_FLOOR_PLAN_UPDATED
 from .floor_plan import FloorPlan
 from .hub import REGISTRATION_FIELDS, Hub
 
-# Only the outline is checked, the app owns the details (app/lib/utils/floor_plan.gd).
+
+def _coordinate(value: Any) -> float:
+    """A finite number, bools are not accepted even though they are ints."""
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(value)
+    ):
+        raise vol.Invalid("expected a finite number")
+    return float(value)
+
+
+# A floor point as [x, z].
+POINT_SCHEMA = vol.All([_coordinate], vol.Length(min=2, max=2))
+
+ROOM_SCHEMA = vol.Schema(
+    {vol.Required("polygon"): [POINT_SCHEMA]},
+    extra=vol.ALLOW_EXTRA,
+)
+
+# The outline and the room shapes are checked, the app owns the rest
+# (app/lib/utils/floor_plan.gd).
 FLOOR_PLAN_SCHEMA = vol.Schema(
     {
         vol.Required("version"): int,
-        vol.Required("rooms"): [dict],
+        vol.Required("rooms"): [ROOM_SCHEMA],
         vol.Required("doors"): [dict],
         vol.Required("entities"): [dict],
     },
